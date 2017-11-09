@@ -1,5 +1,5 @@
 """
-Definition of urls for tms.
+Definition of urls for tms. 
 """
 
 from django.conf.urls import include, url
