@@ -1,8 +1,7 @@
 <div class="left_col scroll-view">
   <div class="navbar nav_title" style="border: 0;">
-    <a href="index.html" class="site_title"><i class="fa fa-spinner"></i> <span>Gentelella Alela!</span></a>
+    <a href="index.html" class="site_title"><i class="fa fa-spinner"></i> <span>{{ request.session.DepName }}</span></a>
   </div>
-
   <div class="clearfix"></div>
 
   <!-- menu profile quick info -->
@@ -12,7 +11,12 @@
     </div>
     <div class="profile_info">
       <span>Welcome,</span>
-      <h2>{% if user.is_authenticated %}{{ user.get_username }}{% endif %}</h2>
+      <h2>{% if user.is_authenticated %}
+        {% if 'UserEmail' in request.session %}
+        {{ request.session.EmpName }}
+        {# {{ mail }}#}
+        {% endif %}
+        {% endif %}</h2>
     </div>
   </div>
   <!-- /menu profile quick info -->

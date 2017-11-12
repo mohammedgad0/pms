@@ -75,6 +75,7 @@ class ProjectStatus(models.Model):
 class Employee(models.Model):
     id = models.IntegerField(db_column='Id', primary_key=True)  # Field name made lowercase.
     empid = models.CharField(db_column='EmpId', max_length=45, blank=True, null=True)  # Field name made lowercase.
+    empname = models.CharField(db_column='EmpName', max_length=255)  # Field name made lowercase.
     depcode = models.CharField(db_column='DepCode', max_length=45, blank=True, null=True)  # Field name made lowercase.
     depname = models.CharField(db_column='DepName', max_length=45, blank=True, null=True)  # Field name made lowercase.
     ismanager = models.CharField(db_column='IsManager', max_length=45, blank=True, null=True)  # Field name made lowercase.
