@@ -1,12 +1,27 @@
 from django.conf.urls import include, url
 from django.conf.urls import url, include
 from django.contrib import admin
-
+import django.contrib.auth.views
+import project.forms
+import project.views
+from datetime import datetime
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
     # app/ -> Genetelella UI and resources
     url(r'^project/', include('project.urls')),
     url(r'^', include('project.urls')),
+    url(r'^login/$',
+        django.contrib.auth.views.login,
+        {
+            'template_name': 'project/login.html',
+            'authentication_form': project.forms.BootstrapAuthenticationForm,
+            'extra_context':
+            {
+                'title': 'Log in',
+                'year': datetime.now().year,
+            }
+        },
+        name='login'),
 
 ]

@@ -18,24 +18,19 @@
     <div class="login_wrapper">
       <div class="animate form login_form">
         <section class="login_content">
-          <form action="." method="post" class="form-horizontal">
-            {% csrf_token %}
+          <form>
             <h1>Login Form</h1>
             <div>
-               {{ form.username }}
+              <input type="text" class="form-control" placeholder="Username" required="" />
             </div>
             <div>
-               {{ form.password }}
+              <input type="password" class="form-control" placeholder="Password" required="" />
             </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="hidden" name="next" value="/" />
-                    <input type="submit" value="Log in" class="btn btn-default" />
-                </div>
+            <div>
+              <a class="btn btn-default submit" href="index.html">Log in</a>
+              <a class="reset_pass" href="#">Lost your password?</a>
             </div>
-            {% if form.errors %}
-            <p class="validation-summary-errors">Please enter a correct user name and password.</p>
-            {% endif %}
+
             <div class="clearfix"></div>
 
             <div class="separator">
@@ -47,14 +42,14 @@
               <br />
 
               <div>
-                <h1><i class="fa fa-paw"></i></h1>
-                <p>©2017 نظام ادارة المهام - الهيئة العامة للإحصاء</p>
+                <h1><i class="fa fa-paw"></i> Gentelella Alela!</h1>
+                <p>©2016 All Rights Reserved. Gentelella Alela! is a Bootstrap 3 template. Privacy and Terms</p>
               </div>
             </div>
           </form>
         </section>
       </div>
-      {# sign up #}
+
       <div id="register" class="animate form registration_form">
         <section class="login_content">
           <form>

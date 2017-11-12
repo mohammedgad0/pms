@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 import os
 import posixpath
-
+from .ldap import *
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -27,7 +27,12 @@ SECRET_KEY = '48739c63-3ef3-46be-a6e6-effc30a8f49c'
 DEBUG = True
 
 ALLOWED_HOSTS = []
+# Ldap authentication
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'django_auth_ldap.backend.LDAPBackend',
 
+]
 
 # Application definition
 
@@ -39,7 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'project.apps.ProjectConfig'
+    'project.apps.AppConfig'
 ]
 
 MIDDLEWARE_CLASSES = [
