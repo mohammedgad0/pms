@@ -35,14 +35,15 @@ def index(request):
     template = loader.get_template('project/index.html')
     return HttpResponse(template.render(context, request))
 # request.session['idempresa'] = profile.idempresa
+
 def gentella_html(request):
+    context = {}
     username = None
     if request.user.is_authenticated():
         username = request.user.username
-    context = {'username'}
+        context = {'username'}
     # The template to be loaded as per gentelella.
     # All resource paths for gentelella end in .html.
-
     # Pick out the html file name from the url. And load that template.
     load_template = request.path.split('/')[-1]
     template = loader.get_template('project/' + load_template)
