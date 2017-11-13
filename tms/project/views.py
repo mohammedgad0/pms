@@ -5,6 +5,8 @@ from .models import Employee
 from .forms import *
 from django.contrib.auth.views import *
 from django.http import HttpResponseRedirect
+from django.utils.translation import ugettext as _
+
 
 
 def myuser(request, *args, **kwargs):
@@ -37,6 +39,8 @@ def index(request):
 # request.session['idempresa'] = profile.idempresa
 
 def gentella_html(request):
+    sentence = 'Welcome to my site.'
+    output = _(sentence)
     context = {}
     username = None
     if request.user.is_authenticated():
