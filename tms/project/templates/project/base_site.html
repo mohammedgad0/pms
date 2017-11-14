@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="ar-EG">
   <head>
     {% block head %}
       {% block meta %}
@@ -9,9 +9,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
       {% endblock meta %}
-
       <title>نظام إدارة المهام-الهيئة العامة للإحصاء| {% block title %}{% endblock %}</title>
-
       {% block stylesheets %}
         <!-- Bootstrap -->
         <link href="/static/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -33,12 +31,10 @@
       <link href="/static/build/css/custom_rtl.min.css" rel="stylesheet">
     {% endblock head %}
   </head>
-
-  <body class="{% block body_class %}nav-md {% endblock body_class %}">
+<body class="{% block body_class %}nav-md {% endblock body_class %}">
     {% block body %}
       <div class="container body">
         <div class="main_container">
-
           {% block sidebar %}
             <div class="col-md-3 left_col {% block sidebar_class %} {% endblock sidebar_class %}">
               {% include "project/sidebar.html" %}
@@ -62,7 +58,6 @@
           {% endblock footer %}
         </div>
       </div>
-
       {% block javascripts %}
         <!-- jQuery -->
         <script src="/static/vendors/jquery/dist/jquery.min.js"></script>

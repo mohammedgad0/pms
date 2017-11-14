@@ -11,7 +11,13 @@
     <div class="">
       <div class="page-title">
         <div class="title_left">
+
+          {# {% get_current_language as LANGUAGE_CODE %} #}
+          {# {{ LANGUAGE_CODE }} #}
+          <p>{% trans "Welcome to our page" %}</p>
           <h3>{% trans "Projects List" %} </h3>
+        
+          {{ LANG }}
         </div>
 
         <div class="title_right">
@@ -27,15 +33,10 @@
       </div>
 
       <div class="clearfix"></div>
-
       <div class="row">
         <div class="col-md-12">
           <div class="x_panel">
-
             <div class="x_content">
-
-              
-
               <!-- start project list -->
               <table class="table table-striped projects">
                 <thead>
