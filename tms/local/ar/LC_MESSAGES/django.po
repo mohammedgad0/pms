@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-14 16:01+0300\n"
+"POT-Creation-Date: 2017-11-15 01:27+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -59,7 +59,7 @@ msgstr "تفاصيل المشروع"
 
 #: .\project\templates\project\projects.html:44
 msgid "Team Members"
-msgstr "Huqhx hgtvdr"
+msgstr "اعضاء الفريق"
 
 #: .\project\templates\project\projects.html:45
 #, fuzzy
@@ -72,6 +72,7 @@ msgid "Status"
 msgstr "الحالة"
 
 #: .\project\templates\project\projects.html:47
+#: .\project\templates\project\projects.html:85
 msgid "Edit"
 msgstr "تعديل"
 
