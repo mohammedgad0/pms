@@ -36,7 +36,7 @@ msgstr ""
 
 #: .\project\templates\project\projects.html:3
 msgid "Projects"
-msgstr ""
+msgstr "قائمة المشاريع"
 
 #: .\project\templates\project\projects.html:17
 msgid "Welcome to our page"
