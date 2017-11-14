@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-14 11:45+0300\n"
+"POT-Creation-Date: 2017-11-14 16:01+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,42 +18,67 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
 #: .\project\forms.py:11
 msgid "Password"
-msgstr ""
+msgstr "كلمة المرور"
 
 #: .\project\templates\project\project_detail.html:3
+#, fuzzy
+#| msgid "Project Detail"
 msgid "Project Details"
-msgstr ""
+msgstr "تفاصيل المشروع"
 
 #: .\project\templates\project\project_detail.html:16
 msgid "Project Detail"
-msgstr ""
+msgstr "تفاصيل المشروع"
 
 #: .\project\templates\project\project_detail.html:37
 msgid "New Partner Contracts Consultancy"
 msgstr ""
 
 #: .\project\templates\project\projects.html:3
+#, fuzzy
+#| msgid "Projects List"
 msgid "Projects"
 msgstr "قائمة المشاريع"
 
-#: .\project\templates\project\projects.html:17
-msgid "Welcome to our page"
-msgstr ""
-
-#: .\project\templates\project\projects.html:18
+#: .\project\templates\project\projects.html:16
 msgid "Projects List"
 msgstr "قائمة المشاريع"
 
-#: .\project\templates\project\projects.html:26
+#: .\project\templates\project\projects.html:24
 msgid "Search for"
-msgstr ""
+msgstr "البحث عن ..."
 
-#: .\tms\settings.py:138
-msgid "Arabic"
-msgstr ""
+#: .\project\templates\project\projects.html:43
+#, fuzzy
+#| msgid "Project Detail"
+msgid "Project Name"
+msgstr "تفاصيل المشروع"
 
-#: .\tms\settings.py:139
+#: .\project\templates\project\projects.html:44
+msgid "Team Members"
+msgstr "Huqhx hgtvdr"
+
+#: .\project\templates\project\projects.html:45
+#, fuzzy
+#| msgid "Projects List"
+msgid "Project Progress"
+msgstr "قائمة المشاريع"
+
+#: .\project\templates\project\projects.html:46
+msgid "Status"
+msgstr "الحالة"
+
+#: .\project\templates\project\projects.html:47
+msgid "Edit"
+msgstr "تعديل"
+
+#: .\tms\settings.py:140
 msgid "English"
-msgstr ""
+msgstr "إنجليزى"
+
+#: .\tms\settings.py:141
+msgid "Arabic"
+msgstr "Arabic"
