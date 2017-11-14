@@ -8,6 +8,7 @@ import project.views
 from datetime import datetime
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^i18n/', include('django.conf.urls.i18n')),
     # app/ -> Genetelella UI and resources
     url(r'^project/', include('project.urls')),
     url(r'^', include('project.urls')),

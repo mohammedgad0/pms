@@ -39,13 +39,7 @@ def index(request):
 # request.session['idempresa'] = profile.idempresa
 
 def gentella_html(request):
-    sentence = 'Welcome to my site.'
-    output = _(sentence)
-    context = {}
-    username = None
-    if request.user.is_authenticated():
-        username = request.user.username
-        context = {'username'}
+    context = {'LANG': request.LANGUAGE_CODE}
     # The template to be loaded as per gentelella.
     # All resource paths for gentelella end in .html.
     # Pick out the html file name from the url. And load that template.
