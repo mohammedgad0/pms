@@ -74,13 +74,10 @@ msgstr "قائمة المشاريع"
 msgid "Search for"
 msgstr "البحث عن ..."
 
-<<<<<<< HEAD
-=======
 #: .\project\templates\project\projects.html:27
 msgid "Go"
 msgstr "بحث"
 
->>>>>>> 85078c840c80de84fa1dae1f61d4a742a0d6414c
 #: .\project\templates\project\projects.html:44
 msgid "Project Name"
 msgstr "أسم المشروع"
@@ -110,8 +107,6 @@ msgstr "الحالة"
 msgid "Edit"
 msgstr "تعديل"
 
-<<<<<<< HEAD
-=======
 #: .\project\templates\project\projects.html:79
 #: .\project\templates\project\projects.html:111
 #: .\project\templates\project\projects.html:146
@@ -136,7 +131,6 @@ msgstr "مكتمل"
 msgid "Success"
 msgstr "مكتمل"
 
->>>>>>> 85078c840c80de84fa1dae1f61d4a742a0d6414c
 #: .\project\templates\project\projects.html:85
 #: .\project\templates\project\projects.html:117
 #: .\project\templates\project\projects.html:152
@@ -189,11 +183,11 @@ msgstr "إنجليزى"
 msgid "Arabic"
 msgstr "Arabic"
 
-#~ msgid "Go"
-#~ msgstr "بحث"
+# msgid "Go"
+# msgstr "بحث"
 
-#~ msgid "Complete"
-#~ msgstr "مكتمل"
+# msgid "Complete"
+# msgstr "مكتمل"
 
-#~ msgid "Success"
-#~ msgstr "مكتمل"
+# msgid "Success"
+# msgstr "مكتمل"
