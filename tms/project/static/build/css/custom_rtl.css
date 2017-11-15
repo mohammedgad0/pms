@@ -2,7 +2,7 @@
 html, body {
     height: 100%;
     direction: rtl;
-    font: 13px 'neo', serif; 
+    font: 13px 'neo', serif !important; 
 }
 
 .full-width {
