@@ -3,7 +3,7 @@
 {% block title %} {% trans "Projects" %} {% endblock title %}
 
 {% block stylesheets %}
-  {{ block.super }}
+{{ block.super }}
 {% endblock stylesheets %}
 
 {% block content %}
@@ -12,10 +12,11 @@
       <div class="page-title">
         <div class="title_left">
 
-      
+          {# {% get_current_language as LANGUAGE_CODE %} #}
+          {# {{ LANGUAGE_CODE }} #}
           <h3>{% trans "Projects List" %} </h3>
-        
-   
+
+          {# {{ LANG }} #}
         </div>
 
         <div class="title_right">
@@ -23,7 +24,7 @@
             <div class="input-group">
               <input type="text" class="form-control" placeholder="{{_('Search for')}}...">
               <span class="input-group-btn">
-                <button class="btn btn-default" type="button">{% trans "Go" %}!</button>
+                <button class="btn btn-default" type="button">Go!</button>
               </span>
             </div>
           </div>
@@ -75,10 +76,10 @@
                       <div class="progress progress_sm">
                         <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="57"></div>
                       </div>
-                      <small>57% {% trans "Complete" %}</small>
+                      <small>57% Complete</small>
                     </td>
                     <td>
-                      <button type="button" class="btn btn-success btn-xs">{% trans "Success" %}</button>
+                      <button type="button" class="btn btn-success btn-xs">Success</button>
                     </td>
                     <td>
                       <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> {% trans "View" %} </a>
@@ -107,10 +108,10 @@
                       <div class="progress progress_sm">
                         <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="47"></div>
                       </div>
-                      <small>47% {% trans "Complete" %}</small>
+                      <small>47% Complete</small>
                     </td>
                     <td>
-                      <button type="button" class="btn btn-success btn-xs">{% trans "Success" %}</button>
+                      <button type="button" class="btn btn-success btn-xs">Success</button>
                     </td>
                     <td>
                     <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> {% trans "View" %} </a>
@@ -142,10 +143,10 @@
                       <div class="progress progress_sm">
                         <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="77"></div>
                       </div>
-                      <small>77% {% trans "Complete" %}</small>
+                      <small>77% Complete</small>
                     </td>
                     <td>
-                      <button type="button" class="btn btn-success btn-xs">{% trans "Success" %}</button>
+                      <button type="button" class="btn btn-success btn-xs">Success</button>
                     </td>
                     <td>
                       <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> {% trans "View" %} </a>
@@ -180,10 +181,10 @@
                       <div class="progress progress_sm">
                         <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="60"></div>
                       </div>
-                      <small>60% {% trans "Complete" %}</small>
+                      <small>60% Complete</small>
                     </td>
                     <td>
-                      <button type="button" class="btn btn-success btn-xs">{% trans "Success" %}</button>
+                      <button type="button" class="btn btn-success btn-xs">Success</button>
                     </td>
                     <td>
                       <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> {% trans "View" %} </a>
@@ -215,10 +216,10 @@
                       <div class="progress progress_sm">
                         <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="12"></div>
                       </div>
-                      <small>12% {% trans "Complete" %}</small>
+                      <small>12% Complete</small>
                     </td>
                     <td>
-                      <button type="button" class="btn btn-success btn-xs">{% trans "Success" %}</button>
+                      <button type="button" class="btn btn-success btn-xs">Success</button>
                     </td>
                     <td>
                       <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> {% trans "View" %} </a>
@@ -253,10 +254,10 @@
                       <div class="progress progress_sm">
                         <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="35"></div>
                       </div>
-                      <small>35% {% trans "Complete" %}</small>
+                      <small>35% Complete</small>
                     </td>
                     <td>
-                      <button type="button" class="btn btn-success btn-xs">{% trans "Success" %}</button>
+                      <button type="button" class="btn btn-success btn-xs">Success</button>
                     </td>
                     <td>
                       <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> {% trans "View" %} </a>
@@ -285,10 +286,10 @@
                       <div class="progress progress_sm">
                         <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="87"></div>
                       </div>
-                      <small>87% {% trans "Complete" %}</small>
+                      <small>87% Complete</small>
                     </td>
                     <td>
-                      <button type="button" class="btn btn-success btn-xs">{% trans "Success" %}</button>
+                      <button type="button" class="btn btn-success btn-xs">Success</button>
                     </td>
                     <td>
                      <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> {% trans "View" %} </a>
@@ -320,10 +321,10 @@
                       <div class="progress progress_sm">
                         <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="77"></div>
                       </div>
-                      <small>77% {% trans "Complete" %}</small>
+                      <small>77% Complete</small>
                     </td>
                     <td>
-                      <button type="button" class="btn btn-success btn-xs">{% trans "Success" %}</button>
+                      <button type="button" class="btn btn-success btn-xs">Success</button>
                     </td>
                     <td>
                       <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> {% trans "View" %} </a>
@@ -358,10 +359,10 @@
                       <div class="progress progress_sm">
                         <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="77"></div>
                       </div>
-                      <small>77% {% trans "Complete" %}</small>
+                      <small>77% Complete</small>
                     </td>
                     <td>
-                      <button type="button" class="btn btn-success btn-xs">{% trans "Success" %}</button>
+                      <button type="button" class="btn btn-success btn-xs">Success</button>
                     </td>
                     <td>
                        <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> {% trans "View" %} </a>
