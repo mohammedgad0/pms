@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-15 10:41+0300\n"
+"POT-Creation-Date: 2017-11-15 11:34+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,6 +22,30 @@ msgstr ""
 #: .\project\forms.py:11
 msgid "Password"
 msgstr "كلمة المرور"
+
+#: .\project\forms.py:17
+msgid "Task Descreption"
+msgstr "وصف المهمة"
+
+#: .\project\forms.py:18
+msgid "Task type"
+msgstr "نوع المهمة"
+
+#: .\project\forms.py:19
+msgid "Duration"
+msgstr "المدة التقريبية للإنجاز"
+
+#: .\project\templates\project\add-sheet.html:3
+msgid "sheets list"
+msgstr ""
+
+#: .\project\templates\project\add-sheet.html:14
+msgid "add tasks"
+msgstr "إضافة مهام جديدة"
+
+#: .\project\templates\project\add-sheet.html:26
+msgid "Submit"
+msgstr "حفظ"
 
 #: .\project\templates\project\project_detail.html:3
 #, fuzzy
@@ -44,83 +68,31 @@ msgstr ""
 msgid "Projects"
 msgstr "قائمة المشاريع"
 
-#: .\project\templates\project\projects.html:16
+#: .\project\templates\project\projects.html:17
 msgid "Projects List"
 msgstr "قائمة المشاريع"
 
-#: .\project\templates\project\projects.html:24
+#: .\project\templates\project\projects.html:25
 msgid "Search for"
 msgstr "البحث عن ..."
 
-#: .\project\templates\project\projects.html:26
-msgid "Go"
-msgstr "بحث"
-
-#: .\project\templates\project\projects.html:43
+#: .\project\templates\project\projects.html:44
 msgid "Project Name"
 msgstr "أسم المشروع"
 
-#: .\project\templates\project\projects.html:44
+#: .\project\templates\project\projects.html:45
 msgid "Team Members"
 msgstr "اعضاء الفريق"
 
-#: .\project\templates\project\projects.html:45
+#: .\project\templates\project\projects.html:46
 msgid "Project Progress"
 msgstr "نسبة الإنجاز"
 
-#: .\project\templates\project\projects.html:46
+#: .\project\templates\project\projects.html:47
 msgid "Status"
 msgstr "الحالة"
 
-#: .\project\templates\project\projects.html:47
-#: .\project\templates\project\projects.html:85
-#: .\project\templates\project\projects.html:117
-#: .\project\templates\project\projects.html:152
-#: .\project\templates\project\projects.html:190
-#: .\project\templates\project\projects.html:225
-#: .\project\templates\project\projects.html:263
-#: .\project\templates\project\projects.html:295
-#: .\project\templates\project\projects.html:330
-#: .\project\templates\project\projects.html:368
-msgid "Edit"
-msgstr "تعديل"
-
-#: .\project\templates\project\projects.html:78
-#: .\project\templates\project\projects.html:110
-#: .\project\templates\project\projects.html:145
-#: .\project\templates\project\projects.html:183
-#: .\project\templates\project\projects.html:218
-#: .\project\templates\project\projects.html:256
-#: .\project\templates\project\projects.html:288
-#: .\project\templates\project\projects.html:323
-#: .\project\templates\project\projects.html:361
-msgid "Complete"
-msgstr "مكتمل"
-
-#: .\project\templates\project\projects.html:81
-#: .\project\templates\project\projects.html:113
-#: .\project\templates\project\projects.html:148
-#: .\project\templates\project\projects.html:186
-#: .\project\templates\project\projects.html:221
-#: .\project\templates\project\projects.html:259
-#: .\project\templates\project\projects.html:291
-#: .\project\templates\project\projects.html:326
-#: .\project\templates\project\projects.html:364
-msgid "Success"
-msgstr "مكتمل"
-
-#: .\project\templates\project\projects.html:84
-#: .\project\templates\project\projects.html:116
-#: .\project\templates\project\projects.html:151
-#: .\project\templates\project\projects.html:189
-#: .\project\templates\project\projects.html:224
-#: .\project\templates\project\projects.html:262
-#: .\project\templates\project\projects.html:294
-#: .\project\templates\project\projects.html:329
-#: .\project\templates\project\projects.html:367
-msgid "View"
-msgstr "معاينة"
-
+#: .\project\templates\project\projects.html:48
 #: .\project\templates\project\projects.html:86
 #: .\project\templates\project\projects.html:118
 #: .\project\templates\project\projects.html:153
@@ -130,6 +102,30 @@ msgstr "معاينة"
 #: .\project\templates\project\projects.html:296
 #: .\project\templates\project\projects.html:331
 #: .\project\templates\project\projects.html:369
+msgid "Edit"
+msgstr "تعديل"
+
+#: .\project\templates\project\projects.html:85
+#: .\project\templates\project\projects.html:117
+#: .\project\templates\project\projects.html:152
+#: .\project\templates\project\projects.html:190
+#: .\project\templates\project\projects.html:225
+#: .\project\templates\project\projects.html:263
+#: .\project\templates\project\projects.html:295
+#: .\project\templates\project\projects.html:330
+#: .\project\templates\project\projects.html:368
+msgid "View"
+msgstr "معاينة"
+
+#: .\project\templates\project\projects.html:87
+#: .\project\templates\project\projects.html:119
+#: .\project\templates\project\projects.html:154
+#: .\project\templates\project\projects.html:192
+#: .\project\templates\project\projects.html:227
+#: .\project\templates\project\projects.html:265
+#: .\project\templates\project\projects.html:297
+#: .\project\templates\project\projects.html:332
+#: .\project\templates\project\projects.html:370
 msgid "Delete"
 msgstr "حذف"
 
@@ -160,3 +156,12 @@ msgstr "إنجليزى"
 #: .\tms\settings.py:141
 msgid "Arabic"
 msgstr "Arabic"
+
+#~ msgid "Go"
+#~ msgstr "بحث"
+
+#~ msgid "Complete"
+#~ msgstr "مكتمل"
+
+#~ msgid "Success"
+#~ msgstr "مكتمل"

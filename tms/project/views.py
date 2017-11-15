@@ -46,3 +46,8 @@ def gentella_html(request):
     load_template = request.path.split('/')[-1]
     template = loader.get_template('project/' + load_template)
     return HttpResponse(template.render(context, request))
+
+def AddSheet(request):
+    form = AddNewSheet
+    # form = form_class(request.POST or None)
+    return render(request, 'project/add-sheet.html', {'form': form})

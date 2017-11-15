@@ -88,7 +88,6 @@ class Employee(models.Model):
         managed = False
         db_table = 'employee'
 
-
 class Department(models.Model):
     id = models.IntegerField(db_column='Id', primary_key=True)  # Field name made lowercase.
     name = models.CharField(db_column='Name', max_length=45, blank=True, null=True)  # Field name made lowercase.
@@ -98,3 +97,19 @@ class Department(models.Model):
     class Meta:
         managed = False
         db_table = 'department'
+
+class Sheet(models.Model):
+    id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
+    empid = models.BigIntegerField(db_column='EmpId', blank=True, null=True)  # Field name made lowercase.
+    deptcode = models.IntegerField(db_column='DeptCode', blank=True, null=True)  # Field name made lowercase.
+    managercode = models.BigIntegerField(db_column='ManagerCode', blank=True, null=True)  # Field name made lowercase.
+    taskdesc = models.CharField(db_column='TaskDesc', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    tasktype = models.CharField(db_column='TaskType', max_length=45, blank=True, null=True)  # Field name made lowercase.
+    duration = models.IntegerField(db_column='Duration', blank=True, null=True)  # Field name made lowercase.
+    createddate = models.DateField(db_column='CreatedDate', blank=True, null=True)  # Field name made lowercase.
+    editedate = models.DateField(db_column='EditeDate', blank=True, null=True)  # Field name made lowercase.
+    ifsubmitted = models.IntegerField(db_column='IfSubmitted', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'sheet'

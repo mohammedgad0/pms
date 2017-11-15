@@ -12,3 +12,8 @@ class BootstrapAuthenticationForm(AuthenticationForm):
                                widget=forms.PasswordInput({
                                    'class': 'form-control',
                                    'placeholder':'Password'}))
+
+class AddNewSheet(forms.Form):
+    TaskDesc = forms.CharField(label=_("Task Descreption"))
+    TaskType = forms.CharField(label=_("Task type"))
+    Duration = forms.IntegerField(label=_("Duration"))
