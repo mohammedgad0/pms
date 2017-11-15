@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-15 08:44+0300\n"
+"POT-Creation-Date: 2017-11-15 10:41+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,6 +38,7 @@ msgid "New Partner Contracts Consultancy"
 msgstr ""
 
 #: .\project\templates\project\projects.html:3
+#: .\project\templates\project\sidebar.html:35
 #, fuzzy
 #| msgid "Projects List"
 msgid "Projects"
@@ -106,7 +107,7 @@ msgstr "مكتمل"
 #: .\project\templates\project\projects.html:326
 #: .\project\templates\project\projects.html:364
 msgid "Success"
-msgstr ""
+msgstr "مكتمل"
 
 #: .\project\templates\project\projects.html:84
 #: .\project\templates\project\projects.html:116
@@ -131,6 +132,26 @@ msgstr "معاينة"
 #: .\project\templates\project\projects.html:369
 msgid "Delete"
 msgstr "حذف"
+
+#: .\project\templates\project\sidebar.html:30
+msgid "General"
+msgstr "عام"
+
+#: .\project\templates\project\sidebar.html:34
+msgid "Home"
+msgstr "الرئيسية"
+
+#: .\project\templates\project\sidebar.html:36
+msgid "Tasks"
+msgstr "المهام"
+
+#: .\project\templates\project\sidebar.html:37
+msgid "My To Do List"
+msgstr "سجل مهامى"
+
+#: .\project\templates\project\sidebar.html:38
+msgid "Reports"
+msgstr "التقارير"
 
 #: .\tms\settings.py:140
 msgid "English"
