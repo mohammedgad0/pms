@@ -12,6 +12,15 @@
       <title>نظام إدارة المهام-الهيئة العامة للإحصاء| {% block title %}{% endblock %}</title>
       {% block stylesheets %}
         <!-- Bootstrap -->
+        <style>
+        @font-face { font-family: 'neo';
+         src: url('/static/fonts/neo/NeoSansArabic.eot'); 
+         src: url('/static/fonts/neo/NeoSansArabic.eot?#iefix') format('embedded-opentype'),
+         url('/static/fonts/neo/NeoSansArabic.woff') format('woff'), 
+         url('/static/fonts/neo/NeoSansArabic.ttf') format('truetype'), 
+         url('/static/fonts/neo/NeoSansArabic.svg#ge_neofont') format('svg'); font-style: normal; }
+        
+        </style>
         <link href="/static/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
       <link href="/static/vendors/bootstrap/dist/css/bootstrap-rtl.min.css" rel="stylesheet">
         <!-- Font Awesome -->
@@ -28,7 +37,7 @@
         <link href="/static/vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet"/>
       {% endblock stylesheets %}
       <!-- Custom Theme Style -->
-      <link href="/static/build/css/custom_rtl.min.css" rel="stylesheet">
+      <link href="/static/build/css/custom_rtl.css" rel="stylesheet">
     {% endblock head %}
   </head>
 <body class="{% block body_class %}nav-md {% endblock body_class %}">

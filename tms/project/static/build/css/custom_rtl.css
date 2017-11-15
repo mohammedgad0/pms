@@ -1,5 +1,4 @@
-﻿@font-face { font-family: 'neo'; src: url('../fonts/neo/NeoSansArabic.eot'); src: url('../fonts/neo/NeoSansArabic.eot?#iefix') format('embedded-opentype'), url('../fonts/neo/NeoSansArabic.woff') format('woff'), url('../fonts/neo/NeoSansArabic.ttf') format('truetype'), url('../fonts/neo/NeoSansArabic.svg#ge_neofont') format('svg'); font-style: normal; }
-
+﻿
 html, body {
     height: 100%;
     direction: rtl;
@@ -632,7 +631,8 @@ body {
     }
 
         .page-title .title_right .pull-right {
-            margin: 10px 0
+            margin: 10px 0;
+                float: left!important;
         }
 
 .fixed_height_320 {
