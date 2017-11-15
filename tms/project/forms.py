@@ -20,3 +20,8 @@ class AddNewSheet(forms.Form):
                widget=forms.TextInput({'class': 'form-control','placeholder':'task'}))
     Duration = forms.IntegerField(label=_("Duration"),
                widget=forms.TextInput({'class': 'form-control','placeholder':'task1'}))
+
+
+#Ad Project
+class ProjectForm(forms.Form):
+    ProjectName = forms.CharField(label='Project Name', max_length=100) 
