@@ -63,10 +63,8 @@ msgstr ""
 
 #: .\project\templates\project\projects.html:3
 #: .\project\templates\project\sidebar.html:35
-#, fuzzy
-#| msgid "Projects List"
 msgid "Projects"
-msgstr "قائمة المشاريع"
+msgstr "المشاريع"
 
 #: .\project\templates\project\projects.html:17
 msgid "Projects List"
@@ -76,6 +74,13 @@ msgstr "قائمة المشاريع"
 msgid "Search for"
 msgstr "البحث عن ..."
 
+<<<<<<< HEAD
+=======
+#: .\project\templates\project\projects.html:27
+msgid "Go"
+msgstr "بحث"
+
+>>>>>>> 85078c840c80de84fa1dae1f61d4a742a0d6414c
 #: .\project\templates\project\projects.html:44
 msgid "Project Name"
 msgstr "أسم المشروع"
@@ -105,6 +110,33 @@ msgstr "الحالة"
 msgid "Edit"
 msgstr "تعديل"
 
+<<<<<<< HEAD
+=======
+#: .\project\templates\project\projects.html:79
+#: .\project\templates\project\projects.html:111
+#: .\project\templates\project\projects.html:146
+#: .\project\templates\project\projects.html:184
+#: .\project\templates\project\projects.html:219
+#: .\project\templates\project\projects.html:257
+#: .\project\templates\project\projects.html:289
+#: .\project\templates\project\projects.html:324
+#: .\project\templates\project\projects.html:362
+msgid "Complete"
+msgstr "مكتمل"
+
+#: .\project\templates\project\projects.html:82
+#: .\project\templates\project\projects.html:114
+#: .\project\templates\project\projects.html:149
+#: .\project\templates\project\projects.html:187
+#: .\project\templates\project\projects.html:222
+#: .\project\templates\project\projects.html:260
+#: .\project\templates\project\projects.html:292
+#: .\project\templates\project\projects.html:327
+#: .\project\templates\project\projects.html:365
+msgid "Success"
+msgstr "مكتمل"
+
+>>>>>>> 85078c840c80de84fa1dae1f61d4a742a0d6414c
 #: .\project\templates\project\projects.html:85
 #: .\project\templates\project\projects.html:117
 #: .\project\templates\project\projects.html:152
