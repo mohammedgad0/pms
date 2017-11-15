@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-15 01:39+0300\n"
+"POT-Creation-Date: 2017-11-15 08:44+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,6 +51,10 @@ msgstr "قائمة المشاريع"
 msgid "Search for"
 msgstr "البحث عن ..."
 
+#: .\project\templates\project\projects.html:26
+msgid "Go"
+msgstr "بحث"
+
 #: .\project\templates\project\projects.html:43
 msgid "Project Name"
 msgstr "أسم المشروع"
@@ -80,6 +84,30 @@ msgstr "الحالة"
 msgid "Edit"
 msgstr "تعديل"
 
+#: .\project\templates\project\projects.html:78
+#: .\project\templates\project\projects.html:110
+#: .\project\templates\project\projects.html:145
+#: .\project\templates\project\projects.html:183
+#: .\project\templates\project\projects.html:218
+#: .\project\templates\project\projects.html:256
+#: .\project\templates\project\projects.html:288
+#: .\project\templates\project\projects.html:323
+#: .\project\templates\project\projects.html:361
+msgid "Complete"
+msgstr "مكتمل"
+
+#: .\project\templates\project\projects.html:81
+#: .\project\templates\project\projects.html:113
+#: .\project\templates\project\projects.html:148
+#: .\project\templates\project\projects.html:186
+#: .\project\templates\project\projects.html:221
+#: .\project\templates\project\projects.html:259
+#: .\project\templates\project\projects.html:291
+#: .\project\templates\project\projects.html:326
+#: .\project\templates\project\projects.html:364
+msgid "Success"
+msgstr ""
+
 #: .\project\templates\project\projects.html:84
 #: .\project\templates\project\projects.html:116
 #: .\project\templates\project\projects.html:151
@@ -102,7 +130,7 @@ msgstr "معاينة"
 #: .\project\templates\project\projects.html:331
 #: .\project\templates\project\projects.html:369
 msgid "Delete"
-msgstr ""
+msgstr "حذف"
 
 #: .\tms\settings.py:140
 msgid "English"
