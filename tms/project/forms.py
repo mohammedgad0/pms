@@ -14,6 +14,9 @@ class BootstrapAuthenticationForm(AuthenticationForm):
                                    'placeholder':'Password'}))
 
 class AddNewSheet(forms.Form):
-    TaskDesc = forms.CharField(label=_("Task Descreption"))
-    TaskType = forms.CharField(label=_("Task type"))
-    Duration = forms.IntegerField(label=_("Duration"))
+    TaskDesc = forms.CharField(label=_("Task Descreption"),
+               widget=forms.TextInput({'class': 'form-control','placeholder': 'وصف المهمة كامل'}))
+    TaskType = forms.CharField(label=_("Task type"),
+               widget=forms.TextInput({'class': 'form-control','placeholder':'task'}))
+    Duration = forms.IntegerField(label=_("Duration"),
+               widget=forms.TextInput({'class': 'form-control','placeholder':'task1'}))
