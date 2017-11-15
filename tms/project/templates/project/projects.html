@@ -3,7 +3,7 @@
 {% block title %} {% trans "Projects" %} {% endblock title %}
 
 {% block stylesheets %}
-  {{ block.super }}
+{{ block.super }}
 {% endblock stylesheets %}
 
 {% block content %}
@@ -14,10 +14,9 @@
 
           {# {% get_current_language as LANGUAGE_CODE %} #}
           {# {{ LANGUAGE_CODE }} #}
-          <p>{% trans "Welcome to our page" %}</p>
           <h3>{% trans "Projects List" %} </h3>
-        
-          {{ LANG }}
+
+          {# {{ LANG }} #}
         </div>
 
         <div class="title_right">
