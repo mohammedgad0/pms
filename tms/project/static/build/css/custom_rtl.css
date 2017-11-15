@@ -2,7 +2,7 @@
 html, body {
     height: 100%;
     direction: rtl;
-    font: 13px 'neo', serif !important ;
+    font: 13px 'neo', serif !important;
 }
 
 .full-width {
@@ -818,7 +818,7 @@ a {
 .top_nav .navbar-right {
     margin: 0;
     width: 70%;
-    float: left
+    float: left !important;
 }
 
     .top_nav .navbar-right li {
