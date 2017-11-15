@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
+import datetime
 
 class BootstrapAuthenticationForm(AuthenticationForm):
     """Authentication form which uses boostrap CSS."""
@@ -22,6 +23,13 @@ class AddNewSheet(forms.Form):
                widget=forms.TextInput({'class': 'form-control','placeholder':'task1'}))
 
 
-#Ad Project
 class ProjectForm(forms.Form):
-    ProjectName = forms.CharField(label='Project Name', max_length=100) 
+    error_css_class = 'error'
+    required_css_class = 'required'
+    
+    ProjectName = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control','placeholder':_('project Name')}))
+    StartDay = forms.DateField(initial=datetime.date.today,widget=forms.TextInput(attrs={'class': 'form-control xdisplay_inputx form-group has-feedback','id':'single_cal1','placeholder':_('Start Date')}))
+    subject = forms.CharField(max_length=100)
+    message = forms.CharField(widget=forms.Textarea)
+    sender = forms.EmailField()
+    cc_myself = forms.BooleanField(required=False)

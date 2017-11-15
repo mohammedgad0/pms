@@ -1,6 +1,9 @@
 from django.conf.urls import url ,include
 from project import views
 
+#application namespace
+app_name = 'project'
+
 urlpatterns = [
     # Matches any html file - to be used for gentella
     # Avoid using your .html in your resources.
