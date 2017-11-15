@@ -1056,7 +1056,7 @@ a {
 }
 
 .panel_toolbox {
-    float: left;
+    float: left !important;
     min-width: 70px
 }
 
