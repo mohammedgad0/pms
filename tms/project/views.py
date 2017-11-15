@@ -6,7 +6,7 @@ from .forms import *
 from django.contrib.auth.views import *
 from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext as _
-
+from django.forms import formset_factory
 
 
 def myuser(request, *args, **kwargs):
@@ -48,6 +48,8 @@ def gentella_html(request):
     return HttpResponse(template.render(context, request))
 
 def AddSheet(request):
-    form = AddNewSheet
+    form = formset_factory(AddNewSheet, extra=6)
+    formset = form
+    # form = AddNewSheet
     # form = form_class(request.POST or None)
-    return render(request, 'project/add-sheet.html', {'form': form})
+    return render(request, 'project/add-sheet.html', {'form': formset})

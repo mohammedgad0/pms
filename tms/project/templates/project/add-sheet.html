@@ -20,11 +20,24 @@
         <div class="col-md-12">
           <div class="x_panel">
             <div class="x_content">
+
               <form method="POST">
                 {% csrf_token %}
-                {{ form }}
-                <button type="submit" name="_submit" class="btn">{{ _('Submit') }}</button>
+                {% for form in form %}
+                
+                <div class="col-md-4 col-sm-12 col-xs-12 form-group">
+                  {{ form.TaskDesc }}
+                </div>
+                <div class="col-md-4 col-sm-12 col-xs-12 form-group">
+                  {{ form.TaskType }}
+                </div>
+                <div class="col-md-4 col-sm-12 col-xs-12 form-group">
+                  {{ form.Duration }}
+                </div>
+                {% endfor %}
+                <button type="submit" name="_submit" class="btn btn-success">{{ _('Submit') }}</button>
               </form>
+
             </div>
           </div>
         </div>
