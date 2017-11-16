@@ -9,6 +9,7 @@ from django.utils.translation import ugettext as _
 from django.forms import formset_factory
 from .models import *
 from django.forms import BaseModelFormSet
+from datetime import datetime
 
 
 def myuser(request, *args, **kwargs):
@@ -83,7 +84,7 @@ def AddProject(request):
             StartDate = form.cleaned_data['StartDate']
             EndDate = form.cleaned_data['EndDate']
             Desc = form.cleaned_data['Desc']
-            p_obj= Project(name=ProjectName,start=StartDate,end=EndDate,desc=Desc)
+            p_obj= Project(name=ProjectName,start=StartDate,end=EndDate,desc=Desc,createddate=datetime.now())
             p_obj.save()
             # redirect to a new URL:
             return HttpResponseRedirect('/thanks/')

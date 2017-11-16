@@ -10,8 +10,8 @@ class Project(models.Model):
     end = models.DateField()
     teamname = models.CharField(db_column='TeamName', max_length=100)  # Field name made lowercase.
     desc = models.CharField(db_column='Desc', max_length=250)  # Field name made lowercase.
-    creationby = models.CharField(db_column='CreationBy', max_length=20)  # Field name made lowercase.
-    creationdate = models.DateTimeField(db_column='CreationDate')  # Field name made lowercase.
+    createdby = models.CharField(db_column='CreatedBy', max_length=20)  # Field name made lowercase.
+    createddate = models.DateTimeField(db_column='CreatedDate')  # Field name made lowercase.
     departementid = models.IntegerField(db_column='DepartementId')  # Field name made lowercase.
     statusid = models.IntegerField(db_column='StatusId')  # Field name made lowercase.
     openby = models.CharField(db_column='OpenBy', max_length=20)  # Field name made lowercase.
