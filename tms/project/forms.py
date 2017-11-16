@@ -21,20 +21,17 @@ class AddNewSheet(forms.Form):
     TaskType = forms.ChoiceField(choices=(('M', _('Master')), ('H', _('Help'))),label=_("Task type"),
                     widget=forms.Select({'class': 'form-control','placeholder':'task'}))
     Duration = forms.IntegerField(label=_("Duration"),
-<<<<<<< HEAD
                widget=forms.NumberInput({'class': 'form-control','placeholder':'0'}))
-=======
-               widget=forms.TextInput({'class': 'form-control','placeholder':'task1'}))
+               
 
 
 class ProjectForm(forms.Form):
     error_css_class = 'error'
     required_css_class = 'required'
-    
+
     ProjectName = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control','placeholder':_('project Name')}))
     StartDay = forms.DateField(initial=datetime.date.today,widget=forms.TextInput(attrs={'class': 'form-control xdisplay_inputx form-group has-feedback','id':'single_cal1','placeholder':_('Start Date')}))
     subject = forms.CharField(max_length=100)
     message = forms.CharField(widget=forms.Textarea)
     sender = forms.EmailField()
     cc_myself = forms.BooleanField(required=False)
->>>>>>> 295bed3fc19f822ee677e31d570a96718b2f3195
