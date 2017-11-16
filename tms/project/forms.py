@@ -2,6 +2,9 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
 import datetime
+from django.forms import modelformset_factory
+from .models import *
+
 
 class BootstrapAuthenticationForm(AuthenticationForm):
     """Authentication form which uses boostrap CSS."""
@@ -22,8 +25,8 @@ class AddNewSheet(forms.Form):
                     widget=forms.Select({'class': 'form-control','placeholder':'task'}))
     Duration = forms.IntegerField(label=_("Duration"),
                widget=forms.NumberInput({'class': 'form-control','placeholder':'0'}))
-               
 
+AddSheet = modelformset_factory(Sheet, fields=('taskdesc', 'tasktype', 'duration'))
 
 class ProjectForm(forms.Form):
     error_css_class = 'error'

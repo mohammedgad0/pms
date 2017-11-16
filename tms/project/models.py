@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-
+from django.utils.translation import ugettext_lazy as _
 from django.db import models
 
 
@@ -103,9 +103,13 @@ class Sheet(models.Model):
     empid = models.BigIntegerField(db_column='EmpId', blank=True, null=True)  # Field name made lowercase.
     deptcode = models.IntegerField(db_column='DeptCode', blank=True, null=True)  # Field name made lowercase.
     managercode = models.BigIntegerField(db_column='ManagerCode', blank=True, null=True)  # Field name made lowercase.
-    taskdesc = models.CharField(db_column='TaskDesc', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    tasktype = models.CharField(db_column='TaskType', max_length=45, blank=True, null=True)  # Field name made lowercase.
-    duration = models.IntegerField(db_column='Duration', blank=True, null=True)  # Field name made lowercase.
+    taskdesc = models.CharField(_('Task Descreption'),db_column='TaskDesc', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    TASK_STATUS = (
+        ('m', _('Master')),
+        ('h', _('Help')),
+    )
+    tasktype = models.CharField(_('Task type'), max_length=1, choices=TASK_STATUS, db_column='TaskType', blank=True, null=True)  # Field name made lowercase.
+    duration = models.IntegerField(_('Duration'),db_column='Duration',blank=True, null=True)  # Field name made lowercase.
     createddate = models.DateField(db_column='CreatedDate', blank=True, null=True)  # Field name made lowercase.
     editedate = models.DateField(db_column='EditeDate', blank=True, null=True)  # Field name made lowercase.
     ifsubmitted = models.IntegerField(db_column='IfSubmitted', blank=True, null=True)  # Field name made lowercase.
