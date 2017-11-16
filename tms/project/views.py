@@ -79,10 +79,12 @@ def AddProject(request):
         # check whether it's valid:
         if form.is_valid():
             # process the data in form.cleaned_data as required
-            subject = form.cleaned_data['subject']
-            message = form.cleaned_data['message']
-            sender = form.cleaned_data['sender']
-            cc_myself = form.cleaned_data['cc_myself']
+            ProjectName = form.cleaned_data['ProjectName']
+            StartDate = form.cleaned_data['StartDate']
+            EndDate = form.cleaned_data['EndDate']
+            Desc = form.cleaned_data['Desc']
+            p_obj= Project(name=ProjectName,start=StartDate,end=EndDate,desc=Desc)
+            p_obj.save()
             # redirect to a new URL:
             return HttpResponseRedirect('/thanks/')
 

@@ -33,8 +33,7 @@ class ProjectForm(forms.Form):
     required_css_class = 'required'
 
     ProjectName = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control','placeholder':_('project Name')}))
-    StartDay = forms.DateField(initial=datetime.date.today,widget=forms.TextInput(attrs={'class': 'form-control xdisplay_inputx form-group has-feedback','id':'single_cal1','placeholder':_('Start Date')}))
-    subject = forms.CharField(max_length=100)
-    message = forms.CharField(widget=forms.Textarea)
-    sender = forms.EmailField()
-    cc_myself = forms.BooleanField(required=False)
+    StartDate = forms.DateField(initial=datetime.date.today,widget=forms.TextInput(attrs={'class': 'form-control xdisplay_inputx form-group has-feedback','id':'#single_cal1','placeholder':_('Start Date')}))
+    EndDate=forms.DateField(initial=datetime.date.today,widget=forms.TextInput(attrs={'class': 'form-control xdisplay_inputx form-group has-feedback','id':'#single_cal1','placeholder':_('End Date')}))
+    Desc =  forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','placeholder':_('project Description')}))
+

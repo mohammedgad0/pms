@@ -30,10 +30,17 @@
    </div>
     
        <div class="col-md-4 col-sm-12 col-xs-12 form-group"> 
-   {{  form.StartDay  }} 
-   <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
-                          <span id="inputSuccess2Status" class="sr-only">(success)</span>
+   {{  form.StartDate  }}                         
    </div>
+   
+          <div class="col-md-4 col-sm-12 col-xs-12 form-group"> 
+   {{  form.EndDate  }}                         
+   </div>
+   
+             <div class="col-md-4 col-sm-12 col-xs-12 form-group"> 
+   {{  form.Desc  }}                         
+   </div>
+   
    
    
    <!-- {{ form.as_table }} -->
@@ -42,34 +49,17 @@
 <!-- {{ form.subject.errors }}
     <label for="{{ form.subject.id_for_label }}">Email subject:</label>
     {{ form.subject }}
-       -->
+     
        
     {{ form.subject.errors }}
     {{ form.subject.label_tag }}
     {{ form.subject }}
+    
+      -->
  
 </div>
-<div class="fieldWrapper">
-    {{ form.message.errors }}
-    <label for="{{ form.message.id_for_label }}">Your message:</label>
-    {{ form.message }}
-</div>
-<div class="fieldWrapper">
-    {% if form.sender.errors %}
-    <ol>
-    {% for error in form.sender.errors %}
-        <li><strong>{{ error|escape }}</strong></li>
-    {% endfor %}
-    </ol>
-{% endif %}
-    <label for="{{ form.sender.id_for_label }}">Your email address:</label>
-    {{ form.sender }}
-</div>
-<div class="fieldWrapper">
-    {{ form.cc_myself.errors }}
-    <label for="{{ form.cc_myself.id_for_label }}">CC yourself?</label>
-    {{ form.cc_myself }}
-</div>
+
+
     <input type="submit" value="Submit" />
     
 
