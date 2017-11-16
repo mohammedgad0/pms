@@ -22,9 +22,9 @@ def myuser(request, *args, **kwargs):
         for data in emp:
             request.session['EmpEmail'] = data.email
             request.session['EmpName'] = data.empname
-            request.session['DepName'] = data.depname
+            request.session['DeptName'] = data.deptname
             request.session['Mobile'] = data.mobile
-            request.session['DeptCode'] = data.depcode
+            request.session['DeptCode'] = data.deptcode
     return login(request, *args, **kwargs)
 # @login_required
 def index(request):
@@ -46,7 +46,7 @@ def gentella_html(request):
     load_template = request.path.split('/')[-1]
     template = loader.get_template('project/' + load_template)
     return HttpResponse(template.render(context, request))
-
+@login_required
 def AddSheet(request):
     form = formset_factory(AddNewSheet, extra=6)
     formset = form

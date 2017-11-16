@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-15 11:34+0300\n"
+"POT-Creation-Date: 2017-11-15 13:40+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,11 +27,19 @@ msgstr "كلمة المرور"
 msgid "Task Descreption"
 msgstr "وصف المهمة"
 
-#: .\project\forms.py:18
+#: .\project\forms.py:20
+msgid "Master"
+msgstr "رئيسية"
+
+#: .\project\forms.py:20
+msgid "Help"
+msgstr "مساندة"
+
+#: .\project\forms.py:20
 msgid "Task type"
 msgstr "نوع المهمة"
 
-#: .\project\forms.py:19
+#: .\project\forms.py:22
 msgid "Duration"
 msgstr "المدة التقريبية للإنجاز"
 
@@ -43,7 +51,7 @@ msgstr ""
 msgid "add tasks"
 msgstr "إضافة مهام جديدة"
 
-#: .\project\templates\project\add-sheet.html:26
+#: .\project\templates\project\add-sheet.html:41
 msgid "Submit"
 msgstr "حفظ"
 
@@ -160,6 +168,7 @@ msgid "General"
 msgstr "عام"
 
 #: .\project\templates\project\sidebar.html:34
+#: .\project\templates\project\sidebar2.html:34
 msgid "Home"
 msgstr "الرئيسية"
 
@@ -182,12 +191,3 @@ msgstr "إنجليزى"
 #: .\tms\settings.py:141
 msgid "Arabic"
 msgstr "Arabic"
-
-# msgid "Go"
-# msgstr "بحث"
-
-# msgid "Complete"
-# msgstr "مكتمل"
-
-# msgid "Success"
-# msgstr "مكتمل"

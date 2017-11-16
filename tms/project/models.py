@@ -75,10 +75,10 @@ class ProjectStatus(models.Model):
 class Employee(models.Model):
     id = models.IntegerField(db_column='Id', primary_key=True)  # Field name made lowercase.
     empid = models.CharField(db_column='EmpId', max_length=45, blank=True, null=True)  # Field name made lowercase.
-    empname = models.CharField(db_column='EmpName', max_length=255)  # Field name made lowercase.
-    depcode = models.CharField(db_column='DepCode', max_length=45, blank=True, null=True)  # Field name made lowercase.
-    depname = models.CharField(db_column='DepName', max_length=45, blank=True, null=True)  # Field name made lowercase.
-    ismanager = models.CharField(db_column='IsManager', max_length=45, blank=True, null=True)  # Field name made lowercase.
+    empname = models.CharField(db_column='EmpName', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    deptcode = models.CharField(db_column='DeptCode', max_length=45, blank=True, null=True)  # Field name made lowercase.
+    deptname = models.CharField(db_column='DeptName', max_length=200, blank=True, null=True)  # Field name made lowercase.
+    ismanager = models.IntegerField(db_column='IsManager', blank=True, null=True)  # Field name made lowercase.
     ext = models.CharField(db_column='Ext', max_length=45, blank=True, null=True)  # Field name made lowercase.
     mobile = models.CharField(db_column='Mobile', max_length=45, blank=True, null=True)  # Field name made lowercase.
     email = models.CharField(db_column='Email', max_length=100, blank=True, null=True)  # Field name made lowercase.
@@ -90,9 +90,9 @@ class Employee(models.Model):
 
 class Department(models.Model):
     id = models.IntegerField(db_column='Id', primary_key=True)  # Field name made lowercase.
-    name = models.CharField(db_column='Name', max_length=45, blank=True, null=True)  # Field name made lowercase.
+    deptname = models.CharField(db_column='DeptName', max_length=200, blank=True, null=True)  # Field name made lowercase.
     managerid = models.CharField(db_column='ManagerId', max_length=45, blank=True, null=True)  # Field name made lowercase.
-    depcode = models.IntegerField(db_column='DepCode', blank=True, null=True)  # Field name made lowercase.
+    deptcode = models.IntegerField(db_column='DeptCode', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False

@@ -12,6 +12,7 @@
       <div class="page-title">
         <div class="title_left">
           <h3>{% trans "add tasks" %} </h3>
+            {{ request.user.email }}
         </div>
       </div>
 
@@ -24,14 +25,17 @@
               <form method="POST">
                 {% csrf_token %}
                 {% for form in form %}
-                
+
                 <div class="col-md-4 col-sm-12 col-xs-12 form-group">
+                  {{ form.TaskDesc.label_tag}}
                   {{ form.TaskDesc }}
                 </div>
                 <div class="col-md-4 col-sm-12 col-xs-12 form-group">
+                  {{form.TaskType.label_tag}}
                   {{ form.TaskType }}
                 </div>
                 <div class="col-md-4 col-sm-12 col-xs-12 form-group">
+                 {{ form.Duration.label_tag}}
                   {{ form.Duration }}
                 </div>
                 {% endfor %}
