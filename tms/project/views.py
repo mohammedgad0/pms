@@ -53,3 +53,24 @@ def AddSheet(request):
     # form = AddNewSheet
     # form = form_class(request.POST or None)
     return render(request, 'project/add-sheet.html', {'form': formset})
+
+def AddProject(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = ProjectForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            subject = form.cleaned_data['subject']
+            message = form.cleaned_data['message']
+            sender = form.cleaned_data['sender']
+            cc_myself = form.cleaned_data['cc_myself']
+            # redirect to a new URL:
+            return HttpResponseRedirect('/thanks/')
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = ProjectForm()
+
+    return render(request, 'project/add_project.html', {'form': form})
