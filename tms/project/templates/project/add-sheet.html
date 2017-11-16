@@ -12,36 +12,49 @@
       <div class="page-title">
         <div class="title_left">
           <h3>{% trans "add tasks" %} </h3>
-            {{ request.user.email }}
         </div>
       </div>
-
       <div class="clearfix"></div>
       <div class="row">
         <div class="col-md-12">
           <div class="x_panel">
             <div class="x_content">
-
-              <form method="POST">
+            <!--  <form method="POST">
                 {% csrf_token %}
+                {{ form.management_form }}
                 {% for form in form %}
-
-                <div class="col-md-4 col-sm-12 col-xs-12 form-group">
-                  {{ form.TaskDesc.label_tag}}
-                  {{ form.TaskDesc }}
-                </div>
-                <div class="col-md-4 col-sm-12 col-xs-12 form-group">
-                  {{form.TaskType.label_tag}}
-                  {{ form.TaskType }}
-                </div>
-                <div class="col-md-4 col-sm-12 col-xs-12 form-group">
-                 {{ form.Duration.label_tag}}
-                  {{ form.Duration }}
-                </div>
+                {{ form.errors }}
+                {{ form.label_tag }} {{  form}}
+                  <div class="clearfix"></div>
                 {% endfor %}
                 <button type="submit" name="_submit" class="btn btn-success">{{ _('Submit') }}</button>
-              </form>
+              </form> -->
+  <form method="POST">
+  {% csrf_token %}
+  {{ form.management_form }}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>{{ _('Task Descreption') }}</th>
+        <th>{{ _('Task type') }}</th>
+        <th>{{ _('Duration') }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for form in form %}
+      <tr>
+        {{ form.id}}
+        <td>{{ form.taskdesc }}</td>
+        <td>{{ form.tasktype }}</td>
+        <td> {{ form.duration }}</td>
 
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <button type="submit" name="_submit" class="btn btn-success">{{ _('Submit') }}</button>
+</form>
             </div>
           </div>
         </div>

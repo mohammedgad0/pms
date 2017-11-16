@@ -7,6 +7,8 @@ from django.contrib.auth.views import *
 from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext as _
 from django.forms import formset_factory
+from .models import *
+from django.forms import BaseModelFormSet
 
 
 def myuser(request, *args, **kwargs):
@@ -46,11 +48,26 @@ def gentella_html(request):
     load_template = request.path.split('/')[-1]
     template = loader.get_template('project/' + load_template)
     return HttpResponse(template.render(context, request))
-@login_required
+
+# @login_required
 def AddSheet(request):
-    form = formset_factory(AddNewSheet, extra=6)
-    formset = form
-    # form = AddNewSheet
+    AddSheet = modelformset_factory(Sheet, fields=('taskdesc', 'tasktype', 'duration'), extra=4,
+        widgets = {
+            'taskdesc': forms.TextInput(attrs={'class': 'form-control'}),
+            'tasktype': forms.Select(attrs={'class': 'form-control'}),
+            'duration': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+    )
+
+    if request.method == 'POST':
+        formset = AddSheet(request.POST)
+        if formset.is_valid():
+            instances = formset.save(commit=False)
+            for obj in instances:
+                obj.createddate = datetime.datetime.now()
+                obj.save()
+    else:
+        formset = AddSheet()
     # form = form_class(request.POST or None)
     return render(request, 'project/add-sheet.html', {'form': formset})
 
