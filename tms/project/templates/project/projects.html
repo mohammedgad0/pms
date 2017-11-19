@@ -116,21 +116,45 @@
                 </tbody>
               </table>
               <!-- end project list -->
-<div class="pagination">
-    <span class="step-links">
-        {% if project_list.has_previous %}
-            <a href="?page={{ project_list.previous_page_number }}">previous</a>
-        {% endif %}
+<!--  pager -->
+<div>
 
-        <span class="current">
-            Page {{ project_list.number }} of {{ project_list.paginator.num_pages }}.
+{% if project_list.has_other_pages %}
+  <ul class="pagination">
+  
+ 
+    {% if project_list.has_previous %}
+      <li><a href="?page={{ project_list.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in project_list.paginator.page_range %}
+      {% if project_list.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if project_list.has_next %}
+      <li><a href="?page={{ project_list.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+{% endif %}
+
+
+ <ul class="pagination" >
+ <li>
+<span class="current">
+            Page {{ project_list.number }} of {{ project_list.paginator.num_pages }}
         </span>
-
-        {% if ProjectList.has_next %}
-            <a href="?page={{ project_list.next_page_number }}">next</a>
-        {% endif %}
-    </span>
+        </li>
+        </ul>
+        
+        
 </div>
+<!-- end pager -->
             </div>
           </div>
         </div>
