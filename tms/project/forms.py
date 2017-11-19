@@ -29,6 +29,7 @@ class AddNewSheet(forms.Form):
 AddSheet = modelformset_factory(Sheet, fields=('taskdesc', 'tasktype', 'duration'))
 
 class ProjectForm(forms.Form):
+<<<<<<< HEAD
     error_css_class = 'error'
     required_css_class = 'required'
 
@@ -37,3 +38,9 @@ class ProjectForm(forms.Form):
     EndDate=forms.DateField(initial=datetime.date.today,widget=forms.TextInput(attrs={'class': 'form-control xdisplay_inputx form-group has-feedback','id':'#single_cal1','placeholder':_('End Date')}))
     Desc =  forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','placeholder':_('project Description')}))
 
+=======
+    ProjectName = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control','placeholder':_('Project Name')}))
+    StartDate= forms.DateField(initial=datetime.date.today,widget=forms.TextInput(attrs={'class': 'form-control xdisplay_inputx form-group has-feedback','id':'#single_cal1','placeholder':_('Start Date')}))
+    EndDate = forms.DateField(initial=datetime.date.today,widget=forms.TextInput(attrs={'class': 'form-control xdisplay_inputx form-group has-feedback','id':'#single_cal2','placeholder':_('End Date')}))
+    Desc = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control','placeholder':_('Project Details')}))
+>>>>>>> b5bc0782fca1bfda8e9c7ef3a425f504d1e390f4

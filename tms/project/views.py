@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse
-from .models import Employee
+from .models import *
 from .forms import *
 from django.contrib.auth.views import *
 from django.http import HttpResponseRedirect
@@ -153,8 +153,15 @@ def AddProject(request):
             StartDate = form.cleaned_data['StartDate']
             EndDate = form.cleaned_data['EndDate']
             Desc = form.cleaned_data['Desc']
+<<<<<<< HEAD
             p_obj= Project(name=ProjectName,start=StartDate,end=EndDate,desc=Desc,createddate=datetime.now())
             p_obj.save()
+=======
+            #collect datat into form model 
+            Project_Object=  Project(id,name=ProjectName,start=StartDate,end=EndDate,desc=Desc)
+            #save to database
+            Project_Object.save()
+>>>>>>> b5bc0782fca1bfda8e9c7ef3a425f504d1e390f4
             # redirect to a new URL:
             return HttpResponseRedirect('/thanks/')
 
