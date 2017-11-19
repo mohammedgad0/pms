@@ -11,12 +11,11 @@
       <img src="/static/images/img.jpg" alt="..." class="img-circle profile_img">
     </div>
     <div class="profile_info">
-      <span>Welcome,</span>
-      <h2>{% if user.is_authenticated %}
-        {% if 'EmpName' in request.session %}
-
-
-        {{ request.session.DeptCode }}
+  {% if user.is_authenticated %}
+      {% if 'EmpName' in request.session %}
+      <span>  {{ request.session.EmpName }}</span>
+  <h2>
+        {{ request.session.DeptName }}
         {# {{ mail }}#}
         {% endif %}
         {% endif %}</h2>

@@ -16,5 +16,6 @@ urlpatterns = [
     url(r'^add-sheet/$', views.AddSheet, name='add-sheet'),
     url(r'^add_project/$', views.AddProject, name='add-project'),
     url(r'^my_sheet/$', views.MySheet, name='my-sheet'),
+    url(r'^all_sheets/$', views.ManagerPage, name='all-sheets'),
     url(r'^dept_sheet/$', views.DeptSheet, name='dept-sheet'),
 ]

@@ -64,6 +64,33 @@ def MySheet(request):
     context = {'AllSheets': sheets}
     return render(request, 'project/my_tasks.html', context)
 
+def ManagerPage(request):
+    DeptCode = 0
+    EmpID = 0
+    if request.user.is_authenticated():
+        DeptCode = request.session['DeptCode']
+        EmpID = request.session['EmpID']
+    dept = Department.objects.filter(deptcode= DeptCode)[:1]
+    managid = '0'
+    sheets = None
+    for data in dept:
+        managid = data.managerid
+    # if this user is manager
+    AllEmp = "0"
+    if managid == EmpID:
+        AllEmp = Sheet.objects.raw('''SELECT sheet.Id, EmpName as employee, COUNT(sheet.Id) as Tasks ,
+                                    (select count(sheet.IfSubmitted) from sheet where IfSubmitted=0
+                                    and EmpId = employee.EmpId) as notsubmitted,
+                                    (select count(sheet.IfSubmitted) from sheet where IfSubmitted=1
+                                    and EmpId = employee.EmpId) as submitted
+                                    FROM sheet
+                                    INNER JOIN employee
+                                    ON sheet.EmpId = employee.EmpId
+                                    WHERE sheet.DeptCode = %s'' group by EmpName''' , [DeptCode])
+
+    context = {'allemp':AllEmp}
+    return render(request, 'project/all_sheets.html',context)
+
 def DeptSheet(request):
     DeptCode = 0
     EmpID = 0
