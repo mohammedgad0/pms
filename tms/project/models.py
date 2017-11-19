@@ -245,7 +245,6 @@ class Sheet(models.Model):
     empid = models.BigIntegerField(db_column='EmpId', blank=True, null=True)  # Field name made lowercase.
     deptcode = models.IntegerField(db_column='DeptCode', blank=True, null=True)  # Field name made lowercase.
     managercode = models.BigIntegerField(db_column='ManagerCode', blank=True, null=True)  # Field name made lowercase.
-<<<<<<< HEAD
     managerlevel2 = models.BigIntegerField(db_column='ManagerLevel2', blank=True, null=True)  # Field name made lowercase.
     managerlevel3 = models.BigIntegerField(db_column='ManagerLevel3', blank=True, null=True)  # Field name made lowercase.
     managerlevel4 = models.BigIntegerField(db_column='ManagerLevel4', blank=True, null=True)  # Field name made lowercase.
@@ -256,11 +255,6 @@ class Sheet(models.Model):
     )
     tasktype = models.CharField(_('Task type'), max_length=1, choices=TASK_STATUS, db_column='TaskType', blank=True, null=True)  # Field name made lowercase.
     duration = models.IntegerField(_('Duration'),db_column='Duration',blank=True, null=True)  # Field name made lowercase.
-=======
-    taskdesc = models.CharField(db_column='TaskDesc', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    tasktype = models.CharField(db_column='TaskType', max_length=45, blank=True, null=True)  # Field name made lowercase.
-    duration = models.IntegerField(db_column='Duration', blank=True, null=True)  # Field name made lowercase.
->>>>>>> c9da7b3a5d64f22602ec2abcc1ecc3019098be40
     createddate = models.DateField(db_column='CreatedDate', blank=True, null=True)  # Field name made lowercase.
     taskdate = models.DateField(_('task date'),db_column='TaskDate', blank=True, null=True)  # Field name made lowercase.
     editedate = models.DateField(db_column='EditeDate', blank=True, null=True)  # Field name made lowercase.
