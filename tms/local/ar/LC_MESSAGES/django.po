@@ -8,56 +8,160 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-<<<<<<< HEAD
-"POT-Creation-Date: 2017-11-15 13:40+0300\n"
-=======
-"POT-Creation-Date: 2017-11-15 13:57+0300\n"
->>>>>>> 295bed3fc19f822ee677e31d570a96718b2f3195
+"POT-Creation-Date: 2017-11-18 19:24+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: .\project\forms.py:11
+#: .\project\forms.py:15
 msgid "Password"
 msgstr "كلمة المرور"
 
-#: .\project\forms.py:17
+#: .\project\forms.py:21 .\project\models.py:110
+#: .\project\templates\project\add-sheet.html:39
+#: .\project\templates\project\dept_tasks.html:56
+#: .\project\templates\project\my_tasks.html:57
 msgid "Task Descreption"
 msgstr "وصف المهمة"
 
-#: .\project\forms.py:20
+#: .\project\forms.py:24 .\project\models.py:112
 msgid "Master"
 msgstr "رئيسية"
 
-#: .\project\forms.py:20
+#: .\project\forms.py:24 .\project\models.py:113
 msgid "Help"
 msgstr "مساندة"
 
-#: .\project\forms.py:20
+#: .\project\forms.py:24 .\project\models.py:115
+#: .\project\templates\project\add-sheet.html:40
+#: .\project\templates\project\dept_tasks.html:57
+#: .\project\templates\project\my_tasks.html:58
 msgid "Task type"
 msgstr "نوع المهمة"
 
-#: .\project\forms.py:22
+#: .\project\forms.py:26 .\project\models.py:116
+#: .\project\templates\project\add-sheet.html:41
 msgid "Duration"
 msgstr "المدة التقريبية للإنجاز"
 
+#: .\project\forms.py:35
+#, fuzzy
+#| msgid "Project Name"
+msgid "project Name"
+msgstr "أسم المشروع"
+
+#: .\project\forms.py:36
+msgid "Start Date"
+msgstr ""
+
+#: .\project\forms.py:37
+msgid "End Date"
+msgstr ""
+
+#: .\project\forms.py:38
+#, fuzzy
+#| msgid "Project Detail"
+msgid "project Description"
+msgstr "تفاصيل المشروع"
+
+#: .\project\models.py:118
+#, fuzzy
+#| msgid "Task type"
+msgid "task date"
+msgstr "نوع المهمة"
+
 #: .\project\templates\project\add-sheet.html:3
+#: .\project\templates\project\add_project.html:3
 msgid "sheets list"
 msgstr ""
 
-#: .\project\templates\project\add-sheet.html:14
+#: .\project\templates\project\add-sheet.html:15
 msgid "add tasks"
 msgstr "إضافة مهام جديدة"
 
-#: .\project\templates\project\add-sheet.html:41
+#: .\project\templates\project\add-sheet.html:31
+#: .\project\templates\project\add-sheet.html:67
 msgid "Submit"
 msgstr "حفظ"
+
+#: .\project\templates\project\add-sheet.html:42
+#: .\project\templates\project\dept_tasks.html:59
+#: .\project\templates\project\my_tasks.html:60
+msgid "Task Date"
+msgstr "وقت المهمة"
+
+#: .\project\templates\project\add_project.html:15
+#, fuzzy
+#| msgid "Ad Project"
+msgid "add New Project"
+msgstr "إضافة مشروع"
+
+#: .\project\templates\project\dept_tasks.html:3
+#: .\project\templates\project\my_tasks.html:3
+#: .\project\templates\project\projects.html:3
+#: .\project\templates\project\sidebar.html:37
+msgid "Projects"
+msgstr "المشاريع"
+
+#: .\project\templates\project\dept_tasks.html:14
+msgid "Tasks List Department"
+msgstr "قائمة مهام الإدارة"
+
+#: .\project\templates\project\dept_tasks.html:19
+#: .\project\templates\project\my_tasks.html:19
+#: .\project\templates\project\projects.html:25
+msgid "Search for"
+msgstr "البحث عن ..."
+
+#: .\project\templates\project\dept_tasks.html:21
+#: .\project\templates\project\my_tasks.html:21
+#: .\project\templates\project\projects.html:27
+msgid "Go"
+msgstr "بحث"
+
+#: .\project\templates\project\dept_tasks.html:32
+msgid "Submit Tasks"
+msgstr "إعتماد المهام"
+
+#: .\project\templates\project\dept_tasks.html:58
+#: .\project\templates\project\my_tasks.html:59
+msgid "Duration by days"
+msgstr " المدرة التقريبية للإنجاز باليوم "
+
+#: .\project\templates\project\dept_tasks.html:60
+#: .\project\templates\project\my_tasks.html:61
+#: .\project\templates\project\projects.html:67
+msgid "Status"
+msgstr "الحالة"
+
+#: .\project\templates\project\dept_tasks.html:86
+#: .\project\templates\project\my_tasks.html:87
+msgid "not submitted"
+msgstr "لم تعتمد"
+
+#: .\project\templates\project\dept_tasks.html:89
+#: .\project\templates\project\my_tasks.html:90
+msgid "submitted"
+msgstr "تم الإعتماد"
+
+#: .\project\templates\project\dept_tasks.html:92
+#: .\project\templates\project\my_tasks.html:93
+msgid "in process"
+msgstr "تحت الإجراء "
+
+#: .\project\templates\project\my_tasks.html:14
+msgid "Tasks List"
+msgstr "قائمة المهام"
+
+#: .\project\templates\project\my_tasks.html:33
+msgid "Add Tasks"
+msgstr "إضافة وتعديل المهام"
 
 #: .\project\templates\project\project_detail.html:3
 #, fuzzy
@@ -73,27 +177,14 @@ msgstr "تفاصيل المشروع"
 msgid "New Partner Contracts Consultancy"
 msgstr ""
 
-#: .\project\templates\project\projects.html:3
-#: .\project\templates\project\sidebar.html:35
-msgid "Projects"
-msgstr "المشاريع"
-
 #: .\project\templates\project\projects.html:17
+#: .\project\templates\project\projects.html:40
 msgid "Projects List"
 msgstr "قائمة المشاريع"
-
-#: .\project\templates\project\projects.html:25
-msgid "Search for"
-msgstr "البحث عن ..."
-
-#: .\project\templates\project\projects.html:27
-msgid "Go"
-msgstr "بحث"
 
 #: .\project\templates\project\projects.html:39
 msgid "Ad Project"
 msgstr "إضافة مشروع"
-
 
 #: .\project\templates\project\projects.html:64
 msgid "Project Name"
@@ -106,10 +197,6 @@ msgstr "اعضاء الفريق"
 #: .\project\templates\project\projects.html:66
 msgid "Project Progress"
 msgstr "نسبة الإنجاز"
-
-#: .\project\templates\project\projects.html:67
-msgid "Status"
-msgstr "الحالة"
 
 #: .\project\templates\project\projects.html:68
 #: .\project\templates\project\projects.html:106
@@ -172,24 +259,24 @@ msgstr "معاينة"
 msgid "Delete"
 msgstr "حذف"
 
-#: .\project\templates\project\sidebar.html:30
+#: .\project\templates\project\sidebar.html:32
 msgid "General"
 msgstr "عام"
 
-#: .\project\templates\project\sidebar.html:34
+#: .\project\templates\project\sidebar.html:36
 #: .\project\templates\project\sidebar2.html:34
 msgid "Home"
 msgstr "الرئيسية"
 
-#: .\project\templates\project\sidebar.html:36
+#: .\project\templates\project\sidebar.html:38
 msgid "Tasks"
 msgstr "المهام"
 
-#: .\project\templates\project\sidebar.html:37
+#: .\project\templates\project\sidebar.html:39
 msgid "My To Do List"
 msgstr "سجل مهامى"
 
-#: .\project\templates\project\sidebar.html:38
+#: .\project\templates\project\sidebar.html:40
 msgid "Reports"
 msgstr "التقارير"
 

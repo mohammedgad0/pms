@@ -5121,3 +5121,18 @@ $(document).ready(function() {
     init_autocomplete();
 
 });
+$.datepicker.setDefaults($.datepicker.regional["ar"]);
+$(document).ready(function(){
+
+  // var $j = jQuery.noConflict();
+
+//   $( "#datepicker" ).each(function(){
+//   $(this).datepicker();
+// });
+
+$('.datepicker').each(function(){
+$(this).datepicker({
+  dateFormat: 'yy-mm-dd',
+});
+});
+});

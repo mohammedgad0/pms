@@ -9,12 +9,18 @@ from django.utils.translation import ugettext as _
 from django.forms import formset_factory
 from .models import *
 from django.forms import BaseModelFormSet
-from datetime import datetime
+from datetime import datetime , timedelta
 
+class BaseSheetFormSet(BaseModelFormSet):
+    def __init__(self, *args, **kwargs):
+        super(BaseSheetFormSet, self).__init__(*args, **kwargs)
+        empID = request.session['EmpID']
+        self.queryset = Sheet.objects.filter(empid= 'empID')
 
 def myuser(request, *args, **kwargs):
     if request.method == "POST":
         form = BootstrapAuthenticationForm(request, data=request.POST)
+        emp = None
         if form.is_valid():
             auth_login(request, form.get_user())
             # email = None
@@ -23,7 +29,7 @@ def myuser(request, *args, **kwargs):
             emp = Employee.objects.filter(email= email)
     # Get all data filtered by user email and set in session
         for data in emp:
-            request.session['EmpEmail'] = data.email
+            request.session['EmpID'] = data.empid
             request.session['EmpName'] = data.empname
             request.session['DeptName'] = data.deptname
             request.session['Mobile'] = data.mobile
@@ -50,25 +56,81 @@ def gentella_html(request):
     template = loader.get_template('project/' + load_template)
     return HttpResponse(template.render(context, request))
 
+def MySheet(request):
+    EmpID = request.session['EmpID']
+    sheets = Sheet.objects.filter(empid = EmpID)
+    context = {'AllSheets': sheets}
+    return render(request, 'project/my_tasks.html', context)
+
+def DeptSheet(request):
+    DeptCode = request.session['DeptCode']
+    EmpID = request.session['EmpID']
+    dept = Department.objects.filter(deptcode= DeptCode)[:1]
+    managid = '0'
+    sheets = None
+    for data in dept:
+        managid = data.managerid
+    if managid == EmpID:
+        # sheets = Sheet.objects.filter(deptcode = DeptCode)
+        sheets = Sheet.objects.raw("SELECT sheet.TaskDesc, sheet.Id, EmpName FROM sheet INNER JOIN employee ON sheet.EmpId = employee.EmpId WHERE sheet.DeptCode =%s",  [DeptCode] )
+    empdata = Employee.objects.all()
+    context = {'AllSheets': sheets, 'department':dept, 'empid':EmpID, 'empdata':empdata}
+    return render(request, 'project/dept_tasks.html', context)
+
+# Add sheet form
 # @login_required
 def AddSheet(request):
-    AddSheet = modelformset_factory(Sheet, fields=('taskdesc', 'tasktype', 'duration'), extra=4,
+    AddSheet = modelformset_factory(Sheet, fields=('taskdesc', 'tasktype', 'duration','taskdate'), extra=4,
         widgets = {
             'taskdesc': forms.TextInput(attrs={'class': 'form-control'}),
             'tasktype': forms.Select(attrs={'class': 'form-control'}),
             'duration': forms.NumberInput(attrs={'class': 'form-control'}),
+            'taskdate': forms.TextInput(attrs={'class': 'datepicker form-control'}),
         }
-    )
 
+    )
+    EmpID = request.session['EmpID']
+    formset = AddSheet(queryset=Sheet.objects.filter(empid= EmpID , ifsubmitted = '0',
+    taskdate__gte=datetime.now()-timedelta(days=7), taskdate__lte=datetime.now()+ timedelta(days=7)
+    ))
     if request.method == 'POST':
         formset = AddSheet(request.POST)
         if formset.is_valid():
             instances = formset.save(commit=False)
+            # Get managers as hierarchicaly
+            email = request.user.email
+            emp = Employee.objects.filter(email= email)
+            # managr level 1
+            for data in emp:
+                managercode = data.managercode
+                request.session['MNGID'] = managercode
+            # managr level 2
+            emp1 = Employee.objects.filter(empid=managercode)
+            for manager in emp1:
+                 manager_2 = manager.managercode
+            # managr level 3
+            emp2 = Employee.objects.filter(empid=manager_2)
+            for manager in emp2:
+                 manager_3 = manager.managercode
+            # managr level 4
+            emp3 = Employee.objects.filter(empid=manager_3)
+            for manager in emp3:
+                 manager_4 = manager.managercode
             for obj in instances:
-                obj.createddate = datetime.datetime.now()
+                obj.empid = request.session['EmpID']
+                obj.deptcode = request.session['DeptCode']
+                obj.managercode = managercode
+                obj.managerlevel2 = manager_2
+                obj.managerlevel3 = manager_3
+                obj.managerlevel4 = manager_4
+                obj.ifsubmitted = '0'
+                if obj.createddate:
+                    obj.editedate = datetime.now()
+                else:
+                    obj.createddate = datetime.now()
                 obj.save()
     else:
-        formset = AddSheet()
+        formset = formset
     # form = form_class(request.POST or None)
     return render(request, 'project/add-sheet.html', {'form': formset})
 

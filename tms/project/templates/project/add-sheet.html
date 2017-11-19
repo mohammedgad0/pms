@@ -4,6 +4,7 @@
 
 {% block stylesheets %}
 {{ block.super }}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 {% endblock stylesheets %}
 
 {% block content %}
@@ -38,6 +39,7 @@
         <th>{{ _('Task Descreption') }}</th>
         <th>{{ _('Task type') }}</th>
         <th>{{ _('Duration') }}</th>
+       <th>{{ _('Task Date') }}</th>
       </tr>
     </thead>
     <tbody>
@@ -46,7 +48,16 @@
         {{ form.id}}
         <td>{{ form.taskdesc }}</td>
         <td>{{ form.tasktype }}</td>
-        <td> {{ form.duration }}</td>
+        <td class="col-md-2"> {{ form.duration }}</td>
+
+        <td class="col-md-2"><div class="input-group date" data-provide="datepicker"> {{ form.taskdate }}
+          <div class="input-group-addon">
+              <span class="glyphicon glyphicon-th"></span>
+          </div>
+         </div>
+
+        </td>
+
 
       </tr>
       {% endfor %}
@@ -62,7 +73,11 @@
     </div>
   </div>
 {% endblock content %}
+<script>
 
+
+</script>
 {% block javascripts %}
+
   {{ block.super }}
 {% endblock javascripts %}

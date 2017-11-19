@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'datetimewidget',
     'project.apps.AppConfig'
 ]
 
@@ -62,7 +62,6 @@ MIDDLEWARE_CLASSES = [
     'project.middleware.ForceLangMiddleware',
 
 ]
-
 ROOT_URLCONF = 'tms.urls'
 
 TEMPLATES = [
