@@ -7,7 +7,6 @@ from django.contrib.auth.views import *
 from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext as _
 from django.forms import formset_factory
-from .models import *
 from django.forms import BaseModelFormSet
 from datetime import datetime , timedelta
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -184,9 +183,8 @@ def AddProject(request):
             Desc = form.cleaned_data['Desc']
             CreatedBy=request.session.get('EmpID', '1056821208')
             #collect datat into form model
-            Project_Object=  Project(id,name=ProjectName,start=StartDate,end=EndDate,desc=Desc)
-            #save to database
             p_obj= Project(name=ProjectName,start=StartDate,end=EndDate,desc=Desc,createddate=datetime.now(),createdby=CreatedBy)
+            #save to database
             p_obj.save()
             # redirect to a new URL:
             return HttpResponseRedirect('/thanks/')
@@ -197,11 +195,9 @@ def AddProject(request):
 
     return render(request, 'project/add_project.html', {'form': form})
 
-
 def ProjectList(request):
-   # CreatedBy=request.session.get('EmpID', '1056821208')
-
-    project_list= Project.objects.all().order_by('-id')
+    createdBy=request.session.get('EmpID', '1056821208')
+    project_list= Project.objects.all().filter(createdby__exact=createdBy).order_by('-id')
     paginator = Paginator(project_list, 5) # Show 5 contacts per page
     
     page = request.GET.get('page')

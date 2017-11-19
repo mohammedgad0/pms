@@ -2,7 +2,7 @@ from django.conf.urls import url ,include
 from project import views
 
 #application namespace
-app_name = 'project'
+app_name = 'ns-project'
 
 urlpatterns = [
     # Matches any html file - to be used for gentella
@@ -18,7 +18,10 @@ urlpatterns = [
     url(r'^all_sheets/$', views.ManagerPage, name='all-sheets'),
     url(r'^dept_sheet/$', views.DeptSheet, name='dept-sheet'),
     url(r'^add_project/$', views.AddProject, name='add-project'),
-    url(r'^projects/$', views.ProjectList, name='projects'),
+    url(r'^project_list/$', views.ProjectList, name='project-list'),
+    url(r'^project_detail/$', views.ProjectList, name='project-detail'),
+    url(r'^project_edit/$', views.ProjectList, name='project-edit'),
+    url(r'^project_delete/$', views.ProjectList, name='project-delete'),
     
     url(r'^.*\.html', views.gentella_html, name='gentella'),
 ]

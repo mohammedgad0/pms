@@ -274,7 +274,7 @@ msgstr "مكتمل"
 #: .\project\templates\project\projects.html:350
 #: .\project\templates\project\projects.html:388
 msgid "View"
-msgstr "معاينة"
+msgstr "تفاصيل"
 
 #: .\project\templates\project\projects.html:107
 #: .\project\templates\project\projects.html:139
