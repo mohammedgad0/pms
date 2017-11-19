@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
 from django.template import loader
 from django.http import HttpResponse
 from .models import *
@@ -10,6 +10,7 @@ from django.forms import formset_factory
 from .models import *
 from django.forms import BaseModelFormSet
 from datetime import datetime , timedelta
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 class BaseSheetFormSet(BaseModelFormSet):
     def __init__(self, *args, **kwargs):
@@ -171,8 +172,21 @@ def AddProject(request):
 
 
 def ProjectList(request):
-    CreatedBy=request.session.get('EmpID', '1056821208')
-    ProjectList = Project.objects.all()
-    context = {'Projects': ProjectList}
+   # CreatedBy=request.session.get('EmpID', '1056821208')
+
+    project_list= Project.objects.all()
+    paginator = Paginator(project_list, 5) # Show 5 contacts per page
+    
+    page = request.GET.get('page')
+    try:
+        _plist = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        _plist = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        _plist = paginator.page(paginator.num_pages)
+
+    context = {'project_list':_plist}
     return render(request, 'project/projects.html', context)
 
