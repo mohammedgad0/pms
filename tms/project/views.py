@@ -57,14 +57,19 @@ def gentella_html(request):
     return HttpResponse(template.render(context, request))
 
 def MySheet(request):
-    EmpID = request.session['EmpID']
+    EmpID = 0
+    if request.user.is_authenticated():
+        EmpID = request.session['EmpID']
     sheets = Sheet.objects.filter(empid = EmpID)
     context = {'AllSheets': sheets}
     return render(request, 'project/my_tasks.html', context)
 
 def DeptSheet(request):
-    DeptCode = request.session['DeptCode']
-    EmpID = request.session['EmpID']
+    DeptCode = 0
+    EmpID = 0
+    if request.user.is_authenticated():
+        DeptCode = request.session['DeptCode']
+        EmpID = request.session['EmpID']
     dept = Department.objects.filter(deptcode= DeptCode)[:1]
     managid = '0'
     sheets = None
@@ -89,7 +94,9 @@ def AddSheet(request):
         }
 
     )
-    EmpID = request.session['EmpID']
+    EmpID = 0
+    if request.user.is_authenticated():
+        EmpID = request.session['EmpID']
     formset = AddSheet(queryset=Sheet.objects.filter(empid= EmpID , ifsubmitted = '0',
     taskdate__gte=datetime.now()-timedelta(days=7), taskdate__lte=datetime.now()+ timedelta(days=7)
     ))
