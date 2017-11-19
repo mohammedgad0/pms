@@ -19,9 +19,9 @@ urlpatterns = [
     url(r'^dept_sheet/$', views.DeptSheet, name='dept-sheet'),
     url(r'^add_project/$', views.AddProject, name='add-project'),
     url(r'^project_list/$', views.ProjectList, name='project-list'),
-    url(r'^project_detail/$', views.ProjectList, name='project-detail'),
-    url(r'^project_edit/$', views.ProjectList, name='project-edit'),
-    url(r'^project_delete/$', views.ProjectList, name='project-delete'),
+    url(r'^project_detail/(?P<pk>\d+)$', views.ProjectDetail, name='project-detail'),
+    url(r'^project_edit/(?P<pk>\d+)$', views.ProjectEdit, name='project-edit'),
+    url(r'^project_delete/(?P<pk>\d+)$', views.ProjectDelete, name='project-delete'),
     
     url(r'^.*\.html', views.gentella_html, name='gentella'),
 ]

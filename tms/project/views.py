@@ -213,3 +213,39 @@ def ProjectList(request):
     context = {'project_list':_plist}
     return render(request, 'project/projects.html', context)
 
+def ProjectDetail(request,pk):
+    project_detail= Project.objects.get(pk=pk)
+    context={'project_detail':project_detail}
+    return render(request, 'project/project_detail.html', context)
+
+def ProjectEdit(request,pk):
+    project_detail= Project.objects.get(pk=pk)
+     # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = ProjectForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            ProjectName = form.cleaned_data['ProjectName']
+            StartDate = form.cleaned_data['StartDate']
+            EndDate = form.cleaned_data['EndDate']
+            Desc = form.cleaned_data['Desc']
+            CreatedBy=request.session.get('EmpID', '1056821208')
+            #collect datat into form model
+            p_obj= Project(name=ProjectName,start=StartDate,end=EndDate,desc=Desc,createddate=datetime.now(),createdby=CreatedBy)
+            #save to database
+            p_obj.save()
+            # redirect to a new URL:
+            return HttpResponseRedirect('/thanks/')
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = ProjectForm()
+
+    return render(request, 'project/add_project.html', {'form': form})
+
+def ProjectDelete(request,pk):
+    project_detail= Project.objects.get(pk=pk)
+    context={'project_detail':project_detail}
+    return render(request, 'project/project_delete.html', context)
