@@ -12,7 +12,7 @@
     <div class="">
       <div class="page-title">
         <div class="title_left">
-        <!--   <h3>{% trans "add New Project" %} </h3> --> 
+        <!--   <h3>{% trans "add New Project" %} </h3> -->
         </div>
       </div>
 
@@ -23,58 +23,17 @@
           <div class="x_title">
               <h2>{% trans "add New Project" %}</h2>
               <ul class="nav navbar-right panel_toolbox">
-            
-                
-               
+
+
+
               </ul>
               <div class="clearfix"></div>
             </div>
-            
-            
+
+
             <div class="x_content">
 
 <!-- #to stop html validation put novalidate in form tag -->
-<<<<<<< HEAD
-              <form action="" method="post" novalidate enctype="multipart/form-data">
-    {% csrf_token %}
-      <div class="col-md-12 col-sm-12 col-xs-12 form-group"> 
-   {{  form.ProjectName  }} 
-   </div>
-    
-       <div class="col-md-4 col-sm-12 col-xs-12 form-group"> 
-   {{  form.StartDate  }}                         
-   </div>
-   
-          <div class="col-md-4 col-sm-12 col-xs-12 form-group"> 
-   {{  form.EndDate  }}                         
-   </div>
-   
-             <div class="col-md-4 col-sm-12 col-xs-12 form-group"> 
-   {{  form.Desc  }}                         
-   </div>
-   
-   
-   
-   <!-- {{ form.as_table }} -->
-   {{ form.non_field_errors }}
-<div class="fieldWrapper">
-<!-- {{ form.subject.errors }}
-    <label for="{{ form.subject.id_for_label }}">Email subject:</label>
-    {{ form.subject }}
-     
-       
-    {{ form.subject.errors }}
-    {{ form.subject.label_tag }}
-    {{ form.subject }}
-
-      -->
- 
-</div>
-
-
-    <input type="submit" value="Submit" />
-    
-=======
 <div class="col-md-8 col-sm-12   col-xs-12" >
 
               <form action="" method="post" class="form-horizontal form-label-left input_mask" novalidate enctype="multipart/form-data">
@@ -87,23 +46,23 @@
                  {{form.ProjectName}}
                   </div>
                 </div>
-                
-            
+
+
                   <div class="form-group">
-                  
+
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _('Start Date')}}</label>
                   <div class="col-md-3 col-sm-9 col-xs-12">
                      {{form.StartDate}}
                   </div>
-                  
+
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _('End Date')}}</label>
                   <div class="col-md-3 col-sm-9 col-xs-12">
                    {{form.EndDate}}
                   </div>
-                  
-                  
+
+
                 </div>
-                              
+
 
                 <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _('Project Description') }} <span class="required">*</span>
@@ -112,10 +71,10 @@
                     {{form.Desc}}
                   </div>
                 </div>
-                
-                
+
+
                 <div class="ln_solid"></div>
-                
+
                 <div class="form-group">
                   <div class="col-md-12 col-sm-12 col-xs-12 col-md-offset-3">
                     <button type="button" class="btn btn-primary">Cancel</button>
@@ -124,15 +83,14 @@
                   </div>
                 </div>
 
-            
-   
 
-     <!-- 
+
+
+     <!--
     {{ form.subject.errors }}
     {{ form.subject.label_tag }}
     {{ form.subject }}
-     -->  
->>>>>>> b5bc0782fca1bfda8e9c7ef3a425f504d1e390f4
+     -->
 
 
 
