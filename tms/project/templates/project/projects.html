@@ -16,7 +16,7 @@
        
           <h3>{% trans "Projects List" %} </h3>
 
-        
+    
         </div>
 
         <div class="title_right">
@@ -37,7 +37,7 @@
           <div class="x_panel">
               <div class="x_title">
               <a href="{% url 'project:add-project' %}" >  <button type="button" class="btn btn-primary btn-md"> <i class="fa fa-plus"></i>  {% trans "Ad Project" %}</button></a>
-               <button type="button" class="btn btn-primary btn-md">  <i class="fa fa-th-list"></i>  {% trans "Projects List" %} </button>
+              <a href="{% url 'project:projects' %}" > <button type="button" class="btn btn-primary btn-md">  <i class="fa fa-th-list"></i>  {% trans "Projects List" %} </button></a>
               <ul class="nav navbar-right panel_toolbox">
                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                 </li>
@@ -56,12 +56,15 @@
               <div class="clearfix"></div>
             </div>
             <div class="x_content">
+            
+          
+             
               <!-- start project list -->
               <table class="table table-striped projects">
                 <thead>
                   <tr>
                     <th style="width: 1%">#</th>
-                    <th style="width: 20%">{% trans "Project Name" %}</th>
+                    <th style="width: 20%"><a href="{% url 'project:projects' %} ">{% trans "Project Name" %}</a></th>
                     <th>{% trans "Team Members" %}</th>
                     <th>{% trans "Project Progress" %}</th>
                     <th>{% trans "Status" %}</th>
@@ -69,10 +72,11 @@
                   </tr>
                 </thead>
                 <tbody>
+                  {% for project in project_list %}
                   <tr>
                     <td>#</td>
                     <td>
-                      <a>مشروع مسح العمره</a>
+                      <a>{{ project.name}}</a>
                       <br />
                       <small>Created 01.01.2015</small>
                     </td>
@@ -107,293 +111,50 @@
                       <a href="#" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> {% trans "Delete" %} </a>
                     </td>
                   </tr>
-                  <tr>
-                    <td>#</td>
-                    <td>
-                      <a>مشروع مسح اصحة الأسرة</a>
-                      <br />
-                      <small>Created 01.01.2015</small>
-                    </td>
-                    <td>
-                      <ul class="list-inline">
-                        <li>
-                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                        </li>
-                        <li>
-                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                        </li>
-                      </ul>
-                    </td>
-                    <td class="project_progress">
-                      <div class="progress progress_sm">
-                        <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="47"></div>
-                      </div>
-                      <small>47% {% trans "Complete" %}</small>
-                    </td>
-                    <td>
-                      <button type="button" class="btn btn-success btn-xs">{% trans "Success" %}</button>
-                    </td>
-                    <td>
-                    <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> {% trans "View" %} </a>
-                      <a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> {% trans "Edit" %} </a>
-                      <a href="#" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> {% trans "Delete" %} </a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>#</td>
-                    <td>
-                      <a>دليل التصنيف المهنى السعودى</a>
-                      <br />
-                      <small>Created 01.01.2015</small>
-                    </td>
-                    <td>
-                      <ul class="list-inline">
-                        <li>
-                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                        </li>
-                        <li>
-                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                        </li>
-                        <li>
-                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                        </li>
-                      </ul>
-                    </td>
-                    <td class="project_progress">
-                      <div class="progress progress_sm">
-                        <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="77"></div>
-                      </div>
-                      <small>77% {% trans "Complete" %}</small>
-                    </td>
-                    <td>
-                      <button type="button" class="btn btn-success btn-xs">{% trans "Success" %}</button>
-                    </td>
-                    <td>
-                      <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> {% trans "View" %} </a>
-                      <a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> {% trans "Edit" %} </a>
-                      <a href="#" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> {% trans "Delete" %} </a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>#</td>
-                    <td>
-                      <a>نظم المعلومات الجغرافية</a>
-                      <br />
-                      <small>Created 01.01.2015</small>
-                    </td>
-                    <td>
-                      <ul class="list-inline">
-                        <li>
-                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                        </li>
-                        <li>
-                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                        </li>
-                        <li>
-                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                        </li>
-                        <li>
-                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                        </li>
-                      </ul>
-                    </td>
-                    <td class="project_progress">
-                      <div class="progress progress_sm">
-                        <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="60"></div>
-                      </div>
-                      <small>60% {% trans "Complete" %}</small>
-                    </td>
-                    <td>
-                      <button type="button" class="btn btn-success btn-xs">{% trans "Success" %}</button>
-                    </td>
-                    <td>
-                      <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> {% trans "View" %} </a>
-                      <a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> {% trans "Edit" %} </a>
-                      <a href="#" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> {% trans "Delete" %} </a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>#</td>
-                    <td>
-                      <a>التصنيف الوطنى للأنشطه الإقتصادية</a>
-                      <br />
-                      <small>Created 01.01.2015</small>
-                    </td>
-                    <td>
-                      <ul class="list-inline">
-                        <li>
-                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                        </li>
-                        <li>
-                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                        </li>
-                        <li>
-                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                        </li>
-                      </ul>
-                    </td>
-                    <td class="project_progress">
-                      <div class="progress progress_sm">
-                        <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="12"></div>
-                      </div>
-                      <small>12% {% trans "Complete" %}</small>
-                    </td>
-                    <td>
-                      <button type="button" class="btn btn-success btn-xs">{% trans "Success" %}</button>
-                    </td>
-                    <td>
-                      <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> {% trans "View" %} </a>
-                      <a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> {% trans "Edit" %} </a>
-                      <a href="#" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> {% trans "Delete" %} </a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>#</td>
-                    <td>
-                      <a>مسح الإنتاج الصناعى</a>
-                      <br />
-                      <small>Created 01.01.2015</small>
-                    </td>
-                    <td>
-                      <ul class="list-inline">
-                        <li>
-                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                        </li>
-                        <li>
-                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                        </li>
-                        <li>
-                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                        </li>
-                        <li>
-                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                        </li>
-                      </ul>
-                    </td>
-                    <td class="project_progress">
-                      <div class="progress progress_sm">
-                        <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="35"></div>
-                      </div>
-                      <small>35% {% trans "Complete" %}</small>
-                    </td>
-                    <td>
-                      <button type="button" class="btn btn-success btn-xs">{% trans "Success" %}</button>
-                    </td>
-                    <td>
-                      <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> {% trans "View" %} </a>
-                      <a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> {% trans "Edit" %} </a>
-                      <a href="#" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> {% trans "Delete" %} </a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>#</td>
-                    <td>
-                      <a>مسح نشاط التجارة الداخلية</a>
-                      <br />
-                      <small>Created 01.01.2015</small>
-                    </td>
-                    <td>
-                      <ul class="list-inline">
-                        <li>
-                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                        </li>
-                        <li>
-                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                        </li>
-                      </ul>
-                    </td>
-                    <td class="project_progress">
-                      <div class="progress progress_sm">
-                        <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="87"></div>
-                      </div>
-                      <small>87% {% trans "Complete" %}</small>
-                    </td>
-                    <td>
-                      <button type="button" class="btn btn-success btn-xs">{% trans "Success" %}</button>
-                    </td>
-                    <td>
-                     <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> {% trans "View" %} </a>
-                      <a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> {% trans "Edit" %} </a>
-                      <a href="#" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> {% trans "Delete" %} </a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>#</td>
-                    <td>
-                      <a>نظام الحسابات القومية</a>
-                      <br />
-                      <small>Created 01.01.2015</small>
-                    </td>
-                    <td>
-                      <ul class="list-inline">
-                        <li>
-                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                        </li>
-                        <li>
-                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                        </li>
-                        <li>
-                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                        </li>
-                      </ul>
-                    </td>
-                    <td class="project_progress">
-                      <div class="progress progress_sm">
-                        <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="77"></div>
-                      </div>
-                      <small>77% {% trans "Complete" %}</small>
-                    </td>
-                    <td>
-                      <button type="button" class="btn btn-success btn-xs">{% trans "Success" %}</button>
-                    </td>
-                    <td>
-                      <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> {% trans "View" %} </a>
-                      <a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> {% trans "Edit" %} </a>
-                      <a href="#" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> {% trans "Delete" %} </a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>#</td>
-                    <td>
-                      <a>الدليل الوطنى للأنشطه الإقتصادية</a>
-                      <br />
-                      <small>Created 01.01.2015</small>
-                    </td>
-                    <td>
-                      <ul class="list-inline">
-                        <li>
-                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                        </li>
-                        <li>
-                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                        </li>
-                        <li>
-                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                        </li>
-                        <li>
-                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                        </li>
-                      </ul>
-                    </td>
-                    <td class="project_progress">
-                      <div class="progress progress_sm">
-                        <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="77"></div>
-                      </div>
-                      <small>77% {% trans "Complete" %}</small>
-                    </td>
-                    <td>
-                      <button type="button" class="btn btn-success btn-xs">{% trans "Success" %}</button>
-                    </td>
-                    <td>
-                       <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> {% trans "View" %} </a>
-                      <a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> {% trans "Edit" %} </a>
-                      <a href="#" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> {% trans "Delete" %} </a>
-                    </td>
-                  </tr>
+               
+                  {% endfor %}
                 </tbody>
               </table>
               <!-- end project list -->
+<!--  pager -->
+<div>
 
+{% if project_list.has_other_pages %}
+  <ul class="pagination">
+  
+ 
+    {% if project_list.has_previous %}
+      <li><a href="?page={{ project_list.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in project_list.paginator.page_range %}
+      {% if project_list.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if project_list.has_next %}
+      <li><a href="?page={{ project_list.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+{% endif %}
+
+
+ <ul class="pagination" >
+ <li>
+<span class="current">
+            Page {{ project_list.number }} of {{ project_list.paginator.num_pages }}
+        </span>
+        </li>
+        </ul>
+        
+        
+</div>
+<!-- end pager -->
             </div>
           </div>
         </div>
