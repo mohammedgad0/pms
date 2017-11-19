@@ -210,9 +210,9 @@ class Employee(models.Model):
 
 
 class Project(models.Model):
-    name = models.CharField(db_column='Name', max_length=250)  # Field name made lowercase.
-    start = models.DateField(db_column='Start')  # Field name made lowercase.
-    end = models.DateField()
+    name = models.CharField(db_column='Name', max_length=250, blank=True, null=True)  # Field name made lowercase.
+    start = models.DateField(db_column='Start', blank=True, null=True)  # Field name made lowercase.
+    end = models.DateField(blank=True, null=True)
     teamname = models.CharField(db_column='TeamName', max_length=100, blank=True, null=True)  # Field name made lowercase.
     desc = models.CharField(db_column='Desc', max_length=250, blank=True, null=True)  # Field name made lowercase.
     createdby = models.CharField(db_column='CreatedBy', max_length=20, blank=True, null=True)  # Field name made lowercase.
@@ -220,7 +220,7 @@ class Project(models.Model):
     departementid = models.IntegerField(db_column='DepartementId', blank=True, null=True)  # Field name made lowercase.
     statusid = models.IntegerField(db_column='StatusId', blank=True, null=True)  # Field name made lowercase.
     openedby = models.CharField(db_column='OpenedBy', max_length=20, blank=True, null=True)  # Field name made lowercase.
-    opendedate = models.DateTimeField(db_column='OpenedDate', blank=True, null=True)  # Field name made lowercase.
+    openeddate = models.DateTimeField(db_column='OpenedDate', blank=True, null=True)  # Field name made lowercase.
     closedby = models.CharField(db_column='ClosedBy', max_length=20, blank=True, null=True)  # Field name made lowercase.
     closeddate = models.DateTimeField(db_column='ClosedDate', blank=True, null=True)  # Field name made lowercase.
     canceledby = models.CharField(db_column='CanceledBy', max_length=20, blank=True, null=True)  # Field name made lowercase.
@@ -230,7 +230,6 @@ class Project(models.Model):
     class Meta:
         managed = False
         db_table = 'project'
-
 
 class ProjectStatus(models.Model):
     name = models.IntegerField(db_column='Name')  # Field name made lowercase.
