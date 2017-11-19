@@ -56,6 +56,11 @@
               <div class="clearfix"></div>
             </div>
             <div class="x_content">
+            
+              {% for Project in Projects %}
+              
+              {{ project.name }}
+              {% endfor %}
               <!-- start project list -->
               <table class="table table-striped projects">
                 <thead>

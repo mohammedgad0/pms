@@ -35,6 +35,7 @@ def myuser(request, *args, **kwargs):
             request.session['Mobile'] = data.mobile
             request.session['DeptCode'] = data.deptcode
     return login(request, *args, **kwargs)
+
 # @login_required
 def index(request):
     # Populate User From Ldap Without Login
@@ -153,11 +154,11 @@ def AddProject(request):
             StartDate = form.cleaned_data['StartDate']
             EndDate = form.cleaned_data['EndDate']
             Desc = form.cleaned_data['Desc']
+            CreatedBy=request.session.get('EmpID', '1056821208')
             #collect datat into form model
             Project_Object=  Project(id,name=ProjectName,start=StartDate,end=EndDate,desc=Desc)
             #save to database
-            Project_Object.save()
-            p_obj= Project(name=ProjectName,start=StartDate,end=EndDate,desc=Desc,createddate=datetime.now())
+            p_obj= Project(name=ProjectName,start=StartDate,end=EndDate,desc=Desc,createddate=datetime.now(),createdby=CreatedBy)
             p_obj.save()
             # redirect to a new URL:
             return HttpResponseRedirect('/thanks/')
@@ -167,3 +168,11 @@ def AddProject(request):
         form = ProjectForm()
 
     return render(request, 'project/add_project.html', {'form': form})
+
+
+def ProjectList(request):
+    CreatedBy=request.session.get('EmpID', '1056821208')
+    ProjectList = Project.objects.all()
+    context = {'Projects': ProjectList}
+    return render(request, 'project/projects.html', context)
+

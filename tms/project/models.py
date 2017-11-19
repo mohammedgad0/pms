@@ -219,8 +219,8 @@ class Project(models.Model):
     createddate = models.DateTimeField(db_column='CreatedDate', blank=True, null=True)  # Field name made lowercase.
     departementid = models.IntegerField(db_column='DepartementId', blank=True, null=True)  # Field name made lowercase.
     statusid = models.IntegerField(db_column='StatusId', blank=True, null=True)  # Field name made lowercase.
-    openby = models.CharField(db_column='OpenBy', max_length=20, blank=True, null=True)  # Field name made lowercase.
-    opendate = models.DateTimeField(db_column='OpenDate', blank=True, null=True)  # Field name made lowercase.
+    openedby = models.CharField(db_column='OpenedBy', max_length=20, blank=True, null=True)  # Field name made lowercase.
+    opendedate = models.DateTimeField(db_column='OpenedDate', blank=True, null=True)  # Field name made lowercase.
     closedby = models.CharField(db_column='ClosedBy', max_length=20, blank=True, null=True)  # Field name made lowercase.
     closeddate = models.DateTimeField(db_column='ClosedDate', blank=True, null=True)  # Field name made lowercase.
     canceledby = models.CharField(db_column='CanceledBy', max_length=20, blank=True, null=True)  # Field name made lowercase.
