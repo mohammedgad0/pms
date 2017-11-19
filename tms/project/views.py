@@ -174,7 +174,7 @@ def AddProject(request):
 def ProjectList(request):
    # CreatedBy=request.session.get('EmpID', '1056821208')
 
-    project_list= Project.objects.all()
+    project_list= Project.objects.all().order_by('-id')
     paginator = Paginator(project_list, 5) # Show 5 contacts per page
     
     page = request.GET.get('page')
