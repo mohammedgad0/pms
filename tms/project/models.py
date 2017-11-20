@@ -192,7 +192,7 @@ class ProjectStatus(models.Model):
     priority = models.IntegerField(db_column='Priority')  # Field priority made lowercase.
     isdefault = models.IntegerField(db_column='IsDefault')  # Field isdefault made lowercase.
     color = models.IntegerField(db_column='Color')  # Field color made lowercase.
-    
+
     class Meta:
         managed = False
         db_table = 'project_status'
@@ -221,8 +221,11 @@ class Sheet(models.Model):
         ('1', _('submitted')),
         ('2', _('not submitted')),
     )
-    ifsubmitted = models.IntegerField(db_column='IfSubmitted',choices=SUBMITTED_STATUS, blank=True, null=True)  # Field name made lowercase.
-
+    ifsubmitted = models.CharField(db_column='IfSubmitted',max_length=1,choices=SUBMITTED_STATUS, blank=True, null=True)  # Field name made lowercase.
+    submittedby = models.IntegerField(db_column='SubmittedBy', blank=True, null=True)  # Field name made lowercase.
+    submitteddate = models.DateField(db_column='SubmittedDate', blank=True, null=True)  # Field name made lowercase.
+    def __str__(self):
+        return self.get_tasktype_display()
     class Meta:
         managed = False
         db_table = 'sheet'

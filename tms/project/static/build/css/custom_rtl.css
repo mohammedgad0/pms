@@ -4,7 +4,8 @@ html, body {
     direction: rtl;
     font: 13px 'neo', serif !important;
 }
-
+/*dropdpwn not clickable*/
+.pointer{pointer-events:none !important;}
 .full-width {
     width: 100%;
 }

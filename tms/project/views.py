@@ -128,9 +128,51 @@ def EditSheet(request, empid):
         formset = formset
     return render(request, 'project/update_sheet.html', {'form': formset,'EmpData':EmpData })
 
-    raise Http404
+    # raise Http404
     return render(request, 'project/update_sheet.html',{'dept':dept,'emp':EmpSheet})
 
+def UpdateSheet(request,empid):
+    SbmitSheet = modelformset_factory(Sheet, fields=('taskdesc', 'tasktype', 'duration','taskdate','ifsubmitted'), extra=4,
+        widgets = {
+            'taskdesc': forms.TextInput(attrs={'class': 'form-control','readonly':True}),
+            'tasktype': forms.Select(attrs={'class': 'form-control pointer','readonly':True}),
+            'duration': forms.NumberInput(attrs={'class': 'form-control','readonly':True}),
+            'taskdate': forms.TextInput(attrs={'class': 'form-control pointer','readonly':True}),
+            'ifsubmitted': forms.Select(attrs={'class': 'form-control'}),
+        }
+    )
+
+    formset = SbmitSheet(queryset=Sheet.objects.filter(~Q(ifsubmitted = '1'), empid= empid ,
+    taskdate__gte=datetime.now()-timedelta(days=7), taskdate__lte=datetime.now()+ timedelta(days=7)
+    ))
+    EmpSheet = get_object_or_404(Employee, empid = empid)
+    EmpData = Employee.objects.filter(empid = empid)
+    dept = Department.objects.filter(deptcode = EmpSheet.deptcode)[:1]
+    managid = 0
+    # Get manager id for employee
+    for data in dept:
+        managid = data.managerid
+    EmpID = 0
+    if request.user.is_authenticated():
+        EmpID = request.session['EmpID']
+    # empid = 123456
+    if managid == EmpID:
+        if request.method == 'POST':
+            formset = SbmitSheet(request.POST)
+            if formset.is_valid():
+                instances = formset.save(commit=False)
+                # Get managers as hierarchicaly
+                for obj in instances:
+                    obj.submittedby = request.session['EmpID']
+                    obj.submitteddate = datetime.now()
+                    obj.save()
+                return HttpResponseRedirect(reverse('ns-project:all-sheets'))
+        else:
+            formset = formset
+    else:
+        raise Http404
+    # form = form_class(request.POST or None)
+    return render(request, 'project/update_sheet.html', {'form': formset,'EmpData':EmpData})
 
 def DeptSheet(request):
     DeptCode = 0
@@ -228,7 +270,7 @@ def AddProject(request):
                status= ProjectStatus.objects.get(isdefault=1).id
             except :
                status= ProjectStatus.objects.order_by('priority')[0].id
-               
+
             p_obj= Project(name=ProjectName,start=StartDate,
                            end=EndDate,desc=Desc,createddate=datetime.now(),
                            createdby=CreatedBy,status_id=status)
