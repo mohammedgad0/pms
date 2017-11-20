@@ -166,7 +166,7 @@ class Employee(models.Model):
 class Project(models.Model):
     name = models.CharField(db_column='Name', max_length=250, blank=True, null=True)  # Field name made lowercase.
     start = models.DateField(db_column='Start', blank=True, null=True)  # Field name made lowercase.
-    end = models.DateField(blank=True, null=True)
+    end = models.DateField(db_column='End',blank=True, null=True)
     teamname = models.CharField(db_column='TeamName', max_length=100, blank=True, null=True)  # Field name made lowercase.
     desc = models.CharField(db_column='Desc', max_length=250, blank=True, null=True)  # Field name made lowercase.
     createdby = models.CharField(db_column='CreatedBy', max_length=20, blank=True, null=True)  # Field name made lowercase.
