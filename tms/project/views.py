@@ -10,6 +10,11 @@ from django.forms import formset_factory
 from django.forms import BaseModelFormSet
 from datetime import datetime , timedelta
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import get_object_or_404
+from django.db.models import Q
+from django.http import Http404
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
 class BaseSheetFormSet(BaseModelFormSet):
     def __init__(self, *args, **kwargs):
@@ -92,6 +97,41 @@ def ManagerPage(request):
     context = {'allemp':AllEmp}
     return render(request, 'project/all_sheets.html',context)
 
+def EditSheet(request, empid):
+    # Start Update Form
+    UpdateSheet = modelformset_factory(Sheet, fields=('taskdesc', 'tasktype', 'duration','taskdate', 'ifsubmitted'), extra=0,
+        widgets = {
+            'taskdesc': forms.TextInput(attrs={'class': 'form-control' ,'readonly':'True'}),
+            'tasktype': forms.Select(attrs={'class': 'form-control','disabled':'True'}),
+            'duration': forms.TextInput(attrs={'class': 'form-control','readonly':'True'}),
+            'taskdate': forms.TextInput(attrs={'class': 'form-control','readonly':'True'}),
+            'ifsubmitted':forms.Select(attrs={'class': 'form-control'}),
+        }
+
+    )
+    formset = UpdateSheet(queryset=Sheet.objects.filter(~Q(ifsubmitted = '1'), empid= empid  ))
+    # Load Employee data
+    EmpSheet = get_object_or_404(Employee, empid = empid)
+    EmpData = Employee.objects.filter(empid = empid)
+    dept = Department.objects.filter(deptcode = EmpSheet.deptcode)[:1]
+    managid = '0'
+    # Get manager id for employee
+    for data in dept:
+        managid = data.managerid
+    # Check if this user is manager
+    # if managid == EmpID:
+    if request.method == 'POST':
+        if formset.is_valid():
+            formset.save()
+            return HttpResponseRedirect(reverse('dept-sheet') )
+    else:
+        formset = formset
+    return render(request, 'project/update_sheet.html', {'form': formset,'EmpData':EmpData })
+
+    raise Http404
+    return render(request, 'project/update_sheet.html',{'dept':dept,'emp':EmpSheet})
+
+
 def DeptSheet(request):
     DeptCode = 0
     EmpID = 0
@@ -120,14 +160,15 @@ def AddSheet(request):
             'duration': forms.NumberInput(attrs={'class': 'form-control'}),
             'taskdate': forms.TextInput(attrs={'class': 'datepicker form-control'}),
         }
-
     )
+
     EmpID = 0
     if request.user.is_authenticated():
         EmpID = request.session['EmpID']
     formset = AddSheet(queryset=Sheet.objects.filter(empid= EmpID , ifsubmitted = '0',
     taskdate__gte=datetime.now()-timedelta(days=7), taskdate__lte=datetime.now()+ timedelta(days=7)
     ))
+
     if request.method == 'POST':
         formset = AddSheet(request.POST)
         if formset.is_valid():
@@ -199,7 +240,7 @@ def ProjectList(request):
     createdBy=request.session.get('EmpID', '1056821208')
     project_list= Project.objects.all().filter(createdby__exact=createdBy).order_by('-id')
     paginator = Paginator(project_list, 5) # Show 5 contacts per page
-    
+
     page = request.GET.get('page')
     try:
         _plist = paginator.page(page)

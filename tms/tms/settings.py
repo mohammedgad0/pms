@@ -27,7 +27,7 @@ SECRET_KEY = '48739c63-3ef3-46be-a6e6-effc30a8f49c'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 # Ldap authentication
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',

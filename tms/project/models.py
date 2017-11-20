@@ -211,7 +211,12 @@ class Sheet(models.Model):
     createddate = models.DateField(db_column='CreatedDate', blank=True, null=True)  # Field name made lowercase.
     taskdate = models.DateField(_('task date'),db_column='TaskDate', blank=True, null=True)  # Field name made lowercase.
     editedate = models.DateField(db_column='EditeDate', blank=True, null=True)  # Field name made lowercase.
-    ifsubmitted = models.IntegerField(db_column='IfSubmitted', blank=True, null=True)  # Field name made lowercase.
+    SUBMITTED_STATUS = (
+        ('0', _('in process')),
+        ('1', _('submitted')),
+        ('2', _('not submitted')),
+    )
+    ifsubmitted = models.IntegerField(db_column='IfSubmitted',choices=SUBMITTED_STATUS, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False

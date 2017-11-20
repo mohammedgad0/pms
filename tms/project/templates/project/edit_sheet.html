@@ -1,0 +1,83 @@
+{% extends "project/base_site.html" %}
+{% load i18n %}
+{% block title %} {% trans "sheets list" %} {% endblock title %}
+
+{% block stylesheets %}
+{{ block.super }}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="">
+      <div class="page-title">
+        <div class="title_left">
+          <h3>{% trans "add tasks" %} </h3>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="x_panel">
+            <div class="x_content">
+            <!--  <form method="POST">
+                {% csrf_token %}
+                {{ form.management_form }}
+                {% for form in form %}
+                {{ form.errors }}
+                {{ form.label_tag }} {{  form}}
+                  <div class="clearfix"></div>
+                {% endfor %}
+                <button type="submit" name="_submit" class="btn btn-success">{{ _('Submit') }}</button>
+              </form> -->
+  <form method="POST">
+  {% csrf_token %}
+  {{ form.management_form }}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>{{ _('Task Descreption') }}</th>
+        <th>{{ _('Task type') }}</th>
+        <th>{{ _('Duration') }}</th>
+       <th>{{ _('Task Date') }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for form in form %}
+      <tr>
+        {{ form.id}}
+        <td>{{ form.taskdesc }}</td>
+        <td>{{ form.tasktype }}</td>
+        <td class="col-md-2"> {{ form.duration }}</td>
+
+        <td class="col-md-2"><div class="input-group date" data-provide="datepicker"> {{ form.taskdate }}
+          <div class="input-group-addon">
+              <span class="glyphicon glyphicon-th"></span>
+          </div>
+         </div>
+
+        </td>
+
+
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <button type="submit" name="_submit" class="btn btn-success">{{ _('Submit') }}</button>
+</form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+<script>
+
+
+</script>
+{% block javascripts %}
+
+  {{ block.super }}
+{% endblock javascripts %}

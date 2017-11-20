@@ -1,0 +1,135 @@
+{% extends "project/base_site.html" %}
+{% load i18n %}
+{% block title %} {% trans "sheets list" %} {% endblock title %}
+
+{% block stylesheets %}
+{{ block.super }}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+{% endblock stylesheets %}
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2 style="font-size:20px; line-height:1.5em;">{{ _('Employee Details')}} </h2>
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Settings 1</a>
+                  </li>
+                  <li><a href="#">Settings 2</a>
+                  </li>
+                </ul>
+              </li>
+              <li><a class="close-link"><i class="fa fa-close"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            <section class="content invoice">
+              <!-- title row -->
+              <div class="row">
+                <!-- /.col -->
+              </div>
+              <!-- info row -->
+              <div class="row invoice-info">
+                <div class="col-sm-4 invoice-col">
+                  {% for data in EmpData %}
+              <address style="font-size: 17px;">
+                <br>
+                <b>{{ _('Name')}}:</b> {{ data.empname}}
+                <br>
+                <br>
+                <b>{{ _('Department')}}:</b> {{ data.deptname}}
+                <br>
+                <br>
+                 <b>{{ _('Job title')}}:</b> {{ data.jobtitle}}
+              </address>
+                </div>
+                <div class="col-sm-4 invoice-col"style="font-size: 17px;">
+                  <br>
+                  <b>{{ _('Mobile')}}:</b> {{ data.mobile}}
+                  <br>
+                  <br>
+                   <b>{{ _('Ext')}}:</b> {{ data.ext}}
+                  <br>
+                  <br>
+                   <b>{{ _('Email')}}:</b> {{ data.email}}
+                </div>
+                {% endfor %}
+                <!-- /.col -->
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="">
+      <!--  <div class="page-title">
+        <div class="title_left">
+        <h3>{% trans "submitted tasks" %} </h3>
+        </div>
+      </div>-->
+      <div class="clearfix"></div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="x_panel">
+            <div class="x_content">
+  <table class="table table-striped">
+    <form method="POST" action="">
+    {% csrf_token %}
+    {{ form.management_form }}
+    <thead>
+      <tr>
+        <th>{{ _('Task Descreption') }}</th>
+        <th>{{ _('Task type') }}</th>
+        <th>{{ _('Duration') }}</th>
+       <th>{{ _('Task Date') }}</th>
+       <th>{{ _('Submitted') }} </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for form in form %}
+      <tr>
+        {{ form.id}}
+        <td>{{ form.taskdesc }}</td>
+        <td>
+        {{ form.tasktype }}
+        </td>
+        <td class="col-md-2"> {{ form.duration }}</td>
+        <td class="col-md-2"> {{ form.taskdate }} </td>
+          </div>
+         </div>
+        </td>
+
+        <td>
+          {{ form.ifsubmitted }}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <button type="submit" name="_submit" class="btn btn-success">{{ _('Submit') }}</button>
+</form>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+<script>
+
+
+</script>
+{% block javascripts %}
+
+  {{ block.super }}
+{% endblock javascripts %}

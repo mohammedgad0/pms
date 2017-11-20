@@ -26,7 +26,7 @@ class AddNewSheet(forms.Form):
     Duration = forms.IntegerField(label=_("Duration"),
                widget=forms.NumberInput({'class': 'form-control','placeholder':'0'}))
 
-AddSheet = modelformset_factory(Sheet, fields=('taskdesc', 'tasktype', 'duration'))
+UpdateSheet = modelformset_factory(Sheet, fields=('taskdesc', 'tasktype', 'duration'))
 
 class ProjectForm(forms.Form):
     ProjectName = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control','placeholder':_('Project Name')}))
