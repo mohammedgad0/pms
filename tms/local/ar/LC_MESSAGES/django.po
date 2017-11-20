@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-20 18:32+0300\n"
+"POT-Creation-Date: 2017-11-20 23:27+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
@@ -26,6 +26,7 @@ msgstr "كلمة المرور"
 #: .\project\forms.py:21 .\project\models.py:209
 #: .\project\templates\project\add-sheet.html:39
 #: .\project\templates\project\dept_tasks.html:60
+#: .\project\templates\project\edit-sheet.html:39
 #: .\project\templates\project\edit_sheet.html:39
 #: .\project\templates\project\my_tasks.html:57
 #: .\project\templates\project\update_sheet.html:89
@@ -43,6 +44,7 @@ msgstr "مساندة"
 #: .\project\forms.py:24 .\project\models.py:214
 #: .\project\templates\project\add-sheet.html:40
 #: .\project\templates\project\dept_tasks.html:61
+#: .\project\templates\project\edit-sheet.html:40
 #: .\project\templates\project\edit_sheet.html:40
 #: .\project\templates\project\my_tasks.html:58
 #: .\project\templates\project\update_sheet.html:90
@@ -51,6 +53,7 @@ msgstr "نوع المهمة"
 
 #: .\project\forms.py:26 .\project\models.py:215
 #: .\project\templates\project\add-sheet.html:41
+#: .\project\templates\project\edit-sheet.html:41
 #: .\project\templates\project\edit_sheet.html:41
 #: .\project\templates\project\update_sheet.html:91
 msgid "Duration"
@@ -101,18 +104,22 @@ msgstr "لم تعتمد"
 
 #: .\project\templates\project\add-sheet.html:3
 #: .\project\templates\project\add_project.html:3
+#: .\project\templates\project\edit-sheet.html:3
 #: .\project\templates\project\edit_sheet.html:3
 #: .\project\templates\project\update_sheet.html:3
 msgid "sheets list"
 msgstr ""
 
 #: .\project\templates\project\add-sheet.html:15
+#: .\project\templates\project\edit-sheet.html:15
 #: .\project\templates\project\edit_sheet.html:15
 msgid "add tasks"
 msgstr "إضافة مهام جديدة"
 
 #: .\project\templates\project\add-sheet.html:31
 #: .\project\templates\project\add-sheet.html:67
+#: .\project\templates\project\edit-sheet.html:31
+#: .\project\templates\project\edit-sheet.html:67
 #: .\project\templates\project\edit_sheet.html:31
 #: .\project\templates\project\edit_sheet.html:67
 #: .\project\templates\project\update_sheet.html:118
@@ -121,6 +128,7 @@ msgstr "حفظ"
 
 #: .\project\templates\project\add-sheet.html:42
 #: .\project\templates\project\dept_tasks.html:63
+#: .\project\templates\project\edit-sheet.html:42
 #: .\project\templates\project\edit_sheet.html:42
 #: .\project\templates\project\my_tasks.html:60
 #: .\project\templates\project\update_sheet.html:92
@@ -144,7 +152,7 @@ msgstr "تفاصيل المشروع"
 #: .\project\templates\project\dept_tasks.html:3
 #: .\project\templates\project\my_tasks.html:3
 #: .\project\templates\project\projects.html:5
-#: .\project\templates\project\sidebar.html:36
+#: .\project\templates\project\sidebar.html:38
 msgid "Projects"
 msgstr "المشاريع"
 
@@ -276,24 +284,28 @@ msgstr "تفاصيل"
 msgid "Delete"
 msgstr "حذف"
 
-#: .\project\templates\project\sidebar.html:31
+#: .\project\templates\project\sidebar.html:6
+msgid "Task Management"
+msgstr "إدارة المهام"
+
+#: .\project\templates\project\sidebar.html:33
 msgid "General"
 msgstr "عام"
 
-#: .\project\templates\project\sidebar.html:35
+#: .\project\templates\project\sidebar.html:37
 #: .\project\templates\project\sidebar2.html:34
 msgid "Home"
 msgstr "الرئيسية"
 
-#: .\project\templates\project\sidebar.html:37
+#: .\project\templates\project\sidebar.html:39
 msgid "Tasks"
 msgstr "المهام"
 
-#: .\project\templates\project\sidebar.html:38
+#: .\project\templates\project\sidebar.html:40
 msgid "My To Do List"
 msgstr "سجل مهامى"
 
-#: .\project\templates\project\sidebar.html:39
+#: .\project\templates\project\sidebar.html:41
 msgid "Reports"
 msgstr "التقارير"
 
