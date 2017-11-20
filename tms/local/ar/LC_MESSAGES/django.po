@@ -40,7 +40,6 @@ msgid "Help"
 msgstr "مساندة"
 
 #: .\project\forms.py:24 .\project\models.py:209
-#: .\project\forms.py:24 .\project\models.py:210
 msgid "Master"
 msgstr "رئيسية"
 
@@ -57,7 +56,6 @@ msgid "Task type"
 msgstr "نوع المهمة"
 
 #: .\project\forms.py:26 .\project\models.py:210
-#: .\project\forms.py:26 .\project\models.py:214
 #: .\project\templates\project\add-sheet.html:41
 #: .\project\templates\project\update_sheet.html:90
 msgid "Duration"
@@ -83,7 +81,6 @@ msgid "Project Details"
 msgstr "تفاصيل المشروع"
 
 #: .\project\models.py:216
-#: .\project\models.py:212
 #, fuzzy
 #| msgid "Task type"
 msgid "task date"
