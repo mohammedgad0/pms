@@ -1,5 +1,7 @@
 {% extends "project/base_site.html" %}
 {% load i18n %}
+
+
 {% block title %} {% trans "Projects" %} {% endblock title %}
 
 {% block stylesheets %}
@@ -7,14 +9,16 @@
 {% endblock stylesheets %}
 
 {% block content %}
+{% get_current_language as LANGUAGE_CODE %}
+
   <div class="right_col" role="main">
     <div class="">
       <div class="page-title">
         <div class="title_left">
 
-     
+ 
        
-          <h3>{% trans "Projects List" %} </h3>
+          <h3>{% trans "Projects List" %}   </h3>
 
     
         </div>
@@ -113,7 +117,15 @@
                       <small>57% {% trans "Complete" %}</small>
                     </td>
                     <td>
-                      <button type="button" class="btn btn-{{ project.status.color }} btn-xs">{{ project.status.name}}</button>
+                      <button type="button" class="btn btn-{{ project.status.color }} btn-xs">
+                
+                      {% if LANGUAGE_CODE == 'ar' %}
+                      {{ project.status.name_ar  }}
+                       {% else %}
+                        {{ project.status.name  }}
+                      {% endif %}
+                      
+                      </button>
                     </td>
                     <td>
                       <a href="{% url 'ns-project:project-detail' project.id %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> {% trans "View" %} </a>

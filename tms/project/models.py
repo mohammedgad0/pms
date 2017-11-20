@@ -188,6 +188,7 @@ class Project(models.Model):
 
 class ProjectStatus(models.Model):
     name = models.IntegerField(db_column='Name')  # Field name made lowercase.
+    name_ar = models.IntegerField(db_column='Name_Ar')  # Field name made lowercase.
     priority = models.IntegerField(db_column='Priority')  # Field priority made lowercase.
     isdefault = models.IntegerField(db_column='IsDefault')  # Field isdefault made lowercase.
     color = models.IntegerField(db_column='Color')  # Field color made lowercase.
