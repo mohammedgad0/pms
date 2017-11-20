@@ -40,6 +40,15 @@ msgid "Help"
 msgstr "مساندة"
 
 #: .\project\forms.py:24 .\project\models.py:209
+#: .\project\forms.py:24 .\project\models.py:210
+msgid "Master"
+msgstr "رئيسية"
+
+#: .\project\forms.py:24 .\project\models.py:211
+msgid "Help"
+msgstr "مساندة"
+
+#: .\project\forms.py:24 .\project\models.py:213
 #: .\project\templates\project\add-sheet.html:40
 #: .\project\templates\project\dept_tasks.html:61
 #: .\project\templates\project\my_tasks.html:58
@@ -48,6 +57,7 @@ msgid "Task type"
 msgstr "نوع المهمة"
 
 #: .\project\forms.py:26 .\project\models.py:210
+#: .\project\forms.py:26 .\project\models.py:214
 #: .\project\templates\project\add-sheet.html:41
 #: .\project\templates\project\update_sheet.html:90
 msgid "Duration"
@@ -60,11 +70,11 @@ msgstr "أسم المشروع"
 
 #: .\project\forms.py:33 .\project\templates\project\add_project.html:53
 msgid "Start Date"
-msgstr ""
+msgstr "تاريخ البدأ"
 
 #: .\project\forms.py:34 .\project\templates\project\add_project.html:58
 msgid "End Date"
-msgstr ""
+msgstr "تاريخ الإنتهاء"
 
 #: .\project\forms.py:35 .\project\templates\project\project_detail.html:3
 #, fuzzy
@@ -72,6 +82,7 @@ msgstr ""
 msgid "Project Details"
 msgstr "تفاصيل المشروع"
 
+#: .\project\models.py:216
 #: .\project\models.py:212
 #, fuzzy
 #| msgid "Task type"
@@ -210,6 +221,18 @@ msgstr "قائمة المهام"
 msgid "Add Tasks"
 msgstr "إضافة وتعديل المهام"
 
+#: .\project\templates\project\page_404.html:25
+msgid "Sorry but we couldn't find this page"
+msgstr "عذرا، لم نتمكن من العثور على هذه الصفحة"
+
+#: .\project\templates\project\page_404.html:26
+msgid "This page you are looking for does not exist"
+msgstr "الصفحة التي تبحث عنها غير موجودة"
+
+#: .\project\templates\project\page_404.html:28
+msgid "Back To Application"
+msgstr "الرجوع الى التطبيق"
+
 #: .\project\templates\project\project_detail.html:16
 msgid "Project Detail"
 msgstr "تفاصيل المشروع"
@@ -229,11 +252,11 @@ msgstr "اعضاء الفريق"
 
 #: .\project\templates\project\projects.html:69
 msgid "Start"
-msgstr ""
+msgstr "بداية"
 
 #: .\project\templates\project\projects.html:70
 msgid "End"
-msgstr ""
+msgstr "نهاية"
 
 #: .\project\templates\project\projects.html:71
 msgid "Project Progress"
@@ -246,10 +269,6 @@ msgstr "تعديل"
 
 #: .\project\templates\project\projects.html:113
 msgid "Complete"
-msgstr "مكتمل"
-
-#: .\project\templates\project\projects.html:116
-msgid "Success"
 msgstr "مكتمل"
 
 #: .\project\templates\project\projects.html:119
@@ -317,8 +336,8 @@ msgstr "إنجليزى"
 msgid "Arabic"
 msgstr "Arabic"
 
-#~ msgid "none"
-#~ msgstr "أختر"
+#~ msgid "Success"
+#~ msgstr "مكتمل"
 
 #, fuzzy
 #~| msgid "Project Name"

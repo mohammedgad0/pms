@@ -172,7 +172,8 @@ class Project(models.Model):
     createdby = models.CharField(db_column='CreatedBy', max_length=20, blank=True, null=True)  # Field name made lowercase.
     createddate = models.DateTimeField(db_column='CreatedDate', blank=True, null=True)  # Field name made lowercase.
     departementid = models.IntegerField(db_column='DepartementId', blank=True, null=True)  # Field name made lowercase.
-    statusid = models.IntegerField(db_column='StatusId', blank=True, null=True)  # Field name made lowercase.
+    #statusid = models.IntegerField(db_column='StatusId', blank=True, null=True)  # Field name made lowercase.
+    status = models.ForeignKey('ProjectStatus', on_delete=models.SET_NULL, null=True)
     openedby = models.CharField(db_column='OpenedBy', max_length=20, blank=True, null=True)  # Field name made lowercase.
     openeddate = models.DateTimeField(db_column='OpenedDate', blank=True, null=True)  # Field name made lowercase.
     closedby = models.CharField(db_column='ClosedBy', max_length=20, blank=True, null=True)  # Field name made lowercase.
@@ -187,7 +188,11 @@ class Project(models.Model):
 
 class ProjectStatus(models.Model):
     name = models.IntegerField(db_column='Name')  # Field name made lowercase.
-
+    name_ar = models.IntegerField(db_column='Name_Ar')  # Field name made lowercase.
+    priority = models.IntegerField(db_column='Priority')  # Field priority made lowercase.
+    isdefault = models.IntegerField(db_column='IsDefault')  # Field isdefault made lowercase.
+    color = models.IntegerField(db_column='Color')  # Field color made lowercase.
+    
     class Meta:
         managed = False
         db_table = 'project_status'
