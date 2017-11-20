@@ -1,20 +1,17 @@
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render, render_to_response ,get_object_or_404
 from django.template import loader
-from django.http import HttpResponse
+from django.http import HttpResponse ,HttpResponseRedirect,Http404 ,HttpResponseForbidden
 from .models import *
 from .forms import *
 from django.contrib.auth.views import *
-from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext as _
 from django.forms import formset_factory
 from django.forms import BaseModelFormSet
 from datetime import datetime , timedelta
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.shortcuts import get_object_or_404
 from django.db.models import Q
-from django.http import Http404
-from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+
 
 class BaseSheetFormSet(BaseModelFormSet):
     def __init__(self, *args, **kwargs):
@@ -304,38 +301,22 @@ def ProjectList(request):
     return render(request, 'project/projects.html', context)
 
 def ProjectDetail(request,pk):
-    project_detail= Project.objects.get(pk=pk)
+    project_detail= get_object_or_404(Project,pk=pk)
     context={'project_detail':project_detail}
     return render(request, 'project/project_detail.html', context)
 
 def ProjectEdit(request,pk):
-    project_detail= Project.objects.get(pk=pk)
-     # if this is a POST request we need to process the form data
-    if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = ProjectForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            # process the data in form.cleaned_data as required
-            ProjectName = form.cleaned_data['ProjectName']
-            StartDate = form.cleaned_data['StartDate']
-            EndDate = form.cleaned_data['EndDate']
-            Desc = form.cleaned_data['Desc']
-            CreatedBy=request.session.get('EmpID', '1056821208')
-            #collect datat into form model
-            p_obj= Project(name=ProjectName,start=StartDate,end=EndDate,desc=Desc,createddate=datetime.now(),createdby=CreatedBy)
-            #save to database
-            p_obj.save()
-            # redirect to a new URL:
-            return HttpResponseRedirect('/thanks/')
-
-    # if a GET (or any other method) we'll create a blank form
-    else:
-        form = ProjectForm()
-
-    return render(request, 'project/add_project.html', {'form': form})
+    instance = get_object_or_404(Project,pk=pk)
+    form = ProjectForm(request.POST or None, instance=instance)
+    if form.is_valid():
+       instance=form.save()
+       instance.save()
+       return HttpResponseRedirect('/thanks/')
+   
+    form = ProjectForm(instance=instance)
+    return render(request, 'project/add_project.html', {'form': form,})
 
 def ProjectDelete(request,pk):
-    project_detail= Project.objects.get(pk=pk)
+    project_detail= get_object_or_404(Project,pk=pk)
     context={'project_detail':project_detail}
     return render(request, 'project/project_delete.html', context)

@@ -29,7 +29,16 @@ class AddNewSheet(forms.Form):
 UpdateSheet = modelformset_factory(Sheet, fields=('taskdesc', 'tasktype', 'duration'))
 
 class ProjectForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super(ProjectForm, self).__init__(*args, **kwargs)
+        # set the user_id as an attribute of the form
+        self.id = id
+        
     ProjectName = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control','placeholder':_('Project Name')}))
     StartDate= forms.DateField(initial=datetime.date.today,widget=forms.TextInput(attrs={'class': 'form-control xdisplay_inputx form-group has-feedback','id':'#single_cal1','placeholder':_('Start Date')}))
     EndDate = forms.DateField(initial=datetime.date.today,widget=forms.TextInput(attrs={'class': 'form-control xdisplay_inputx form-group has-feedback','id':'#single_cal2','placeholder':_('End Date')}))
     Desc = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control','placeholder':_('Project Details')}))
+    
+    class Meta:
+        model = Project
+        fields = '__all__'
