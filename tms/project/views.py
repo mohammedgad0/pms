@@ -183,7 +183,13 @@ def AddProject(request):
             Desc = form.cleaned_data['Desc']
             CreatedBy=request.session.get('EmpID', '1056821208')
             #collect datat into form model
-            p_obj= Project(name=ProjectName,start=StartDate,end=EndDate,desc=Desc,createddate=datetime.now(),createdby=CreatedBy)
+            try:
+               status= ProjectStatus.objects.get(isdefault=1).id
+            except :
+               status= ProjectStatus.objects.order_by('priority')[0].id
+            p_obj= Project(name=ProjectName,start=StartDate,
+                           end=EndDate,desc=Desc,createddate=datetime.now(),
+                           createdby=CreatedBy,status_id=status)
             #save to database
             p_obj.save()
             # redirect to a new URL:
