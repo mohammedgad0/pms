@@ -57,6 +57,7 @@
           {% endblock top_navigation %}
 
           {% block content %}
+          {% include 'project/messages.html' %}
             <!-- {{ content }} -->
           {% endblock content %}
 
@@ -70,7 +71,7 @@
       {% block javascripts %}
         <!-- jQuery -->
         <script src="/static/vendors/jquery/dist/jquery.min.js"></script>
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script src="/static/vendors/jquery/dist/jquery-ui.js"></script>
         <!-- Bootstrap -->
         <script src="/static/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
         <!-- FastClick -->

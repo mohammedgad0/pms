@@ -217,7 +217,7 @@ class Sheet(models.Model):
     taskdate = models.DateField(_('task date'),db_column='TaskDate', blank=True, null=True)  # Field name made lowercase.
     editedate = models.DateField(db_column='EditeDate', blank=True, null=True)  # Field name made lowercase.
     SUBMITTED_STATUS = (
-        ('0', _('in process')),
+        ('0', _('New')),
         ('1', _('submitted')),
         ('2', _('not submitted')),
     )

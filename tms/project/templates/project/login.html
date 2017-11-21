@@ -20,7 +20,13 @@
         <section class="login_content">
           <form action="." method="post" class="form-horizontal">
             {% csrf_token %}
-            <h1>Login Form</h1>
+
+            <h1>{{ _('Login Form')}}</h1>
+            {% if form.errors %}
+            <div class="alert alert-danger">
+              <p class="validation-summary-errors">{{ _('Please enter a correct user name and password.') }}</p>
+            </div>
+            {% endif %}
             <div>
                {{ form.username }}
             </div>
@@ -30,18 +36,14 @@
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <input type="hidden" name="next" value="/" />
-                    <input type="submit" value="Log in" class="btn btn-default" />
+                    <input type="submit" value="{{_('Log in')}}" class="btn btn-default" />
                 </div>
             </div>
-            {% if form.errors %}
-            <p class="validation-summary-errors">Please enter a correct user name and password.</p>
-            {% endif %}
+
             <div class="clearfix"></div>
 
             <div class="separator">
-              <p class="change_link">New to site?
-                <a href="#signup" class="to_register"> Create Account </a>
-              </p>
+
 
               <div class="clearfix"></div>
               <br />

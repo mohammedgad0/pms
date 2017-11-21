@@ -11,7 +11,7 @@ from datetime import datetime , timedelta
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 from django.core.urlresolvers import reverse
-
+from django.contrib import messages
 
 class BaseSheetFormSet(BaseModelFormSet):
     def __init__(self, *args, **kwargs):
@@ -23,19 +23,22 @@ def myuser(request, *args, **kwargs):
     if request.method == "POST":
         form = BootstrapAuthenticationForm(request, data=request.POST)
         emp = None
-        if form.is_valid():
-            auth_login(request, form.get_user())
+        # if form.is_valid():
+        #     auth_login(request, form.get_user())
             # email = None
-            # if request.user.is_authenticated():
+        if request.user.is_authenticated():
             email = request.user.email
             emp = Employee.objects.filter(email= email)
-    # Get all data filtered by user email and set in session
-        for data in emp:
-            request.session['EmpID'] = data.empid
-            request.session['EmpName'] = data.empname
-            request.session['DeptName'] = data.deptname
-            request.session['Mobile'] = data.mobile
-            request.session['DeptCode'] = data.deptcode
+        # Get all data filtered by user email and set in session
+            for data in emp:
+                request.session['EmpID'] = data.empid
+                request.session['EmpName'] = data.empname
+                request.session['DeptName'] = data.deptname
+                request.session['Mobile'] = data.mobile
+                request.session['DeptCode'] = data.deptcode
+        else:
+            return login(request, *args, **kwargs)
+
     return login(request, *args, **kwargs)
 
 # @login_required
@@ -64,7 +67,10 @@ def MySheet(request):
     if request.user.is_authenticated():
         EmpID = request.session['EmpID']
     sheets = Sheet.objects.filter(empid = EmpID)
-    context = {'AllSheets': sheets}
+    count = len(list(sheets))
+    if count == 0:
+        messages.info(request, _("No tasks"))
+    context = {'AllSheets': sheets,'count':count}
     return render(request, 'project/my_tasks.html', context)
 
 def ManagerPage(request):
@@ -90,8 +96,12 @@ def ManagerPage(request):
                                     INNER JOIN employee
                                     ON sheet.EmpId = employee.EmpId
                                     WHERE sheet.DeptCode = %s'' group by EmpName''' , [DeptCode])
-
-    context = {'allemp':AllEmp}
+    # for data in AllEmp:
+    count = len(list(AllEmp))
+    if count == 0:
+        messages.info(request, _("No data"))
+        return render(request, 'project/all_sheets.html')
+    context = {'allemp':AllEmp,"count":count}
     return render(request, 'project/all_sheets.html',context)
 
 def EditSheet(request, empid):
@@ -189,10 +199,11 @@ def DeptSheet(request):
     context = {'AllSheets': sheets, 'department':dept, 'empid':EmpID, 'empdata':empdata}
     return render(request, 'project/dept_tasks.html', context)
 
+
 # Add sheet form
 # @login_required
 def AddSheet(request):
-    AddSheet = modelformset_factory(Sheet, fields=('taskdesc', 'tasktype', 'duration','taskdate'), extra=4,
+    AddSheet = modelformset_factory(Sheet, fields=('taskdesc', 'tasktype', 'duration','taskdate'), extra=7,
         widgets = {
             'taskdesc': forms.TextInput(attrs={'class': 'form-control'}),
             'tasktype': forms.Select(attrs={'class': 'form-control'}),
@@ -200,7 +211,6 @@ def AddSheet(request):
             'taskdate': forms.TextInput(attrs={'class': 'datepicker form-control'}),
         }
     )
-
     EmpID = 0
     if request.user.is_authenticated():
         EmpID = request.session['EmpID']
@@ -216,6 +226,7 @@ def AddSheet(request):
             email = request.user.email
             emp = Employee.objects.filter(email= email)
             # managr level 1
+            managercode = manager_2 = manager_3 = manager_4 = 0
             for data in emp:
                 managercode = data.managercode
                 request.session['MNGID'] = managercode
@@ -244,6 +255,8 @@ def AddSheet(request):
                 else:
                     obj.createddate = datetime.now()
                 obj.save()
+                messages.success(request, _("Post Submit"))
+                return HttpResponseRedirect(reverse('ns-project:my-sheet'))
     else:
         formset = formset
     # form = form_class(request.POST or None)
@@ -312,7 +325,7 @@ def ProjectEdit(request,pk):
        instance=form.save()
        instance.save()
        return HttpResponseRedirect('/thanks/')
-   
+
     form = ProjectForm(instance=instance)
     return render(request, 'project/add_project.html', {'form': form,})
 

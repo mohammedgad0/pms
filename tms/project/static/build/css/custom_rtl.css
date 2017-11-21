@@ -4,6 +4,8 @@ html, body {
     direction: rtl;
     font: 13px 'neo', serif !important;
 }
+.login_content h1{font-family: neo !important ;}
+
 /*dropdpwn not clickable*/
 .pointer{pointer-events:none !important;}
 .full-width {

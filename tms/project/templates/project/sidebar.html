@@ -1,7 +1,7 @@
 {% load i18n %}
 <div class="left_col scroll-view">
   <div class="navbar nav_title" style="border: 0;">
-  
+
 
     <a href="index.html" class="site_title"> <img src="/static/images/stats_logo.png" alt="..." class="img-rounded  profile_img" style="width:50px;">  <span>{{ _("Task Management") }} </span></a>
   </div>
@@ -37,7 +37,7 @@
            <li><a href="index.html"><i class="fa fa-home"></i> {% trans "Home" %} <span class="fa"></span></a>  </li>
            <li><a href="projects.html"><i class="fa fa-home"></i> {% trans "Projects" %} <span class="fa"></span></a>  </li>
            <li><a href="plain_page.html"><i class="fa fa-home"></i> {% trans "Tasks" %} <span class="fa"></span></a>  </li>
-            <li><a href="plain_page.html"><i class="fa fa-home"></i> {% trans "My To Do List" %} <span class="fa"></span></a>  </li>
+            <li><a href="{% url 'ns-project:my-sheet' %}"><i class="fa fa-list"></i> {% trans "My To Do List" %} <span class="fa"></span></a>  </li>
             <li><a><i class="fa fa-home"></i> {% trans "Reports" %} <span class="fa fa-chevron-down"></span></a>
 
           <ul class="nav child_menu">

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-20 23:27+0300\n"
+"POT-Creation-Date: 2017-11-21 13:46+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,7 +19,11 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: .\project\forms.py:15
+#: .\project\forms.py:14
+msgid "User Name"
+msgstr "اسم المستخدم"
+
+#: .\project\forms.py:15 .\project\forms.py:18
 msgid "Password"
 msgstr "كلمة المرور"
 
@@ -28,7 +32,7 @@ msgstr "كلمة المرور"
 #: .\project\templates\project\dept_tasks.html:60
 #: .\project\templates\project\edit-sheet.html:39
 #: .\project\templates\project\edit_sheet.html:39
-#: .\project\templates\project\my_tasks.html:57
+#: .\project\templates\project\my_tasks.html:66
 #: .\project\templates\project\update_sheet.html:89
 msgid "Task Descreption"
 msgstr "وصف المهمة"
@@ -46,7 +50,7 @@ msgstr "مساندة"
 #: .\project\templates\project\dept_tasks.html:61
 #: .\project\templates\project\edit-sheet.html:40
 #: .\project\templates\project\edit_sheet.html:40
-#: .\project\templates\project\my_tasks.html:58
+#: .\project\templates\project\my_tasks.html:67
 #: .\project\templates\project\update_sheet.html:90
 msgid "Task type"
 msgstr "نوع المهمة"
@@ -59,20 +63,20 @@ msgstr "نوع المهمة"
 msgid "Duration"
 msgstr "المدة التقريبية للإنجاز"
 
-#: .\project\forms.py:32 .\project\templates\project\add_project.html:44
+#: .\project\forms.py:37 .\project\templates\project\add_project.html:44
 #: .\project\templates\project\projects.html:71
 msgid "Project Name"
 msgstr "أسم المشروع"
 
-#: .\project\forms.py:33 .\project\templates\project\add_project.html:53
+#: .\project\forms.py:38 .\project\templates\project\add_project.html:53
 msgid "Start Date"
 msgstr "تاريخ البدأ"
 
-#: .\project\forms.py:34 .\project\templates\project\add_project.html:58
+#: .\project\forms.py:39 .\project\templates\project\add_project.html:58
 msgid "End Date"
 msgstr "تاريخ الإنتهاء"
 
-#: .\project\forms.py:35 .\project\templates\project\project_detail.html:3
+#: .\project\forms.py:40 .\project\templates\project\project_detail.html:3
 #, fuzzy
 #| msgid "Project Detail"
 msgid "Project Details"
@@ -84,21 +88,19 @@ msgstr "تفاصيل المشروع"
 msgid "task date"
 msgstr "نوع المهمة"
 
-#: .\project\models.py:220 .\project\templates\project\all_sheets.html:97
-#: .\project\templates\project\dept_tasks.html:97
-#: .\project\templates\project\my_tasks.html:87
-msgid "in process"
-msgstr "تحت الإجراء "
+#: .\project\models.py:220 .\project\templates\project\my_tasks.html:96
+msgid "New"
+msgstr "جديد"
 
-#: .\project\models.py:221 .\project\templates\project\all_sheets.html:94
+#: .\project\models.py:221 .\project\templates\project\all_sheets.html:102
 #: .\project\templates\project\dept_tasks.html:94
-#: .\project\templates\project\my_tasks.html:90
+#: .\project\templates\project\my_tasks.html:99
 msgid "submitted"
 msgstr "تم الإعتماد"
 
-#: .\project\models.py:222 .\project\templates\project\all_sheets.html:91
+#: .\project\models.py:222 .\project\templates\project\all_sheets.html:99
 #: .\project\templates\project\dept_tasks.html:91
-#: .\project\templates\project\my_tasks.html:93
+#: .\project\templates\project\my_tasks.html:102
 msgid "not submitted"
 msgstr "لم تعتمد"
 
@@ -130,7 +132,7 @@ msgstr "حفظ"
 #: .\project\templates\project\dept_tasks.html:63
 #: .\project\templates\project\edit-sheet.html:42
 #: .\project\templates\project\edit_sheet.html:42
-#: .\project\templates\project\my_tasks.html:60
+#: .\project\templates\project\my_tasks.html:69
 #: .\project\templates\project\update_sheet.html:92
 msgid "Task Date"
 msgstr "وقت المهمة"
@@ -175,48 +177,64 @@ msgstr "البحث عن ..."
 msgid "Go"
 msgstr "بحث"
 
-#: .\project\templates\project\all_sheets.html:36
-#: .\project\templates\project\dept_tasks.html:35
-msgid "Submit Tasks"
-msgstr "إعتماد المهام"
-
-#: .\project\templates\project\all_sheets.html:60
+#: .\project\templates\project\all_sheets.html:68
 #: .\project\templates\project\update_sheet.html:45
 msgid "Name"
 msgstr "اسم الموظف"
 
-#: .\project\templates\project\all_sheets.html:61
+#: .\project\templates\project\all_sheets.html:69
 msgid "Task count"
 msgstr "عدد جميع المهام"
 
-#: .\project\templates\project\all_sheets.html:62
+#: .\project\templates\project\all_sheets.html:70
 msgid "Task Submitted Count"
 msgstr "مهام معتمدة"
 
-#: .\project\templates\project\all_sheets.html:63
+#: .\project\templates\project\all_sheets.html:71
 msgid "Task not submitted count"
 msgstr " مهام غير معتمدة"
 
-#: .\project\templates\project\all_sheets.html:64
+#: .\project\templates\project\all_sheets.html:72
 #: .\project\templates\project\update_sheet.html:93
 msgid "Submitted"
 msgstr "إعتماد المهام"
 
-#: .\project\templates\project\all_sheets.html:65
+#: .\project\templates\project\all_sheets.html:73
 #: .\project\templates\project\dept_tasks.html:64
-#: .\project\templates\project\my_tasks.html:61
+#: .\project\templates\project\my_tasks.html:70
 #: .\project\templates\project\projects.html:76
 msgid "Status"
 msgstr "الحالة"
 
-#: .\project\templates\project\all_sheets.html:87
+#: .\project\templates\project\all_sheets.html:95
 msgid "Operations"
 msgstr "إعتماد"
 
+#: .\project\templates\project\all_sheets.html:105
+#: .\project\templates\project\dept_tasks.html:97
+msgid "in process"
+msgstr "تحت الإجراء "
+
+#: .\project\templates\project\dept_tasks.html:35
+msgid "Submit Tasks"
+msgstr "إعتماد المهام"
+
 #: .\project\templates\project\dept_tasks.html:62
-#: .\project\templates\project\my_tasks.html:59
+#: .\project\templates\project\my_tasks.html:68
 msgid "Duration by days"
 msgstr " المدرة التقريبية للإنجاز باليوم "
+
+#: .\project\templates\project\login.html:24
+msgid "Login Form"
+msgstr " تسجيل الدخول"
+
+#: .\project\templates\project\login.html:27
+msgid "Please enter a correct user name and password."
+msgstr "برجاء التأكد من أسم المستخدم وكلمة المرور"
+
+#: .\project\templates\project\login.html:39
+msgid "Log in"
+msgstr "دخول"
 
 #: .\project\templates\project\my_tasks.html:14
 msgid "Tasks List"
@@ -337,13 +355,29 @@ msgstr "البريد الإلكتروني"
 msgid "submitted tasks"
 msgstr "عرض وإعتماد المهام"
 
-#: .\tms\settings.py:139
+#: .\project\views.py:72
+
+msgid "No tasks"
+msgstr "عفواً, لا يوجد مهام تمت إضافتها"
+
+#: .\project\views.py:102
+msgid "No data"
+msgstr "عفواً, لا يوجد مهام لموظفين الإدارة"
+
+#: .\project\views.py:257
+msgid "Post Submit"
+msgstr "تم حفظ المهام بنجاح"
+
+#: .\tms\settings.py:147
 msgid "English"
 msgstr "إنجليزى"
 
-#: .\tms\settings.py:140
+#: .\tms\settings.py:148
 msgid "Arabic"
 msgstr "Arabic"
+
+#~ msgid "Post Done"
+#~ msgstr "تم حفظ المهام بنجاح"
 
 #~ msgid "Success"
 #~ msgstr "مكتمل"

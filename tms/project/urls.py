@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^add-sheet/$', views.AddSheet, name='add-sheet'),
     url(r'^my_sheet/$', views.MySheet, name='my-sheet'),
     url(r'^all_sheets/$', views.ManagerPage, name='all-sheets'),
+    url(r'^all_emp/$', views.IsManager, name='all-emp'),
     url(r'^dept_sheet/$', views.DeptSheet, name='dept-sheet'),
     # url(r'^sheet/(?P<empid>\d+)/update/$', views.EditSheet, name='edit-sheet'),
     url(r'^sheet/(?P<empid>\d+)/update/$', views.UpdateSheet, name='update-sheet'),
