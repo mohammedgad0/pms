@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 import datetime
 from django.forms import modelformset_factory
 from .models import *
-
+from django.forms import ModelForm, Textarea,TextInput,DateField
 
 class BootstrapAuthenticationForm(AuthenticationForm):
     """Authentication form which uses boostrap CSS."""
@@ -28,17 +28,18 @@ class AddNewSheet(forms.Form):
 
 UpdateSheet = modelformset_factory(Sheet, fields=('taskdesc', 'tasktype', 'duration'))
 
-class ProjectForm(forms.Form):
-    def __init__(self, *args, **kwargs):
-        super(ProjectForm, self).__init__(*args, **kwargs)
-        # set the user_id as an attribute of the form
-        self.id = id
-
-    ProjectName = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control','placeholder':_('Project Name')}))
-    StartDate= forms.DateField(initial=datetime.date.today,widget=forms.TextInput(attrs={'class': 'form-control xdisplay_inputx form-group has-feedback','id':'#single_cal1','placeholder':_('Start Date')}))
-    EndDate = forms.DateField(initial=datetime.date.today,widget=forms.TextInput(attrs={'class': 'form-control xdisplay_inputx form-group has-feedback','id':'#single_cal2','placeholder':_('End Date')}))
-    Desc = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control','placeholder':_('Project Details')}))
-
+class ProjectForm(ModelForm):
+    #ProjectName = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control','placeholder':_('Project Name')}))
+    #StartDate= forms.DateField(initial=datetime.date.today,widget=forms.TextInput(attrs={'class': 'form-control xdisplay_inputx form-group has-feedback','id':'#single_cal1','placeholder':_('Start Date')}))
+    #EndDate = forms.DateField(initial=datetime.date.today,widget=forms.TextInput(attrs={'class': 'form-control xdisplay_inputx form-group has-feedback','id':'#single_cal2','placeholder':_('End Date')}))
+    #Desc = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control','placeholder':_('Project Details')}))
+    
     class Meta:
         model = Project
-        fields = '__all__'
+        fields = ['name','start','end','desc']
+        widgets = {
+            'name':TextInput(attrs={'class': 'form-control','placeholder':_('Project Name')}),
+            'start':TextInput(attrs={'class': 'form-control has-feedback-left  ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Start Date')}),
+            'end':TextInput(attrs={'class': 'form-control has-feedback-left  ','id':'single_cal_2','aria-describedby':'inputSuccess2Status','placeholder':_('End Date')}),
+            'desc': Textarea(attrs={'class':'form-control','placeholder':_('Project Details')}),
+        }

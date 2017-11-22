@@ -267,25 +267,18 @@ def AddProject(request):
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = ProjectForm(request.POST)
-        # check whether it's valid:
         if form.is_valid():
-            # process the data in form.cleaned_data as required
-            ProjectName = form.cleaned_data['ProjectName']
-            StartDate = form.cleaned_data['StartDate']
-            EndDate = form.cleaned_data['EndDate']
-            Desc = form.cleaned_data['Desc']
-            CreatedBy=request.session.get('EmpID', '1056821208')
-            #collect datat into form model
+            project_obj= form.save(commit=False)
             try:
-               status= ProjectStatus.objects.get(isdefault=1).id
+               status_obj= ProjectStatus.objects.get(isdefault=1)
             except :
-               status= ProjectStatus.objects.order_by('priority')[0].id
-
-            p_obj= Project(name=ProjectName,start=StartDate,
-                           end=EndDate,desc=Desc,createddate=datetime.now(),
-                           createdby=CreatedBy,status_id=status)
+               status_obj= ProjectStatus.objects.order_by('priority')[0]
+               
+            project_obj.status=status_obj
+            project_obj.createdby=request.session.get('EmpID', '1056821208')
+            project_obj.createddate= datetime.now()
             #save to database
-            p_obj.save()
+            project_obj.save()
             # redirect to a new URL:
             return HttpResponseRedirect('/thanks/')
 
@@ -325,8 +318,8 @@ def ProjectEdit(request,pk):
        instance=form.save()
        instance.save()
        return HttpResponseRedirect('/thanks/')
+   
 
-    form = ProjectForm(instance=instance)
     return render(request, 'project/add_project.html', {'form': form,})
 
 def ProjectDelete(request,pk):

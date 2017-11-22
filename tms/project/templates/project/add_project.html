@@ -8,6 +8,10 @@
 
 {% block content %}
 
+
+
+                        
+
 <div class="right_col" role="main">
     <div class="">
       <div class="page-title">
@@ -43,23 +47,25 @@
                 <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.ProjectName.id_for_label }}">{{ _('Project Name')}}</label>
                   <div class="col-md-9 col-sm-9 col-xs-12">
-                 {{form.ProjectName}}
+                 {{form.name}}
                   </div>
                 </div>
 
 
                   <div class="form-group">
 
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _('Start Date')}}</label>
+                  <label class=" xdisplay_inputx control-label col-md-3 col-sm-3 col-xs-12">{{ _('Start Date')}}</label>
                   <div class="col-md-3 col-sm-9 col-xs-12">
-                     {{form.StartDate}}
+                     {{form.start}}
                   </div>
 
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _('End Date')}}</label>
+                     <label class=" xdisplay_inputx control-label col-md-3 col-sm-3 col-xs-12">{{ _('End Date')}}</label>
                   <div class="col-md-3 col-sm-9 col-xs-12">
-                   {{form.EndDate}}
+                     {{form.end}}
                   </div>
 
+
+                        
 
                 </div>
 
@@ -68,7 +74,7 @@
                   <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _('Project Description') }} <span class="required">*</span>
                   </label>
                   <div class="col-md-9 col-sm-9 col-xs-12">
-                    {{form.Desc}}
+                    {{form.desc}}
                   </div>
                 </div>
 
@@ -78,7 +84,7 @@
                 <div class="form-group">
                   <div class="col-md-12 col-sm-12 col-xs-12 col-md-offset-3">
                     <button type="button" class="btn btn-primary">Cancel</button>
-  		   <button class="btn btn-primary" type="reset">Reset</button>
+             <button class="btn btn-primary" type="reset">Reset</button>
                     <button type="submit" class="btn btn-success">Submit</button>
                   </div>
                 </div>
@@ -86,11 +92,14 @@
 
 
 
-     <!--
-    {{ form.subject.errors }}
-    {{ form.subject.label_tag }}
-    {{ form.subject }}
-     -->
+     
+    {{ form.start.errors }}
+    {{ form.start.label_tag }}
+
+    
+
+{{ f.errors}}
+     
 
 
 
@@ -101,8 +110,34 @@
       </div>
     </div>
   </div>
+  
+  
 {% endblock content %}
 
 {% block javascripts %}
   {{ block.super }}
+  
+    <script>
+  $('#single_cal_1').daterangepicker({
+      singleDatePicker: true,
+      singleClasses: "picker_1",
+       locale: {
+            format: 'YYYY-MM-DD'
+        },
+  }, function(start, end, label) {
+      console.log(start.toISOString(), end.toISOString(), label);
+  });
+  
+  $('#single_cal_2').daterangepicker({
+      singleDatePicker: true,
+      singleClasses: "picker_1",
+      locale: {
+            format: 'YYYY-MM-DD',
+            language: 'ar-EG',
+        },
+  }, function(start, end, label) {
+      console.log(start.toISOString(), end.toISOString(), label);
+  });
+  </script>
+  
 {% endblock javascripts %}
