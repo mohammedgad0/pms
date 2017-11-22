@@ -304,7 +304,7 @@ def AddProject(request):
                status_obj= ProjectStatus.objects.get(isdefault=1)
             except :
                status_obj= ProjectStatus.objects.order_by('priority')[0]
-
+               
             project_obj.status=status_obj
             project_obj.createdby=request.session.get('EmpID', '1056821208')
             project_obj.createddate= datetime.now()
@@ -349,12 +349,12 @@ def ProjectEdit(request,pk):
     if form.is_valid():
        instance=form.save()
        instance.save()
-       messages.success(request, _("Project has updated successfully"))
+       messages.success(request, _("Project has updated successfully"), fail_silently=True,)
        return HttpResponseRedirect(reverse('ns-project:project-list'))
     else:
-
-       # messages.add_message(request, messages.WARNING, 'Can not update project.')
-        #messages.WARNING(request, _("Can not update project."))
+        # Set the messages level back to default.
+        messages.add_message(request, messages.ERROR, 'Can not update project.', fail_silently=True, extra_tags='alert')
+        #messages.error(request, _("Can not update project."))
         return render(request, 'project/add_project.html', {'form': form,})
 
 def ProjectDelete(request,pk):
