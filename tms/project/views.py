@@ -311,7 +311,8 @@ def AddProject(request):
             #save to database
             project_obj.save()
             # redirect to a new URL:
-            return HttpResponseRedirect('/thanks/')
+            messages.success(request, _("Project has created successfully"))
+            return HttpResponseRedirect(reverse('ns-project:project-list'))
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -348,10 +349,13 @@ def ProjectEdit(request,pk):
     if form.is_valid():
        instance=form.save()
        instance.save()
-       return HttpResponseRedirect('/thanks/')
+       messages.success(request, _("Project has updated successfully"))
+       return HttpResponseRedirect(reverse('ns-project:project-list'))
+    else:
 
-
-    return render(request, 'project/add_project.html', {'form': form,})
+       # messages.add_message(request, messages.WARNING, 'Can not update project.')
+        #messages.WARNING(request, _("Can not update project."))
+        return render(request, 'project/add_project.html', {'form': form,})
 
 def ProjectDelete(request,pk):
     project_detail= get_object_or_404(Project,pk=pk)

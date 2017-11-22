@@ -11,6 +11,8 @@
 {% block content %}
 {% get_current_language as LANGUAGE_CODE %}
 
+
+
   <div class="right_col" role="main">
     <div class="">
       <div class="page-title">
@@ -20,7 +22,7 @@
        
           <h3>{% trans "Projects List" %}   </h3>
 
-    
+
         </div>
 
         <div class="title_right">
@@ -61,7 +63,14 @@
             </div>
             <div class="x_content">
             
-          
+              {% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="alert {{ message.tags }}"{% endif %}>{{ message }}</li>
+    
+    {% endfor %}
+</ul>
+{% endif %}
              
               <!-- start project list -->
               <table class="table table-striped projects">

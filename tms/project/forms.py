@@ -29,17 +29,40 @@ class AddNewSheet(forms.Form):
 UpdateSheet = modelformset_factory(Sheet, fields=('taskdesc', 'tasktype', 'duration'))
 
 class ProjectForm(ModelForm):
-    #ProjectName = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control','placeholder':_('Project Name')}))
-    #StartDate= forms.DateField(initial=datetime.date.today,widget=forms.TextInput(attrs={'class': 'form-control xdisplay_inputx form-group has-feedback','id':'#single_cal1','placeholder':_('Start Date')}))
-    #EndDate = forms.DateField(initial=datetime.date.today,widget=forms.TextInput(attrs={'class': 'form-control xdisplay_inputx form-group has-feedback','id':'#single_cal2','placeholder':_('End Date')}))
-    #Desc = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control','placeholder':_('Project Details')}))
-    
+
     class Meta:
         model = Project
         fields = ['name','start','end','desc']
         widgets = {
-            'name':TextInput(attrs={'class': 'form-control','placeholder':_('Project Name')}),
-            'start':TextInput(attrs={'class': 'form-control has-feedback-left  ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Start Date')}),
-            'end':TextInput(attrs={'class': 'form-control has-feedback-left  ','id':'single_cal_2','aria-describedby':'inputSuccess2Status','placeholder':_('End Date')}),
-            'desc': Textarea(attrs={'class':'form-control','placeholder':_('Project Details')}),
+            'name':TextInput(attrs={'class': 'form-control','placeholder':_('Project Name'),'required': True}),
+            'start':TextInput(attrs={'class': 'form-control has-feedback-left  ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Start Date'),'required': True}),
+            'end':TextInput(attrs={'class': 'form-control has-feedback-left  ','id':'single_cal_2','aria-describedby':'inputSuccess2Status','placeholder':_('End Date'),'required': True}),
+            'desc': Textarea(attrs={'class':'form-control','placeholder':_('Project Details'),'required': True}),
+        }
+        labels = {
+            'name': _('Project Name'),
+            'start':_('Start Date'),
+            'end':_('End Date'),
+            'desc':_('Desc'),
+        }
+        help_texts = {
+            'desc': _('write a Description for Project .'),
+            'start':_('Please use the following format: <em>YYYY-MM-DD</em>.'),
+            'end':_('Please use the following format: <em>YYYY-MM-DD</em>.'),
+        }
+        error_messages = {
+            'name': {
+                    'max_length': _("The Project's name is too long."),
+                    'required': _("Project's name is required."),
+             },
+            'start': {
+                    'required': _("Start Date  is required."),
+             },
+            'end': {
+                    'required': _("End Date  is required."),
+             },
+            'desc': {
+                    'max_length': _("The Project's Description is too long."),
+                    'required': _("Description Date  is required."),
+             },
         }
