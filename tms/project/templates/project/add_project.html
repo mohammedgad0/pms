@@ -45,7 +45,7 @@
   {% csrf_token %}
 
                 <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.ProjectName.id_for_label }}">{{ _('Project Name')}}</label>
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.ProjectName.id_for_label }}">{{ _('Project Name')}} <span class="required">*</span></label>
                   <div class="col-md-9 col-sm-9 col-xs-12">
                  {{form.name}}
                   </div>
@@ -54,14 +54,18 @@
 
                   <div class="form-group">
 
-                  <label class=" xdisplay_inputx control-label col-md-3 col-sm-3 col-xs-12">{{ _('Start Date')}}</label>
+                  <label class=" xdisplay_inputx control-label col-md-3 col-sm-3 col-xs-12">{{ _('Start Date')}} <span class="required">*</span></label>
                   <div class="col-md-3 col-sm-9 col-xs-12">
                      {{form.start}}
+                      <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+                          <span id="inputSuccess2Status2" class="sr-only">(success)</span>
                   </div>
 
-                     <label class=" xdisplay_inputx control-label col-md-3 col-sm-3 col-xs-12">{{ _('End Date')}}</label>
+                     <label class=" xdisplay_inputx control-label col-md-3 col-sm-3 col-xs-12">{{ _('End Date')}} <span class="required">*</span></label>
                   <div class="col-md-3 col-sm-9 col-xs-12">
                      {{form.end}}
+                      <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+                          <span id="inputSuccess2Status2" class="sr-only">(success)</span>
                   </div>
 
 
@@ -92,9 +96,12 @@
 
 
 
-     
-    {{ form.start.errors }}
-    {{ form.start.label_tag }}
+    {{ form.name.errors }}
+    {{ form.start.errors}}
+    {{ form.end.errors  }}
+    {{ form.desc.errors  }}
+    
+    <!--  {{ form.start.label_tag }} -->
 
     
 
@@ -125,10 +132,11 @@
             format: 'YYYY-MM-DD'
         },
   }, function(start, end, label) {
-      console.log(start.toISOString(), end.toISOString(), label);
+     
   });
   
   $('#single_cal_2').daterangepicker({
+	  autoUpdateInput: true,
       singleDatePicker: true,
       singleClasses: "picker_1",
       locale: {
@@ -136,7 +144,7 @@
             language: 'ar-EG',
         },
   }, function(start, end, label) {
-      console.log(start.toISOString(), end.toISOString(), label);
+    
   });
   </script>
   

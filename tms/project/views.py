@@ -44,9 +44,9 @@ def myuser(request, *args, **kwargs):
 # @login_required
 def index(request):
     # Populate User From Ldap Without Login
-    # from django_auth_ldap.backend import LDAPBackend
-    # ldap_backend = LDAPBackend()
-    # ldap_backend.populate_user('tgalharbi@stats.gov.sa')
+    from django_auth_ldap.backend import LDAPBackend
+    ldap_backend = LDAPBackend()
+    #ldap_backend.populate_user('wisal.ahmed@stats.gov.sa')
     logged = request.COOKIES.get('logged_in_status')
     context = {'logged':logged}
     template = loader.get_template('project/index.html')
@@ -280,7 +280,8 @@ def AddProject(request):
             #save to database
             project_obj.save()
             # redirect to a new URL:
-            return HttpResponseRedirect('/thanks/')
+            messages.success(request, _("Project has created successfully"))
+            return HttpResponseRedirect(reverse('ns-project:project-list'))
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -317,10 +318,13 @@ def ProjectEdit(request,pk):
     if form.is_valid():
        instance=form.save()
        instance.save()
-       return HttpResponseRedirect('/thanks/')
-   
-
-    return render(request, 'project/add_project.html', {'form': form,})
+       messages.success(request, _("Project has updated successfully"))
+       return HttpResponseRedirect(reverse('ns-project:project-list'))
+    else:
+        
+       # messages.add_message(request, messages.WARNING, 'Can not update project.')
+        #messages.WARNING(request, _("Can not update project."))
+        return render(request, 'project/add_project.html', {'form': form,})
 
 def ProjectDelete(request,pk):
     project_detail= get_object_or_404(Project,pk=pk)
