@@ -6,11 +6,38 @@
   {{ block.super }}
   <!-- Animate.css -->
   <link href="/static/vendors/animate.css/animate.min.css" rel="stylesheet">
+  
+  <style>
+body, html {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+   background: #092756 !important;
+    /* The image used */
+    /*background-image: url("http://www.dailygalaxy.com/.a/6a00d8341bf7f753ef01b7c86b22a2970b-pi") !important;*/
+
+    /* Full height */
+    height: 100% !important; 
+
+    /* Center and scale the image nicely */
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+    
+    
+    
+}
+</style>
+
 {% endblock stylesheets %}
 
 {% block body_class %}login{% endblock body_class %}
 
 {% block body %}
+
+<div class="bg"></div>
   <div>
     <a class="hiddenanchor" id="signup"></a>
     <a class="hiddenanchor" id="signin"></a>
@@ -19,7 +46,7 @@
       <div class="animate form login_form">
         <section class="login_content">
 
-
+  <img src="/static/images/stats_logo.png" alt="..." class="img-rounded profile_img">
           <form action="." method="post" class="form-horizontal">
             {% csrf_token %}
 
@@ -51,7 +78,8 @@
               <br />
 
               <div>
-                <h1><i class="fa fa-paw"></i></h1>
+               <!-- <h1> <i class="fa fa-paw"></i> </h1> -->
+               <br><br>
                 <p>©2017 نظام ادارة المهام - الهيئة العامة للإحصاء</p>
               </div>
             </div>
