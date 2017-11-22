@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-21 13:46+0300\n"
+"POT-Creation-Date: 2017-11-22 14:30+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,6 +29,7 @@ msgstr "كلمة المرور"
 
 #: .\project\forms.py:21 .\project\models.py:209
 #: .\project\templates\project\add-sheet.html:39
+#: .\project\templates\project\all_employee.html:69
 #: .\project\templates\project\dept_tasks.html:60
 #: .\project\templates\project\edit-sheet.html:39
 #: .\project\templates\project\edit_sheet.html:39
@@ -47,6 +48,7 @@ msgstr "مساندة"
 
 #: .\project\forms.py:24 .\project\models.py:214
 #: .\project\templates\project\add-sheet.html:40
+#: .\project\templates\project\all_employee.html:70
 #: .\project\templates\project\dept_tasks.html:61
 #: .\project\templates\project\edit-sheet.html:40
 #: .\project\templates\project\edit_sheet.html:40
@@ -57,26 +59,27 @@ msgstr "نوع المهمة"
 
 #: .\project\forms.py:26 .\project\models.py:215
 #: .\project\templates\project\add-sheet.html:41
+#: .\project\templates\project\all_employee.html:71
 #: .\project\templates\project\edit-sheet.html:41
 #: .\project\templates\project\edit_sheet.html:41
 #: .\project\templates\project\update_sheet.html:91
 msgid "Duration"
 msgstr "المدة التقريبية للإنجاز"
 
-#: .\project\forms.py:37 .\project\templates\project\add_project.html:44
+#: .\project\forms.py:41 .\project\templates\project\add_project.html:48
 #: .\project\templates\project\projects.html:71
 msgid "Project Name"
 msgstr "أسم المشروع"
 
-#: .\project\forms.py:38 .\project\templates\project\add_project.html:53
+#: .\project\forms.py:42 .\project\templates\project\add_project.html:57
 msgid "Start Date"
 msgstr "تاريخ البدأ"
 
-#: .\project\forms.py:39 .\project\templates\project\add_project.html:58
+#: .\project\forms.py:43 .\project\templates\project\add_project.html:62
 msgid "End Date"
 msgstr "تاريخ الإنتهاء"
 
-#: .\project\forms.py:40 .\project\templates\project\project_detail.html:3
+#: .\project\forms.py:44 .\project\templates\project\project_detail.html:3
 #, fuzzy
 #| msgid "Project Detail"
 msgid "Project Details"
@@ -104,6 +107,14 @@ msgstr "تم الإعتماد"
 msgid "not submitted"
 msgstr "لم تعتمد"
 
+#: .\project\templates\admin\base_site.html:3
+msgid "Django site admin"
+msgstr ""
+
+#: .\project\templates\admin\base_site.html:6
+msgid "my cool "
+msgstr ""
+
 #: .\project\templates\project\add-sheet.html:3
 #: .\project\templates\project\add_project.html:3
 #: .\project\templates\project\edit-sheet.html:3
@@ -120,6 +131,7 @@ msgstr "إضافة مهام جديدة"
 
 #: .\project\templates\project\add-sheet.html:31
 #: .\project\templates\project\add-sheet.html:67
+#: .\project\templates\project\all_employee.html:86
 #: .\project\templates\project\edit-sheet.html:31
 #: .\project\templates\project\edit-sheet.html:67
 #: .\project\templates\project\edit_sheet.html:31
@@ -129,6 +141,7 @@ msgid "Submit"
 msgstr "حفظ"
 
 #: .\project\templates\project\add-sheet.html:42
+#: .\project\templates\project\all_employee.html:72
 #: .\project\templates\project\dept_tasks.html:63
 #: .\project\templates\project\edit-sheet.html:42
 #: .\project\templates\project\edit_sheet.html:42
@@ -137,32 +150,35 @@ msgstr "حفظ"
 msgid "Task Date"
 msgstr "وقت المهمة"
 
-#: .\project\templates\project\add_project.html:15
-#: .\project\templates\project\add_project.html:24
+#: .\project\templates\project\add_project.html:19
+#: .\project\templates\project\add_project.html:28
 #, fuzzy
 #| msgid "Ad Project"
 msgid "add New Project"
 msgstr "إضافة مشروع"
 
-#: .\project\templates\project\add_project.html:68
+#: .\project\templates\project\add_project.html:74
 #, fuzzy
 #| msgid "Project Detail"
 msgid "Project Description"
 msgstr "تفاصيل المشروع"
 
+#: .\project\templates\project\all_employee.html:3
 #: .\project\templates\project\all_sheets.html:3
 #: .\project\templates\project\dept_tasks.html:3
 #: .\project\templates\project\my_tasks.html:3
 #: .\project\templates\project\projects.html:5
-#: .\project\templates\project\sidebar.html:38
+#: .\project\templates\project\sidebar.html:36
 msgid "Projects"
 msgstr "المشاريع"
 
+#: .\project\templates\project\all_employee.html:14
 #: .\project\templates\project\all_sheets.html:14
 #: .\project\templates\project\dept_tasks.html:14
 msgid "Tasks List Department"
 msgstr "قائمة مهام الإدارة"
 
+#: .\project\templates\project\all_employee.html:23
 #: .\project\templates\project\all_sheets.html:23
 #: .\project\templates\project\dept_tasks.html:22
 #: .\project\templates\project\my_tasks.html:19
@@ -170,6 +186,7 @@ msgstr "قائمة مهام الإدارة"
 msgid "Search for"
 msgstr "البحث عن ..."
 
+#: .\project\templates\project\all_employee.html:25
 #: .\project\templates\project\all_sheets.html:25
 #: .\project\templates\project\dept_tasks.html:24
 #: .\project\templates\project\my_tasks.html:21
@@ -310,20 +327,24 @@ msgstr "إدارة المهام"
 msgid "General"
 msgstr "عام"
 
-#: .\project\templates\project\sidebar.html:37
+#: .\project\templates\project\sidebar.html:35
 #: .\project\templates\project\sidebar2.html:34
 msgid "Home"
 msgstr "الرئيسية"
 
-#: .\project\templates\project\sidebar.html:39
+#: .\project\templates\project\sidebar.html:37
 msgid "Tasks"
 msgstr "المهام"
 
-#: .\project\templates\project\sidebar.html:40
+#: .\project\templates\project\sidebar.html:38
 msgid "My To Do List"
 msgstr "سجل مهامى"
 
 #: .\project\templates\project\sidebar.html:41
+msgid "manage all sheets"
+msgstr "إدارة سجل مهام الموظفين"
+
+#: .\project\templates\project\sidebar.html:43
 msgid "Reports"
 msgstr "التقارير"
 
@@ -355,26 +376,29 @@ msgstr "البريد الإلكتروني"
 msgid "submitted tasks"
 msgstr "عرض وإعتماد المهام"
 
-#: .\project\views.py:72
-
+#: .\project\views.py:94
 msgid "No tasks"
 msgstr "عفواً, لا يوجد مهام تمت إضافتها"
 
-#: .\project\views.py:102
+#: .\project\views.py:124
 msgid "No data"
 msgstr "عفواً, لا يوجد مهام لموظفين الإدارة"
 
-#: .\project\views.py:257
+#: .\project\views.py:280
 msgid "Post Submit"
 msgstr "تم حفظ المهام بنجاح"
 
-#: .\tms\settings.py:147
+#: .\tms\settings.py:150
 msgid "English"
 msgstr "إنجليزى"
 
-#: .\tms\settings.py:148
+#: .\tms\settings.py:151
 msgid "Arabic"
 msgstr "Arabic"
+
+#: .\tms\urls.py:12
+msgid "Task Management System cp"
+msgstr "لوحة تحكم نظام إدارة المهام"
 
 #~ msgid "Post Done"
 #~ msgstr "تم حفظ المهام بنجاح"

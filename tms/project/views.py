@@ -1,4 +1,4 @@
-from django.shortcuts import render, render_to_response ,get_object_or_404
+from django.shortcuts import render, render_to_response ,get_object_or_404,redirect
 from django.template import loader
 from django.http import HttpResponse ,HttpResponseRedirect,Http404 ,HttpResponseForbidden
 from .models import *
@@ -12,6 +12,10 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 from django.core.urlresolvers import reverse
 from django.contrib import messages
+from django.contrib.auth.models import Group
+
+
+
 
 class BaseSheetFormSet(BaseModelFormSet):
     def __init__(self, *args, **kwargs):
@@ -23,30 +27,52 @@ def myuser(request, *args, **kwargs):
     if request.method == "POST":
         form = BootstrapAuthenticationForm(request, data=request.POST)
         emp = None
-        # if form.is_valid():
-        #     auth_login(request, form.get_user())
+        if form.is_valid():
+          auth_login(request, form.get_user())
             # email = None
         if request.user.is_authenticated():
             email = request.user.email
             emp = Employee.objects.filter(email= email)
         # Get all data filtered by user email and set in session
+
             for data in emp:
                 request.session['EmpID'] = data.empid
                 request.session['EmpName'] = data.empname
                 request.session['DeptName'] = data.deptname
                 request.session['Mobile'] = data.mobile
                 request.session['DeptCode'] = data.deptcode
+                request.session['IsManager'] = data.ismanager
+            if emp:
+                if data.ismanager == 1:
+                    g = Group.objects.get(name='ismanager')
+                    g.user_set.add(request.user.id)
+                else:
+                    g = Group.objects.get(name='employee')
+                    g.user_set.add(request.user.id)
+            # if not emp:
+            #     g = Group.objects.get(name='employee')
+            #     g.user_set.add(request.user.id)
+
         else:
             return login(request, *args, **kwargs)
-
     return login(request, *args, **kwargs)
 
-# @login_required
+@login_required
 def index(request):
+    # if request.user.is_authenticated():
+    #     email = request.user.email
+    #     emp = Employee.objects.filter(email= email)
+    # # Get all data filtered by user email and set in session
+    #     for data in emp:
+    #         request.session['EmpID'] = data.empid
+    #         request.session['EmpName'] = data.empname
+    #         request.session['DeptName'] = data.deptname
+    #         request.session['Mobile'] = data.mobile
+    #         request.session['DeptCode'] = data.deptcode
     # Populate User From Ldap Without Login
     # from django_auth_ldap.backend import LDAPBackend
     # ldap_backend = LDAPBackend()
-    # ldap_backend.populate_user('tgalharbi@stats.gov.sa')
+    # ldap_backend.populate_user('alfray@stats.gov.sa')
     logged = request.COOKIES.get('logged_in_status')
     context = {'logged':logged}
     template = loader.get_template('project/index.html')
@@ -62,6 +88,7 @@ def gentella_html(request):
     template = loader.get_template('project/' + load_template)
     return HttpResponse(template.render(context, request))
 
+@login_required
 def MySheet(request):
     EmpID = 0
     if request.user.is_authenticated():
@@ -73,6 +100,7 @@ def MySheet(request):
     context = {'AllSheets': sheets,'count':count}
     return render(request, 'project/my_tasks.html', context)
 
+@login_required
 def ManagerPage(request):
     DeptCode = 0
     EmpID = 0
@@ -104,6 +132,7 @@ def ManagerPage(request):
     context = {'allemp':AllEmp,"count":count}
     return render(request, 'project/all_sheets.html',context)
 
+@login_required
 def EditSheet(request, empid):
     # Start Update Form
     UpdateSheet = modelformset_factory(Sheet, fields=('taskdesc', 'tasktype', 'duration','taskdate', 'ifsubmitted'), extra=0,
@@ -138,6 +167,7 @@ def EditSheet(request, empid):
     # raise Http404
     return render(request, 'project/update_sheet.html',{'dept':dept,'emp':EmpSheet})
 
+@login_required
 def UpdateSheet(request,empid):
     SbmitSheet = modelformset_factory(Sheet, fields=('taskdesc', 'tasktype', 'duration','taskdate','ifsubmitted'), extra=4,
         widgets = {
@@ -181,6 +211,7 @@ def UpdateSheet(request,empid):
     # form = form_class(request.POST or None)
     return render(request, 'project/update_sheet.html', {'form': formset,'EmpData':EmpData})
 
+@login_required
 def DeptSheet(request):
     DeptCode = 0
     EmpID = 0
@@ -201,7 +232,7 @@ def DeptSheet(request):
 
 
 # Add sheet form
-# @login_required
+@login_required
 def AddSheet(request):
     AddSheet = modelformset_factory(Sheet, fields=('taskdesc', 'tasktype', 'duration','taskdate'), extra=7,
         widgets = {
@@ -255,8 +286,8 @@ def AddSheet(request):
                 else:
                     obj.createddate = datetime.now()
                 obj.save()
-                messages.success(request, _("Post Submit"))
-                return HttpResponseRedirect(reverse('ns-project:my-sheet'))
+            messages.success(request, _("Post Submit"))
+            return HttpResponseRedirect(reverse('ns-project:my-sheet'))
     else:
         formset = formset
     # form = form_class(request.POST or None)
@@ -273,7 +304,7 @@ def AddProject(request):
                status_obj= ProjectStatus.objects.get(isdefault=1)
             except :
                status_obj= ProjectStatus.objects.order_by('priority')[0]
-               
+
             project_obj.status=status_obj
             project_obj.createdby=request.session.get('EmpID', '1056821208')
             project_obj.createddate= datetime.now()
@@ -318,7 +349,7 @@ def ProjectEdit(request,pk):
        instance=form.save()
        instance.save()
        return HttpResponseRedirect('/thanks/')
-   
+
 
     return render(request, 'project/add_project.html', {'form': form,})
 

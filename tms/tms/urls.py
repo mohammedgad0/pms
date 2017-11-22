@@ -6,6 +6,12 @@ from project import views
 import project.forms
 import project.views
 from datetime import datetime
+from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
+from django.contrib.auth.views import logout
+
+admin.site.site_header = _('Task Management System cp')
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^i18n/', include('django.conf.urls.i18n')),
@@ -24,6 +30,10 @@ urlpatterns = [
             }
         },
         name='login'),
+    url(r'^su/', include('django_su.urls')),
+    url(r'^accounts/logout/$', logout, {'next_page': settings.LOGOUT_REDIRECT_URL}, name='logout'),
+    url(r'^accounts/', include('django.contrib.auth.urls')),
+
 
 
 

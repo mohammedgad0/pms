@@ -9,9 +9,9 @@
 
   <!-- menu profile quick info -->
   <div class="profile clearfix">
-    <div class="profile_pic">
+     <!--<div class="profile_pic">
       <img src="/static/images/img.jpg" alt="..." class="img-circle profile_img">
-    </div>
+    </div> -->
     <div class="profile_info">
   {% if user.is_authenticated %}
       {% if 'EmpName' in request.session %}
@@ -32,12 +32,14 @@
     <div class="menu_section">
       <h3>{%  trans "General" %}</h3>
       <ul class="nav side-menu">
-
-
            <li><a href="index.html"><i class="fa fa-home"></i> {% trans "Home" %} <span class="fa"></span></a>  </li>
            <li><a href="projects.html"><i class="fa fa-home"></i> {% trans "Projects" %} <span class="fa"></span></a>  </li>
            <li><a href="plain_page.html"><i class="fa fa-home"></i> {% trans "Tasks" %} <span class="fa"></span></a>  </li>
-            <li><a href="{% url 'ns-project:my-sheet' %}"><i class="fa fa-list"></i> {% trans "My To Do List" %} <span class="fa"></span></a>  </li>
+           <li><a href="{% url 'ns-project:my-sheet' %}"><i class="fa fa-list"></i> {% trans "My To Do List" %} <span class="fa"></span></a>  </li>
+           {% load user_group %}
+           {% if request.user|has_group:"ismanager" %}
+           <li><a href="{% url 'ns-project:all-sheets' %}"><i class="fa fa-list"></i> {% trans "manage all sheets" %} <span class="fa"></span></a>  </li>
+           {% endif %}
             <li><a><i class="fa fa-home"></i> {% trans "Reports" %} <span class="fa fa-chevron-down"></span></a>
 
           <ul class="nav child_menu">
@@ -63,7 +65,7 @@
     <a data-toggle="tooltip" data-placement="top" title="Lock">
       <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
     </a>
-    <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
+    <a data-toggle="tooltip" data-placement="top" title="Logout" href="{% url "logout" %}">
       <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
     </a>
   </div>

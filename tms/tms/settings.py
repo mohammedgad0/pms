@@ -25,6 +25,10 @@ MESSAGE_TAGS = {
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger',
 }
+LOGOUT_REDIRECT_URL = 'login'
+
+LOGIN_REDIRECT_URL = '/project/my_sheet'
+
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
@@ -40,13 +44,14 @@ ALLOWED_HOSTS = ['127.0.0.1']
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'django_auth_ldap.backend.LDAPBackend',
-
+    'django_su.backends.SuBackend',
 ]
 
 # Application definition
 
 INSTALLED_APPS = [
     # Add your apps here to enable them
+    'django_su',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -59,6 +64,7 @@ INSTALLED_APPS = [
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'project.middleware.UserSeesionSet',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -67,6 +73,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'project.middleware.ForceLangMiddleware',
+
 
 ]
 ROOT_URLCONF = 'tms.urls'
