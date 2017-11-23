@@ -1,5 +1,5 @@
 {% extends "project/base_site.html" %}
-
+{% load i18n %}
 {% block title %} Plain Page {% endblock title %}
 
 {% block stylesheets %}
@@ -7,11 +7,12 @@
 {% endblock stylesheets %}
 
 {% block content %}
+{% get_current_language as LANGUAGE_CODE %}
     <div class="right_col" role="main">
       <div class="">
         <div class="page-title">
           <div class="title_left">
-            <h3>Plain Page</h3>
+            <h3></h3>
           </div>
 
           <div class="title_right">
@@ -32,26 +33,69 @@
           <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
               <div class="x_title">
-                <h2>Plain Page</h2>
-                <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                    <ul class="dropdown-menu" role="menu">
-                      <li><a href="#">Settings 1</a>
-                      </li>
-                      <li><a href="#">Settings 2</a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li><a class="close-link"><i class="fa fa-close"></i></a>
-                  </li>
-                </ul>
+                <h3>{{ _('delete project confirmation') }} </h3>
+           
                 <div class="clearfix"></div>
               </div>
               <div class="x_content">
-                  Add content to the page ...
+              
+              <div class="col-md-3 col-sm-3 col-xs-12">
+
+                      <section class="panel">
+
+                        
+                        <div class="panel-body">
+                          <h3 class="green"><i class="fa fa-paint-brush"></i> {{p.name}}</h3>
+
+                          <p>{{p.desc}}</p>
+                          <br>
+
+                          <div class="project_detail">
+
+                            <p class="title">{{_('Created By')}}</p>
+                            <p>{{p.createdby}}</p>
+                            <p class="title">{{_('Created Date')}}</p>
+                            <p>{{p.createddate}}</p>
+                            <p class="title">{{ _('Status')}}</p>
+                            <p>
+                             {% if LANGUAGE_CODE == 'ar' %}
+                      {{ p.status.name_ar  }}
+                      {% else %}
+                      {{ p.status.name  }}
+                      {% endif %}
+                             </p>
+                          </div>
+
+                          <br>
+                          <h5>{{_('Attachments')}}</h5>
+                          <ul class="list-unstyled project_files">
+                            <li><a href=""><i class="fa fa-file-word-o"></i> Functional-requirements.docx</a>
+                            </li>
+                            <li><a href=""><i class="fa fa-file-pdf-o"></i> UAT.pdf</a>
+                            </li>
+                            <li><a href=""><i class="fa fa-mail-forward"></i> Email-from-flatbal.mln</a>
+                            </li>
+                            <li><a href=""><i class="fa fa-picture-o"></i> Logo.png</a>
+                            </li>
+                            <li><a href=""><i class="fa fa-file-word-o"></i> Contract-10_12_2014.docx</a>
+                            </li>
+                          </ul>
+                          <br>
+
+               
+                        </div>
+
+                      </section>
+           <div class="text-center mtop20">
+                            <form  action="" method="post" class="form-horizontal form-label-left input_mask" >
+                 {% csrf_token %}
+                <a href="{% url 'ns-project:project-list' %}" >  <button type="button" class="btn btn-primary">{{ _('Back')}}</button></a>
+                   <button type="submit" class="btn btn-danger">{{_('Delete')}}</button>
+               </form>
+                          </div>
+                    </div>
+              
+              
               </div>
             </div>
           </div>

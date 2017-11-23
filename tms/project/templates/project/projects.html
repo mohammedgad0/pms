@@ -44,21 +44,7 @@
               <div class="x_title">
               <a href="{% url 'ns-project:add-project' %}" >  <button type="button" class="btn btn-primary btn-md"> <i class="fa fa-plus"></i>  {% trans "Ad Project" %}</button></a>
               <a href="{% url 'ns-project:project-list' %}" > <button type="button" class="btn btn-primary btn-md">  <i class="fa fa-th-list"></i>  {% trans "Projects List" %} </button></a>
-              <ul class="nav navbar-right panel_toolbox">
-                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                </li>
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                  <ul class="dropdown-menu" role="menu">
-                    <li><a href="#">Settings 1</a>
-                    </li>
-                    <li><a href="#">Settings 2</a>
-                    </li>
-                  </ul>
-                </li>
-                <li><a class="close-link"><i class="fa fa-close"></i></a>
-                </li>
-              </ul>
+       
               <div class="clearfix"></div>
             </div>
             <div class="x_content">
@@ -97,7 +83,7 @@
                     <td>
                       <a>{{ project.name}}</a>
                       <br />
-                      <small>Created 01.01.2015</small>
+                      <small>{{_('Created Date')}} {{project.createddate}}</small>
                     </td>
                     <td>
                       <ul class="list-inline">
@@ -134,8 +120,8 @@
                 
                       {% if LANGUAGE_CODE == 'ar' %}
                       {{ project.status.name_ar  }}
-                       {% else %}
-                        {{ project.status.name  }}
+                      {% else %}
+                      {{ project.status.name  }}
                       {% endif %}
                       
                       </button>
@@ -182,7 +168,7 @@
  <ul class="pagination" >
  <li>
 <span class="current">
-            Page {{ project_list.number }} of {{ project_list.paginator.num_pages }}
+            {{ _('Page') }} {{ project_list.number }} of {{ project_list.paginator.num_pages }}
         </span>
         </li>
         </ul>

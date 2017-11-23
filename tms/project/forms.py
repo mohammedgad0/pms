@@ -63,6 +63,6 @@ class ProjectForm(ModelForm):
              },
             'desc': {
                     'max_length': _("The Project's Description is too long."),
-                    'required': _("Description Date  is required."),
+                    'required': _("Description is required."),
              },
         }

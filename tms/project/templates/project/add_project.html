@@ -9,14 +9,11 @@
 {% block content %}
 
 
-
-                        
-
 <div class="right_col" role="main">
     <div class="">
       <div class="page-title">
         <div class="title_left">
-        <!--   <h3>{% trans "add New Project" %} </h3> -->
+        <!--   <h3>{% trans "Ad Project" %} </h3> -->
         </div>
       </div>
 
@@ -25,10 +22,8 @@
         <div class="col-md-12">
           <div class="x_panel">
           <div class="x_title">
-              <h2>{% trans "add New Project" %}</h2>
+              <h3>{{ action_name }}</h3>  
               <ul class="nav navbar-right panel_toolbox">
-
-
 
               </ul>
               <div class="clearfix"></div>
@@ -81,33 +76,38 @@
                     {{form.desc}}
                   </div>
                 </div>
-
-
+     <div class="form-group text-danger ">
+     <div class="col-md-3"></div><div class="col-md-9 col-sm-12 col-xs-12">
+    {{ form.name.errors }}
+    {{ form.desc.errors }}
+    {{ form.start.errors}}
+    {{ form.end.errors  }}
+   
+    </div>
+</div>
                 <div class="ln_solid"></div>
 
                 <div class="form-group">
                   <div class="col-md-12 col-sm-12 col-xs-12 col-md-offset-3">
-                    <button type="button" class="btn btn-primary">Cancel</button>
-             <button class="btn btn-primary" type="reset">Reset</button>
-                    <button type="submit" class="btn btn-success">Submit</button>
+                    <a href="{% url 'ns-project:project-list' %}" >  <button type="button" class="btn btn-primary">{{ _('Back')}}</button></a>
+                    <!--  <button class="btn btn-primary" type="reset">{{_('Reset')}}</button>-->
+                 <button type="submit" class="btn btn-success">{{_('Submit')}}</button>
                   </div>
                 </div>
 
 
 
 
-    {{ form.name.errors }}
-    {{ form.start.errors}}
-    {{ form.end.errors  }}
-    {{ form.desc.errors  }}
+   
+    
     
     <!--  {{ form.start.label_tag }} -->
 
     
 
-{{ f.errors}}
-     
 
+     
+</form>
 
 
 </div>
