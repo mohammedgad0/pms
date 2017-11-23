@@ -384,7 +384,7 @@ def ProjectEdit(request,pk):
        return HttpResponseRedirect(reverse('ns-project:project-list'))
     else:
         # Set the messages level back to default.
-        messages.add_message(request, messages.ERROR, 'Can not update project.', fail_silently=True, extra_tags='alert')
+        #messages.add_message(request, messages.ERROR, 'Can not update project.', fail_silently=True, extra_tags='alert')
         #messages.error(request, _("Can not update project."))
         return render(request, 'project/add_project.html', {'form': form,})
 
