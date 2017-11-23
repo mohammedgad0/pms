@@ -1,0 +1,127 @@
+{% extends "project/base_site.html" %}
+{% load i18n %}
+{% block title %} {% trans "Projects" %} {% endblock title %}
+
+{% block stylesheets %}
+{{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="">
+      <div class="page-title">
+        <div class="title_left">
+          <h3>{% trans "Tasks List Department" %} </h3>
+{% for emp in AllSheets %}
+  {{ emp.empname }}
+{% endfor %}
+
+        </div>
+        <div class="title_right">
+          <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="{{_('Search for')}}...">
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button">{% trans "Go"  %}!</button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="x_panel">
+              <div class="x_title">
+              <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Settings 1</a>
+                    </li>
+                    <li><a href="#">Settings 2</a>
+                    </li>
+                  </ul>
+                </li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li>
+              </ul>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <!-- start project list -->
+              {% for message in messages %}
+                <div style="font-size: 20px;" class="alert {{ message.tags }} alert-dismissible" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  {{ message }}
+                </div>
+              {% endfor %}
+              {% if count > 0 %}
+              <table class="table table-striped projects">
+                <thead>
+                  <tr>
+                    <th style="width: 1%">#</th>
+                    <th>{{ _('Name') }}</th>
+                    <th style="width: 40%">{% trans "Task count" %}</th>
+                    <th>{% trans "Task Submitted Count" %}</th>
+                    <th>{% trans "Task not submitted count" %}</th>
+                    <th style="width: 20%">{% trans "Submitted" %}</th>
+                  <!--  <th>{% trans "Status" %}</th> -->
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for data in allemp %}
+                  <tr>
+                    <td>#</td>
+                    <td>{{ data.employee }}
+
+                    </td>
+                    <td>
+                    {{ data.Tasks }}
+                    </td>
+                    <td>
+                      {{data.submitted }}
+
+                    </td>
+                    <td class="project_progress">
+                        {{ data.notsubmitted }}
+                    </td>
+
+                    <td>
+                      <a href="/sheet/{{data.empid}}/update" class="btn btn-primary btn-xm">{% trans "Operations" %}</a>
+                    </td>
+                    <!--  <td>
+                      {% if data.ifsubmitted == 0 %}
+                      <button type="button" class="btn btn-danger btn-xs">{% trans "not submitted" %}</button>
+                      {% endif %}
+                      {% if data.ifsubmitted == 1 %}
+                      <button type="button" class="btn btn-success btn-xs">{% trans "submitted" %}</button>
+                      {% endif %}
+                      {% if data.ifsubmitted == 2 %}
+                      <button type="button" class="btn btn-primary btn-xs">{% trans "in process" %}</button>
+                      {% endif %}
+                    </td>
+                  -->
+
+                    </tr>
+                  {% endfor %}
+          </tbody>
+              </table>
+              {%endif%}
+              <!-- end project list -->
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+{% endblock javascripts %}

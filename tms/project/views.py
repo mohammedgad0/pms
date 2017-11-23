@@ -132,6 +132,37 @@ def ManagerPage(request):
     context = {'allemp':AllEmp,"count":count}
     return render(request, 'project/all_sheets.html',context)
 
+def AllSheets(request):
+    DeptCode = 0
+    EmpID = 0
+    if request.user.is_authenticated():
+        DeptCode = request.session['DeptCode']
+        EmpID = request.session['EmpID']
+    dept = Department.objects.filter(deptcode= DeptCode)[:1]
+    managid = '0'
+    sheets = None
+    for data in dept:
+        managid = data.managerid
+    # if this user is manager
+    AllEmp = "0"
+    if managid == EmpID:
+        AllEmp = Sheet.objects.raw('''SELECT sheet.Id, EmpName as employee, COUNT(sheet.Id) as Tasks ,
+                                    (select count(sheet.IfSubmitted) from sheet where IfSubmitted=0
+                                    and EmpId = employee.EmpId) as notsubmitted,
+                                    (select count(sheet.IfSubmitted) from sheet where IfSubmitted=1
+                                    and EmpId = employee.EmpId) as submitted
+                                    FROM sheet
+                                    INNER JOIN employee
+                                    ON sheet.EmpId = employee.EmpId
+                                    group by EmpName''')
+    # for data in AllEmp:
+    count = len(list(AllEmp))
+    if count == 0:
+        messages.info(request, _("No data"))
+        return render(request, 'project/all_emp_sheets.html')
+    context = {'allemp':AllEmp,"count":count}
+    return render(request, 'project/all_emp_sheets.html',context)
+
 @login_required
 def EditSheet(request, empid):
     # Start Update Form
@@ -304,7 +335,7 @@ def AddProject(request):
                status_obj= ProjectStatus.objects.get(isdefault=1)
             except :
                status_obj= ProjectStatus.objects.order_by('priority')[0]
-               
+
             project_obj.status=status_obj
             project_obj.createdby=request.session.get('EmpID', '1056821208')
             project_obj.createddate= datetime.now()
