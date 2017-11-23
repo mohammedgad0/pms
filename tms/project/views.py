@@ -396,4 +396,4 @@ def ProjectDelete(request,pk):
           return HttpResponseRedirect(reverse('ns-project:project-list'))
     else:
           context={'project_detail':project_detail}
-          return render(request, 'project/project_delete.html')
+          return render(request, 'project/project_delete.html',context)

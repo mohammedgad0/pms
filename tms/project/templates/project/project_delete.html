@@ -11,7 +11,7 @@
       <div class="">
         <div class="page-title">
           <div class="title_left">
-            <h3>Plain Page</h3>
+            <h3></h3>
           </div>
 
           <div class="title_right">
@@ -37,11 +37,56 @@
                 <div class="clearfix"></div>
               </div>
               <div class="x_content">
-               <form  action="" method="post" class="form-horizontal form-label-left input_mask" >
+              
+              <div class="col-md-3 col-sm-3 col-xs-12">
+
+                      <section class="panel">
+
+                        
+                        <div class="panel-body">
+                          <h3 class="green"><i class="fa fa-paint-brush"></i> {{project_detail.name}}</h3>
+
+                          <p>{{project_detail.desc}}</p>
+                          <br>
+
+                          <div class="project_detail">
+
+                            <p class="title">Client Company</p>
+                            <p>Deveint Inc</p>
+                            <p class="title">Project Leader</p>
+                            <p>Tony Chicken</p>
+                          </div>
+
+                          <br>
+                          <h5>Project files</h5>
+                          <ul class="list-unstyled project_files">
+                            <li><a href=""><i class="fa fa-file-word-o"></i> Functional-requirements.docx</a>
+                            </li>
+                            <li><a href=""><i class="fa fa-file-pdf-o"></i> UAT.pdf</a>
+                            </li>
+                            <li><a href=""><i class="fa fa-mail-forward"></i> Email-from-flatbal.mln</a>
+                            </li>
+                            <li><a href=""><i class="fa fa-picture-o"></i> Logo.png</a>
+                            </li>
+                            <li><a href=""><i class="fa fa-file-word-o"></i> Contract-10_12_2014.docx</a>
+                            </li>
+                          </ul>
+                          <br>
+
+               
+                        </div>
+
+                      </section>
+           <div class="text-center mtop20">
+                            <form  action="" method="post" class="form-horizontal form-label-left input_mask" >
                  {% csrf_token %}
                 <a href="{% url 'ns-project:project-list' %}" >  <button type="button" class="btn btn-primary">{{ _('Back')}}</button></a>
-                   <button type="submit" class="btn btn-success">{{_('Delete')}}</button>
+                   <button type="submit" class="btn btn-danger">{{_('Delete')}}</button>
                </form>
+                          </div>
+                    </div>
+              
+              
               </div>
             </div>
           </div>
