@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^dept_sheet/$', views.DeptSheet, name='dept-sheet'),
     # url(r'^sheet/(?P<empid>\d+)/update/$', views.EditSheet, name='edit-sheet'),
     url(r'^sheet/(?P<empid>\d+)/update/$', views.UpdateSheet, name='update-sheet'),
+    url(r'^sheet/(?P<empid>\d+)/details/$', views.DetailseSheet, name='detials-sheet'),
     url(r'^add_project/$', views.AddProject, name='add-project'),
     url(r'^project_list/$', views.ProjectList, name='project-list'),
     url(r'^project_detail/(?P<pk>\d+)$', views.ProjectDetail, name='project-detail'),

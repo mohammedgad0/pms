@@ -92,13 +92,13 @@
                       {{ data.taskdate }}
                     </td>
                     <td>
-                      {% if data.ifsubmitted == 0 %}
+                      {% if data.ifsubmitted == '0' %}
                       <button type="button" class="btn btn-info btn-xs">{% trans "New" %}</button>
                       {% endif %}
-                      {% if data.ifsubmitted == 1 %}
+                      {% if data.ifsubmitted == '1' %}
                       <button type="button" class="btn btn-success btn-xs">{% trans "submitted" %}</button>
                       {% endif %}
-                      {% if data.ifsubmitted == 2 %}
+                      {% if data.ifsubmitted == '2' %}
                       <button type="button" class="btn btn-danger btn-xs">{% trans "not submitted" %}</button>
                       {% endif %}
                     </td>

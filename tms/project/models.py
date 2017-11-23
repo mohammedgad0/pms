@@ -224,8 +224,7 @@ class Sheet(models.Model):
     ifsubmitted = models.CharField(db_column='IfSubmitted',max_length=1,choices=SUBMITTED_STATUS, blank=True, null=True)  # Field name made lowercase.
     submittedby = models.IntegerField(db_column='SubmittedBy', blank=True, null=True)  # Field name made lowercase.
     submitteddate = models.DateField(db_column='SubmittedDate', blank=True, null=True)  # Field name made lowercase.
-    def __str__(self):
-        return self.get_tasktype_display()
+
     class Meta:
         managed = False
         db_table = 'sheet'

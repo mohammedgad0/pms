@@ -1,0 +1,43 @@
+{% extends "project/base_site.html" %}
+{% load i18n %}
+{% block title %} Page 404 {% endblock title %}
+
+{% block stylesheets %}
+<style>body {
+   background: #092756 !important;
+    /* The image used */
+  /*  background-image: url("http://www.dailygalaxy.com/.a/6a00d8341bf7f753ef01b7c86b22a2970b-pi") !important; */
+  }</style>
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block sidebar %}{% endblock sidebar %}
+
+{% block top_navigation %}{% endblock top_navigation %}
+
+{% block content %}
+
+
+
+  <div class="col-md-12">
+    <div class="col-middle">
+        <div class="mid_center">
+           <img src="/static/images/stats_logo.png" alt="..." class="profile_img">
+              </div>
+      </div>
+      <div class="text-center text-center">
+        <h1 class="error-number">403</h1>
+        <h2>{% trans "Sorry but you not have permission" %}</h2>
+        <p>{%  trans "Please Contact With Hr department" %}</p>
+     <span class="input-group-btn">
+    <!--  <a href="{% url 'ns-project:index' %}"> <button class="btn btn-default" type="button"> <i class="fa fa-forward"></i> {% trans "Back To Application" %}</button></a>-->
+      </span>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block footer %}{% endblock footer %}
+
+{% block javascripts %}
+  {{ block.super }}
+{% endblock javascripts %}

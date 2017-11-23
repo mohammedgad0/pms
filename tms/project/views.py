@@ -13,7 +13,7 @@ from django.db.models import Q
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.contrib.auth.models import Group
-
+from django.contrib.auth.decorators import permission_required
 
 
 
@@ -34,13 +34,13 @@ def myuser(request, *args, **kwargs):
             email = request.user.email
             emp = Employee.objects.filter(email= email)
         # Get all data filtered by user email and set in session
-
             for data in emp:
                 request.session['EmpID'] = data.empid
                 request.session['EmpName'] = data.empname
                 request.session['DeptName'] = data.deptname
                 request.session['Mobile'] = data.mobile
                 request.session['DeptCode'] = data.deptcode
+                request.session['JobTitle'] = data.jobtitle
                 request.session['IsManager'] = data.ismanager
             if emp:
                 if data.ismanager == 1:
@@ -72,7 +72,7 @@ def index(request):
     # Populate User From Ldap Without Login
     # from django_auth_ldap.backend import LDAPBackend
     # ldap_backend = LDAPBackend()
-    # ldap_backend.populate_user('alfray@stats.gov.sa')
+    # ldap_backend.populate_user('aalmanie@stats.gov.sa')
     logged = request.COOKIES.get('logged_in_status')
     context = {'logged':logged}
     template = loader.get_template('project/index.html')
@@ -89,7 +89,9 @@ def gentella_html(request):
     return HttpResponse(template.render(context, request))
 
 @login_required
+@permission_required('project.add_sheet',raise_exception=True)
 def MySheet(request):
+
     EmpID = 0
     if request.user.is_authenticated():
         EmpID = request.session['EmpID']
@@ -133,20 +135,7 @@ def ManagerPage(request):
     return render(request, 'project/all_sheets.html',context)
 
 def AllSheets(request):
-    DeptCode = 0
-    EmpID = 0
-    if request.user.is_authenticated():
-        DeptCode = request.session['DeptCode']
-        EmpID = request.session['EmpID']
-    dept = Department.objects.filter(deptcode= DeptCode)[:1]
-    managid = '0'
-    sheets = None
-    for data in dept:
-        managid = data.managerid
-    # if this user is manager
-    AllEmp = "0"
-    if managid == EmpID:
-        AllEmp = Sheet.objects.raw('''SELECT sheet.Id, EmpName as employee, COUNT(sheet.Id) as Tasks ,
+    AllEmp = Sheet.objects.raw('''SELECT sheet.Id, EmpName as employee,DeptName as department , COUNT(sheet.Id) as Tasks ,
                                     (select count(sheet.IfSubmitted) from sheet where IfSubmitted=0
                                     and EmpId = employee.EmpId) as notsubmitted,
                                     (select count(sheet.IfSubmitted) from sheet where IfSubmitted=1
@@ -241,6 +230,11 @@ def UpdateSheet(request,empid):
         raise Http404
     # form = form_class(request.POST or None)
     return render(request, 'project/update_sheet.html', {'form': formset,'EmpData':EmpData})
+
+def DetailseSheet(request,empid):
+    EmpData = Employee.objects.filter(empid = empid)
+    allsheet = Sheet.objects.filter(empid =empid)
+    return render(request, 'project/details_sheets.html', {'EmpData':EmpData, 'allsheet':allsheet})
 
 @login_required
 def DeptSheet(request):

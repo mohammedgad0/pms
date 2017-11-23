@@ -15,12 +15,12 @@
     <div class="profile_info">
   {% if user.is_authenticated %}
       {% if 'EmpName' in request.session %}
-      <span>  {{ request.session.EmpName }}</span>
-  <h2>
-        {{ request.session.DeptName }}
+      <h2>  {{ request.session.EmpName }}</h2>
+
+      <span>  {{ request.session.JobTitle }}</span>
         {# {{ mail }}#}
         {% endif %}
-        {% endif %}</h2>
+        {% endif %}
     </div>
   </div>
   <!-- /menu profile quick info -->

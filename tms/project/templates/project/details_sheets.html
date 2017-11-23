@@ -81,9 +81,6 @@
           <div class="x_panel">
             <div class="x_content">
   <table class="table table-striped">
-    <form method="POST" action="">
-    {% csrf_token %}
-    {{ form.management_form }}
     <thead>
       <tr>
         <th>{{ _('Task Descreption') }}</th>
@@ -94,28 +91,29 @@
       </tr>
     </thead>
     <tbody>
-      {% for form in form %}
+      {% for form in allsheet %}
+
       <tr>
-        {{ form.id}}
-        <td>{{ form.taskdesc }}</td>
+        <td>{{ form.taskdesc }}
+          {{ taskdesc }}
+          {{ form.get_taskdesc_display }}
+        </td>
         <td>
-        {{ form.tasktype }}
+        {{ form.get_tasktype_display }}
         </td>
         <td class="col-md-2"> {{ form.duration }}</td>
         <td class="col-md-2"> {{ form.taskdate }} </td>
           </div>
          </div>
         </td>
+
         <td>
-          {{ form.ifsubmitted }}
+          {{ form.get_ifsubmitted_display }}
         </td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
-
-<button type="submit" name="_submit" class="btn btn-success">{{ _('Submit') }}</button>
-</form>
 
             </div>
           </div>
