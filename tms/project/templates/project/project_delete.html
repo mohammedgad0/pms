@@ -1,5 +1,5 @@
 {% extends "project/base_site.html" %}
-
+{% load i18n %}
 {% block title %} Plain Page {% endblock title %}
 
 {% block stylesheets %}
@@ -7,6 +7,7 @@
 {% endblock stylesheets %}
 
 {% block content %}
+{% get_current_language as LANGUAGE_CODE %}
     <div class="right_col" role="main">
       <div class="">
         <div class="page-title">
@@ -32,7 +33,7 @@
           <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
               <div class="x_title">
-                <h2>{{ _('delete project confirmation') }} </h2>
+                <h3>{{ _('delete project confirmation') }} </h3>
            
                 <div class="clearfix"></div>
               </div>
@@ -44,21 +45,29 @@
 
                         
                         <div class="panel-body">
-                          <h3 class="green"><i class="fa fa-paint-brush"></i> {{project_detail.name}}</h3>
+                          <h3 class="green"><i class="fa fa-paint-brush"></i> {{p.name}}</h3>
 
-                          <p>{{project_detail.desc}}</p>
+                          <p>{{p.desc}}</p>
                           <br>
 
                           <div class="project_detail">
 
-                            <p class="title">Client Company</p>
-                            <p>Deveint Inc</p>
-                            <p class="title">Project Leader</p>
-                            <p>Tony Chicken</p>
+                            <p class="title">{{_('Created By')}}</p>
+                            <p>{{p.createdby}}</p>
+                            <p class="title">{{_('Created Date')}}</p>
+                            <p>{{p.createddate}}</p>
+                            <p class="title">{{ _('Status')}}</p>
+                            <p>
+                             {% if LANGUAGE_CODE == 'ar' %}
+                      {{ p.status.name_ar  }}
+                      {% else %}
+                      {{ p.status.name  }}
+                      {% endif %}
+                             </p>
                           </div>
 
                           <br>
-                          <h5>Project files</h5>
+                          <h5>{{_('Attachments')}}</h5>
                           <ul class="list-unstyled project_files">
                             <li><a href=""><i class="fa fa-file-word-o"></i> Functional-requirements.docx</a>
                             </li>

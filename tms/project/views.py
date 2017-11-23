@@ -349,7 +349,7 @@ def AddProject(request):
     else:
         form = ProjectForm()
 
-    return render(request, 'project/add_project.html', {'form': form})
+    return render(request, 'project/add_project.html', {'form': form,'action_name': _('Ad Project')})
 
 def ProjectList(request):
     createdBy=request.session.get('EmpID', '1056821208')
@@ -386,14 +386,14 @@ def ProjectEdit(request,pk):
         # Set the messages level back to default.
         #messages.add_message(request, messages.ERROR, 'Can not update project.', fail_silently=True, extra_tags='alert')
         #messages.error(request, _("Can not update project."))
-        return render(request, 'project/add_project.html', {'form': form,})
+        return render(request, 'project/add_project.html', {'form': form,'action_name': _('Edit Project')})
 
 def ProjectDelete(request,pk):
-    project_detail= get_object_or_404(Project,pk=pk)
+    p= get_object_or_404(Project,pk=pk)
     if request.method == 'POST':
-          Project.objects.filter(id=project_detail.id).delete()
+          Project.objects.filter(id=p.id).delete()
           messages.success(request, _("Project has deleted successfully"), fail_silently=True,)
           return HttpResponseRedirect(reverse('ns-project:project-list'))
     else:
-          context={'project_detail':project_detail}
+          context={'p':p}
           return render(request, 'project/project_delete.html',context)

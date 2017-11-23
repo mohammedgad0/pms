@@ -120,8 +120,8 @@
                 
                       {% if LANGUAGE_CODE == 'ar' %}
                       {{ project.status.name_ar  }}
-                       {% else %}
-                        {{ project.status.name  }}
+                      {% else %}
+                      {{ project.status.name  }}
                       {% endif %}
                       
                       </button>
@@ -168,7 +168,7 @@
  <ul class="pagination" >
  <li>
 <span class="current">
-            Page {{ project_list.number }} of {{ project_list.paginator.num_pages }}
+            {{ _('Page') }} {{ project_list.number }} of {{ project_list.paginator.num_pages }}
         </span>
         </li>
         </ul>
