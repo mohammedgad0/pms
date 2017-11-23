@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-23 10:03+0300\n"
+"POT-Creation-Date: 2017-11-23 10:37+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -68,18 +68,18 @@ msgid "Duration"
 msgstr "المدة التقريبية للإنجاز"
 
 #: .\project\forms.py:37 .\project\forms.py:43
-#: .\project\templates\project\add_project.html:48
+#: .\project\templates\project\add_project.html:43
 #: .\project\templates\project\projects.html:84
 msgid "Project Name"
 msgstr "أسم المشروع"
 
 #: .\project\forms.py:38 .\project\forms.py:44
-#: .\project\templates\project\add_project.html:57
+#: .\project\templates\project\add_project.html:52
 msgid "Start Date"
 msgstr "تاريخ البدأ"
 
 #: .\project\forms.py:39 .\project\forms.py:45
-#: .\project\templates\project\add_project.html:64
+#: .\project\templates\project\add_project.html:59
 msgid "End Date"
 msgstr "تاريخ الإنتهاء"
 
@@ -177,7 +177,7 @@ msgstr "إضافة مهام جديدة"
 
 #: .\project\templates\project\add-sheet.html:31
 #: .\project\templates\project\add-sheet.html:67
-#: .\project\templates\project\add_project.html:92
+#: .\project\templates\project\add_project.html:94
 #: .\project\templates\project\all_employee.html:86
 #: .\project\templates\project\edit-sheet.html:31
 #: .\project\templates\project\edit-sheet.html:67
@@ -197,24 +197,24 @@ msgstr "حفظ"
 msgid "Task Date"
 msgstr "وقت المهمة"
 
-#: .\project\templates\project\add_project.html:19
-#: .\project\templates\project\add_project.html:28
+#: .\project\templates\project\add_project.html:16
+#: .\project\templates\project\add_project.html:25
 #, fuzzy
 #| msgid "Ad Project"
 msgid "add New Project"
 msgstr "إضافة مشروع"
 
-#: .\project\templates\project\add_project.html:78
+#: .\project\templates\project\add_project.html:73
 msgid "Project Description"
 msgstr "تفاصيل المشروع"
 
-#: .\project\templates\project\add_project.html:90
+#: .\project\templates\project\add_project.html:92
 msgid "Back"
 msgstr "رجوع"
 
-#: .\project\templates\project\add_project.html:91
+#: .\project\templates\project\add_project.html:93
 msgid "Reset"
-msgstr ""
+msgstr "إعادة"
 
 #: .\project\templates\project\all_emp_sheets.html:3
 #: .\project\templates\project\all_employee.html:3
@@ -476,10 +476,6 @@ msgstr "تم إنشاء المشروع بنجاح"
 #: .\project\views.py:383
 msgid "Project has updated successfully"
 msgstr "تم تحديث المشروع بنجاح"
-
-#: .\project\views.py:388
-msgid "Can not update project."
-msgstr ""
 
 #: .\tms\settings.py:154
 msgid "English"
