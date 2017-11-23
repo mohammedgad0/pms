@@ -390,5 +390,10 @@ def ProjectEdit(request,pk):
 
 def ProjectDelete(request,pk):
     project_detail= get_object_or_404(Project,pk=pk)
-    context={'project_detail':project_detail}
-    return render(request, 'project/project_delete.html', context)
+    if request.method == 'POST':
+          Project.objects.filter(id=project_detail.id).delete()
+          messages.success(request, _("Project has deleted successfully"), fail_silently=True,)
+          return HttpResponseRedirect(reverse('ns-project:project-list'))
+    else:
+          context={'project_detail':project_detail}
+          return render(request, 'project/project_delete.html')
