@@ -1,0 +1,226 @@
+{% extends "project/base_site.html" %}
+{% load i18n %}
+
+
+{% block title %} {% trans "Projects" %} {% endblock title %}
+
+{% block stylesheets %}
+{{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+{% get_current_language as LANGUAGE_CODE %}
+
+
+
+  <div class="right_col" role="main">
+    <div class="">
+      <div class="page-title">
+        <div class="title_left">
+
+ 
+       
+          <h3>{% trans "Task List" %}   </h3>
+
+
+        </div>
+
+        <div class="title_right">
+          <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="{{_('Search for')}}...">
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button">{% trans "Go"  %}!</button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="clearfix"></div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="x_panel">
+              <div class="x_title" style="background-color: #e3f2fd;" >
+             
+       
+       <nav class="navbar "  style="background-color: #e3f2fd;">
+  <div class="container-fluid">
+       <ul class="nav nav-pills navbar-right" role="tablist">
+                    <li role="presentation"><a href="#">{{ _('All Tasks')}} </a></li>
+                    <li role="presentation"><a href="#">{{ _('Open Tasks')}} </a></li>
+                    <li role="presentation"><a href="#">{{ _('Assigned to Me')}} </a></li>
+                    <li role="presentation"><a href="#">{{ _('Delayed')}} </a></li>
+                    
+                    <li role="presentation" class="dropdown">
+                      <a id="drop4" href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
+                                  {{_('More')}}
+                                  <span class="caret"></span>
+                              </a>
+                      <ul id="menu6" class="dropdown-menu animated fadeInDown" role="menu">
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://twitter.com/fat">{{_('New')}}</a>
+                        </li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://twitter.com/fat">{{_('Inprogress')}}</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://twitter.com/fat">{{_('Finshed By Me') }} </a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://twitter.com/fat">{{_('Done')}} </a></li>
+                       <li role="presentation"><a role="menuitem" tabindex="-1" href="https://twitter.com/fat">{{ _('Closed')}} </a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://twitter.com/fat">{{ _('Canceled')}} </a></li>
+                      </ul>
+                    </li>
+                   
+                  
+
+                 
+                    
+                  </ul>
+                  
+              <ul class="nav nav-pills navbar-left" role="tablist" style="margin-top:5px;">
+            <a href="{% url 'ns-project:add-project' %}" class="float-left" style="float:left" >  <button type="button" class="btn btn-primary btn-md"> <i class="fa fa-plus"></i>  {% trans "Ad Task" %}</button></a>
+            <a href="{% url 'ns-project:project-list' %}" class="float-left" style="float:left"> <button type="button" class="btn btn-primary btn-md">  <i class="fa fa-th-list"></i>  {% trans "All Task" %} </button></a>
+       </ul>
+                 
+  
+      </div>
+</nav>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+            
+
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="alert {{ message.tags }}"{% endif %}>
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+        {{ message }}
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+             
+              <!-- start project list -->
+              <table class="table table-striped projects">
+                <thead>
+                  <tr>
+                    <th style="width: 1%">#</th>
+                    <th style="width: 20%"><a href="{% url 'ns-project:project-list' %} ">{% trans "Project Name" %}</a></th>
+                    <th>{% trans "Team Members" %}</th>
+                    <th>{% trans "Start" %}</th>
+                    <th>{% trans "End" %}</th>
+                    <th>{% trans "Project Progress" %}</th>
+                    <th>{% trans "Status" %}</th>
+                    <th style="width: 20%">{% trans "Edit" %}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for project in project_list %}
+                  <tr>
+                    <td>#</td>
+                    <td>
+                      <a>{{ project.name}}</a>
+                      <br />
+                      <small>{{_('Created Date')}} {{project.createddate}}</small>
+                    </td>
+                    <td>
+                      <ul class="list-inline">
+                        <li>
+                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
+                        </li>
+                        <li>
+                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
+                        </li>
+                        <li>
+                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
+                        </li>
+                        <li>
+                          <img src="/static/images/user.png" class="avatar" alt="Avatar">
+                        </li>
+                      </ul>
+                    </td>
+                    
+                     <td>
+                     {{project.start}}
+                     </td>
+                      <td>
+                     {{project.end}}
+                     </td>
+                     
+                    <td class="project_progress">
+                      <div class="progress progress_sm">
+                        <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="57"></div>
+                      </div>
+                      <small>57% {% trans "Complete" %}</small>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-{{ project.status.color }} btn-xs">
+                
+                      {% if LANGUAGE_CODE == 'ar' %}
+                      {{ project.status.name_ar  }}
+                      {% else %}
+                      {{ project.status.name  }}
+                      {% endif %}
+                      
+                      </button>
+                    </td>
+                    <td>
+                      <a href="{% url 'ns-project:project-detail' project.id %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> {% trans "View" %} </a>
+                      <a href="{% url 'ns-project:project-edit' project.id %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> {% trans "Edit" %} </a>
+                      <a href="{% url 'ns-project:project-delete' project.id %}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> {% trans "Delete" %} </a>
+                    </td>
+                  </tr>
+               
+                  {% endfor %}
+                </tbody>
+              </table>
+              <!-- end project list -->
+<!--  pager -->
+<div>
+
+{% if project_list.has_other_pages %}
+  <ul class="pagination">
+  
+ 
+    {% if project_list.has_previous %}
+      <li><a href="?page={{ project_list.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in project_list.paginator.page_range %}
+      {% if project_list.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if project_list.has_next %}
+      <li><a href="?page={{ project_list.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+{% endif %}
+
+
+ <ul class="pagination" >
+ <li>
+<span class="current">
+            {{ _('Page') }} {{ project_list.number }} of {{ project_list.paginator.num_pages }}
+        </span>
+        </li>
+        </ul>
+        
+        
+</div>
+<!-- end pager -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+{% endblock javascripts %}
