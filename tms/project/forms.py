@@ -29,21 +29,32 @@ class AddNewSheet(forms.Form):
 UpdateSheet = modelformset_factory(Sheet, fields=('taskdesc', 'tasktype', 'duration'))
 
 class ProjectForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ProjectForm, self).__init__(*args, **kwargs)
+        self.fields['status'].empty_label = None
+        self.fields['name'].widget.attrs['maxlength'] =255
 
     class Meta:
         model = Project
-        fields = ['name','start','end','desc']
+        fields = ['name','start','status','end','desc']
+       # status = models.ForeignKey(ProjectStatus, widget=forms.Select({'class': 'form-control','placeholder':'task'}) )
         widgets = {
             'name':TextInput(attrs={'class': 'form-control','placeholder':_('Project Name'),'required': True}),
-            'start':TextInput(attrs={'class': 'form-control has-feedback-left  ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Start Date'),'required': True}),
-            'end':TextInput(attrs={'class': 'form-control has-feedback-left  ','id':'single_cal_2','aria-describedby':'inputSuccess2Status','placeholder':_('End Date'),'required': True}),
+            'start':TextInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Start Date'),'required': True}),
+            'end':TextInput(attrs={'class': 'form-control has-feedback-left col-md-6 ','id':'single_cal_2','aria-describedby':'inputSuccess2Status','placeholder':_('End Date'),'required': True}),
             'desc': Textarea(attrs={'class':'form-control','placeholder':_('Project Details'),'required': True}),
+            'status':forms.Select(attrs={'class': 'form-control','placeholder':_('Select Status')})
+            
+
+        
         }
+  
         labels = {
             'name': _('Project Name'),
+            'status': _('Status'),
             'start':_('Start Date'),
             'end':_('End Date'),
-            'desc':_('Desc'),
+            'desc':_('Project Description'),
         }
         help_texts = {
             'desc': _('write a Description for Project .'),
@@ -65,4 +76,5 @@ class ProjectForm(ModelForm):
                     'max_length': _("The Project's Description is too long."),
                     'required': _("Description is required."),
              },
+        
         }
