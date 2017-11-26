@@ -16,7 +16,6 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import permission_required
 
 
-
 class BaseSheetFormSet(BaseModelFormSet):
     def __init__(self, *args, **kwargs):
         super(BaseSheetFormSet, self).__init__(*args, **kwargs)
@@ -41,6 +40,7 @@ def myuser(request, *args, **kwargs):
                 request.session['Mobile'] = data.mobile
                 request.session['DeptCode'] = data.deptcode
                 request.session['JobTitle'] = data.jobtitle
+                request.session['JobTitle'] = data.deptname
                 request.session['IsManager'] = data.ismanager
             if emp:
                 if data.ismanager == 1:
@@ -95,7 +95,7 @@ def MySheet(request):
     EmpID = 0
     if request.user.is_authenticated():
         EmpID = request.session['EmpID']
-    sheets = Sheet.objects.filter(empid = EmpID)
+    sheets = Sheet.objects.filter(empid = EmpID).order_by('ifsubmitted')
     count = len(list(sheets))
     if count == 0:
         messages.info(request, _("No tasks"))
@@ -117,15 +117,16 @@ def ManagerPage(request):
     # if this user is manager
     AllEmp = "0"
     if managid == EmpID:
-        AllEmp = Sheet.objects.raw('''SELECT sheet.Id, EmpName as employee, COUNT(sheet.Id) as Tasks ,
-                                    (select count(sheet.IfSubmitted) from sheet where IfSubmitted=0
-                                    and EmpId = employee.EmpId) as notsubmitted,
-                                    (select count(sheet.IfSubmitted) from sheet where IfSubmitted=1
-                                    and EmpId = employee.EmpId) as submitted
-                                    FROM sheet
-                                    INNER JOIN employee
-                                    ON sheet.EmpId = employee.EmpId
-                                    WHERE sheet.DeptCode = %s'' group by EmpName''' , [DeptCode])
+        AllEmp = VSheetsdata.objects.filter(deptcode = DeptCode).order_by('new')
+        # AllEmp = Sheet.objects.raw('''SELECT sheet.Id, EmpName as employee, COUNT(sheet.Id) as Tasks ,
+        #                             (select count(sheet.IfSubmitted) from sheet where IfSubmitted=0
+        #                             and EmpId = employee.EmpId) as notsubmitted,
+        #                             (select count(sheet.IfSubmitted) from sheet where IfSubmitted=1
+        #                             and EmpId = employee.EmpId) as submitted
+        #                             FROM sheet
+        #                             INNER JOIN employee
+        #                             ON sheet.EmpId = employee.EmpId
+        #                             WHERE sheet.DeptCode = %s'' group by EmpName''' , [DeptCode])
     # for data in AllEmp:
     count = len(list(AllEmp))
     if count == 0:
@@ -150,41 +151,6 @@ def AllSheets(request):
         return render(request, 'project/all_emp_sheets.html')
     context = {'allemp':AllEmp,"count":count}
     return render(request, 'project/all_emp_sheets.html',context)
-
-@login_required
-def EditSheet(request, empid):
-    # Start Update Form
-    UpdateSheet = modelformset_factory(Sheet, fields=('taskdesc', 'tasktype', 'duration','taskdate', 'ifsubmitted'), extra=0,
-        widgets = {
-            'taskdesc': forms.TextInput(attrs={'class': 'form-control' ,'readonly':'True'}),
-            'tasktype': forms.Select(attrs={'class': 'form-control','disabled':'True'}),
-            'duration': forms.TextInput(attrs={'class': 'form-control','readonly':'True'}),
-            'taskdate': forms.TextInput(attrs={'class': 'form-control','readonly':'True'}),
-            'ifsubmitted':forms.Select(attrs={'class': 'form-control'}),
-        }
-
-    )
-    formset = UpdateSheet(queryset=Sheet.objects.filter(~Q(ifsubmitted = '1'), empid= empid  ))
-    # Load Employee data
-    EmpSheet = get_object_or_404(Employee, empid = empid)
-    EmpData = Employee.objects.filter(empid = empid)
-    dept = Department.objects.filter(deptcode = EmpSheet.deptcode)[:1]
-    managid = '0'
-    # Get manager id for employee
-    for data in dept:
-        managid = data.managerid
-    # Check if this user is manager
-    # if managid == EmpID:
-    if request.method == 'POST':
-        if formset.is_valid():
-            formset.save()
-            return HttpResponseRedirect(reverse('dept-sheet') )
-    else:
-        formset = formset
-    return render(request, 'project/update_sheet.html', {'form': formset,'EmpData':EmpData })
-
-    # raise Http404
-    return render(request, 'project/update_sheet.html',{'dept':dept,'emp':EmpSheet})
 
 @login_required
 def UpdateSheet(request,empid):
@@ -365,7 +331,7 @@ def ProjectDetail(request,pk):
     project_detail= get_object_or_404(Project,pk=pk)
     createdBy=request.session.get('EmpID', '1056821208')
     project_list= Project.objects.all().filter(createdby__exact=createdBy).exclude(status=4).order_by('-id')
-  
+
     context={'project_detail':project_detail,'project_list':project_list}
     return render(request, 'project/project_detail.html', context)
 
