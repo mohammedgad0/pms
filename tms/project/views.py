@@ -363,7 +363,10 @@ def ProjectList(request):
 
 def ProjectDetail(request,pk):
     project_detail= get_object_or_404(Project,pk=pk)
-    context={'project_detail':project_detail}
+    createdBy=request.session.get('EmpID', '1056821208')
+    project_list= Project.objects.all().filter(createdby__exact=createdBy).exclude(status=4).order_by('-id')
+  
+    context={'project_detail':project_detail,'project_list':project_list}
     return render(request, 'project/project_detail.html', context)
 
 def ProjectEdit(request,pk):
@@ -382,10 +385,29 @@ def ProjectEdit(request,pk):
 
 def ProjectDelete(request,pk):
     p= get_object_or_404(Project,pk=pk)
+    emp_obj=Employee.objects.get(empid__exact=p.createdby)
     if request.method == 'POST':
           Project.objects.filter(id=p.id).delete()
           messages.success(request, _("Project has deleted successfully"), fail_silently=True,)
           return HttpResponseRedirect(reverse('ns-project:project-list'))
     else:
-          context={'p':p}
+          context={'p':p,'emp_obj':emp_obj}
           return render(request, 'project/project_delete.html',context)
+
+def ProjectTask(request,pk):
+    createdBy=request.session.get('EmpID', '1056821208')
+    task_list= Task.objects.all().filter(createdby__exact=createdBy, projectid__exact=pk).order_by('-id')
+    paginator = Paginator(task_list, 5) # Show 5 contacts per page
+
+    page = request.GET.get('page')
+    try:
+        _plist = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        _plist = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        _plist = paginator.page(paginator.num_pages)
+
+    context = {'project_list':_plist}
+    return render(request, 'project/tasks.html', context)

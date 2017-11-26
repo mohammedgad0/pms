@@ -40,42 +40,39 @@
   {% csrf_token %}
 
                 <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.ProjectName.id_for_label }}">{{ _('Project Name')}} <span class="required">*</span></label>
-                  <div class="col-md-9 col-sm-9 col-xs-12">
-                 {{form.name}}
-                  </div>
-                </div>
+              <div class=" col-md-12">
+              {{form.name.label_tag}}
+               {{form.name}}
+               </div>
+               </div>
+               
+               <div class="form-group">
+              <div class=" col-md-4">
+              {{form.start.label_tag}}
+               {{form.start}}
+                <span class="fa fa-calendar-o form-control-feedback left" style="margin-top:25px;" aria-hidden="true"></span>
+               </div>
+               
+               <div class=" col-md-4">
+                {{form.end.label_tag}}
+               {{form.end}}
+                <span class="fa fa-calendar-o form-control-feedback left" style="margin-top:25px;" aria-hidden="true"></span>
+               </div>
+               
+                 <div class=" col-md-4">
+                {{form.status.label_tag}}
+               {{form.status}}
+               </div>
+               </div>
+               
+             <div class="form-group">
+              <div class=" col-md-12">
+              {{form.desc.label_tag}}
+               {{form.desc}}
+               </div>
+               </div>
 
-
-                  <div class="form-group">
-
-                  <label class=" xdisplay_inputx control-label col-md-3 col-sm-3 col-xs-12">{{ _('Start Date')}} <span class="required">*</span></label>
-                  <div class="col-md-3 col-sm-9 col-xs-12">
-                     {{form.start}}
-                      <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
-                          <span id="inputSuccess2Status2" class="sr-only">(success)</span>
-                  </div>
-
-                     <label class=" xdisplay_inputx control-label col-md-3 col-sm-3 col-xs-12">{{ _('End Date')}} <span class="required">*</span></label>
-                  <div class="col-md-3 col-sm-9 col-xs-12">
-                     {{form.end}}
-                      <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
-                          <span id="inputSuccess2Status2" class="sr-only">(success)</span>
-                  </div>
-
-
-                        
-
-                </div>
-
-
-                <div class="form-group">
-                  <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _('Project Description') }} <span class="required">*</span>
-                  </label>
-                  <div class="col-md-9 col-sm-9 col-xs-12">
-                    {{form.desc}}
-                  </div>
-                </div>
+              
      <div class="form-group text-danger ">
      <div class="col-md-3"></div><div class="col-md-9 col-sm-12 col-xs-12">
     {{ form.name.errors }}
@@ -95,7 +92,7 @@
                   </div>
                 </div>
 
-
+<!--  {{ form.as_p }} -->
 
 
    
