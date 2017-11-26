@@ -163,5 +163,5 @@ STATIC_ROOT = posixpath.join(*(BASE_DIR.split(os.path.sep) + ['static']))
 
 #local pth for language
 LOCALE_PATHS = [
-    'local',
+    os.path.join(BASE_DIR, 'local'),
 ]

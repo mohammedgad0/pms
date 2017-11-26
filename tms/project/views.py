@@ -89,7 +89,7 @@ def gentella_html(request):
     return HttpResponse(template.render(context, request))
 
 @login_required
-@permission_required('project.add_sheet',raise_exception=True)
+#@permission_required('project.add_sheet',raise_exception=True)
 def MySheet(request):
 
     EmpID = 0
@@ -411,5 +411,5 @@ def ProjectTask(request,pk):
         # If page is out of range (e.g. 9999), deliver last page of results.
         _plist = paginator.page(paginator.num_pages)
 
-    context = {'project_list':_plist}
+    context = {'tasks':_plist}
     return render(request, 'project/tasks.html', context)

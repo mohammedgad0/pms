@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-25 19:38+0300\n"
+"POT-Creation-Date: 2017-11-26 08:29+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -72,6 +72,7 @@ msgstr "المدة التقريبية للإنجاز"
 
 #: .\project\forms.py:42 .\project\forms.py:53
 #: .\project\templates\project\projects.html:70
+#: .\project\templates\project\tasks.html:107
 msgid "Project Name"
 msgstr "أسم المشروع"
 
@@ -99,10 +100,11 @@ msgstr "الحالة"
 #: .\project\templates\project\my_tasks.html:70
 #: .\project\templates\project\project_delete.html:59
 #: .\project\templates\project\projects.html:75
+#: .\project\templates\project\tasks.html:112
 msgid "Status"
 msgstr "الحالة"
 
-#: .\project\forms.py:57
+#: .\project\forms.py:57 .\project\templates\project\project_detail.html:156
 msgid "Project Description"
 msgstr "تفاصيل المشروع"
 
@@ -149,6 +151,7 @@ msgid "task date"
 msgstr "نوع المهمة"
 
 #: .\project\models.py:224 .\project\templates\project\my_tasks.html:96
+#: .\project\templates\project\tasks.html:61
 msgid "New"
 msgstr "جديد"
 
@@ -237,6 +240,7 @@ msgid "Task Date"
 msgstr "وقت المهمة"
 
 #: .\project\templates\project\add_project.html:16
+#: .\project\templates\project\project_detail.html:38
 #: .\project\templates\project\projects.html:45 .\project\views.py:346
 msgid "Ad Project"
 msgstr "إضافة مشروع"
@@ -257,6 +261,7 @@ msgstr "إعادة"
 #: .\project\templates\project\my_tasks.html:3
 #: .\project\templates\project\projects.html:5
 #: .\project\templates\project\sidebar.html:36
+#: .\project\templates\project\tasks.html:5
 msgid "Projects"
 msgstr "المشاريع"
 
@@ -272,6 +277,7 @@ msgstr "قائمة المهام"
 #: .\project\templates\project\dept_tasks.html:22
 #: .\project\templates\project\my_tasks.html:19
 #: .\project\templates\project\projects.html:31
+#: .\project\templates\project\tasks.html:31
 msgid "Search for"
 msgstr "البحث عن ..."
 
@@ -281,6 +287,7 @@ msgstr "البحث عن ..."
 #: .\project\templates\project\dept_tasks.html:24
 #: .\project\templates\project\my_tasks.html:21
 #: .\project\templates\project\projects.html:33
+#: .\project\templates\project\tasks.html:33
 msgid "Go"
 msgstr "بحث"
 
@@ -315,6 +322,7 @@ msgstr " مهام غير معتمدة"
 #: .\project\templates\project\all_emp_sheets.html:52
 #: .\project\templates\project\all_emp_sheets.html:76
 #: .\project\templates\project\projects.html:130
+#: .\project\templates\project\tasks.html:167
 msgid "View"
 msgstr "تفاصيل"
 
@@ -406,58 +414,82 @@ msgid "delete project confirmation"
 msgstr "تأكيد حذف المشروع "
 
 #: .\project\templates\project\project_delete.html:55
+#: .\project\templates\project\project_detail.html:167
 msgid "Created By"
 msgstr "أنشأ بواسطة"
 
 #: .\project\templates\project\project_delete.html:57
+#: .\project\templates\project\project_detail.html:171
 #: .\project\templates\project\projects.html:86
+#: .\project\templates\project\tasks.html:123
 msgid "Created Date"
 msgstr "تاريخ الإنشاء"
 
 #: .\project\templates\project\project_delete.html:70
+#: .\project\templates\project\project_detail.html:176
 msgid "Attachments"
 msgstr "المرفقات"
 
 #: .\project\templates\project\project_delete.html:93
 #: .\project\templates\project\projects.html:132
+#: .\project\templates\project\tasks.html:169
 msgid "Delete"
 msgstr "حذف"
 
-#: .\project\templates\project\project_detail.html:16
-msgid "Project Detail"
-msgstr "تفاصيل المشروع"
+#: .\project\templates\project\project_detail.html:37
+msgid "Completed"
+msgstr "مكتمل"
+
+
+#: .\project\templates\project\project_detail.html:43
+#: .\project\templates\project\sidebar.html:37
+msgid "Tasks"
+msgstr "المهام"
+
+#: .\project\templates\project\project_detail.html:44
+#: .\project\templates\project\projects.html:71
+#: .\project\templates\project\tasks.html:108
+msgid "Team Members"
+msgstr "اعضاء الفريق"
+
+#: .\project\templates\project\project_detail.html:84
+msgid "Recent Activity"
+msgstr ""
 
 #: .\project\templates\project\projects.html:23
 #: .\project\templates\project\projects.html:46
 msgid "Projects List"
 msgstr "قائمة المشاريع"
 
-#: .\project\templates\project\projects.html:71
-msgid "Team Members"
-msgstr "اعضاء الفريق"
-
 #: .\project\templates\project\projects.html:72
+#: .\project\templates\project\tasks.html:109
 msgid "Start"
 msgstr "بداية"
 
 #: .\project\templates\project\projects.html:73
+#: .\project\templates\project\tasks.html:110
 msgid "End"
 msgstr "نهاية"
 
 #: .\project\templates\project\projects.html:74
+#: .\project\templates\project\tasks.html:111
 msgid "Project Progress"
 msgstr "نسبة الإنجاز"
 
 #: .\project\templates\project\projects.html:76
 #: .\project\templates\project\projects.html:131
+#: .\project\templates\project\tasks.html:113
+#: .\project\templates\project\tasks.html:168
 msgid "Edit"
 msgstr "تعديل"
 
 #: .\project\templates\project\projects.html:116
+#: .\project\templates\project\tasks.html:153
 msgid "Complete"
 msgstr "مكتمل"
 
 #: .\project\templates\project\projects.html:171
+#: .\project\templates\project\tasks.html:208
 msgid "Page"
 msgstr "صفحة"
 
@@ -474,10 +506,6 @@ msgstr "عام"
 msgid "Home"
 msgstr "الرئيسية"
 
-#: .\project\templates\project\sidebar.html:37
-msgid "Tasks"
-msgstr "المهام"
-
 #: .\project\templates\project\sidebar.html:38
 msgid "My To Do List"
 msgstr "سجل مهامى"
@@ -489,6 +517,57 @@ msgstr "إدارة سجل مهام الموظفين"
 #: .\project\templates\project\sidebar.html:43
 msgid "Reports"
 msgstr "التقارير"
+
+#: .\project\templates\project\tasks.html:23
+#, fuzzy
+#| msgid "Tasks List"
+msgid "Task List"
+msgstr "قائمة المهام"
+
+#: .\project\templates\project\tasks.html:50
+msgid "All Project Tasks"
+msgstr "كل المهام"
+
+#: .\project\templates\project\tasks.html:51
+msgid "Open Tasks"
+msgstr "مهام مفتوحة"
+
+#: .\project\templates\project\tasks.html:52
+msgid "Assigned to Me"
+msgstr "مهام مسندة لى "
+
+#: .\project\templates\project\tasks.html:53
+msgid "Delayed"
+msgstr "متأخرة"
+
+#: .\project\templates\project\tasks.html:57
+msgid "More"
+msgstr "المزيد ..."
+
+#: .\project\templates\project\tasks.html:63
+msgid "Inprogress"
+msgstr "جارى العمل"
+
+#: .\project\templates\project\tasks.html:64
+msgid "Finshed By Me"
+msgstr "قمت أنا بإنجازها"
+
+#: .\project\templates\project\tasks.html:65
+msgid "Done"
+msgstr "منجزة"
+
+#: .\project\templates\project\tasks.html:66
+msgid "Closed"
+msgstr "مغلقة"
+
+#: .\project\templates\project\tasks.html:67
+msgid "Canceled"
+msgstr "ألغيت"
+
+
+#: .\project\templates\project\tasks.html:79
+msgid "Ad Task"
+msgstr "إضافة مهمة"
 
 #: .\project\templates\project\top_navigation.html:20
 msgid "Profile"
@@ -514,15 +593,15 @@ msgstr "تم حفظ المهام بنجاح"
 msgid "Project has created successfully"
 msgstr "تم إنشاء المشروع بنجاح"
 
-#: .\project\views.py:377
+#: .\project\views.py:380
 msgid "Project has updated successfully"
 msgstr "تم تحديث المشروع بنجاح"
 
-#: .\project\views.py:383
+#: .\project\views.py:386
 msgid "Edit Project"
 msgstr "تعديل المشروع"
 
-#: .\project\views.py:390
+#: .\project\views.py:393
 msgid "Project has deleted successfully"
 msgstr "تم إنشاء المشروع بنجاح"
 
@@ -537,17 +616,3 @@ msgstr "Arabic"
 #: .\tms\urls.py:13
 msgid "Task Management System cp"
 msgstr "لوحة تحكم نظام إدارة المهام"
-
-#, fuzzy
-#~| msgid "Task Descreption"
-#~ msgid "Description"
-#~ msgstr "وصف المهمة"
-
-#~ msgid "Desc"
-#~ msgstr "التفاصيل"
-
-#~ msgid "Post Done"
-#~ msgstr "تم حفظ المهام بنجاح"
-
-#~ msgid "Success"
-#~ msgstr "مكتمل"
