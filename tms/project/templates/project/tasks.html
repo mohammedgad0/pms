@@ -48,10 +48,9 @@
   <div class="container-fluid">
        <ul class="nav nav-pills navbar-right" role="tablist">
                     <li role="presentation" class="active"><a href="#">{{ _('All Project Tasks')}} </a></li>
-                    <li role="presentation"><a href="#">{{ _('Open Tasks')}} </a></li>
+                    <li role="presentation"><a href="#" >{{ _('Open Tasks')}} </a></li>
                     <li role="presentation"><a href="#">{{ _('Assigned to Me')}} </a></li>
                     <li role="presentation"><a href="#">{{ _('Delayed')}} </a></li>
-                    
                     <li role="presentation" class="dropdown">
                       <a id="drop4" href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
                                   {{_('More')}}
@@ -119,7 +118,7 @@
                 <tbody>
                   {% for task in tasks %}
                   <tr>
-                    <td>#</td>
+                    <td>{{task.id }} </td>
                     <td>{{task.name }}</td>
                     <td>{{task.startdate }}</td>
                     <td>{{task.enddate }}</td>
@@ -127,11 +126,13 @@
                     <td>{{task.assignedto }}</td>
                     <td>{{task.finishedby }}</td>
                     <td></td>
-                     <td></td>
+                    
                     <td>
-                      <a href="{% url 'ns-project:project-detail' task.id %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> {% trans "View" %} </a>
-                      <a href="{% url 'ns-project:project-edit' task.id %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> {% trans "Edit" %} </a>
-                      <a href="{% url 'ns-project:project-delete' task.id %}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> {% trans "Delete" %} </a>
+                      <a href="{% url 'ns-project:project-detail' task.id %}"  ><i class="fa fa-hand-o-right fa-2x paction text-primary" title="{% trans "Assign" %} "></i></a>
+                      <a href="{% url 'ns-project:project-edit' task.id %}" ><i class="fa fa-play fa-2x paction  text-primary" title="{% trans "Play" %}"></i> </a>
+                      <a href="{% url 'ns-project:project-edit' task.id %}" ><i class="fa fa-check-square-o fa-2x paction  text-primary" title="{% trans "Finish" %}"></i> </a>
+                      <a href="{% url 'ns-project:project-edit' task.id %}" ><i class="fa fa-power-off  fa-2x paction  text-primary" title="{% trans "Close" %}"></i> </a>
+                      <a href="{% url 'ns-project:project-edit' task.id %}" ><i class="fa fa-edit fa-2x paction  text-primary" title="{% trans "Edit" %}"></i>  </a>
                     </td>
                   </tr>
                

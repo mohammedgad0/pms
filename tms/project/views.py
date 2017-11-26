@@ -56,7 +56,7 @@ def myuser(request, *args, **kwargs):
             return login(request, *args, **kwargs)
     return login(request, *args, **kwargs)
 
-@login_required
+#@login_required
 def index(request):
     # if request.user.is_authenticated():
     #     email = request.user.email
