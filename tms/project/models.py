@@ -192,7 +192,7 @@ class ProjectStatus(models.Model):
     priority = models.IntegerField(db_column='Priority')  # Field priority made lowercase.
     isdefault = models.IntegerField(db_column='IsDefault')  # Field isdefault made lowercase.
     color = models.IntegerField(db_column='Color')  # Field color made lowercase.
-    
+
     def __str__(self):
         return self.name_ar
         self.fields['verb'].empty_label = 'None'
@@ -233,6 +233,21 @@ class Sheet(models.Model):
         managed = False
         db_table = 'sheet'
 
+class VSheetsdata(models.Model):
+    id = models.IntegerField(db_column='Id',primary_key=True)  # Field name made lowercase.
+    employeeid = models.CharField(db_column='EmployeeId', max_length=45, blank=True, null=True)  # Field name made lowercase.
+    employeename = models.CharField(db_column='EmployeeName', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    deptname = models.CharField(db_column='DeptName', max_length=200, blank=True, null=True)  # Field name made lowercase.
+    deptcode = models.CharField(db_column='DeptCode', max_length=45, blank=True, null=True)  # Field name made lowercase.
+    managername = models.CharField(db_column='ManagerName', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    totaltask = models.BigIntegerField(db_column='TotalTask')  # Field name made lowercase.
+    notsubmitted = models.BigIntegerField(db_column='NotSubmitted', blank=True, null=True)  # Field name made lowercase.
+    submitted = models.BigIntegerField(db_column='Submitted', blank=True, null=True)  # Field name made lowercase.
+    new = models.BigIntegerField(db_column='New', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'V_SheetsData'
 
 class Task(models.Model):
     projectid = models.IntegerField(db_column='ProjectId')  # Field name made lowercase.

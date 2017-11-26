@@ -16,8 +16,9 @@
   {% if user.is_authenticated %}
       {% if 'EmpName' in request.session %}
       <h2>  {{ request.session.EmpName }}</h2>
-
       <span>  {{ request.session.JobTitle }}</span>
+      <br>
+      <span>  {{ request.session.DeptName }}</span>
         {# {{ mail }}#}
         {% endif %}
         {% endif %}
