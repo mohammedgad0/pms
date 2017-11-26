@@ -229,6 +229,19 @@ class Sheet(models.Model):
         managed = False
         db_table = 'sheet'
 
+class VSheetsdata(models.Model):
+    id = models.IntegerField(db_column='Id',primary_key=True)  # Field name made lowercase.
+    employeeid = models.CharField(db_column='EmployeeId', max_length=45, blank=True, null=True)  # Field name made lowercase.
+    employeename = models.CharField(db_column='EmployeeName', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    deptname = models.CharField(db_column='DeptName', max_length=200, blank=True, null=True)  # Field name made lowercase.
+    managername = models.CharField(db_column='ManagerName', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    totaltask = models.BigIntegerField(db_column='TotalTask')  # Field name made lowercase.
+    notsubmitted = models.BigIntegerField(db_column='NotSubmitted', blank=True, null=True)  # Field name made lowercase.
+    submitted = models.BigIntegerField(db_column='Submitted', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'V_SheetsData'
 
 class Task(models.Model):
     projectid = models.IntegerField(db_column='ProjectId')  # Field name made lowercase.

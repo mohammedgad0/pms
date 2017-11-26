@@ -14,13 +14,15 @@
           <h3>{% trans "Tasks List All" %} </h3>
         </div>
         <div class="title_right">
-        <!--  <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+          <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
             <div class="input-group">
-              <input type="text" class="form-control" placeholder="{{_('Search for')}}...">
+              <form method="GET" action="">
+              <input type="text" name="q" class="form-control" style="width:auto;" value="{{ request.GET.q}}" placeholder="{{_('Emp Or dept')}}...">
               <span class="input-group-btn">
-                <button class="btn btn-default" type="button">{% trans "Go"  %}!</button>
+                <button class="btn btn-default" type="submit">{% trans "Go"  %}!</button>
               </span>
-            </div> -->
+            </form>
+            </div>
           </div>
         </div>
       </div>
@@ -46,10 +48,10 @@
                     <th style="width: 1%">#</th>
                     <th>{{ _('Name') }}</th>
                     <th>{{ _('Department') }}</th>
-                    <th style="width: 20%">{% trans "Task count" %}</th>
+                    <th style="width: 10%">{% trans "Task count" %}</th>
                     <th>{% trans "Task Submitted Count" %}</th>
                     <th>{% trans "Task not submitted count" %}</th>
-                    <th style="width: 20%">{% trans "View" %}</th>
+                    <th>{% trans "View" %}</th>
                   <!--  <th>{% trans "Status" %}</th> -->
                   </tr>
                 </thead>
@@ -57,12 +59,12 @@
                   {% for data in allemp %}
                   <tr>
                     <td>#</td>
-                    <td>{{ data.employee }}
+                    <td>{{ data.employeename }}
 
                     </td>
-                    <td>{{data.department}}</td>
+                    <td>{{data.deptname}}</td>
                     <td>
-                    {{ data.Tasks }}
+                    {{ data.totaltask }}
                     </td>
                     <td>
                       {{data.submitted }}
