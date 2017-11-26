@@ -40,7 +40,6 @@ def myuser(request, *args, **kwargs):
                 request.session['Mobile'] = data.mobile
                 request.session['DeptCode'] = data.deptcode
                 request.session['JobTitle'] = data.jobtitle
-                request.session['JobTitle'] = data.deptname
                 request.session['IsManager'] = data.ismanager
             if emp:
                 if data.ismanager == 1:
