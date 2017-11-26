@@ -374,5 +374,5 @@ def ProjectTask(request,pk):
         # If page is out of range (e.g. 9999), deliver last page of results.
         _plist = paginator.page(paginator.num_pages)
 
-    context = {'tasks':_plist}
+    context = {'tasks':_plist} 
     return render(request, 'project/tasks.html', context)
