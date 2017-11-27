@@ -14,6 +14,8 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^add-sheet/$', views.AddSheet, name='add-sheet'),
+    url(r'^sheet/(?P<pk>\d+)/edit/$', views.EditSheet, name='edit-sheet'),
+    url(r'^sheet/(?P<pk>\d+)/change/$', views.ChangeStatus, name='change-status'),
     url(r'^my_sheet/$', views.MySheet, name='my-sheet'),
     url(r'^all_sheets/$', views.ManagerPage, name='all-sheets'),
     url(r'^all_employees_sheets/$', views.AllSheets, name='emps-sheets'),

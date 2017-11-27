@@ -212,6 +212,7 @@ class Sheet(models.Model):
     managerlevel4 = models.BigIntegerField(db_column='ManagerLevel4', blank=True, null=True)  # Field name made lowercase.
     taskdesc = models.CharField(_('Task Descreption'),db_column='TaskDesc', max_length=255, blank=True, null=True)  # Field name made lowercase.
     TASK_STATUS = (
+        ('', _('Choice')),
         ('m', _('Master')),
         ('h', _('Help')),
     )
@@ -221,11 +222,26 @@ class Sheet(models.Model):
     taskdate = models.DateField(_('task date'),db_column='TaskDate', blank=True, null=True)  # Field name made lowercase.
     editedate = models.DateField(db_column='EditeDate', blank=True, null=True)  # Field name made lowercase.
     SUBMITTED_STATUS = (
+        ('', _('Choice')),
         ('0', _('New')),
         ('1', _('submitted')),
         ('2', _('not submitted')),
     )
     ifsubmitted = models.CharField(db_column='IfSubmitted',max_length=1,choices=SUBMITTED_STATUS, blank=True, null=True)  # Field name made lowercase.
+    SHEET_STATUS = (
+    ('', _('Choice')),
+        ('0', _('New')),
+        ('1', _('in progres')),
+        ('2', _('Done')),
+        ('3', _('Ignore')),
+    )
+    status = models.CharField(db_column='Status',choices=SHEET_STATUS, max_length=1)  # Field name made lowercase.
+    REASON_STATUS = (
+    ('', _('Choice')),
+        ('0', _('Need Support')),
+        ('1', _('Change piroty')),
+    )
+    reason = models.CharField(db_column='Reason',choices=REASON_STATUS, max_length=1)  # Field name made lowercase.
     submittedby = models.IntegerField(db_column='SubmittedBy', blank=True, null=True)  # Field name made lowercase.
     submitteddate = models.DateField(db_column='SubmittedDate', blank=True, null=True)  # Field name made lowercase.
 

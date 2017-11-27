@@ -5123,6 +5123,13 @@ $(document).ready(function() {
 });
 $.datepicker.setDefaults($.datepicker.regional["ar"]);
 $(document).ready(function(){
+  $('#id_form-0-status').change(function(){
+  if( $('#id_form-0-status').val() == '3'){
+    $('#show').show()
+  }else{
+    $('#show').hide()
+  }
+     });
 
   // var $j = jQuery.noConflict();
 

@@ -28,6 +28,9 @@ class AddNewSheet(forms.Form):
 
 UpdateSheet = modelformset_factory(Sheet, fields=('taskdesc', 'tasktype', 'duration'))
 
+class SheetForm(ModelForm):
+    model = Sheet
+
 class ProjectForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProjectForm, self).__init__(*args, **kwargs)
@@ -44,11 +47,11 @@ class ProjectForm(ModelForm):
             'end':TextInput(attrs={'class': 'form-control has-feedback-left col-md-6 ','id':'single_cal_2','aria-describedby':'inputSuccess2Status','placeholder':_('End Date'),'required': True}),
             'desc': Textarea(attrs={'class':'form-control','placeholder':_('Project Details'),'required': True}),
             'status':forms.Select(attrs={'class': 'form-control','placeholder':_('Select Status')})
-            
 
-        
+
+
         }
-  
+
         labels = {
             'name': _('Project Name'),
             'status': _('Status'),
@@ -76,5 +79,5 @@ class ProjectForm(ModelForm):
                     'max_length': _("The Project's Description is too long."),
                     'required': _("Description is required."),
              },
-        
+
         }

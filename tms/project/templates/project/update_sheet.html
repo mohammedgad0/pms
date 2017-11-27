@@ -79,7 +79,32 @@
       <div class="row">
         <div class="col-md-12">
           <div class="x_panel">
+          <h4>اختيار المهام حسب التاريخ </h4>
             <div class="x_content">
+
+      <form method="GET" action="">
+        <div class="col-md-2">
+        <div class="input-group date" data-provide="datepicker">
+          <input class="datepicker form-control" name="q_start" type="text" value='{{ request.GET.q_start}}' placeholder="{{_('form')}}">
+        <div class="input-group-addon">
+            <span class="glyphicon glyphicon-th"></span>
+        </div>
+       </div>
+     </div>
+     <div class="col-md-2">
+     <div class="input-group date" data-provide="datepicker">
+    <input class="datepicker form-control" name="q_end" type="text" value='{{ request.GET.q_end}}'placeholder="{{_('to')}}">
+     <div class="input-group-addon">
+         <span class="glyphicon glyphicon-th"></span>
+     </div>
+    </div>
+  </div>
+
+      <!--<input type="text" name="q" class="form-control" style="width:auto;" value="{{ request.GET.q}}" placeholder="{{_('Emp Or dept')}}..."> -->
+      <span class="input-group-btn">
+        <button class="btn btn-primary " type="submit">{% trans "Go"  %}!</button>
+      </span>
+    </form>
   <table class="table table-striped">
     <form method="POST" action="">
     {% csrf_token %}

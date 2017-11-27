@@ -63,11 +63,13 @@
                 <thead>
                   <tr>
                     <th style="width: 1%">#</th>
-                    <th style="width: 40%">{% trans "Task Descreption" %}</th>
+                    <th style="width: 30%">{% trans "Task Descreption" %}</th>
                     <th>{% trans "Task type" %}</th>
                     <th>{% trans "Duration by days" %}</th>
-                    <th style="width: 20%">{% trans "Task Date" %}</th>
-                    <th>{% trans "Status" %}</th>
+                    <th>{% trans "Task Deadline" %}</th>
+                    <th>{% trans "Status submitted" %}</th>
+                    <th>{% trans "Status task" %}</th>
+                    <th>{% trans "Operations" %}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -83,7 +85,6 @@
                       {% else %}
                       {{ ' مساندة' }}
                       {% endif %}
-
                     </td>
                     <td class="project_progress">
                         {{ data.duration }}
@@ -102,7 +103,28 @@
                       <button type="button" class="btn btn-danger btn-xs">{% trans "not submitted" %}</button>
                       {% endif %}
                     </td>
-
+                    <td>
+                      {% if data.status == '0' %}
+                      <button type="button" class="btn btn-info btn-xs">{% trans "New" %}</button>
+                      {% endif %}
+                      {% if data.status == '1' %}
+                      <button type="button" class="btn btn-warning btn-xs">{% trans "in progres" %}</button>
+                      {% endif %}
+                      {% if data.status == '2' %}
+                      <button type="button" class="btn btn-danger btn-xs">{% trans "Ignore" %}</button>
+                      {% endif %}
+                      {% if data.status == '3' %}
+                      <button type="button" class="btn btn-success btn-xs">{% trans "Done" %}</button>
+                      {% endif %}
+                    </td>
+                      <td>
+                    {%if data.ifsubmitted != '0' %}
+                    <a href="#" class="btn btn-primary btn-xs disabled">{% trans "Edit" %}</a>
+                    {%else%}
+                      <a href="/sheet/{{data.id}}/edit" class="btn btn-primary btn-xs">{% trans "Edit" %}</a>
+                        {% endif %}
+                  <a href="/sheet/{{data.id}}/change" class="btn btn-primary btn-xs">{% trans "Change status" %}</a>
+                    </td>
                     </tr>
                   {% endfor %}
 
