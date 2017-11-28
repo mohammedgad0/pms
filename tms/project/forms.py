@@ -78,3 +78,14 @@ class ProjectForm(ModelForm):
              },
         
         }
+        
+  
+
+
+class TaskStartForm(forms.Form):
+    realstartdate = forms.CharField(label='Real Start Date', max_length=100)
+    notes = forms.CharField(label='Notes', max_length=500)
+    
+          
+
+

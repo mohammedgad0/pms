@@ -319,6 +319,18 @@ class Task(models.Model):
         db_table = 'task'
 
 
+class TaskHistory(models.Model):
+    projectid = models.IntegerField(db_column='ProjectId')  # Field name made lowercase.
+    taskid = models.IntegerField(db_column='TaskId')  # Field name made lowercase.
+    actionname = models.IntegerField(db_column='ActionName')  # Field name made lowercase.
+    actiondate = models.IntegerField(db_column='ActionDate')  # Field name made lowercase.
+    notes = models.IntegerField(db_column='Notes')  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'task_history'
+
+
 class TaskStatus(models.Model):
     id = models.IntegerField()
     name = models.IntegerField(db_column='Name')  # Field name made lowercase.

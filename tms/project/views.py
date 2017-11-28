@@ -14,7 +14,7 @@ from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import permission_required
-
+from django.views.generic import UpdateView, ListView
 
 class BaseSheetFormSet(BaseModelFormSet):
     def __init__(self, *args, **kwargs):
@@ -56,7 +56,7 @@ def myuser(request, *args, **kwargs):
             return login(request, *args, **kwargs)
     return login(request, *args, **kwargs)
 
-@login_required
+#@login_required
 def index(request):
     # if request.user.is_authenticated():
     #     email = request.user.email
@@ -376,3 +376,17 @@ def ProjectTask(request,pk):
 
     context = {'tasks':_plist} 
     return render(request, 'project/tasks.html', context)
+
+def TaskStart(request,pk):
+    task_obj = get_object_or_404(Task,pk=pk)
+    form = TaskStartForm(request.POST)
+    if form.is_valid():
+       task_obj.realstartdate=request.POST['realstartdate']
+       task_obj.save()
+       
+       '''TaskHistory = TaskHistory(projectid=task_obj.projectid,taskid=task_obj.id,actionname='TaskStart',actiondate=form.realstartdate,notes=form.notes)
+       TaskHistory.save()'''
+       
+    return render(request, 'project/task_start.html')
+
+
