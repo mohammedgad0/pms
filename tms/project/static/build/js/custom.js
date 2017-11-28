@@ -5123,6 +5123,9 @@ $(document).ready(function() {
 });
 $.datepicker.setDefaults($.datepicker.regional["ar"]);
 $(document).ready(function(){
+  if( $('#id_form-0-status').val() == '3'){
+    $('#show').show()
+  }
   $('#id_form-0-status').change(function(){
   if( $('#id_form-0-status').val() == '3'){
     $('#show').show()
@@ -5130,7 +5133,20 @@ $(document).ready(function(){
     $('#show').hide()
   }
      });
+     $("#submit").click(function(){
+         $("input").each(function(){
+             if($(this).val() == '') {
+                 $(this).remove();
+             }
+             $("select").each(function(){
+                 if($(this).val() == '') {
+                     $(this).remove();
+                 }
 
+});
+         });
+         $("#search").submit();
+     });
   // var $j = jQuery.noConflict();
 
 //   $( "#datepicker" ).each(function(){

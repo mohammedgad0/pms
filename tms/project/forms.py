@@ -28,6 +28,22 @@ class AddNewSheet(forms.Form):
 
 UpdateSheet = modelformset_factory(Sheet, fields=('taskdesc', 'tasktype', 'duration'))
 
+class FilterSheet(forms.Form):
+    tasktype = forms.ChoiceField(choices=(("", _('')),('M', _('Master')), ('H', _('Help'))),label=_("Task type"),required=False,
+                    widget=forms.Select({'class': 'form-control','placeholder':'task'}))
+    tasksubmitted= forms.ChoiceField(choices=(
+        ("", _('')),
+        ('0', _('New')),
+        ('1', _('submitted')),
+        ('2', _('not submitted')),
+    ),required=False,label=_("Status submitted"),widget=forms.Select({'class': 'form-control cust','placeholder':'task'}))
+    taskstatus= forms.ChoiceField(choices=(
+    ("", _('')),
+        ('1', _('in progres')),
+        ('2', _('Done')),
+        ('3', _('Ignore')),
+    ),required=False,label=_("Status task"),widget=forms.Select({'class': 'form-control','placeholder':'task'}))
+
 class SheetForm(ModelForm):
     model = Sheet
 

@@ -111,10 +111,10 @@
                       <button type="button" class="btn btn-warning btn-xs">{% trans "in progres" %}</button>
                       {% endif %}
                       {% if data.status == '2' %}
-                      <button type="button" class="btn btn-danger btn-xs">{% trans "Ignore" %}</button>
+                      <button type="button" class="btn btn-success btn-xs">{% trans "Done" %}</button>
                       {% endif %}
                       {% if data.status == '3' %}
-                      <button type="button" class="btn btn-success btn-xs">{% trans "Done" %}</button>
+                      <button type="button" class="btn btn-danger btn-xs">{% trans "Ignore" %}</button>
                       {% endif %}
                     </td>
                       <td>
@@ -123,7 +123,11 @@
                     {%else%}
                       <a href="/sheet/{{data.id}}/edit" class="btn btn-primary btn-xs">{% trans "Edit" %}</a>
                         {% endif %}
+                  {%if data.ifsubmitted == '1' %}
                   <a href="/sheet/{{data.id}}/change" class="btn btn-primary btn-xs">{% trans "Change status" %}</a>
+                  {%else%}
+                  <a href="#" class="btn btn-primary btn-xs disabled">{% trans "Change status" %}</a>
+                  {% endif %}
                     </td>
                     </tr>
                   {% endfor %}

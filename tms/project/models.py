@@ -212,32 +212,33 @@ class Sheet(models.Model):
     managerlevel4 = models.BigIntegerField(db_column='ManagerLevel4', blank=True, null=True)  # Field name made lowercase.
     taskdesc = models.CharField(_('Task Descreption'),db_column='TaskDesc', max_length=255, blank=True, null=True)  # Field name made lowercase.
     TASK_STATUS = (
-        ('', _('Choice')),
+        ('', _('Choice type')),
         ('m', _('Master')),
         ('h', _('Help')),
     )
     tasktype = models.CharField(_('Task type'), max_length=1, choices=TASK_STATUS, db_column='TaskType', blank=True, null=True)  # Field name made lowercase.
     duration = models.IntegerField(_('Duration'),db_column='Duration',blank=True, null=True)  # Field name made lowercase.
     createddate = models.DateField(db_column='CreatedDate', blank=True, null=True)  # Field name made lowercase.
-    taskdate = models.DateField(_('task date'),db_column='TaskDate', blank=True, null=True)  # Field name made lowercase.
+    taskdate = models.DateField(_('task date'),db_column='TaskDate', blank=False, null=False)  # Field name made lowercase.
     editedate = models.DateField(db_column='EditeDate', blank=True, null=True)  # Field name made lowercase.
     SUBMITTED_STATUS = (
-        ('', _('Choice')),
+        ('', _('Choice action')),
         ('0', _('New')),
         ('1', _('submitted')),
         ('2', _('not submitted')),
     )
     ifsubmitted = models.CharField(db_column='IfSubmitted',max_length=1,choices=SUBMITTED_STATUS, blank=True, null=True)  # Field name made lowercase.
     SHEET_STATUS = (
-    ('', _('Choice')),
+    ('', _('Choice status')),
         ('0', _('New')),
         ('1', _('in progres')),
         ('2', _('Done')),
         ('3', _('Ignore')),
     )
     status = models.CharField(db_column='Status',choices=SHEET_STATUS, max_length=1)  # Field name made lowercase.
+    statusdate = models.DateTimeField(db_column='StatusDate', blank=True, null=True)  # Field name made lowercase.
     REASON_STATUS = (
-    ('', _('Choice')),
+    ('', _('Choice reason')),
         ('0', _('Need Support')),
         ('1', _('Change piroty')),
     )

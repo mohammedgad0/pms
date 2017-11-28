@@ -40,24 +40,19 @@
         <th>{{ _('Task type') }}</th>
         <th>{{ _('Duration') }}</th>
        <th>{{ _('Task Deadline') }}</th>
-       <th style="text-align: center;" width="8%">{{ _('Change status') }}</th>
+       <th>{{ _('Change status') }}</th>
       </tr>
     </thead>
     <tbody>
       {% for form in form %}
       <tr>
-
         {{ form.id}}
         <td>{{ form.taskdesc }}</td>
         <td>{{ form.tasktype }}</td>
         <td class="col-md-2"> {{ form.duration }}</td>
+        <td>{{ form.taskdate }}  </td>
 
-        <td class="col-md-2"><div class="input-group date" data-provide="datepicker"> {{ form.taskdate }}
-          <div class="input-group-addon">
-              <span class="glyphicon glyphicon-th"></span>
-          </div>
-         </div>
-        </td>
+
 
         <td style="text-align: center;">
           {{form.status}}
@@ -68,7 +63,6 @@
       {% endfor %}
     </tbody>
   </table>
-
   <button type="submit" name="_submit" class="btn btn-success">{{ _('Submit') }}</button>
 </form>
             </div>

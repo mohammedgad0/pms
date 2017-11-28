@@ -45,19 +45,20 @@
     </thead>
     <tbody>
       {% for form in form %}
+
       <tr>
 
         {{ form.id}}
         <td>{{ form.taskdesc }}</td>
-        <td>{{ form.tasktype }}</td>
-        <td class="col-md-2"> {{ form.duration }}</td>
-
+        <td>{{ form.tasktype }}{{ form.tasktype.errors }}</td>
+        <td class="col-md-2"> {{ form.duration }}{{ form.duration.errors }}</td>
         <td class="col-md-2">
           <div class="input-group date" data-provide="datepicker"> {{ form.taskdate }}
           <div class="input-group-addon">
               <span class="glyphicon glyphicon-th"></span>
           </div>
          </div>
+         {{ form.taskdate.errors }}
         </td>
 
         <td style="text-align: center;">

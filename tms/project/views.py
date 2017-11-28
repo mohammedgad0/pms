@@ -17,10 +17,15 @@ from django.contrib.auth.decorators import permission_required
 
 
 class BaseSheetFormSet(BaseModelFormSet):
-    def __init__(self, *args, **kwargs):
-        super(BaseSheetFormSet, self).__init__(*args, **kwargs)
-        empID = request.session['EmpID']
-        self.queryset = Sheet.objects.filter(empid= 'empID')
+    def clean(self):
+        if any(self.errors):
+            return
+        taskdesc = []
+        for form in self.forms:
+            taskdescs = form.cleaned_data['taskdescs']
+            if taskdescs in titles:
+                raise forms.ValidationError("Articles in a set must have distinct titles.")
+            titles.append(title)
 
 def myuser(request, *args, **kwargs):
     if request.method == "POST":
@@ -101,6 +106,40 @@ def MySheet(request):
     context = {'AllSheets': sheets,'count':count}
     return render(request, 'project/my_tasks.html', context)
 
+
+def EmpSheet(request,empid):
+    '''
+    Page For Each Employee to Show His Sheets
+    '''
+    EmpID = 0
+    sheettype = sheetsubmit = sheetstatus = ""
+    if request.GET.get("tasktype"):
+        sheettype = request.GET.get("tasktype")
+    if request.GET.get("tasksubmitted"):
+        sheetsubmit = request.GET.get("tasksubmitted")
+    if request.GET.get("taskstatus"):
+        sheetstatus = request.GET.get("taskstatus")
+    form = FilterSheet(initial={'tasktype': sheettype,'tasksubmitted':sheetsubmit,'taskstatus':sheetstatus})
+    # if request.user.is_authenticated():
+    #     EmpID = request.session['EmpID']
+    EmpData = Employee.objects.filter(empid = empid)
+    sheets = Sheet.objects.filter(empid = empid).order_by('ifsubmitted')
+    start = request.GET.get("q_start" )
+    end = request.GET.get("q_end")
+    if start or sheettype or sheetsubmit or sheetstatus:
+        sheets = Sheet.objects.filter(
+        Q(empid = empid) &
+        Q(tasktype = sheettype)&
+        Q(ifsubmitted = sheetsubmit)&
+        Q(status = sheetstatus)
+        )
+    count = len(list(sheets))
+    if count == 0:
+        messages.info(request, _("No tasks"))
+    context = {'AllSheets': sheets,'count':count,'EmpData':EmpData,'form':form,'sheettype':sheettype}
+    return render(request, 'project/emp_sheet.html', context)
+
+
 @login_required
 def ManagerPage(request):
     DeptCode = 0
@@ -162,8 +201,6 @@ def UpdateSheet(request,empid):
             'ifsubmitted': forms.Select(attrs={'class': 'form-control'}),
         }
     )
-
-
     formset = SbmitSheet(queryset=Sheet.objects.filter(~Q(ifsubmitted = '1'), empid= empid ,
     taskdate__gte=datetime.now()-timedelta(days=7), taskdate__lte=datetime.now()+ timedelta(days=7)
     ))
@@ -194,6 +231,10 @@ def UpdateSheet(request,empid):
                 for obj in instances:
                     obj.submittedby = request.session['EmpID']
                     obj.submitteddate = datetime.now()
+                    if obj.ifsubmitted == '1':
+                        obj.status = '1'
+                    if obj.ifsubmitted == '2':
+                        obj.status = '3'
                     obj.save()
                 return HttpResponseRedirect(reverse('ns-project:all-sheets'))
         else:
@@ -241,6 +282,7 @@ def AddSheet(request):
     EmpID = 0
     if request.user.is_authenticated():
         EmpID = request.session['EmpID']
+
     formset = AddSheet(queryset=Sheet.objects.filter(empid= EmpID , ifsubmitted = '0',
     taskdate__gte=datetime.now()-timedelta(days=7), taskdate__lte=datetime.now()+ timedelta(days=7)
     )
@@ -279,6 +321,7 @@ def AddSheet(request):
                 obj.managerlevel3 = manager_3
                 obj.managerlevel4 = manager_4
                 obj.ifsubmitted = '0'
+                obj.status = '0'
                 if obj.createddate:
                     obj.editedate = datetime.now()
                 else:
@@ -294,6 +337,8 @@ def AddSheet(request):
     return render(request, 'project/add-sheet.html', {'form': formset})
 
 def EditSheet(request,pk):
+    if request.user.is_authenticated():
+        EmpID = request.session['EmpID']
     SbmitSheet = modelformset_factory(Sheet, fields=('taskdesc', 'tasktype', 'duration','taskdate','ifsubmitted'), can_delete=True, extra=0,
         widgets = {
             'taskdesc': forms.TextInput(attrs={'class': 'form-control'}),
@@ -305,53 +350,63 @@ def EditSheet(request,pk):
     )
     formset = SbmitSheet(queryset=Sheet.objects.filter(id = pk,ifsubmitted='0' ))
     # taskdate__gte=datetime.now()-timedelta(days=7), taskdate__lte=datetime.now()+ timedelta(days=7)
-    if request.method == 'POST':
-        formset = SbmitSheet(request.POST)
-        if formset.is_valid():
-            instances = formset.save(commit=False)
-            # Get managers as hierarchicaly
-            for obj in instances:
-                obj.editdate = datetime.now()
-                obj.ifsubmitted = 0
-                obj.save()
-            for obj in formset.deleted_objects:
-                obj.delete()
-            messages.success(request, _("Edit complete"))
-            return HttpResponseRedirect(reverse('ns-project:my-sheet'))
+    SheetData = get_object_or_404(Sheet,pk=pk)
+    sheetid = SheetData.empid
+    if EmpID == str(sheetid):
+        if request.method == 'POST':
+            formset = SbmitSheet(request.POST)
+            if formset.is_valid():
+                instances = formset.save(commit=False)
+                # Get managers as hierarchicaly
+                for obj in instances:
+                    obj.editdate = datetime.now()
+                    obj.ifsubmitted = 0
+                    obj.save()
+                for obj in formset.deleted_objects:
+                    obj.delete()
+                messages.success(request, _("Edit complete"))
+                return HttpResponseRedirect(reverse('ns-project:my-sheet'))
+        else:
+            formset = formset
     else:
-        formset = formset
+        raise Http404
     # form = form_class(request.POST or None)
-    return render(request, 'project/edit_s_sheet.html', {'form': formset})
+    return render(request, 'project/edit_s_sheet.html', {'form': formset,'Sheetid':sheetid,'EmpID':EmpID})
 
 def ChangeStatus(request,pk):
-    SbmitSheet = modelformset_factory(Sheet, fields=('taskdesc', 'tasktype', 'duration','taskdate','ifsubmitted','status','reason'), can_delete=True, extra=0,
+    if request.user.is_authenticated():
+        EmpID = request.session['EmpID']
+    ChangeStatus = modelformset_factory(Sheet, fields=('taskdesc', 'tasktype', 'duration','taskdate','reason','status'),extra=0,
         widgets = {
             'taskdesc': forms.TextInput(attrs={'class': 'form-control','readonly':True}),
             'tasktype': forms.Select(attrs={'class': 'form-control pointer','readonly':True}),
-            'duration': forms.NumberInput(attrs={'class': 'form-control','readonly':True}),
+            'duration': forms.TextInput(attrs={'class': 'form-control','readonly':True}),
             'taskdate': forms.TextInput(attrs={'class': 'form-control pointer','readonly':True}),
-            'ifsubmitted': forms.Select(attrs={'class': 'form-control','readonly':True}),
             'status': forms.Select(attrs={'class': 'form-control'}),
             'reason': forms.Select(attrs={'class': 'form-control'}),
         }
     )
-    formset = SbmitSheet(queryset=Sheet.objects.filter(id = pk,ifsubmitted='0' ))
+    formset = ChangeStatus(queryset=Sheet.objects.filter(ifsubmitted = '1',id = pk ))
     # taskdate__gte=datetime.now()-timedelta(days=7), taskdate__lte=datetime.now()+ timedelta(days=7)
-    if request.method == 'POST':
-        formset = SbmitSheet(request.POST)
-        if formset.is_valid():
-            instances = formset.save(commit=False)
-            # Get managers as hierarchicaly
-            for obj in instances:
-                obj.editdate = datetime.now()
-                obj.ifsubmitted = 0
-                obj.save()
-            for obj in formset.deleted_objects:
-                obj.delete()
-            messages.success(request, _("Edit complete"))
-            return HttpResponseRedirect(reverse('ns-project:my-sheet'))
+    SheetData = get_object_or_404(Sheet,pk=pk)
+    sheetid = SheetData.empid
+    if EmpID == str(sheetid):
+        if request.method == 'POST':
+            formset = ChangeStatus(request.POST)
+            if formset.is_valid():
+                instances = formset.save(commit=False)
+                # Get managers as hierarchicaly
+                for obj in instances:
+                    obj.statusdate = datetime.now()
+                    obj.save()
+                for obj in formset.deleted_objects:
+                    obj.delete()
+                messages.success(request, _("Change status done"))
+                return HttpResponseRedirect(reverse('ns-project:my-sheet'))
+        else:
+            formset = formset
     else:
-        formset = formset
+        raise Http404
     # form = form_class(request.POST or None)
     return render(request, 'project/change_s_sheet.html', {'form': formset})
 
