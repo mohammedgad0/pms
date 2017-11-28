@@ -39,8 +39,8 @@
         <th>{{ _('Task Descreption') }}</th>
         <th>{{ _('Task type') }}</th>
         <th>{{ _('Duration') }}</th>
-       <th>{{ _('Task Date') }}</th>
-       <th style="text-align: center;" width="8%">{{ _('Sheet Delete') }}</th>
+       <th>{{ _('Task Deadline') }}</th>
+       <th style="text-align: center;" width="8%">{{ _('Change status') }}</th>
       </tr>
     </thead>
     <tbody>
@@ -52,8 +52,7 @@
         <td>{{ form.tasktype }}</td>
         <td class="col-md-2"> {{ form.duration }}</td>
 
-        <td class="col-md-2">
-          <div class="input-group date" data-provide="datepicker"> {{ form.taskdate }}
+        <td class="col-md-2"><div class="input-group date" data-provide="datepicker"> {{ form.taskdate }}
           <div class="input-group-addon">
               <span class="glyphicon glyphicon-th"></span>
           </div>
@@ -61,8 +60,10 @@
         </td>
 
         <td style="text-align: center;">
-          {{form.DELETE }}
+          {{form.status}}
+
         </td>
+        <td id="show" style='display:none;'>{{form.reason}}</td>
       </tr>
       {% endfor %}
     </tbody>
@@ -78,6 +79,7 @@
   </div>
 {% endblock content %}
 <script>
+
 
 
 </script>
