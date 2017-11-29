@@ -15,7 +15,7 @@ from django.contrib import messages
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import permission_required
 from django.views.generic import UpdateView, ListView
-from .filters import *
+from .filters import SheetFilter
 
 
 class BaseSheetFormSet(BaseModelFormSet):
@@ -108,86 +108,24 @@ def MySheet(request):
     context = {'AllSheets': sheets,'count':count}
     return render(request, 'project/my_tasks.html', context)
 
+@login_required
 def EmpSheet(request,empid):
     '''
     Page For Each Employee to Show His Sheets
     '''
-    sheet_list = Sheet.objects.filter(empid = empid)
-    start = request.GET.get("q_start")
-    end = request.GET.get("q_end")
-    if start:
-        sheet_list = Sheet.objects.filter(empid = empid,taskdate__gte=start, taskdate__lte=end)
-    EmpData = Employee.objects.filter(empid = empid)
-
-    sheet_filter = SheetFilter(request.GET, queryset=sheet_list)
+    EmpData = get_object_or_404(Employee, empid = empid)
+    if str(EmpData.managercode) == str(request.session['EmpID']):
+        sheet_list = Sheet.objects.filter(empid = empid)
+        start = request.GET.get("q_start")
+        end = request.GET.get("q_end")
+        if start:
+            sheet_list = Sheet.objects.filter(empid = empid,taskdate__gte=start, taskdate__lte=end)
+        # EmpData = Employee.objects.filter(empid = empid)
+        sheet_filter = SheetFilter(request.GET, queryset=sheet_list)
+    else:
+        raise Http404
 
     return render(request, 'project/emp_sheet.html', {'filter': sheet_filter,'EmpData':EmpData})
-
-# def EmpSheet(request,empid):
-#     '''
-#     Page For Each Employee to Show His Sheets
-#     '''
-#     EmpID = 0
-#     sheettype = sheetsubmit = sheetstatus = None
-#     if request.GET.get("tasktype"):
-#         sheettype = request.GET.get("tasktype")
-#     if request.GET.get("tasksubmitted"):
-#         sheetsubmit = request.GET.get("tasksubmitted")
-#     if request.GET.get("taskstatus"):
-#         sheetstatus = request.GET.get("taskstatus")
-#     form = FilterSheet(initial={'tasktype': sheettype,'tasksubmitted':sheetsubmit,'taskstatus':sheetstatus})
-#     # if request.user.is_authenticated():
-#     #     EmpID = request.session['EmpID']
-#     EmpData = Employee.objects.filter(empid = empid)
-#     sheets = Sheet.objects.filter(empid = empid).order_by('ifsubmitted')
-#     start = request.GET.get("q_start" )
-#     end = request.GET.get("q_end")
-#     if sheettype:
-#
-#         sheets = Sheet.objects.filter(
-#         Q(empid = empid) &
-#         Q(tasktype = sheettype)&
-#         Q(ifsubmitted = '' )
-#         )
-#     count = len(list(sheets))
-#     if count == 0:
-#         messages.info(request, _("No tasks"))
-#     context = {'AllSheets': sheets,'count':count,'EmpData':EmpData,'form':form,'sheettype':sheettype}
-#     return render(request, 'project/emp_sheet.html', context)
-
-
-@login_required
-def ManagerPage(request):
-    DeptCode = 0
-    EmpID = 0
-    if request.user.is_authenticated():
-        DeptCode = request.session['DeptCode']
-        EmpID = request.session['EmpID']
-    dept = Department.objects.filter(deptcode= DeptCode)[:1]
-    managid = '0'
-    sheets = None
-    for data in dept:
-        managid = data.managerid
-    # if this user is manager
-    AllEmp = "0"
-    if managid == EmpID:
-        AllEmp = VSheetsdata.objects.filter(deptcode = DeptCode).order_by('new')
-        # AllEmp = Sheet.objects.raw('''SELECT sheet.Id, EmpName as employee, COUNT(sheet.Id) as Tasks ,
-        #                             (select count(sheet.IfSubmitted) from sheet where IfSubmitted=0
-        #                             and EmpId = employee.EmpId) as notsubmitted,
-        #                             (select count(sheet.IfSubmitted) from sheet where IfSubmitted=1
-        #                             and EmpId = employee.EmpId) as submitted
-        #                             FROM sheet
-        #                             INNER JOIN employee
-        #                             ON sheet.EmpId = employee.EmpId
-        #                             WHERE sheet.DeptCode = %s'' group by EmpName''' , [DeptCode])
-    # for data in AllEmp:
-    count = len(list(AllEmp))
-    if count == 0:
-        messages.info(request, _("No data"))
-        return render(request, 'project/all_sheets.html')
-    context = {'allemp':AllEmp,"count":count}
-    return render(request, 'project/all_sheets.html',context)
 
 def AllSheets(request):
     AllEmp = VSheetsdata.objects.filter()
@@ -260,29 +198,48 @@ def UpdateSheet(request,empid):
     # form = form_class(request.POST or None)
     return render(request, 'project/update_sheet.html', {'form': formset,'EmpData':EmpData})
 
+@login_required
 def DetailseSheet(request,empid):
     EmpData = Employee.objects.filter(empid = empid)
     allsheet = Sheet.objects.filter(empid =empid)
     return render(request, 'project/details_sheets.html', {'EmpData':EmpData, 'allsheet':allsheet})
 
 @login_required
-def DeptSheet(request):
-    DeptCode = 0
-    EmpID = 0
+def DeptSheet(request,deptcode):
     if request.user.is_authenticated():
-        DeptCode = request.session['DeptCode']
+        # DeptCode = request.session['DeptCode']
         EmpID = request.session['EmpID']
-    dept = Department.objects.filter(deptcode= DeptCode)[:1]
+    dept = Department.objects.filter(deptcode= deptcode)[:1]
     managid = '0'
     sheets = None
     for data in dept:
         managid = data.managerid
     if managid == EmpID:
-        # sheets = Sheet.objects.filter(deptcode = DeptCode)
-        sheets = Sheet.objects.raw("SELECT sheet.TaskDesc, sheet.Id, EmpName FROM sheet INNER JOIN employee ON sheet.EmpId = employee.EmpId WHERE sheet.DeptCode =%s",  [DeptCode] )
-    empdata = Employee.objects.all()
-    context = {'AllSheets': sheets, 'department':dept, 'empid':EmpID, 'empdata':empdata}
-    return render(request, 'project/dept_tasks.html', context)
+        # if this user is manager
+        AllEmp = "0"
+        #count all data
+        emp_count = Employee.objects.filter(deptcode = deptcode).count()
+        total_task = Sheet.objects.filter(deptcode = deptcode).count()
+        submitted_task = Sheet.objects.filter(deptcode = deptcode, status = 2).count()
+        not_submitted_task = Sheet.objects.filter(deptcode = deptcode, status = 3).count()
+        AllEmp = VSheetsdata.objects.filter(deptcode = deptcode).order_by('new')
+        query = request.GET.get("q")
+        if query:
+            AllEmp = VSheetsdata.objects.filter(
+            Q(deptcode = deptcode)&
+            Q(employeename__icontains = query)
+            )
+    else:
+        raise Http404
+    count = len(list(AllEmp))
+    if count == 0:
+        messages.info(request, _("No data"))
+        return render(request, 'project/all_sheets.html')
+    context = {'allemp':AllEmp,"count":count,"total_task":total_task,
+    "submitted_task":submitted_task,"n_task":not_submitted_task,"emp_count":emp_count}
+
+
+    return render(request, 'project/all_sheets.html',context)
 
 # Add sheet form
 @login_required
@@ -352,6 +309,50 @@ def AddSheet(request):
     # form = form_class(request.POST or None)
     return render(request, 'project/add-sheet.html', {'form': formset})
 
+@login_required
+def SubmitSheet(request,pk):
+    '''
+    Submit or not submit individual sheet by manager.
+    '''
+    if request.user.is_authenticated():
+        EmpID = request.session['EmpID']
+    SbmitSheet = modelformset_factory(Sheet, fields=('taskdesc', 'tasktype', 'duration','taskdate','ifsubmitted'), can_delete=True, extra=0,
+        widgets = {
+            'taskdesc': forms.TextInput(attrs={'class': 'form-control','readonly':True}),
+            'tasktype': forms.Select(attrs={'class': 'form-control pointer','readonly':True}),
+            'duration': forms.NumberInput(attrs={'class': 'form-control','readonly':True}),
+            'taskdate': forms.TextInput(attrs={'class': 'form-control pointer','readonly':True}),
+            'ifsubmitted': forms.Select(attrs={'class': 'form-control'}),
+        }
+    )
+    formset = SbmitSheet(queryset=Sheet.objects.filter(id = pk,ifsubmitted='0' ))
+    # taskdate__gte=datetime.now()-timedelta(days=7), taskdate__lte=datetime.now()+ timedelta(days=7)
+    SheetData = get_object_or_404(Sheet,pk=pk)
+    sheetid = SheetData.empid
+    employeeid = SheetData.empid
+    # if EmpID == str(sheetid):
+    if request.method == 'POST':
+        formset = SbmitSheet(request.POST)
+        if formset.is_valid():
+            instances = formset.save(commit=False)
+            for obj in instances:
+                obj.submittedby = request.session['EmpID']
+                obj.submitteddate = datetime.now()
+                if obj.ifsubmitted == '1':
+                    obj.status = '1'
+                if obj.ifsubmitted == '2':
+                    obj.status = '3'
+                obj.save()
+            messages.success(request, _("Post Done"))
+            return HttpResponseRedirect(reverse('ns-project:emp-sheet', kwargs={'empid':employeeid} ))
+    else:
+        formset = formset
+    # else:
+    #     raise Http404
+    # form = form_class(request.POST or None)
+    return render(request, 'project/submit_sheet.html', {'form': formset,'Sheetid':sheetid,'EmpID':EmpID})
+
+@login_required
 def EditSheet(request,pk):
     if request.user.is_authenticated():
         EmpID = request.session['EmpID']
@@ -389,6 +390,7 @@ def EditSheet(request,pk):
     # form = form_class(request.POST or None)
     return render(request, 'project/edit_s_sheet.html', {'form': formset,'Sheetid':sheetid,'EmpID':EmpID})
 
+@login_required
 def ChangeStatus(request,pk):
     if request.user.is_authenticated():
         EmpID = request.session['EmpID']

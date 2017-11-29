@@ -218,9 +218,9 @@ class Sheet(models.Model):
     )
     tasktype = models.CharField(_('Task type'), max_length=1, choices=TASK_STATUS, db_column='TaskType', blank=True, null=True)  # Field name made lowercase.
     duration = models.IntegerField(_('Duration'),db_column='Duration',blank=True, null=True)  # Field name made lowercase.
-    createddate = models.DateField(db_column='CreatedDate', blank=True, null=True)  # Field name made lowercase.
+    createddate = models.DateTimeField(db_column='CreatedDate', blank=True, null=True)  # Field name made lowercase.
     taskdate = models.DateField(_('task date'),db_column='TaskDate', blank=False, null=False)  # Field name made lowercase.
-    editedate = models.DateField(db_column='EditeDate', blank=True, null=True)  # Field name made lowercase.
+    editedate = models.DateTimeField(db_column='EditeDate', blank=True, null=True)  # Field name made lowercase.
     SUBMITTED_STATUS = (
         ('', _('Choice action')),
         ('0', _('New')),
@@ -229,7 +229,7 @@ class Sheet(models.Model):
     )
     ifsubmitted = models.CharField(db_column='IfSubmitted',max_length=1,choices=SUBMITTED_STATUS, blank=True, null=True)  # Field name made lowercase.
     SHEET_STATUS = (
-    ('', _('Choice status')),
+        ('', _('Choice status')),
         ('0', _('New')),
         ('1', _('in progres')),
         ('2', _('Done')),
@@ -238,13 +238,13 @@ class Sheet(models.Model):
     status = models.CharField(db_column='Status',choices=SHEET_STATUS, max_length=1)  # Field name made lowercase.
     statusdate = models.DateTimeField(db_column='StatusDate', blank=True, null=True)  # Field name made lowercase.
     REASON_STATUS = (
-    ('', _('Choice reason')),
+        ('', _('Choice reason')),
         ('0', _('Need Support')),
         ('1', _('Change piroty')),
     )
     reason = models.CharField(db_column='Reason',choices=REASON_STATUS, max_length=1)  # Field name made lowercase.
     submittedby = models.IntegerField(db_column='SubmittedBy', blank=True, null=True)  # Field name made lowercase.
-    submitteddate = models.DateField(db_column='SubmittedDate', blank=True, null=True)  # Field name made lowercase.
+    submitteddate = models.DateTimeField(db_column='SubmittedDate', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
