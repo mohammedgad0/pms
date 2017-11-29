@@ -104,8 +104,11 @@ class ProjectForm(ModelForm):
 class TaskStartForm(forms.Form):
        rsd = forms.DateField(label=_("Real Start Date"),
        widget=forms.DateInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Start Date'),'required': True}))
-       notes = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':'Notes', 'size': '40'}))
+       notes = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':'Notes', 'size': '40','required': False}), error_messages={'required': 'y'})
     
           
-
+class TaskFinishForm(forms.Form):
+       ftime = forms.DateField(label=_("Finished on"),
+       widget=forms.DateInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Start Date'),'required': True}))
+       notes = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':'Notes', 'size': '40','required': False}), error_messages={'required': 'y'})                     
 

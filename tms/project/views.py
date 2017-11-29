@@ -552,3 +552,26 @@ def updateStartDate(request,pk):
     context = {'form': TaskStartForm(),'pk':pk}
     html_form = render_to_string('project/update_start_task.html',context,request=request,)
     return JsonResponse({'html_form': html_form})
+
+
+def updateTaskFinish(request,pk):
+    data = dict()
+    _obj =  get_object_or_404(Task,pk=pk)
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = TaskFinishForm(request.POST)
+        if form.is_valid():
+            _obj.ftime=form.cleaned_data['ftime']
+            _obj.save()
+            data['form_is_valid'] = True
+            data['id'] = pk
+            data['message'] = _(' Finish Date Updated successfully for Task number %s ' %pk)
+            data['html_form'] = render_to_string('project/task/update_finish_task.html',request=request)
+            return JsonResponse(data)
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        data['form_is_valid'] = False
+    context = {'form': TaskFinishForm(),'pk':pk}
+    html_form = render_to_string('project/task/update_finish_task.html',context,request=request)
+    return JsonResponse({'html_form': html_form})

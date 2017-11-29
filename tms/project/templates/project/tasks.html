@@ -133,7 +133,9 @@
                       {% else %}
                       <a href="#" data-url="{% url 'ns-project:task-update-start' task.id %}" class="update-task-start" ><i class="fa fa-play fa-2x paction  text-primary" title="{% trans "Play" %}" id="p_{{task.id}}" ></i> </a>
                       {% endif %}
-                      <a href="{% url 'ns-project:project-edit' task.id %}" ><i class="fa fa-check-square-o fa-2x paction  text-primary" title="{% trans "Finish" %}"></i> </a>
+                      
+                      <a href="#" data-url="{% url 'ns-project:update-finish-task' task.id %}" class="update-finish-task" ><i class="fa fa-check-square-o fa-2x paction  text-primary" title="{% trans "Finish" %}"></i> </a>
+                      
                       <a href="{% url 'ns-project:project-edit' task.id %}" ><i class="fa fa-power-off  fa-2x paction  text-primary" title="{% trans "Close" %}"></i> </a>
                       <a href="{% url 'ns-project:project-edit' task.id %}" ><i class="fa fa-edit fa-2x paction  text-primary" title="{% trans "Edit" %}"></i>  </a>
                     </td>
@@ -177,7 +179,7 @@
  <ul class="pagination" >
  <li>
 <span class="current">
-            {{ _('Page') }} {{ project_list.number }} of {{ project_list.paginator.num_pages }}
+            {{ _('Page') }} {{ tasks.number }} of {{ tasks.paginator.num_pages }}
         </span>
         </li>
         </ul>
@@ -253,12 +255,15 @@
   }; //end save form
 
 
- // Update task start date
+ // Update task start date and status
   $("#task-table").on("click", ".update-task-start", loadForm);
   $("#modal-task").on("submit", ".task-update-start-form", saveForm);
 
-
-
+  
+  //update task finish date and staus
+  $("#task-table").on("click", ".update-finish-task", loadForm);
+  $("#modal-task").on("submit", ".update-finish-task-form", saveForm);
+  
   </script>
   
 {% endblock javascripts %}

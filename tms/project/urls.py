@@ -32,7 +32,9 @@ urlpatterns = [
     url(r'^project_delete/(?P<pk>\d+)$', views.ProjectDelete, name='project-delete'),
     url(r'^project_task/(?P<pk>\d+)$', views.ProjectTask, name='project-task'),
     url(r'^project_team/(?P<pk>\d+)$', views.ProjectDelete, name='project-team'),
-#     url(r'^task_start/(?P<pk>\d+)$', views.TaskStart, name='task-start'),
+    
     url(r'^task_update_start/(?P<pk>\d+)$', views.updateStartDate, name='task-update-start'),
+    url(r'^update_finish_task/(?P<pk>\d+)$',views.updateTaskFinish, name='update-finish-task'),
+    
     url(r'^.*\.html', views.gentella_html, name='gentella'),
 ]
