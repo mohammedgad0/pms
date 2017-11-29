@@ -332,8 +332,8 @@ class TaskHistory(models.Model):
 
 
 class TaskStatus(models.Model):
-    id = models.IntegerField()
-    name = models.IntegerField(db_column='Name')  # Field name made lowercase.
+    name = models.CharField(db_column='Name', max_length=20)  # Field name made lowercase.
+    name_ar = models.CharField(db_column='Name_Ar', max_length=20)  # Field name made lowercase.
 
     class Meta:
         managed = False

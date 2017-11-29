@@ -88,20 +88,19 @@
             <div class="x_content">
             
 
-
-{% if messages %}
 <ul class="messages">
+{% if messages %}
     {% for message in messages %}
     <li{% if message.tags %} class="alert {{ message.tags }}"{% endif %}>
         {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
         {{ message }}
     </li>
     {% endfor %}
-</ul>
 {% endif %}
+</ul>
              
               <!-- start project list -->
-              <table class="table table-striped projects">
+              <table class="table table-striped projects" id="task-table">
                 <thead>
                   <tr>
                     <th style="width: 1%">#</th>
@@ -122,23 +121,32 @@
                     <td>{{task.name }}</td>
                     <td>{{task.startdate }}</td>
                     <td>{{task.enddate }}</td>
-                    <td>{{task.status }}</td>
+                    <td>{{task.get_status_display }}</td>
                     <td>{{task.assignedto }}</td>
                     <td>{{task.finishedby }}</td>
                     <td></td>
                     
                     <td>
-                      <a href="{% url 'ns-project:project-detail' task.id %}"  ><i class="fa fa-hand-o-right fa-2x paction text-primary" title="{% trans "Assign" %} "></i></a>
-                      <a href="#"  class="task-action" data-toggle="modal"  data-toggle="modal" data-target=".bs-example-modal-lg" data-id="{{task.id}}" data-name="{{task.name}}"><i class="fa fa-play fa-2x paction  text-primary" title="{% trans "Play" %}"></i> </a>
-                      <a href="{% url 'ns-project:project-edit' task.id %}" ><i class="fa fa-check-square-o fa-2x paction  text-primary" title="{% trans "Finish" %}"></i> </a>
-                      <a href="{% url 'ns-project:project-edit' task.id %}" ><i class="fa fa-power-off  fa-2x paction  text-primary" title="{% trans "Close" %}"></i> </a>
-                      <a href="{% url 'ns-project:project-edit' task.id %}"  ><i class="fa fa-edit fa-2x paction  text-primary" title="{% trans "Edit" %}"></i>  </a>
+                      <a href="{% url 'ns-project:task-update-start' task.id %}" class="js-task-start" ><i class="fa fa-hand-o-right fa-2x paction text-primary" title="{% trans "Assign" %} "></i></a>
+                      {% if task.realstartdate %}
+                      <i class="fa fa-play fa-2x paction  paction_disable" title="{% trans "Play" %}" id="p_{{task.id}}" ></i>
+                      {% else %}
+                      <a href="#" data-url="{% url 'ns-project:task-update-start' task.id %}" class="update-task-start" ><i class="fa fa-play fa-2x paction  text-primary" title="{% trans "Play" %}" id="p_{{task.id}}" ></i> </a>
+                      {% endif %}
+                      
+                      <a href="#" data-url="{% url 'ns-project:update-finish-task' task.id %}" class="update-finish-task" ><i class="fa fa-check-square-o fa-2x paction  text-primary" title="{% trans "Finish" %}"></i> </a>
+                      
+                      <a href="#" data-url="{% url 'ns-project:update-close-task' task.id %}" class="update-close-task" ><i class="fa fa-power-off  fa-2x paction  text-primary" title="{% trans "Close" %}"></i> </a>
+                      <a href="{% url 'ns-project:project-edit' task.id %}" ><i class="fa fa-edit fa-2x paction  text-primary" title="{% trans "Edit" %}"></i>  </a>
                     </td>
                   </tr>
                
                   {% endfor %}
                 </tbody>
               </table>
+              
+ 
+    
               <!-- end project list -->
 <!--  pager -->
 <div>
@@ -186,97 +194,79 @@
     </div>
   </div>
   
+              <!-- THE MODAL WE WILL BE USING -->
+     <!--  %  include 'project/task_start.html' %}  -->
   
   
   
-  <!-- Large modal -->
-  
-     <div id="exampleModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
-                      <div class="modal-content">
+  <div class="modal fade" id="modal-task">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
 
-<form method="POST" action="" class="js-task-form">
-  {% csrf_token %}
+      </div>
+    </div>
+  </div>
   
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">x</span>
-                          </button>
-                          <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-                        </div>
-                        <div class="modal-body">
-                         
-                          <div class="row"> <div class="col-md-4 xdisplay_inputx form-group has-feedback">
-                          <label class="control-label ">Actual Start Date</label>
-                                <input type="text" class="form-control has-feedback-left" id="single_cal1" name ="realstartdate" placeholder="Actual Start" aria-describedby="inputSuccess2Status">
-                                <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
-                                <span id="inputSuccess2Status" class="sr-only">(success)</span>
-                              </div> 
-                            </div> 
-                             
-                              
-               
-                           <div class="row">
-                          <div class="col-md-12 col-sm-12  col-xs-12 form-group">
-                           <label class="control-label ">Notes</label>
-                          <textarea id="Notes" required="required" class="form-control" name="notes" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Notes.." data-parsley-validation-threshold="10" placeholder="{{_('Notes')}}"></textarea>
-                          </div>
-                          </div> 
-                        
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-</form>
-                      </div>
-                    </div>
-                    
-                    
-                  </div>
-          
-          
+  
 {% endblock content %}
 
 {% block javascripts %}
   {{ block.super }}
-  
-  
-  
   <script>
-  $(function () {
 
-	  $('#exampleModal').on('show.bs.modal', function (event) {
-		  var button = $(event.relatedTarget) // Button that triggered the modal
-		  var id = button.data('id') // Extract info from data-* attributes
-		  var title = button.data('name') 
-		  var modal = $(this)
-		  modal.find('.modal-title').text( id + " "+ title  + "  >" +"{{_('Start Task')}}")
-		  /*modal.find('.modal-body input').val(recipient) */
-		  
-		  
-		  $("#exampleModal").on("submit", ".js-task-form", function () {
-			    var form = $(this);
-			    $.ajax({
-			      url: form.attr("action")+"/project/task_start/"+id,
-			      data: form.serialize(),
-			      type: form.attr("method"),
-			      dataType: 'json',
-			      success: function (data) {
-			        if (data.form_is_valid) {
-			          alert("Book created!");  // <-- This is just a placeholder for now for testing
-			        }
-			        else {
-			          $("#modal-book .modal-content").html(data.html_form);
-			        }
-			      }
-			    });
-			    return false;
-			  });
-		  
-	  });
-	  
-  });
+    var btn
+
+    var loadForm = function () {
+   btn = $(this);
+    $.ajax({
+      url: $(this).attr("data-url"),
+      type: 'get',
+      dataType: 'json',
+      beforeSend: function () {
+        $("#modal-task").modal("show");
+      },
+      success: function (data) {
+        $("#modal-task .modal-content").html(data.html_form);
+      }
+    });
+
+  }; //end load form
+
+
+ var saveForm = function () {
+    var form = $(this);
+    $.ajax({
+      url: form.attr("action"),
+      data: form.serialize(),
+      type: form.attr("method"),
+      dataType: 'json',
+      success: function (data) {
+        if (data.form_is_valid) {
+          $(".messages").html('<li class="alert alert-success">'+data.message+"</li>");
+          $("#p_"+data['id']).addClass('paction_disable');
+          $("#modal-task").modal("hide");
+        }
+        else {
+          $("#modal-task .modal-content").html(data.html_form);
+        }
+      }
+    });
+    return false;
+  }; //end save form
+
+
+ // Update task start date and status
+  $("#task-table").on("click", ".update-task-start", loadForm);
+  $("#modal-task").on("submit", ".task-update-start-form", saveForm);
+
   
+  //update task finish date and staus
+  $("#task-table").on("click", ".update-finish-task", loadForm);
+  $("#modal-task").on("submit", ".update-finish-task-form", saveForm);
   
+  //update task close date and staus
+  $("#task-table").on("click", ".update-close-task", loadForm);
+  $("#modal-task").on("submit", ".update-close-task-form", saveForm);
   </script>
+  
 {% endblock javascripts %}

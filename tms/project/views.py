@@ -16,7 +16,8 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import permission_required
 from django.views.generic import UpdateView, ListView
 from .filters import SheetFilter
-
+from django.template.loader import  render_to_string
+from django.http import JsonResponse
 
 class BaseSheetFormSet(BaseModelFormSet):
     def clean(self):
@@ -524,14 +525,79 @@ def ProjectTask(request,pk):
     context = {'tasks':_plist}
     return render(request, 'project/tasks.html', context)
 
-def TaskStart(request,pk):
-    task_obj = get_object_or_404(Task,pk=pk)
-    form = TaskStartForm(request.POST)
-    if form.is_valid():
-       task_obj.realstartdate=request.POST['realstartdate']
-       task_obj.save()
 
-       '''TaskHistory = TaskHistory(projectid=task_obj.projectid,taskid=task_obj.id,actionname='TaskStart',actiondate=form.realstartdate,notes=form.notes)
-       TaskHistory.save()'''
+# def TaskStart(request,pk):
+#      task = get_object_or_404(Task, pk)
+#      if request.method == 'POST':
+#         form = TaskForm(request.POST, instance=task)
+#      return render(request,  'project/tupdate_start_task.html')
 
-    return render(request, 'project/task_start.html')
+
+def updateStartDate(request,pk):
+    data = dict()
+    _obj =  get_object_or_404(Task,pk=pk)
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = TaskStartForm(request.POST)
+        if form.is_valid():
+            _obj.realstartdate=form.cleaned_data['rsd']
+            _obj.save()
+            data['form_is_valid'] = True
+            data['id'] = pk
+            data['message'] = _(' Start Date Updated successfully for Task number %s ' %pk)
+            data['html_form'] = render_to_string('project/update_start_task.html',request=request)
+            return JsonResponse(data)
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        data['form_is_valid'] = False
+    context = {'form': TaskStartForm(),'pk':pk}
+    html_form = render_to_string('project/update_start_task.html',context,request=request,)
+    return JsonResponse({'html_form': html_form})
+
+
+def updateTaskFinish(request,pk):
+    data = dict()
+    _obj =  get_object_or_404(Task,pk=pk)
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = TaskFinishForm(request.POST)
+        if form.is_valid():
+            _obj.ftime=form.cleaned_data['ftime']
+            _obj.save()
+            data['form_is_valid'] = True
+            data['id'] = pk
+            data['message'] = _(' Finish Date Updated successfully for Task number %s ' %pk)
+            data['html_form'] = render_to_string('project/task/update_finish_task.html',request=request)
+            return JsonResponse(data)
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        data['form_is_valid'] = False
+    context = {'form': TaskFinishForm(),'pk':pk}
+    html_form = render_to_string('project/task/update_finish_task.html',context,request=request)
+    return JsonResponse({'html_form': html_form})
+
+
+def updateTaskClose(request,pk):
+    data = dict()
+    _obj =  get_object_or_404(Task,pk=pk)
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = TaskCloseForm(request.POST)
+        if form.is_valid():
+            _obj.ctime=form.cleaned_data['ctime']
+            _obj.status="Closed"
+            _obj.save()
+            data['form_is_valid'] = True
+            data['id'] = pk
+            data['message'] = _(' Close Date Updated successfully for Task number %s ' %pk)
+            data['html_form'] = render_to_string('project/task/update_close_task.html',request=request)
+            return JsonResponse(data)
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        data['form_is_valid'] = False
+    context = {'form': TaskCloseForm(),'pk':pk}
+    html_form = render_to_string('project/task/update_close_task.html',context,request=request)
+    return JsonResponse({'html_form': html_form})
