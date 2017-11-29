@@ -5074,3 +5074,14 @@ table thead .checkbox.radio { margin-top:-7px;margin-top:-21px; }
     margin-right:8px;
     #4d90fe!important
 }
+
+/*custom icon size for task actions*/
+.paction {
+    font-size: 1.5em;
+    margin-right:5px;
+    #4d90fe!important
+}
+.paction_disable  {
+    color:#ccc!important
+}
+

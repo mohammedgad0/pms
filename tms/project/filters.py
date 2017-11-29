@@ -13,5 +13,4 @@ from django.forms import ModelForm, Textarea,TextInput,DateField
 class SheetFilter(django_filters.FilterSet):
     class Meta:
         model = Sheet
-        
-        fields = ['tasktype', 'ifsubmitted', 'status','taskdate', ]
+        fields = ['tasktype', 'ifsubmitted', 'status','taskdate']
