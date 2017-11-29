@@ -5123,6 +5123,9 @@ $(document).ready(function() {
 });
 $.datepicker.setDefaults($.datepicker.regional["ar"]);
 $(document).ready(function(){
+  $("select").each(function(){
+$(this).find('option').get(0).remove();
+});
   if( $('#id_form-0-status').val() == '3'){
     $('#show').show()
   }

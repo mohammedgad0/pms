@@ -15,6 +15,8 @@ from django.contrib import messages
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import permission_required
 from django.views.generic import UpdateView, ListView
+from .filters import *
+
 
 class BaseSheetFormSet(BaseModelFormSet):
     def clean(self):
@@ -106,38 +108,52 @@ def MySheet(request):
     context = {'AllSheets': sheets,'count':count}
     return render(request, 'project/my_tasks.html', context)
 
-
 def EmpSheet(request,empid):
     '''
     Page For Each Employee to Show His Sheets
     '''
-    EmpID = 0
-    sheettype = sheetsubmit = sheetstatus = ""
-    if request.GET.get("tasktype"):
-        sheettype = request.GET.get("tasktype")
-    if request.GET.get("tasksubmitted"):
-        sheetsubmit = request.GET.get("tasksubmitted")
-    if request.GET.get("taskstatus"):
-        sheetstatus = request.GET.get("taskstatus")
-    form = FilterSheet(initial={'tasktype': sheettype,'tasksubmitted':sheetsubmit,'taskstatus':sheetstatus})
-    # if request.user.is_authenticated():
-    #     EmpID = request.session['EmpID']
-    EmpData = Employee.objects.filter(empid = empid)
-    sheets = Sheet.objects.filter(empid = empid).order_by('ifsubmitted')
-    start = request.GET.get("q_start" )
+    sheet_list = Sheet.objects.filter(empid = empid)
+    start = request.GET.get("q_start")
     end = request.GET.get("q_end")
-    if start or sheettype or sheetsubmit or sheetstatus:
-        sheets = Sheet.objects.filter(
-        Q(empid = empid) &
-        Q(tasktype = sheettype)&
-        Q(ifsubmitted = sheetsubmit)&
-        Q(status = sheetstatus)
-        )
-    count = len(list(sheets))
-    if count == 0:
-        messages.info(request, _("No tasks"))
-    context = {'AllSheets': sheets,'count':count,'EmpData':EmpData,'form':form,'sheettype':sheettype}
-    return render(request, 'project/emp_sheet.html', context)
+    if start:
+        sheet_list = Sheet.objects.filter(empid = empid,taskdate__gte=start, taskdate__lte=end)
+    EmpData = Employee.objects.filter(empid = empid)
+
+    sheet_filter = SheetFilter(request.GET, queryset=sheet_list)
+
+    return render(request, 'project/emp_sheet.html', {'filter': sheet_filter,'EmpData':EmpData})
+
+# def EmpSheet(request,empid):
+#     '''
+#     Page For Each Employee to Show His Sheets
+#     '''
+#     EmpID = 0
+#     sheettype = sheetsubmit = sheetstatus = None
+#     if request.GET.get("tasktype"):
+#         sheettype = request.GET.get("tasktype")
+#     if request.GET.get("tasksubmitted"):
+#         sheetsubmit = request.GET.get("tasksubmitted")
+#     if request.GET.get("taskstatus"):
+#         sheetstatus = request.GET.get("taskstatus")
+#     form = FilterSheet(initial={'tasktype': sheettype,'tasksubmitted':sheetsubmit,'taskstatus':sheetstatus})
+#     # if request.user.is_authenticated():
+#     #     EmpID = request.session['EmpID']
+#     EmpData = Employee.objects.filter(empid = empid)
+#     sheets = Sheet.objects.filter(empid = empid).order_by('ifsubmitted')
+#     start = request.GET.get("q_start" )
+#     end = request.GET.get("q_end")
+#     if sheettype:
+#
+#         sheets = Sheet.objects.filter(
+#         Q(empid = empid) &
+#         Q(tasktype = sheettype)&
+#         Q(ifsubmitted = '' )
+#         )
+#     count = len(list(sheets))
+#     if count == 0:
+#         messages.info(request, _("No tasks"))
+#     context = {'AllSheets': sheets,'count':count,'EmpData':EmpData,'form':form,'sheettype':sheettype}
+#     return render(request, 'project/emp_sheet.html', context)
 
 
 @login_required
@@ -512,10 +528,8 @@ def TaskStart(request,pk):
     if form.is_valid():
        task_obj.realstartdate=request.POST['realstartdate']
        task_obj.save()
-       
+
        '''TaskHistory = TaskHistory(projectid=task_obj.projectid,taskid=task_obj.id,actionname='TaskStart',actiondate=form.realstartdate,notes=form.notes)
        TaskHistory.save()'''
-       
+
     return render(request, 'project/task_start.html')
-
-

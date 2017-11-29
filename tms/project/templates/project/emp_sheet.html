@@ -1,7 +1,7 @@
 {% extends "project/base_site.html" %}
 {% load i18n %}
 {% block title %} {% trans "sheets list" %} {% endblock title %}
-
+{% load widget_tweaks %}
 {% block stylesheets %}
 {{ block.super }}
 <link href="/static/vendors/jquery/dist/jquery-ui.css" rel="stylesheet">
@@ -65,6 +65,11 @@
         </div>
       </div>-->
       <div class="clearfix"></div>
+      <form method="get">
+
+
+<ul>
+</ul>
       <div class="row">
         <div class="col-md-12">
           <div class="x_panel">
@@ -72,16 +77,20 @@
             <div class="x_content">
       <form id="search" method="GET" action="">
         <div class="col-md-2">
-            {{ form.tasktype }}
+  {% render_field filter.form.tasktype class="form-control" %}
+
         </div>
           <div class="col-md-2">
-            {{ form.tasksubmitted }}
+  {% render_field filter.form.ifsubmitted class="form-control" %}
         </div>
         <div class="col-md-2">
-            {{ form.taskstatus }}
+    {% render_field filter.form.status class="form-control" %}
         </div>
 
-        <div class="col-md-2">
+
+
+
+      <div class="col-md-2">
         <div class="input-group date" data-provide="datepicker">
           <input class="datepicker form-control" name="q_start" type="text" value='{{ request.GET.q_start}}' placeholder="{{_('form')}}">
         <div class="input-group-addon">
@@ -98,7 +107,7 @@
     </div>
   </div>
 
-      <!--<input type="text" name="q" class="form-control" style="width:auto;" value="{{ request.GET.q}}" placeholder="{{_('Emp Or dept')}}..."> -->
+    <!--  <input type="text" name="q" class="form-control" style="width:auto;" value="{{ request.GET.q}}" placeholder="{{_('Emp Or dept')}}...">-->
       <span class="input-group-btn">
         <button id="submit" class="btn btn-primary " type="submit">{% trans "Go"  %}!</button>
       </span>
@@ -117,7 +126,7 @@
         </tr>
       </thead>
       <tbody>
-        {% for data in AllSheets %}
+        {% for data in filter.qs %}
         <tr>
           <td>#</td>
           <td>
