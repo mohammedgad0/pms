@@ -121,7 +121,7 @@
                     <td>{{task.name }}</td>
                     <td>{{task.startdate }}</td>
                     <td>{{task.enddate }}</td>
-                    <td>{{task.status }}</td>
+                    <td>{{task.get_status_display }}</td>
                     <td>{{task.assignedto }}</td>
                     <td>{{task.finishedby }}</td>
                     <td></td>
@@ -136,7 +136,7 @@
                       
                       <a href="#" data-url="{% url 'ns-project:update-finish-task' task.id %}" class="update-finish-task" ><i class="fa fa-check-square-o fa-2x paction  text-primary" title="{% trans "Finish" %}"></i> </a>
                       
-                      <a href="{% url 'ns-project:project-edit' task.id %}" ><i class="fa fa-power-off  fa-2x paction  text-primary" title="{% trans "Close" %}"></i> </a>
+                      <a href="#" data-url="{% url 'ns-project:update-close-task' task.id %}" class="update-close-task" ><i class="fa fa-power-off  fa-2x paction  text-primary" title="{% trans "Close" %}"></i> </a>
                       <a href="{% url 'ns-project:project-edit' task.id %}" ><i class="fa fa-edit fa-2x paction  text-primary" title="{% trans "Edit" %}"></i>  </a>
                     </td>
                   </tr>
@@ -200,7 +200,7 @@
   
   
   <div class="modal fade" id="modal-task">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
 
       </div>
@@ -264,6 +264,9 @@
   $("#task-table").on("click", ".update-finish-task", loadForm);
   $("#modal-task").on("submit", ".update-finish-task-form", saveForm);
   
+  //update task close date and staus
+  $("#task-table").on("click", ".update-close-task", loadForm);
+  $("#modal-task").on("submit", ".update-close-task-form", saveForm);
   </script>
   
 {% endblock javascripts %}

@@ -575,3 +575,27 @@ def updateTaskFinish(request,pk):
     context = {'form': TaskFinishForm(),'pk':pk}
     html_form = render_to_string('project/task/update_finish_task.html',context,request=request)
     return JsonResponse({'html_form': html_form})
+
+
+def updateTaskClose(request,pk):
+    data = dict()
+    _obj =  get_object_or_404(Task,pk=pk)
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = TaskCloseForm(request.POST)
+        if form.is_valid():
+            _obj.ctime=form.cleaned_data['ctime']
+            _obj.status="Closed"
+            _obj.save()
+            data['form_is_valid'] = True
+            data['id'] = pk
+            data['message'] = _(' Close Date Updated successfully for Task number %s ' %pk)
+            data['html_form'] = render_to_string('project/task/update_close_task.html',request=request)
+            return JsonResponse(data)
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        data['form_is_valid'] = False
+    context = {'form': TaskCloseForm(),'pk':pk}
+    html_form = render_to_string('project/task/update_close_task.html',context,request=request)
+    return JsonResponse({'html_form': html_form})
