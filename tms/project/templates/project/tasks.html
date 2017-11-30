@@ -121,31 +121,31 @@
                     <td>{{task.name }}</td>
                     <td>{{task.startdate }}</td>
                     <td>{{task.enddate }}</td>
-                    <td>
+                    <td id="status_{{task.id}}">
 
                       {% if task.status == 'Closed' %}
-                      <span class="label label-default">{{task.get_status_display }} </span>
+                      <span class="label label-default" >{{task.get_status_display }} </span>
                       {% endif %}
                        {% if task.status == 'Cancelled' %}
-                      <span class="label label-warning">{{task.get_status_display }} </span>
+                      <span class="label label-warning" >{{task.get_status_display }} </span>
                       {% endif %}
                        {% if task.status == 'Hold' %}
-                      <span class="label label-warning">{{task.get_status_display }} </span>
+                      <span class="label label-warning" >{{task.get_status_display }} </span>
                       {% endif %}
                        {% if task.status == 'Done' %}
-                      <span class="label label-success">{{task.get_status_display }} </span>
+                      <span class="label label-success" >{{task.get_status_display }} </span>
                       {% endif %}
                        {% if task.status == 'InProgress' %}
-                      <span class="label label-danger">{{task.get_status_display }} </span>
+                      <span class="label label-danger" >{{task.get_status_display }} </span>
                       {% endif %}
                           {% if task.status == 'New' %}
-                      <span class="label label-primary">{{task.get_status_display }} </span>
+                      <span class="label label-primary" >{{task.get_status_display }} </span>
                       {% endif %}
 
                     </td>
                     <td>{{task.assignedto }}</td>
                     <td>{{task.finishedby }}</td>
-                    <td></td>
+                    <td>{{task.finisheddate }}</td>
                     
                     <td>
                       <a href="{% url 'ns-project:task-update-start' task.id %}" class="js-task-start" ><i class="fa fa-hand-o-right fa-2x paction text-primary" title="{% trans "Assign" %} "></i></a>
@@ -250,8 +250,6 @@
   {{ block.super }}
   <script>
 
-    var btn
-
     var loadForm = function () {
    btn = $(this);
     $.ajax({
@@ -279,6 +277,8 @@
       success: function (data) {
         if (data.form_is_valid) {
           $(".messages").html('<li class="alert alert-success">'+data.message+"</li>");
+          $("#status_"+data.id).html('<span class="label task-'+data.status+'" >'+data.status+'</span>');
+         
           $("#"+data.icon).addClass('paction_disable').closest('a').removeAttr("href").removeAttr("data-url").removeAttr("class");
           $("#modal-task").modal("hide");
         }

@@ -295,7 +295,7 @@ class Task(models.Model):
     projectid = models.IntegerField(db_column='ProjectId')  # Field name made lowercase.
     name = models.CharField(db_column='Name', max_length=100, blank=True, null=True)  # Field name made lowercase.
     desc = models.CharField(db_column='Desc', max_length=2500, blank=True, null=True)  # Field name made lowercase.
-    status = models.IntegerField(db_column='Status', blank=True, null=True)  # Field name made lowercase.
+    status = models.CharField(max_length=10, blank=True, null=True)
     startdate = models.DateTimeField(db_column='StartDate', blank=True, null=True)  # Field name made lowercase.
     enddate = models.DateTimeField(db_column='EndDate', blank=True, null=True)  # Field name made lowercase.
     departementid = models.IntegerField(db_column='DepartementId', blank=True, null=True)  # Field name made lowercase.
@@ -309,7 +309,8 @@ class Task(models.Model):
     closedby = models.IntegerField(db_column='ClosedBy', blank=True, null=True)  # Field name made lowercase.
     closeddate = models.DateTimeField(db_column='ClosedDate', blank=True, null=True)  # Field name made lowercase.
     closereson = models.CharField(db_column='CloseReson', max_length=500, blank=True, null=True)  # Field name made lowercase.
-    lastedit = models.DateTimeField(db_column='LastEdit', blank=True, null=True)  # Field name made lowercase.
+    lasteditdate = models.DateTimeField(db_column='LastEditDate', blank=True, null=True)  # Field name made lowercase.
+    lasteditby = models.IntegerField(db_column='LastEditBy', blank=True, null=True)  # Field name made lowercase.
     deleted = models.IntegerField(db_column='Deleted', blank=True, null=True)  # Field name made lowercase.
     createdby = models.IntegerField(db_column='CreatedBy', blank=True, null=True)  # Field name made lowercase.
     createddate = models.DateTimeField(db_column='CreatedDate', blank=True, null=True)  # Field name made lowercase.

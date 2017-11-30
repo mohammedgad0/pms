@@ -298,13 +298,13 @@ class Task(models.Model):
         ('Closed', _('Closed')),
     )
     status = models.CharField(db_column='Status',max_length=10,choices=TASK_STATUS, blank=True, null=True)  # Field name made lowercase.
-
     startdate = models.DateTimeField(db_column='StartDate', blank=True, null=True)  # Field name made lowercase.
     enddate = models.DateTimeField(db_column='EndDate', blank=True, null=True)  # Field name made lowercase.
     departementid = models.IntegerField(db_column='DepartementId', blank=True, null=True)  # Field name made lowercase.
     assignedto = models.IntegerField(db_column='AssignedTo', blank=True, null=True)  # Field name made lowercase.
     assigneddate = models.DateTimeField(db_column='AssignedDate', blank=True, null=True)  # Field name made lowercase.
     realstartdate = models.DateTimeField(db_column='RealStartDate', blank=True, null=True)  # Field name made lowercase.
+    realstartby = models.IntegerField(db_column='RealStartBy', blank=True, null=True)  # Field name made lowercase.
     finishedby = models.IntegerField(db_column='FinishedBy', blank=True, null=True)  # Field name made lowercase.
     finisheddate = models.DateTimeField(db_column='FinishedDate', blank=True, null=True)  # Field name made lowercase.
     canceledby = models.IntegerField(db_column='CanceledBy', blank=True, null=True)  # Field name made lowercase.
@@ -312,7 +312,8 @@ class Task(models.Model):
     closedby = models.IntegerField(db_column='ClosedBy', blank=True, null=True)  # Field name made lowercase.
     closeddate = models.DateTimeField(db_column='ClosedDate', blank=True, null=True)  # Field name made lowercase.
     closereson = models.CharField(db_column='CloseReson', max_length=500, blank=True, null=True)  # Field name made lowercase.
-    lastedit = models.DateTimeField(db_column='LastEdit', blank=True, null=True)  # Field name made lowercase.
+    lasteditdate = models.DateTimeField(db_column='LastEditDate', blank=True, null=True)  # Field name made lowercase.
+    lasteditby = models.IntegerField(db_column='LastEditBy', blank=True, null=True)  # Field name made lowercase.
     deleted = models.IntegerField(db_column='Deleted', blank=True, null=True)  # Field name made lowercase.
     createdby = models.IntegerField(db_column='CreatedBy', blank=True, null=True)  # Field name made lowercase.
     createddate = models.DateTimeField(db_column='CreatedDate', blank=True, null=True)  # Field name made lowercase.

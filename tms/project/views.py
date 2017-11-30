@@ -561,11 +561,7 @@ def ProjectTask(request,pk):
     return render(request, 'project/tasks.html', context)
 
 
-# def TaskStart(request,pk):
-#      task = get_object_or_404(Task, pk)
-#      if request.method == 'POST':
-#         form = TaskForm(request.POST, instance=task)
-#      return render(request,  'project/tupdate_start_task.html')
+
 
 
 def updateStartDate(request,pk):
@@ -576,10 +572,16 @@ def updateStartDate(request,pk):
         form = TaskStartForm(request.POST)
         if form.is_valid():
             _obj.realstartdate=form.cleaned_data['rsd']
+            _obj.realstartby=request.session.get('EmpID', '1056821208')
+            _obj.status="InProgress"
+            _obj.lasteditdate=datetime.now()
+            _obj.lasteditby=request.session.get('EmpID', '1056821208')
             _obj.save()
             data['form_is_valid'] = True
             data['id'] = pk
-            data['message'] = _(' Start Date Updated successfully for Task number %s ' %pk)
+            data['status'] = _('InProgress')
+            data['id'] = pk
+            data['message'] = _('Start Date Updated successfully for Task number %s ' %pk)
             data['html_form'] = render_to_string('project/update_start_task.html',request=request)
             return JsonResponse(data)
 
@@ -599,9 +601,16 @@ def updateTaskFinish(request,pk):
         form = TaskFinishForm(request.POST)
         if form.is_valid():
             _obj.ftime=form.cleaned_data['ftime']
+            _obj.status="Finished"
+            _obj.finisheddate=datetime.now()
+            _obj.finishedby=request.session.get('EmpID', '1056821208')
+            _obj.lasteditdate=datetime.now()
+            _obj.lasteditby=request.session.get('EmpID', '1056821208')
             _obj.save()
             data['form_is_valid'] = True
             data['id'] = pk
+            data['id'] = pk
+            data['status'] = _('Finished')
             data['message'] = _(' Finish Date Updated successfully for Task number %s ' %pk)
             data['html_form'] = render_to_string('project/task/update_finish_task.html',request=request)
             return JsonResponse(data)
@@ -623,9 +632,13 @@ def updateTaskClose(request,pk):
         if form.is_valid():
             _obj.ctime=form.cleaned_data['ctime']
             _obj.status="Closed"
+            _obj.closeddate=datetime.now()
+            _obj.lasteditdate=datetime.now()
+            _obj.lasteditby=request.session.get('EmpID', '1056821208')
             _obj.save()
             data['form_is_valid'] = True
             data['id'] = pk
+            data['status'] = _('Closed')
             data['message'] = _(' Close Date Updated successfully for Task number %s ' %pk)
             data['html_form'] = render_to_string('project/task/update_close_task.html',request=request)
             return JsonResponse(data)
