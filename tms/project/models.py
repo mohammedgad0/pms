@@ -242,7 +242,7 @@ class Sheet(models.Model):
         ('0', _('Need Support')),
         ('1', _('Change piroty')),
     )
-    reason = models.CharField(db_column='Reason',choices=REASON_STATUS, max_length=1)  # Field name made lowercase.
+    reason = models.CharField(db_column='Reason',choices=REASON_STATUS, max_length=1,blank=True, null=True)  # Field name made lowercase.
     submittedby = models.IntegerField(db_column='SubmittedBy', blank=True, null=True)  # Field name made lowercase.
     submitteddate = models.DateTimeField(db_column='SubmittedDate', blank=True, null=True)  # Field name made lowercase.
 

@@ -453,8 +453,7 @@ def ChangeStatus(request,pk):
                 for obj in instances:
                     obj.statusdate = datetime.now()
                     obj.save()
-                for obj in formset.deleted_objects:
-                    obj.delete()
+
                 messages.success(request, _("Change status done"))
                 return HttpResponseRedirect(reverse('ns-project:my-sheet'))
         else:
