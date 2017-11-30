@@ -5085,3 +5085,25 @@ table thead .checkbox.radio { margin-top:-7px;margin-top:-21px; }
     color:#ccc!important
 }
 
+/*custom color for task status*/
+.task-text-Cancelled{
+background-color:#d9534f;
+}
+.task-text-Closed{
+background-color:#ccc;
+color: #333;
+}
+.task-text-New{
+background-color:#337ab7;
+}
+.task-text-InProgress{
+background-color:#f0ad4e;
+}
+.task-text-Done{
+background-color:#5cb85c;
+}
+.task-text-Hold{
+background-color:#f0ad4e;
+}
+
+

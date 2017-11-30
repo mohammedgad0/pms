@@ -121,22 +121,58 @@
                     <td>{{task.name }}</td>
                     <td>{{task.startdate }}</td>
                     <td>{{task.enddate }}</td>
-                    <td>{{task.get_status_display }}</td>
+                    <td>
+
+                      {% if task.status == 'Closed' %}
+                      <span class="label label-default">{{task.get_status_display }} </span>
+                      {% endif %}
+                       {% if task.status == 'Cancelled' %}
+                      <span class="label label-warning">{{task.get_status_display }} </span>
+                      {% endif %}
+                       {% if task.status == 'Hold' %}
+                      <span class="label label-warning">{{task.get_status_display }} </span>
+                      {% endif %}
+                       {% if task.status == 'Done' %}
+                      <span class="label label-success">{{task.get_status_display }} </span>
+                      {% endif %}
+                       {% if task.status == 'InProgress' %}
+                      <span class="label label-danger">{{task.get_status_display }} </span>
+                      {% endif %}
+                          {% if task.status == 'New' %}
+                      <span class="label label-primary">{{task.get_status_display }} </span>
+                      {% endif %}
+
+                    </td>
                     <td>{{task.assignedto }}</td>
                     <td>{{task.finishedby }}</td>
                     <td></td>
                     
                     <td>
                       <a href="{% url 'ns-project:task-update-start' task.id %}" class="js-task-start" ><i class="fa fa-hand-o-right fa-2x paction text-primary" title="{% trans "Assign" %} "></i></a>
+                      
+                      <!-- user start task  -->
                       {% if task.realstartdate %}
                       <i class="fa fa-play fa-2x paction  paction_disable" title="{% trans "Play" %}" id="p_{{task.id}}" ></i>
                       {% else %}
                       <a href="#" data-url="{% url 'ns-project:task-update-start' task.id %}" class="update-task-start" ><i class="fa fa-play fa-2x paction  text-primary" title="{% trans "Play" %}" id="p_{{task.id}}" ></i> </a>
                       {% endif %}
                       
-                      <a href="#" data-url="{% url 'ns-project:update-finish-task' task.id %}" class="update-finish-task" ><i class="fa fa-check-square-o fa-2x paction  text-primary" title="{% trans "Finish" %}"></i> </a>
+                      <!-- user finish task -->
+                       {% if task.finisheddate %}
+                       <i class="fa fa-check-square-o fa-2x paction  paction_disable" title="{% trans "Finish" %}"></i>
+                       {% else %}
+                       <a href="#" data-url="{% url 'ns-project:update-finish-task' task.id %}" class="update-finish-task" ><i class="fa fa-check-square-o fa-2x paction  text-primary" title="{% trans "Finish" %}" id="f_{{task.id}}"></i> </a>
+                       {% endif %}
+                     
                       
-                      <a href="#" data-url="{% url 'ns-project:update-close-task' task.id %}" class="update-close-task" ><i class="fa fa-power-off  fa-2x paction  text-primary" title="{% trans "Close" %}"></i> </a>
+                      <!-- manager close task -->
+                       {% if task.closeddate %}
+                      <i class="fa fa-power-off  fa-2x paction  paction_disable" title="{% trans "Close" %}" id="c_{{task.id}}"></i>
+                       {% else %}
+                      <a href="#" data-url="{% url 'ns-project:update-close-task' task.id %}" class="update-close-task" ><i class="fa fa-power-off  fa-2x paction  text-primary" title="{% trans "Close" %}" id="c_{{task.id}}"></i> </a>
+                       {% endif %}
+                      
+                      <!-- manager edit task -->
                       <a href="{% url 'ns-project:project-edit' task.id %}" ><i class="fa fa-edit fa-2x paction  text-primary" title="{% trans "Edit" %}"></i>  </a>
                     </td>
                   </tr>
@@ -243,7 +279,7 @@
       success: function (data) {
         if (data.form_is_valid) {
           $(".messages").html('<li class="alert alert-success">'+data.message+"</li>");
-          $("#p_"+data['id']).addClass('paction_disable');
+          $("#"+data.icon).addClass('paction_disable').closest('a').removeAttr("href").removeAttr("data-url").removeAttr("class");
           $("#modal-task").modal("hide");
         }
         else {
