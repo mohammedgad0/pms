@@ -5123,6 +5123,15 @@ $(document).ready(function() {
 });
 $.datepicker.setDefaults($.datepicker.regional["ar"]);
 $(document).ready(function(){
+  var item = window.localStorage.getItem('q');
+$('select[name=q]').val(item);
+  $('select[name=q]').change(function() {
+     window.localStorage.setItem('q', $(this).val());
+  });
+
+
+
+
   $(".custom").each(function(){
 $(this).find('option').get(0).remove();
 });

@@ -266,11 +266,28 @@ class VSheetsdata(models.Model):
         managed = False
         db_table = 'V_SheetsData'
 
+class VDeptsheetsdata(models.Model):
+    id = models.IntegerField(db_column='Id',primary_key=True)  # Field name made lowercase.
+    deptcode = models.IntegerField(db_column='DeptCode', blank=True, null=True)  # Field name made lowercase.
+    deptname = models.CharField(db_column='DeptName', max_length=200, blank=True, null=True)  # Field name made lowercase.
+    mangerid = models.CharField(db_column='MangerID', max_length=45, blank=True, null=True)  # Field name made lowercase.
+    empname = models.CharField(db_column='EmpName', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    totaltask = models.BigIntegerField(db_column='TotalTask')  # Field name made lowercase.
+    done = models.BigIntegerField(db_column='Done', blank=True, null=True)  # Field name made lowercase.
+    inprogress = models.BigIntegerField(db_column='INPROGRESS', blank=True, null=True)  # Field name made lowercase.
+    notcomplete = models.BigIntegerField(db_column='NOTCOMPLETE', blank=True, null=True)  # Field name made lowercase.
+    new = models.BigIntegerField(db_column='NEW', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'v_deptsheetsdata'
+
+
 class Task(models.Model):
     projectid = models.IntegerField(db_column='ProjectId')  # Field name made lowercase.
     name = models.CharField(db_column='Name', max_length=100, blank=True, null=True)  # Field name made lowercase.
     desc = models.CharField(db_column='Desc', max_length=2500, blank=True, null=True)  # Field name made lowercase.
-   
+
     TASK_STATUS = (
         ('', _('Choice action')),
         ('New', _('New')),
@@ -281,7 +298,7 @@ class Task(models.Model):
         ('Closed', _('Closed')),
     )
     status = models.CharField(db_column='Status',max_length=10,choices=TASK_STATUS, blank=True, null=True)  # Field name made lowercase.
-    
+
     startdate = models.DateTimeField(db_column='StartDate', blank=True, null=True)  # Field name made lowercase.
     enddate = models.DateTimeField(db_column='EndDate', blank=True, null=True)  # Field name made lowercase.
     departementid = models.IntegerField(db_column='DepartementId', blank=True, null=True)  # Field name made lowercase.
