@@ -5089,21 +5089,25 @@ table thead .checkbox.radio { margin-top:-7px;margin-top:-21px; }
 .task-text-Cancelled{
 background-color:#d9534f;
 }
-.task-text-Closed{
-background-color:#ccc;
+.task-Closed{
+background-color:#777;
 color: #333;
 }
-.task-text-New{
+.task-New{
 background-color:#337ab7;
 }
-.task-text-InProgress{
+.task-InProgress{
 background-color:#f0ad4e;
 }
-.task-text-Done{
+.task-Done{
 background-color:#5cb85c;
 }
-.task-text-Hold{
+.task-Hold{
 background-color:#f0ad4e;
 }
+.task-Finished{
+background-color:#5cb85c;
+}
+
 
 
