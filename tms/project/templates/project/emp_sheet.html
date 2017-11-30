@@ -13,6 +13,7 @@
          <div class="x_panel">
             <div class="x_title">
                <h2 style="font-size:20px; line-height:1.5em;">{{ _('Employee Details')}} </h2>
+
                <ul class="nav navbar-right panel_toolbox">
                   <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                   </li>
@@ -82,6 +83,7 @@
       <form class="form-inline" id="search" method="GET" action="">
 
       <legend>{{_('Search area')}}</legend>
+
       <div class="col-md-2">
         <label>{{_('Task type')}}</label>
       {% render_field filter.form.tasktype class="form-control custom" %}
@@ -138,7 +140,9 @@
       <th>{% trans "Task Deadline" %}</th>
       <th>{% trans "Status submitted" %}</th>
       <th>{% trans "Status task" %}</th>
+      {%if his_manager%}
       <th>{% trans "Operations" %}</th>
+      {%endif%}
       </tr>
       </thead>
       <tbody>
@@ -187,6 +191,7 @@
        {{ data.get_reason_display }}
       {% endif %}
       </td>
+        {%if his_manager%}
       <td>
         {%if data.ifsubmitted != '0' %}
         <a href="#" class="btn btn-primary btn-xs disabled">{% trans "Change status submit" %}</a>
@@ -194,6 +199,7 @@
           <a href="/sheet/{{data.id}}/submit" class="btn btn-primary btn-xs">{% trans "Change status submit" %}</a>
         {% endif %}
       </td>
+      {% endif %}
       </tr>
       {% endfor %}
       </tbody>

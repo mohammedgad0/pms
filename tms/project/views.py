@@ -112,10 +112,20 @@ def MySheet(request):
 @login_required
 def EmpSheet(request,empid):
     '''
-    Page For Each Employee to Show His Sheets
+    Page For Manager to See Employees Sheets
     '''
     EmpData = get_object_or_404(Employee, empid = empid)
+    referer = 'test'
+    URL = request.META.get('HTTP_REFERER')
+    if URL:
+        referer= URL.split("/")[-2]
+    request.session['CanView'] = False
+    if referer == 'dept':
+        request.session['CanView'] = True
+    his_manager = False
     if str(EmpData.managercode) == str(request.session['EmpID']):
+        his_manager = True
+    if str(EmpData.managercode) == str(request.session['EmpID']) or request.session['CanView']==True:
         sheet_list = Sheet.objects.filter(empid = empid)
         start = request.GET.get("q_start")
         end = request.GET.get("q_end")
@@ -126,7 +136,7 @@ def EmpSheet(request,empid):
     else:
         raise Http404
 
-    return render(request, 'project/emp_sheet.html', {'filter': sheet_filter,'EmpData':EmpData})
+    return render(request, 'project/emp_sheet.html', {'filter': sheet_filter,'EmpData':EmpData,"his_manager":his_manager})
 
 def AllSheets(request):
     AllEmp = VSheetsdata.objects.filter()
@@ -144,6 +154,24 @@ def AllSheets(request):
         return render(request, 'project/all_emp_sheets.html')
     context = {'allemp':AllEmp,"count":count}
     return render(request, 'project/all_emp_sheets.html',context)
+
+def AllDept(request):
+    SelectDept = VDeptsheetsdata.objects.all()
+    AllDept = VDeptsheetsdata.objects.all()
+    query = request.GET.get("q")
+    if query and query != '0':
+        AllDept = VDeptsheetsdata.objects.filter(
+        Q(deptcode = query)
+        )
+    # for data in AllEmp:
+    count = len(list(AllDept))
+    if count == 0:
+        messages.info(request, _("No data there"))
+        context = {'alldept':AllDept,"count":count,"selectdept":SelectDept}
+        return render(request, 'project/sheet_all_dept.html',context)
+    context = {'alldept':AllDept,"count":count,"selectdept":SelectDept}
+
+    return render(request, 'project/sheet_all_dept.html',context)
 
 @login_required
 def UpdateSheet(request,empid):
@@ -213,9 +241,16 @@ def DeptSheet(request,deptcode):
     dept = Department.objects.filter(deptcode= deptcode)[:1]
     managid = '0'
     sheets = None
+    referer = ' '
+    URL = request.META.get('HTTP_REFERER')
+    if URL:
+        referer= URL.split("/")[-2]
+    request.session['CanView'] = False
+    if referer == 'all_dept_sheet':
+        request.session['CanView'] = True
     for data in dept:
         managid = data.managerid
-    if managid == EmpID:
+    if managid == EmpID or request.session['CanView']:
         # if this user is manager
         AllEmp = "0"
         #count all data
@@ -429,6 +464,7 @@ def ChangeStatus(request,pk):
     # form = form_class(request.POST or None)
     return render(request, 'project/change_s_sheet.html', {'form': formset})
 
+
 def AddProject(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
@@ -545,7 +581,7 @@ def updateStartDate(request,pk):
             data['form_is_valid'] = True
             data['id'] = pk
             data['status'] = _('InProgress')
-            data['icon'] = "p_%s" %pk
+            data['id'] = pk
             data['message'] = _('Start Date Updated successfully for Task number %s ' %pk)
             data['html_form'] = render_to_string('project/update_start_task.html',request=request)
             return JsonResponse(data)
@@ -573,7 +609,7 @@ def updateTaskFinish(request,pk):
             _obj.lasteditby=request.session.get('EmpID', '1056821208')
             _obj.save()
             data['form_is_valid'] = True
-            data['icon'] = "f_%s" %pk
+            data['id'] = pk
             data['id'] = pk
             data['status'] = _('Finished')
             data['message'] = _(' Finish Date Updated successfully for Task number %s ' %pk)
@@ -590,21 +626,13 @@ def updateTaskFinish(request,pk):
 
 def updateTaskClose(request,pk):
     data = dict()
-    errors = []
-    
-    if 'notes' in request.POST:
-        notes = request.POST['notes']
-        if not notes:
-            errors.append(_('Enter a notes .'))
-            
     _obj =  get_object_or_404(Task,pk=pk)
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
-        form = TaskCloseForm(request.POST )
+        form = TaskCloseForm(request.POST)
         if form.is_valid():
-            _obj.closeddate=form.cleaned_data['ctime']
+            _obj.ctime=form.cleaned_data['ctime']
             _obj.status="Closed"
-            _obj.closedby= request.session.get('EmpID', '1056821208')
             _obj.closeddate=datetime.now()
             _obj.lasteditdate=datetime.now()
             _obj.lasteditby=request.session.get('EmpID', '1056821208')
@@ -612,14 +640,13 @@ def updateTaskClose(request,pk):
             data['form_is_valid'] = True
             data['id'] = pk
             data['status'] = _('Closed')
-            data['icon'] = "c_%s" %pk
             data['message'] = _(' Close Date Updated successfully for Task number %s ' %pk)
             data['html_form'] = render_to_string('project/task/update_close_task.html',request=request)
             return JsonResponse(data)
 
-        # if a GET (or any other method) we'll create a blank form
-        else:
-            data['form_is_valid'] = False
-    context = {'form': TaskCloseForm(),'pk':pk,'errors':errors}
-    data['html_form'] = render_to_string('project/task/update_close_task.html',context,request=request)
-    return JsonResponse( data)
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        data['form_is_valid'] = False
+    context = {'form': TaskCloseForm(),'pk':pk}
+    html_form = render_to_string('project/task/update_close_task.html',context,request=request)
+    return JsonResponse({'html_form': html_form})

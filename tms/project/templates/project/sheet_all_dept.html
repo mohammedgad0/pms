@@ -1,0 +1,109 @@
+{% extends "project/base_site.html" %}
+{% load i18n %}
+{% block title %} {% trans "Projects" %} {% endblock title %}
+
+{% block stylesheets %}
+{{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="">
+      <div class="page-title">
+        <div class="title_left">
+          <h3>{% trans "Tasks List All" %} </h3>
+        </div>
+{{referer}}
+        <div class="title_right">
+          <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right">
+
+              <form method="GET" action="">
+                <div class="form-group">
+                            <select name="q" class="form-control">
+                              <option value='0' selected>{{_('All Department')}}</option>
+                              {%for data in selectdept%}
+                              <option value="{{data.deptcode}}">{{data.deptname}}</option>
+                              {%endfor%}
+                            </select>
+
+                        </div>
+        <!--      <input type="text" name="q" class="form-control" style="width:auto;" value="{{ request.GET.q}}" placeholder="{{_('Emp Or dept')}}...">
+              <span class="input-group-btn">-->
+                <button style="float: left;" class="btn btn-default" type="submit">{% trans "Go"  %}!</button>
+            <!--  </span> -->
+            </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="x_panel">
+
+            <div class="x_content">
+              <!-- start project list -->
+              {% for message in messages %}
+                <div style="font-size: 20px;" class="alert {{ message.tags }} alert-dismissible" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  {{ message }}
+                </div>
+              {% endfor %}
+              {% if count > 0 %}
+              <table class="table table-striped projects">
+                <thead>
+                  <tr>
+                    <th style="width: 1%">#</th>
+                    <th>{{ _('Department') }}</th>
+                    <th>{{ _('Manager Name') }}</th>
+                    <th>{% trans "Task count" %}</th>
+                    <th>{% trans "Task Done" %}</th>
+                    <th>{% trans "Task inprogress" %}</th>
+                    <th>{% trans "Task not complete" %}</th>
+                    <th>{% trans "View" %}</th>
+                  <!--  <th>{% trans "Status" %}</th> -->
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for data in alldept %}
+                  <tr>
+                    <td>#</td>
+                    <td>{{data.deptname}}</td>
+                    <td>
+                    {{ data.empname }}
+                    </td>
+                    <td>
+                      {{data.totaltask }}
+                    </td>
+                    <td>
+                        {{ data.done }}
+                    </td>
+                    <td>
+                        {{ data.inprogress }}
+                    </td>
+                    <td>
+                        {{ data.notcomplete }}
+                    </td>
+                    <td>
+                      <a href="/sheet/{{data.deptcode}}/dept" class="btn btn-primary btn-xs">{% trans "View" %}</a>
+                    </td>
+                    </tr>
+                  {% endfor %}
+          </tbody>
+              </table>
+              {%endif%}
+              <!-- end project list -->
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+{% endblock javascripts %}
