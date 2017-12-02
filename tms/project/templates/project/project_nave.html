@@ -1,0 +1,25 @@
+   <ul class="nav nav-pills" role="tablist">
+   
+                  <!-- project name select -->
+                  <li role="presentation" class="dropdown">
+                    <a id="drop6" href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false"> {{project_detail.name}} <span class="caret"></span></a>
+                    <ul id="menu3" class="dropdown-menu animated fadeInDown " role="menu" aria-labelledby="drop6">
+                    
+                        {% for project in project_list %}
+                         <li role="presentation"><a role="menuitem" tabindex="-1" href="{% url  current_url project.id %}"> <i class="fa fa-folder-o"></i> {{project.name}}</a> </li>
+                        {% endfor %}
+                        
+                         <li role="presentation" class="divider"></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="{% url 'ns-project:project-list' %}"> <i class="fa fa-th-large"></i>  {{_('Completed') }} </a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="{% url 'ns-project:project-list' %}"> <i class="fa fa-th-large"></i>  {{_('All Projects') }} </a></li>
+                      </ul>
+                    </li>
+                    
+                     <!-- task -->
+                    <li role="presentation"><a href="{% url 'ns-project:project-task' project_detail.id %}">{{_('Tasks')}} </a> </li>
+                    <!-- team -->
+                   <li role="presentation"><a href="{% url 'ns-project:project-team'  project_detail.id %}">{{_('Team Members')}} </a>  </li>
+                   <!-- project over view -->
+                    <li role="presentation"><a href="{% url 'ns-project:project-detail'  project_detail.id %}">{{_('Project Overview')}} </a>  </li>
+
+                  </ul>
