@@ -18,6 +18,7 @@ from django.views.generic import UpdateView, ListView
 from .filters import SheetFilter
 from django.template.loader import  render_to_string
 from django.http import JsonResponse
+from django.views.generic.list import ListView
 
 class BaseSheetFormSet(BaseModelFormSet):
     def clean(self):
@@ -513,8 +514,8 @@ def ProjectDetail(request,pk):
     project_detail= get_object_or_404(Project,pk=pk)
     createdBy=request.session.get('EmpID', '1056821208')
     project_list= Project.objects.all().filter(createdby__exact=createdBy).exclude(status=4).order_by('-id')
-
-    context={'project_detail':project_detail,'project_list':project_list}
+    current_url ="ns-project:" + resolve(request.path_info).url_name
+    context={'project_detail':project_detail,'project_list':project_list,'current_url':current_url}
     return render(request, 'project/project_detail.html', context)
 
 def ProjectEdit(request,pk):
@@ -541,8 +542,54 @@ def ProjectDelete(request,pk):
     else:
           context={'p':p,'emp_obj':emp_obj}
           return render(request, 'project/project_delete.html',context)
-
+      
+from django.core.urlresolvers import resolve
+   
 def ProjectTask(request,pk):
+    current_url ="ns-project:" + resolve(request.path_info).url_name
+    createdBy=request.session.get('EmpID', '1056821208')
+    task_list= Task.objects.all().filter(createdby__exact=createdBy, projectid__exact=pk).order_by('-id')
+    project_detail= get_object_or_404(Project,pk=pk)
+    project_list= Project.objects.all().filter(createdby__exact=createdBy).exclude(status=4).order_by('-id')
+
+    paginator = Paginator(task_list, 5) # Show 5 contacts per page
+    page = request.GET.get('page')
+    try:
+        _plist = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        _plist = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        _plist = paginator.page(paginator.num_pages)
+
+    context = {'tasks':_plist,'project_detail':project_detail,'project_list':project_list,'current_url':current_url}
+    return render(request, 'project/tasks.html', context)
+
+def ProjectTeam(request,pk):
+    createdBy=request.session.get('EmpID', '1056821208')
+    project_list= Project.objects.all().filter(createdby__exact=createdBy).exclude(status=4).order_by('-id')
+    current_url ="ns-project:" + resolve(request.path_info).url_name
+    project_detail= get_object_or_404(Project,pk=pk)
+    form=TeamForm()
+    
+    #project team
+    projectmembers= ProjectMembers.objects.all().order_by('-id')
+      
+    context = {'form':form,'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'projectmembers':projectmembers}
+    return render(request, 'project/project_team.html', context) 
+
+class ProjectMembersListView(ListView):
+
+    model = ProjectMembers
+    paginate_by=3
+    def get_context_data(self, **kwargs):
+        context = super(ProjectMembersListView, self).get_context_data(**kwargs)
+        
+        return context
+        
+    
+def ProjectTaskDetail(request,pk):
     createdBy=request.session.get('EmpID', '1056821208')
     task_list= Task.objects.all().filter(createdby__exact=createdBy, projectid__exact=pk).order_by('-id')
     paginator = Paginator(task_list, 5) # Show 5 contacts per page
@@ -559,9 +606,6 @@ def ProjectTask(request,pk):
 
     context = {'tasks':_plist}
     return render(request, 'project/tasks.html', context)
-
-
-
 
 
 def updateStartDate(request,pk):

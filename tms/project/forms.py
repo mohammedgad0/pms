@@ -5,6 +5,9 @@ import datetime
 from django.forms import modelformset_factory
 from .models import *
 from django.forms import ModelForm, Textarea,TextInput,DateField
+from django.contrib.admin.widgets import FilteredSelectMultiple
+from django.forms import ModelChoiceField
+
 
 class BootstrapAuthenticationForm(AuthenticationForm):
     """Authentication form which uses boostrap CSS."""
@@ -114,3 +117,12 @@ class TaskCloseForm(forms.Form):
        ctime = forms.DateField(label=_("Closed on"),
        widget=forms.DateInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Closed on Date'),'required': True}))
        notes = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':'Notes', 'size': '40','required': True}),required=True, max_length=500, error_messages={'required': 'note'})                     
+
+class MyModelChoiceField(ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.empname
+    
+class TeamForm(forms.Form):
+      employee = MyModelChoiceField(queryset=Employee.objects.all(), empty_label="(Nothing)")
+
+    

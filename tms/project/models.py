@@ -341,3 +341,12 @@ class TaskStatus(models.Model):
     class Meta:
         managed = False
         db_table = 'task_status'
+        
+class ProjectMembers(models.Model):
+    project =  models.ForeignKey(Project, on_delete=models.CASCADE)
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    createddate = models.DateTimeField(db_column='CreatedDate', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'project_members'

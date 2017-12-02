@@ -20,8 +20,9 @@
 
  
        
-          <h3>{% trans "Task List" %}   </h3>
+          <!-- <h3>{% trans "Task List" %}   </h3> -->
 
+{% include "project/project_nave.html" %}
 
         </div>
 
@@ -103,7 +104,7 @@
               <table class="table table-striped projects" id="task-table">
                 <thead>
                   <tr>
-                    <th style="width: 1%">#</th>
+                    <th style="width: 1%">ID</th>
                     <th>{% trans "Task Name" %}</th>
                     <th>{% trans "Start Date" %}</th>
                     <th>{% trans "End Date" %}</th>
@@ -117,35 +118,35 @@
                 <tbody>
                   {% for task in tasks %}
                   <tr>
-                    <td>{{task.id }} </td>
-                    <td>{{task.name }}</td>
-                    <td>{{task.startdate }}</td>
-                    <td>{{task.enddate }}</td>
+                    <td><a href="{% url 'ns-project:project-task-detail' task.id %}" class=" btn-link">{{task.id }}</a> </td>
+                    <td><a href="{% url 'ns-project:project-task-detail' task.id %}" class=" btn-link">{{task.name }}</a></td>
+                    <td>{{  task.startdate|date:"d M Y" }} </td>
+                    <td>{{  task.enddate|date:"d M Y" }} </td>
                     <td id="status_{{task.id}}">
-
                       {% if task.status == 'Closed' %}
-                      <span class="label label-default" >{{task.get_status_display }} </span>
+                      <button type="button" class="btn btn-dark btn-xs"> {{task.get_status_display }}</button>
                       {% endif %}
                        {% if task.status == 'Cancelled' %}
-                      <span class="label label-warning" >{{task.get_status_display }} </span>
+                      <button type="button" class="btn btn-danger btn-xs"> {{task.get_status_display }}</button>
                       {% endif %}
                        {% if task.status == 'Hold' %}
-                      <span class="label label-warning" >{{task.get_status_display }} </span>
+                      <button type="button" class="btn btn-danger btn-xs"> {{task.get_status_display }}</button>
                       {% endif %}
                        {% if task.status == 'Done' %}
-                      <span class="label label-success" >{{task.get_status_display }} </span>
+                      <button type="button" class="btn btn-success btn-xs"> {{task.get_status_display }}</button>
                       {% endif %}
                        {% if task.status == 'InProgress' %}
-                      <span class="label label-danger" >{{task.get_status_display }} </span>
+                      <button type="button" class="btn btn-warning btn-xs"> {{task.get_status_display }}</button>
                       {% endif %}
                           {% if task.status == 'New' %}
-                      <span class="label label-primary" >{{task.get_status_display }} </span>
+                     <button type="button" class="btn btn-info btn-xs"> {{task.get_status_display }}</button>
+
                       {% endif %}
 
                     </td>
                     <td>{{task.assignedto }}</td>
                     <td>{{task.finishedby }}</td>
-                    <td>{{task.finisheddate }}</td>
+                    <td>{{  task.finisheddate|date:"d M Y" }} </td>
                     
                     <td>
                       <a href="{% url 'ns-project:task-update-start' task.id %}" class="js-task-start" ><i class="fa fa-hand-o-right fa-2x paction text-primary" title="{% trans "Assign" %} "></i></a>
