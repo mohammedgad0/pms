@@ -18,6 +18,8 @@ from django.views.generic import UpdateView, ListView
 from .filters import SheetFilter
 from django.template.loader import  render_to_string
 from django.http import JsonResponse
+from django.views.generic.list import ListView
+
 
 class BaseSheetFormSet(BaseModelFormSet):
     def clean(self):
@@ -544,8 +546,8 @@ def ProjectDetail(request,pk):
     project_detail= get_object_or_404(Project,pk=pk)
     createdBy=request.session.get('EmpID', '1056821208')
     project_list= Project.objects.all().filter(createdby__exact=createdBy).exclude(status=4).order_by('-id')
-
-    context={'project_detail':project_detail,'project_list':project_list}
+    current_url ="ns-project:" + resolve(request.path_info).url_name
+    context={'project_detail':project_detail,'project_list':project_list,'current_url':current_url}
     return render(request, 'project/project_detail.html', context)
 
 def ProjectEdit(request,pk):
@@ -572,8 +574,68 @@ def ProjectDelete(request,pk):
     else:
           context={'p':p,'emp_obj':emp_obj}
           return render(request, 'project/project_delete.html',context)
-
+      
+from django.core.urlresolvers import resolve
+   
 def ProjectTask(request,pk):
+    current_url ="ns-project:" + resolve(request.path_info).url_name
+    createdBy=request.session.get('EmpID', '1056821208')
+    task_list= Task.objects.all().filter(createdby__exact=createdBy, projectid__exact=pk).order_by('-id')
+    project_detail= get_object_or_404(Project,pk=pk)
+    project_list= Project.objects.all().filter(createdby__exact=createdBy).exclude(status=4).order_by('-id')
+
+    paginator = Paginator(task_list, 5) # Show 5 contacts per page
+    page = request.GET.get('page')
+    try:
+        _plist = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        _plist = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        _plist = paginator.page(paginator.num_pages)
+
+    context = {'tasks':_plist,'project_detail':project_detail,'project_list':project_list,'current_url':current_url}
+    return render(request, 'project/tasks.html', context)
+
+def ProjectTeam(request,pk):
+    createdBy=request.session.get('EmpID', '1056821208')
+    project_list= Project.objects.all().filter(createdby__exact=createdBy).exclude(status=4).order_by('-id')
+    current_url ="ns-project:" + resolve(request.path_info).url_name
+    project_detail= get_object_or_404(Project,pk=pk)
+    projectmembers= ProjectMembers.objects.all().order_by('-id')
+
+
+
+    paginator = Paginator(projectmembers, 5) # Show 5 contacts per page
+    page = request.GET.get('page')
+    try:
+        _mlist = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        _mlist = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        _mlist = paginator.page(paginator.num_pages)
+    
+    
+    #project team
+    form=TeamForm()
+      
+    context = {'form':form,'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'projectmembers':_mlist}
+    return render(request, 'project/project_team.html', context) 
+
+class ProjectMembersListView(ListView):
+
+    model = ProjectMembers
+    paginate_by=3
+    def get_context_data(self, **kwargs):
+        context = super(ProjectMembersListView, self).get_context_data(**kwargs)
+        
+        return context
+        
+    
+def ProjectTaskDetail(request,pk):
     createdBy=request.session.get('EmpID', '1056821208')
     task_list= Task.objects.all().filter(createdby__exact=createdBy, projectid__exact=pk).order_by('-id')
     paginator = Paginator(task_list, 5) # Show 5 contacts per page
@@ -592,11 +654,10 @@ def ProjectTask(request,pk):
     return render(request, 'project/tasks.html', context)
 
 
-
-
-
 def updateStartDate(request,pk):
     data = dict()
+    errors = []
+     
     _obj =  get_object_or_404(Task,pk=pk)
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -611,7 +672,7 @@ def updateStartDate(request,pk):
             data['form_is_valid'] = True
             data['id'] = pk
             data['status'] = _('InProgress')
-            data['id'] = pk
+            data['icon'] = "p_%s" %pk
             data['message'] = _('Start Date Updated successfully for Task number %s ' %pk)
             data['html_form'] = render_to_string('project/update_start_task.html',request=request)
             return JsonResponse(data)
@@ -619,13 +680,15 @@ def updateStartDate(request,pk):
     # if a GET (or any other method) we'll create a blank form
     else:
         data['form_is_valid'] = False
-    context = {'form': TaskStartForm(),'pk':pk}
-    html_form = render_to_string('project/update_start_task.html',context,request=request,)
-    return JsonResponse({'html_form': html_form})
+    context = {'form': TaskStartForm(),'pk':pk,'errors':errors}
+    data['html_form'] = render_to_string('project/update_start_task.html',context,request=request,)
+    return JsonResponse(data)
 
 
 def updateTaskFinish(request,pk):
     data = dict()
+    errors = []
+    
     _obj =  get_object_or_404(Task,pk=pk)
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -639,7 +702,7 @@ def updateTaskFinish(request,pk):
             _obj.lasteditby=request.session.get('EmpID', '1056821208')
             _obj.save()
             data['form_is_valid'] = True
-            data['id'] = pk
+            data['icon'] = "f_%s" %pk
             data['id'] = pk
             data['status'] = _('Finished')
             data['message'] = _(' Finish Date Updated successfully for Task number %s ' %pk)
@@ -649,34 +712,43 @@ def updateTaskFinish(request,pk):
     # if a GET (or any other method) we'll create a blank form
     else:
         data['form_is_valid'] = False
-    context = {'form': TaskFinishForm(),'pk':pk}
-    html_form = render_to_string('project/task/update_finish_task.html',context,request=request)
-    return JsonResponse({'html_form': html_form})
+    context = {'form': TaskFinishForm(),'pk':pk,'errors':errors}
+    data['html_form'] = render_to_string('project/task/update_finish_task.html',context,request=request)
+    return JsonResponse({data})
 
 
 def updateTaskClose(request,pk):
     data = dict()
+    errors = []
+    
+    if 'notes' in request.POST:
+        notes = request.POST['notes']
+        if not notes:
+            errors.append(_('Enter a notes .'))
+            
     _obj =  get_object_or_404(Task,pk=pk)
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
-        form = TaskCloseForm(request.POST)
+        form = TaskCloseForm(request.POST )
         if form.is_valid():
-            _obj.ctime=form.cleaned_data['ctime']
+            _obj.closeddate=form.cleaned_data['ctime']
             _obj.status="Closed"
+            _obj.closedby= request.session.get('EmpID', '1056821208')
             _obj.closeddate=datetime.now()
             _obj.lasteditdate=datetime.now()
-            _obj.lasteditby=request.session.get('EmpID', '1056821208')
             _obj.save()
             data['form_is_valid'] = True
             data['id'] = pk
             data['status'] = _('Closed')
+            data['icon'] = "c_%s" %pk
             data['message'] = _(' Close Date Updated successfully for Task number %s ' %pk)
             data['html_form'] = render_to_string('project/task/update_close_task.html',request=request)
             return JsonResponse(data)
+        else:
+            data['form_is_valid'] = False
 
     # if a GET (or any other method) we'll create a blank form
-    else:
-        data['form_is_valid'] = False
-    context = {'form': TaskCloseForm(),'pk':pk}
-    html_form = render_to_string('project/task/update_close_task.html',context,request=request)
-    return JsonResponse({'html_form': html_form})
+    context = {'form': TaskCloseForm(),'pk':pk,'errors':errors}
+    data['html_form'] = render_to_string('project/task/update_close_task.html',context,request=request)
+    return JsonResponse(data)
+
