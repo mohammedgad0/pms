@@ -282,6 +282,25 @@ class VDeptsheetsdata(models.Model):
         managed = False
         db_table = 'v_deptsheetsdata'
 
+class ApfDeptView(models.Model):
+    id = models.IntegerField(db_column='Id',primary_key=True)  # Field name made lowercase.
+    dept_code = models.CharField(db_column='DEPT_CODE', max_length=5, blank=True, null=True)  # Field name made lowercase.
+    dept_name = models.CharField(db_column='DEPT_NAME', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    resp_dept_code = models.CharField(db_column='RESP_DEPT_CODE', max_length=5, blank=True, null=True)  # Field name made lowercase.
+    resp_dept_name = models.CharField(db_column='RESP_DEPT_NAME', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    manager_title = models.CharField(db_column='MANAGER_TITLE', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    manager_ext = models.CharField(db_column='MANAGER_EXT', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    manager_name = models.CharField(db_column='MANAGER_NAME', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    manager_code = models.CharField(db_column='MANAGER_CODE', max_length=20, blank=True, null=True)  # Field name made lowercase.
+    note = models.CharField(db_column='NOTE', max_length=200, blank=True, null=True)  # Field name made lowercase.
+    city_name = models.CharField(db_column='CITY_NAME', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    city_code = models.CharField(db_column='CITY_CODE', max_length=20, blank=True, null=True)  # Field name made lowercase.
+    branch_name = models.CharField(db_column='BRANCH_NAME', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    branch_code = models.IntegerField(db_column='BRANCH_CODE', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'apf_dept_view'
 
 class Task(models.Model):
     projectid = models.IntegerField(db_column='ProjectId')  # Field name made lowercase.

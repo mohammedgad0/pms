@@ -12,6 +12,17 @@
       <div class="page-title">
         <div class="title_left">
           <h3>{% trans "Tasks List All" %} </h3>
+          {{deptcode}}
+        </br>
+          {%for dept in level3 %}
+          {{dept.dept_code}}
+          {%endfor%}
+          {# {{len}} #}
+          {# {{alldepartment|join:'<br>'}} #}
+          {{request.session.TreeDept}}
+
+</br>
+
         </div>
 {{referer}}
         <div class="title_right">

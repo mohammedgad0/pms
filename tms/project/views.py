@@ -77,9 +77,9 @@ def index(request):
     #         request.session['Mobile'] = data.mobile
     #         request.session['DeptCode'] = data.deptcode
     # Populate User From Ldap Without Login
-    # from django_auth_ldap.backend import LDAPBackend
-    # ldap_backend = LDAPBackend()
-    # ldap_backend.populate_user('aalmanie@stats.gov.sa')
+    from django_auth_ldap.backend import LDAPBackend
+    ldap_backend = LDAPBackend()
+    ldap_backend.populate_user('aalbatil@stats.gov.sa')
     logged = request.COOKIES.get('logged_in_status')
     context = {'logged':logged}
     template = loader.get_template('project/index.html')
@@ -115,17 +115,19 @@ def EmpSheet(request,empid):
     Page For Manager to See Employees Sheets
     '''
     EmpData = get_object_or_404(Employee, empid = empid)
-    referer = 'test'
-    URL = request.META.get('HTTP_REFERER')
-    if URL:
-        referer= URL.split("/")[-2]
-    request.session['CanView'] = False
-    if referer == 'dept':
-        request.session['CanView'] = True
+    deptcode = EmpData.deptcode
+    alldept = request.session.get('TreeDept', '0')
+    # referer = 'test'
+    # URL = request.META.get('HTTP_REFERER')
+    # if URL:
+    #     referer= URL.split("/")[-2]
+    # request.session['CanView'] = False
+    # if referer == 'dept':
+    #     request.session['CanView'] = True
     his_manager = False
     if str(EmpData.managercode) == str(request.session['EmpID']):
         his_manager = True
-    if str(EmpData.managercode) == str(request.session['EmpID']) or request.session['CanView']==True:
+    if str(EmpData.managercode) == str(request.session['EmpID']) or deptcode in alldept:
         sheet_list = Sheet.objects.filter(empid = empid)
         start = request.GET.get("q_start")
         end = request.GET.get("q_end")
@@ -156,8 +158,34 @@ def AllSheets(request):
     return render(request, 'project/all_emp_sheets.html',context)
 
 def AllDept(request):
-    SelectDept = VDeptsheetsdata.objects.all()
-    AllDept = VDeptsheetsdata.objects.all()
+    '''
+    All departments as tree based on user logged in
+    '''
+    DeptCode = request.session['DeptCode']
+    dept_level_1 = ApfDeptView.objects.filter(resp_dept_code = DeptCode)
+    dept_level_2 = []
+    dept_level_3 = []
+    dept_level_4 = []
+    for dept in dept_level_1:
+        dept2 = dept.dept_code
+        # name = dept.dept_name
+        dept_level_2.append(dept2)
+        # dept_level_2.append(name)
+        dept = ApfDeptView.objects.filter(resp_dept_code = dept2)
+        for data in dept:
+            dept3= data.dept_code
+            # name = data.dept_name
+            dept_level_3.append(dept3)
+            # dept_level_3.append(name)
+            dept = ApfDeptView.objects.filter(resp_dept_code = dept3)
+            for data in dept:
+                dept4 = data.dept_code
+                dept_level_4.append(dept4)
+    all_dept =  dept_level_2 + dept_level_3 + dept_level_4
+    request.session['TreeDept'] = all_dept
+    le = len(list(all_dept))
+    SelectDept = VDeptsheetsdata.objects.filter(deptcode__in = all_dept)
+    AllDept = VDeptsheetsdata.objects.filter(deptcode__in = all_dept)
     query = request.GET.get("q")
     if query and query != '0':
         AllDept = VDeptsheetsdata.objects.filter(
@@ -169,7 +197,9 @@ def AllDept(request):
         messages.info(request, _("No data there"))
         context = {'alldept':AllDept,"count":count,"selectdept":SelectDept}
         return render(request, 'project/sheet_all_dept.html',context)
-    context = {'alldept':AllDept,"count":count,"selectdept":SelectDept}
+    context = {'alldept':AllDept,"count":count,"selectdept":SelectDept,"deptcode":DeptCode,'dept2':dept_level_1
+    ,'level3':dept_level_3,'level4':dept_level_4,'alldepartment':all_dept,'len':le
+    }
 
     return render(request, 'project/sheet_all_dept.html',context)
 
@@ -241,16 +271,17 @@ def DeptSheet(request,deptcode):
     dept = Department.objects.filter(deptcode= deptcode)[:1]
     managid = '0'
     sheets = None
-    referer = ' '
-    URL = request.META.get('HTTP_REFERER')
-    if URL:
-        referer= URL.split("/")[-2]
-    request.session['CanView'] = False
-    if referer == 'all_dept_sheet':
-        request.session['CanView'] = True
+    # referer = ' '
+    # URL = request.META.get('HTTP_REFERER')
+    # if URL:
+    #     referer= URL.split("/")[-2]
+    # request.session['CanView'] = False
+    # if referer == 'all_dept_sheet':
+    #     request.session['CanView'] = True
+    alldept = request.session.get('TreeDept', '0')
     for data in dept:
         managid = data.managerid
-    if managid == EmpID or request.session['CanView']:
+    if managid == EmpID or deptcode in alldept:
         # if this user is manager
         AllEmp = "0"
         #count all data
