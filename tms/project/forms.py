@@ -123,6 +123,6 @@ class MyModelChoiceField(ModelChoiceField):
         return obj.empname
     
 class TeamForm(forms.Form):
-      employee = MyModelChoiceField(queryset=Employee.objects.all(), empty_label="(Nothing)")
+      employee = MyModelChoiceField(queryset=Employee.objects.all(), empty_label="(Nothing)",widget=forms.Select(attrs={'class': 'chosen'} ))
 
     

@@ -19,6 +19,8 @@ from .filters import SheetFilter
 from django.template.loader import  render_to_string
 from django.http import JsonResponse
 from django.views.generic.list import ListView
+from crudbuilder.abstract import BaseCrudBuilder
+
 
 class BaseSheetFormSet(BaseModelFormSet):
     def clean(self):
@@ -571,12 +573,26 @@ def ProjectTeam(request,pk):
     project_list= Project.objects.all().filter(createdby__exact=createdBy).exclude(status=4).order_by('-id')
     current_url ="ns-project:" + resolve(request.path_info).url_name
     project_detail= get_object_or_404(Project,pk=pk)
-    form=TeamForm()
+    projectmembers= ProjectMembers.objects.all().order_by('-id')
+
+
+
+    paginator = Paginator(projectmembers, 5) # Show 5 contacts per page
+    page = request.GET.get('page')
+    try:
+        _mlist = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        _mlist = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        _mlist = paginator.page(paginator.num_pages)
+    
     
     #project team
-    projectmembers= ProjectMembers.objects.all().order_by('-id')
+    form=TeamForm()
       
-    context = {'form':form,'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'projectmembers':projectmembers}
+    context = {'form':form,'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'projectmembers':_mlist}
     return render(request, 'project/project_team.html', context) 
 
 class ProjectMembersListView(ListView):
@@ -693,3 +709,4 @@ def updateTaskClose(request,pk):
     context = {'form': TaskCloseForm(),'pk':pk}
     html_form = render_to_string('project/task/update_close_task.html',context,request=request)
     return JsonResponse({'html_form': html_form})
+

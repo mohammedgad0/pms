@@ -40,6 +40,7 @@ urlpatterns = [
     url(r'^update_finish_task/(?P<pk>\d+)$',views.updateTaskFinish, name='update-finish-task'),
     url(r'^update_close_task/(?P<pk>\d+)$',views.updateTaskClose, name='update-close-task'),
 
+
     url(r'^ProjectMember/$', ProjectMembersListView.as_view(), name='ProjectMember-list'),
     url(r'^.*\.html', views.gentella_html, name='gentella'),
     
