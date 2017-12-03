@@ -775,3 +775,9 @@ def updateTaskClose(request,pk):
     data['html_form'] = render_to_string('project/task/update_close_task.html',context,request=request)
     return JsonResponse(data)
 
+def ganttChart(request,pk):
+   
+    context={}
+    return render(request, 'project/project_ganttchart.html', context)
+    
+    
