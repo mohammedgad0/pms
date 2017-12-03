@@ -124,10 +124,10 @@
                     <td>{{  task.enddate|date:"d M Y" }} </td>
                     <td id="status_{{task.id}}">
                       {% if task.status == 'Closed' %}
-                      <button type="button" class="btn btn-dark btn-xs"> {{task.get_status_display }}</button>
+                      <span class="btn btn-dark btn-xs"> {{task.get_status_display }}</span>
                       {% endif %}
                        {% if task.status == 'Cancelled' %}
-                      <button type="button" class="btn btn-danger btn-xs"> {{task.get_status_display }}</button>
+                      <span  class="btn btn-danger btn-xs"> {{task.get_status_display }}</span>
                       {% endif %}
                        {% if task.status == 'Hold' %}
                       <button type="button" class="btn btn-danger btn-xs"> {{task.get_status_display }}</button>
@@ -136,10 +136,10 @@
                       <button type="button" class="btn btn-success btn-xs"> {{task.get_status_display }}</button>
                       {% endif %}
                        {% if task.status == 'InProgress' %}
-                      <button type="button" class="btn btn-warning btn-xs"> {{task.get_status_display }}</button>
+                      <span class="btn btn-warning btn-xs"> {{task.get_status_display }}</span>
                       {% endif %}
                           {% if task.status == 'New' %}
-                     <button type="button" class="btn btn-info btn-xs"> {{task.get_status_display }}</button>
+                     <span class="btn btn-info btn-xs"> {{task.get_status_display }}</span>
 
                       {% endif %}
 
@@ -278,7 +278,7 @@
       success: function (data) {
         if (data.form_is_valid) {
           $(".messages").html('<li class="alert alert-success">'+data.message+"</li>");
-          $("#status_"+data.id).html('<span class="label task-'+data.status+'" >'+data.status+'</span>');
+          $("#status_"+data.id).html('<span class=" btn btn-warning  task-'+data.status+'" >'+data.status+'</span>');
          
           $("#"+data.icon).addClass('paction_disable').closest('a').removeAttr("href").removeAttr("data-url").removeAttr("class");
           $("#modal-task").modal("hide");
