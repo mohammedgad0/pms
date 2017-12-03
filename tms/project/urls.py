@@ -33,6 +33,8 @@ urlpatterns = [
     url(r'^project_edit/(?P<pk>\d+)$', views.ProjectEdit, name='project-edit'),
     url(r'^project_delete/(?P<pk>\d+)$', views.ProjectDelete, name='project-delete'),
     url(r'^project_task/(?P<pk>\d+)$', views.ProjectTask, name='project-task'),
+    url(r'^project_task/(?P<pk>\d+)/(?P<task_status>\w+)$', views.ProjectTask, name='project-task'),
+
     url(r'^project_task_detail/(?P<pk>\d+)$', views.ProjectTaskDetail, name='project-task-detail'),
     url(r'^project_team/(?P<pk>\d+)$', views.ProjectTeam, name='project-team'),
 

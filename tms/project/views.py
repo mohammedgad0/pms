@@ -19,6 +19,7 @@ from .filters import SheetFilter
 from django.template.loader import  render_to_string
 from django.http import JsonResponse
 from django.views.generic.list import ListView
+from django.core.urlresolvers import resolve
 
 
 class BaseSheetFormSet(BaseModelFormSet):
@@ -575,14 +576,38 @@ def ProjectDelete(request,pk):
           context={'p':p,'emp_obj':emp_obj}
           return render(request, 'project/project_delete.html',context)
       
-from django.core.urlresolvers import resolve
    
-def ProjectTask(request,pk):
+def ProjectTask(request,pk,task_status=None):
     current_url ="ns-project:" + resolve(request.path_info).url_name
-    createdBy=request.session.get('EmpID', '1056821208')
-    task_list= Task.objects.all().filter(createdby__exact=createdBy, projectid__exact=pk).order_by('-id')
+    empid=request.session.get('EmpID', '1056821208')
     project_detail= get_object_or_404(Project,pk=pk)
-    project_list= Project.objects.all().filter(createdby__exact=createdBy).exclude(status=4).order_by('-id')
+    project_list= Project.objects.all().filter(createdby__exact=empid).exclude(status=4).order_by('-id')
+
+    if task_status=="all":
+         task_list= Task.objects.all().filter(createdby__exact=empid, projectid__exact=pk).order_by('-id')
+    elif task_status=="unclosed":
+         task_list= Task.objects.all().filter(createdby__exact=empid, projectid__exact=pk).exclude(status__exact='Closed').order_by('-id')
+    elif task_status=="assignedtome":
+         task_list= Task.objects.all().filter( projectid__exact=pk,assignedto__exact=empid).order_by('-id')
+    elif task_status=="new":
+         task_list= Task.objects.all().filter(createdby__exact=empid, projectid__exact=pk,status__exact='New').order_by('-id')
+    elif task_status=="inprogress":
+         task_list= Task.objects.all().filter(createdby__exact=empid, projectid__exact=pk,status__exact='InProgress').order_by('-id')
+    elif task_status=="finishedbyme":
+         task_list= Task.objects.all().filter(finishedby__exact=empid, projectid__exact=pk,status__exact='Done').order_by('-id')
+    elif task_status=="done":
+         task_list= Task.objects.all().filter( projectid__exact=pk,status__exact='Done').order_by('-id')
+    elif task_status=="closed":
+         task_list= Task.objects.all().filter( projectid__exact=pk,status__exact='Closed').order_by('-id')
+    elif task_status=="cancelled":
+         task_list= Task.objects.all().filter( projectid__exact=pk,status__exact='Cancelled').order_by('-id')
+    elif task_status=="hold":
+         task_list= Task.objects.all().filter( projectid__exact=pk,status__exact='Hold').order_by('-id')
+    elif task_status=="delayed":
+         task_list= Task.objects.all().filter( projectid__exact=pk,enddate__lt = datetime.today()).order_by('-id')
+    else :
+       task_list= Task.objects.all().filter(createdby__exact=empid, projectid__exact=pk).order_by('-id')
+
 
     paginator = Paginator(task_list, 5) # Show 5 contacts per page
     page = request.GET.get('page')
@@ -604,8 +629,6 @@ def ProjectTeam(request,pk):
     current_url ="ns-project:" + resolve(request.path_info).url_name
     project_detail= get_object_or_404(Project,pk=pk)
     projectmembers= ProjectMembers.objects.all().order_by('-id')
-
-
 
     paginator = Paginator(projectmembers, 5) # Show 5 contacts per page
     page = request.GET.get('page')

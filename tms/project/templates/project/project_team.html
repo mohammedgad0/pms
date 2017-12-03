@@ -184,18 +184,18 @@
 {% block javascripts %}
   {{ block.super }}
     <!-- Datatables -->
- <!-- <script src="/static/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+  <script src="/static/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
   <script src="/static/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
   <script src="/static/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
   
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.jquery.js"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.jquery.js"></script>
   <script>
   
   $(document).ready(function(){
      $(".chosen").data("placeholder","Select Frameworks...").chosen();
      $(".chosen").chosen({no_results_text: "Oops, nothing found!"}); 
                         $('.chosen').chosen({allow_single_deselect: true,no_results_text: "لا يوجد نتائج!"});
-<!-- $('.projects').DataTable(); -->
+$('.projects').DataTable();
 });
 
 
