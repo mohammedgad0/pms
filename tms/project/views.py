@@ -781,3 +781,7 @@ def ganttChart(request,pk):
 
     context={}
     return render(request, 'project/project_ganttchart.html', context)
+
+def projectFlowUp(request,pk):
+    pass
+    

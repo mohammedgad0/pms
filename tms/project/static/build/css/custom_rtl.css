@@ -5086,31 +5086,34 @@ table thead .checkbox.radio { margin-top:-7px;margin-top:-21px; }
 }
 
 /*custom color for task status*/
+.task-text-Cancelled,.task-Closed,.task-New,.task-InProgress,.task-InProgress,.task-Done,.task-Hold,.task-Finished{
+	padding: 1px 5px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #fff;
+}
 .task-text-Cancelled{
 background-color:#d9534f;
+
 }
-.btn-Closed{
+.task-Closed{
 background-color:#777;
-color: #fff;
+
 }
-.span-New{
+.task-New{
 background-color:#337ab7;
-color: #fff;
 }
-.span-InProgress{
+.task-InProgress{
 background-color:#f0ad4e;
-color: #fff;
 }
-.span-Done{
+.task-Done{
 background-color:#5cb85c;
 }
-.span-Hold{
+.task-Hold{
 background-color:#f0ad4e;
-color: #fff;
 }
-.span-Finished{
+.task-Finished{
 background-color:#5cb85c;
-color: #fff;
 }
 
 
