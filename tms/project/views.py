@@ -184,6 +184,7 @@ def AllDept(request):
                 dept4 = data.dept_code
                 dept_level_4.append(dept4)
     all_dept =  dept_level_2 + dept_level_3 + dept_level_4
+    all_dept.append(DeptCode)
     request.session['TreeDept'] = all_dept
     le = len(list(all_dept))
     SelectDept = VDeptsheetsdata.objects.filter(deptcode__in = all_dept)
@@ -574,9 +575,9 @@ def ProjectDelete(request,pk):
     else:
           context={'p':p,'emp_obj':emp_obj}
           return render(request, 'project/project_delete.html',context)
-      
+
 from django.core.urlresolvers import resolve
-   
+
 def ProjectTask(request,pk):
     current_url ="ns-project:" + resolve(request.path_info).url_name
     createdBy=request.session.get('EmpID', '1056821208')
@@ -617,13 +618,13 @@ def ProjectTeam(request,pk):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         _mlist = paginator.page(paginator.num_pages)
-    
-    
+
+
     #project team
     form=TeamForm()
-      
+
     context = {'form':form,'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'projectmembers':_mlist}
-    return render(request, 'project/project_team.html', context) 
+    return render(request, 'project/project_team.html', context)
 
 class ProjectMembersListView(ListView):
 
@@ -631,10 +632,10 @@ class ProjectMembersListView(ListView):
     paginate_by=3
     def get_context_data(self, **kwargs):
         context = super(ProjectMembersListView, self).get_context_data(**kwargs)
-        
+
         return context
-        
-    
+
+
 def ProjectTaskDetail(request,pk):
     createdBy=request.session.get('EmpID', '1056821208')
     task_list= Task.objects.all().filter(createdby__exact=createdBy, projectid__exact=pk).order_by('-id')
@@ -657,7 +658,7 @@ def ProjectTaskDetail(request,pk):
 def updateStartDate(request,pk):
     data = dict()
     errors = []
-     
+
     _obj =  get_object_or_404(Task,pk=pk)
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -688,7 +689,7 @@ def updateStartDate(request,pk):
 def updateTaskFinish(request,pk):
     data = dict()
     errors = []
-    
+
     _obj =  get_object_or_404(Task,pk=pk)
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -720,12 +721,12 @@ def updateTaskFinish(request,pk):
 def updateTaskClose(request,pk):
     data = dict()
     errors = []
-    
+
     if 'notes' in request.POST:
         notes = request.POST['notes']
         if not notes:
             errors.append(_('Enter a notes .'))
-            
+
     _obj =  get_object_or_404(Task,pk=pk)
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -751,4 +752,3 @@ def updateTaskClose(request,pk):
     context = {'form': TaskCloseForm(),'pk':pk,'errors':errors}
     data['html_form'] = render_to_string('project/task/update_close_task.html',context,request=request)
     return JsonResponse(data)
-
