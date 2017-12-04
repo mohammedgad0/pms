@@ -111,7 +111,7 @@ WSGI_APPLICATION = 'tms.wsgi.application'
 DATABASES = {
    'default': {
        'ENGINE': 'django.db.backends.mysql',
-       'NAME': 'tms_dept',
+       'NAME': 'tms_dev',
        'USER': 'sakr',
        'PASSWORD': 'Sakr!@#123',
        'HOST': '192.168.0.192',   # Or an IP Address that your DB is hosted on
