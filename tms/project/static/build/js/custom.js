@@ -5123,6 +5123,7 @@ $(document).ready(function() {
 });
 $.datepicker.setDefaults($.datepicker.regional["ar"]);
 $(document).ready(function(){
+  
   var item = window.localStorage.getItem('q');
 $('select[name=q]').val(item);
   $('select[name=q]').change(function() {

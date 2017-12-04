@@ -3,6 +3,7 @@ from django.template import loader
 from django.http import HttpResponse ,HttpResponseRedirect,Http404 ,HttpResponseForbidden
 from .models import *
 from .forms import *
+from tms.ldap import *
 from django.contrib.auth.views import *
 from django.utils.translation import ugettext as _
 from django.forms import formset_factory
@@ -69,20 +70,20 @@ def myuser(request, *args, **kwargs):
 
 #@login_required
 def index(request):
-    # if request.user.is_authenticated():
-    #     email = request.user.email
-    #     emp = Employee.objects.filter(email= email)
-    # # Get all data filtered by user email and set in session
-    #     for data in emp:
-    #         request.session['EmpID'] = data.empid
-    #         request.session['EmpName'] = data.empname
-    #         request.session['DeptName'] = data.deptname
-    #         request.session['Mobile'] = data.mobile
-    #         request.session['DeptCode'] = data.deptcode
     # Populate User From Ldap Without Login
     from django_auth_ldap.backend import LDAPBackend
-    ldap_backend = LDAPBackend()
-    ldap_backend.populate_user('aalbatil@stats.gov.sa')
+    # ldapClient = ldap.initialize(AUTH_LDAP_SERVER_URI)
+    # ldapClient.set_option(ldap.OPT_REFERRALS, 2000)
+    # ldapClient.page_size = 10
+    # ldapClient.bind(AUTH_LDAP_BIND_DN, AUTH_LDAP_BIND_PASSWORD)
+    # ldapClient.result()
+    # results = ldapClient.search_s("OU=intranet,DC=stats,DC=gov,DC=sa",ldap.SCOPE_SUBTREE)
+    # results.sizelimit = 1500
+    # for result in results:
+    #   result_dn = result[0]
+    #   result_attrs = result[1]
+    # ldap_backend = LDAPBackend()
+    # ldap_backend.populate_user('aalbatil@stats.gov.sa')
     logged = request.COOKIES.get('logged_in_status')
     context = {'logged':logged}
     template = loader.get_template('project/index.html')
@@ -105,7 +106,7 @@ def MySheet(request):
     EmpID = 0
     if request.user.is_authenticated():
         EmpID = request.session['EmpID']
-    sheets = Sheet.objects.filter(empid = EmpID).order_by('ifsubmitted')
+    sheets = Sheet.objects.filter(empid = EmpID).order_by('ifsubmitted','status')
     count = len(list(sheets))
     if count == 0:
         messages.info(request, _("No tasks"))
@@ -131,7 +132,7 @@ def EmpSheet(request,empid):
     if str(EmpData.managercode) == str(request.session['EmpID']):
         his_manager = True
     if str(EmpData.managercode) == str(request.session['EmpID']) or deptcode in alldept:
-        sheet_list = Sheet.objects.filter(empid = empid)
+        sheet_list = Sheet.objects.filter(empid = empid).order_by('ifsubmitted','status')
         start = request.GET.get("q_start")
         end = request.GET.get("q_end")
         if start:
@@ -302,13 +303,13 @@ def DeptSheet(request,deptcode):
             )
     else:
         raise Http404
+
     count = len(list(AllEmp))
-    if count == 0:
-        messages.info(request, _("No data"))
-        return render(request, 'project/all_sheets.html')
     context = {'allemp':AllEmp,"count":count,"total_task":total_task,
     "submitted_task":submitted_task,"n_task":not_submitted_task,"emp_count":emp_count}
-
+    if count == 0:
+        messages.info(request, _("No data"))
+        return render(request, 'project/all_sheets.html',context)
 
     return render(request, 'project/all_sheets.html',context)
 

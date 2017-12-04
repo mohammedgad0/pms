@@ -11,7 +11,7 @@
     <div class="">
       <div class="page-title">
         <div class="title_left">
-          <h3>{% trans "Tasks List All" %} </h3>
+          <h3>{% trans "All Departments" %} </h3>
           {# {{deptcode}} #}
         </br>
 
@@ -25,10 +25,10 @@
 {{referer}}
         <div class="title_right">
           <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right">
-
               <form method="GET" action="">
                 <div class="form-group">
-                            <select name="q" class="form-control">
+                  <label> {{_('Choice Department')}}</label>
+                            <select id='js-select-dept' onchange="this.form.submit()" name="q" class="form-control">
                               <option value='0' selected>{{_('All Department')}}</option>
                               {%for data in selectdept%}
                               <option value="{{data.deptcode}}">{{data.deptname}}</option>
@@ -38,7 +38,7 @@
                         </div>
         <!--      <input type="text" name="q" class="form-control" style="width:auto;" value="{{ request.GET.q}}" placeholder="{{_('Emp Or dept')}}...">
               <span class="input-group-btn">-->
-                <button style="float: left;" class="btn btn-default" type="submit">{% trans "Go"  %}!</button>
+              <!--  <button style="float: left;" class="btn btn-default" type="submit">{% trans "Go"  %}!</button> -->
             <!--  </span> -->
             </form>
             </div>

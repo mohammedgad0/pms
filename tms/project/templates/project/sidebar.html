@@ -39,15 +39,14 @@
            <li><a href="{% url 'ns-project:my-sheet' %}"><i class="fa fa-list"></i> {% trans "My To Do List" %} <span class="fa"></span></a>  </li>
            {% load user_group %}
            {% if request.user|has_group:"ismanager" %}
-           <li><a href=" /sheet/{{request.session.DeptCode}}/dept "><i class="fa fa-list"></i> {% trans "manage all sheets" %} <span class="fa"></span></a>  </li>
-           {% endif %}
-            <li><a><i class="fa fa-home"></i> {% trans "Reports" %} <span class="fa fa-chevron-down"></span></a>
+           <li><a href=" /sheet/{{request.session.DeptCode}}/dept "><i class="fa fa-pencil-square-o"></i> {% trans "manage all sheets" %} <span class="fa"></span></a>  </li>
 
+            <li><a><i class="fa fa-file-text-o"></i> {% trans "Reports" %} <span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">
             <li><a href="{% url 'ns-project:dept-sheets'%}">{{_('All Department')}}</a></li>
           </ul>
         </li>
-
+           {% endif %}
       </ul>
     </div></div>
   <!-- /sidebar menu -->
