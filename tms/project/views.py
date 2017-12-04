@@ -783,6 +783,8 @@ def ganttChart(request,pk):
     return render(request, 'project/project_ganttchart.html', context)
 
 def projectFlowUp(request,pk):
-    context={}
+    
+    FollowupFormSet = formset_factory(FollowupForm)
+    context={'form':FollowupFormSet}
     return render(request, 'project/project_followup.html', context)
     

@@ -118,11 +118,29 @@ class TaskCloseForm(forms.Form):
        widget=forms.DateInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Closed on Date'),'required': True}))
        notes = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':'Notes', 'size': '40','required': True}),required=True, max_length=500, error_messages={'required': 'note'})                     
 
-class MyModelChoiceField(ModelChoiceField):
+class TeamModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.empname
     
+class FollowupModelChoiceField(ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.dept_name
+    
 class TeamForm(forms.Form):
-      employee = MyModelChoiceField(queryset=Employee.objects.all(), empty_label="(Nothing)",widget=forms.Select(attrs={'class': 'chosen'} ))
+      employee = TeamModelChoiceField(queryset=Employee.objects.all(), empty_label="(Nothing)",widget=forms.Select(attrs={'class': 'chosen'} ))
 
+    
+class FollowupForm(forms.Form):
+      departement = FollowupModelChoiceField(queryset=ApDeptTab.objects.all(), empty_label=_('Select Departement'),widget=forms.Select(attrs={'class': 'chosen'} ))
+      employee = TeamModelChoiceField(queryset=Employee.objects.all(), empty_label="(Select Employee)",widget=forms.Select(attrs={'class': 'chosen'} ))
+      TASK_STATUS = (
+        ('', _('Choice action')),
+        ('New', _('New')),
+        ('InProgress', _('InProgress')),
+        ('Done', _('Done')),
+        ('Hold', _('Hold')),
+        ('Cancelled', _('Cancelled')),
+        ('Closed', _('Closed')),
+        )
+      taskstatus= forms.ChoiceField(choices=TASK_STATUS,required=False,label=_("Select Status"))
     
