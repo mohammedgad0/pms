@@ -783,8 +783,26 @@ def ganttChart(request,pk):
     return render(request, 'project/project_ganttchart.html', context)
 
 def projectFlowUp(request,pk):
-    
-    FollowupFormSet = formset_factory(FollowupForm)
-    context={'form':FollowupFormSet}
-    return render(request, 'project/project_followup.html', context)
+     task_list=''
+     if request.method == 'GET':
+        form = FollowupForm(request.GET)
+        if form.is_valid():
+           status=form.cleaned_data['taskstatus']
+           departement=form.cleaned_data['departement']
+           assignedto=form.cleaned_data['employee']
+           
+           if departement:
+               task_list=Task.objects.all().filter(status__exact=status)
+
+           if assignedto:
+               task_list=task_list.filter(assignedto__exact=1)
+           if status:
+               task_list=task_list.filter(status__exact=status)
+
+           task_list= task_list.order_by('-id')
+
+     else:
+        form = FollowupForm()
+     context={'form':form,'task_list':task_list}
+     return render(request, 'project/project_followup.html', context)
     
