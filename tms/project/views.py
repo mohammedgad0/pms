@@ -786,22 +786,29 @@ def projectFlowUp(request,pk):
      task_list=''
      if request.method == 'GET':
         form = FollowupForm(request.GET)
-        if form.is_valid():
-           status_id=form.cleaned_data['taskstatus']
-           dept=form.cleaned_data['departement']
-           employee=form.cleaned_data['employee']
+        dept = request.GET.get('departement')
+        employee = request.GET.get('employee')
+        status = request.GET.get('taskstatus')
+        if dept:
+            task_list=VFollowup.objects.filter(deptcode__exact=dept)
+            form.fields["employee"].queryset = Employee.objects.filter(deptcode = dept)
+        if status:
+            task_list=task_list.filter(status__exact=status)
+        if employee:
+            task_list=task_list.filter(assignedto__exact=employee)
 
-           if dept:
-               task_list=VFollowup.objects.filter(deptcode__exact=dept.deptcode)
-               form.fields["employee"].queryset = Employee.objects.filter(deptcode = dept.deptcode)
-           if status_id:
-               task_list=task_list.filter(status__exact=status_id)
-           if employee:
-               task_list=task_list.filter(assignedto__exact=employee.empid)
+        # task_list=task_list.order_by('-id')
+        # if form.is_valid():
+        #    status_id=form.cleaned_data['taskstatus']
+        #    dept=form.cleaned_data['departement']
+        #    employee=form.cleaned_data['employee']
+        #    if dept:
+        #        task_list=VFollowup.objects.filter(deptcode__exact=dept.deptcode)
+        #        form.fields["employee"].queryset = Employee.objects.filter(deptcode = dept.deptcode)
+        #    if status_id:
+        #        task_list=task_list.filter(status__exact=status_id)
+        #    if employee:
+        #        task_list=task_list.filter(assignedto__exact=employee.empid)
 
-           task_list=task_list.order_by('-id')
-
-     else:
-        form = FollowupForm()
      context={'form':form,'task_list':task_list}
      return render(request, 'project/project_followup.html', context)
