@@ -123,9 +123,9 @@ class TeamModelChoiceField(ModelChoiceField):
         return obj.empname
     
 class FollowupModelChoiceField(ModelChoiceField):
- 
+  
     def label_from_instance(self, obj):
-        return obj.dept_name
+        return obj.deptname
     
     
 class TeamForm(forms.Form):
@@ -133,8 +133,8 @@ class TeamForm(forms.Form):
 
     
 class FollowupForm(forms.Form):
-      departement = FollowupModelChoiceField(queryset=ApDeptTab.objects.all(), empty_label=_('Select Departement'),widget=forms.Select(attrs={'class': 'chosen'} ))
-      employee = TeamModelChoiceField(queryset=Employee.objects.all(), empty_label="(Select Employee)",widget=forms.Select(attrs={'class': 'chosen'} ),required=False)
+      departement = FollowupModelChoiceField(queryset=Department.objects.all(), to_field_name="deptcode",empty_label=_('Select Departement'),widget=forms.Select(attrs={'class': 'chosen'} ))
+      employee = TeamModelChoiceField(queryset=Employee.objects.all(),to_field_name="empid" ,empty_label="(Select Employee)",widget=forms.Select(attrs={'class': 'chosen'} ),required=False)
       TASK_STATUS = (
         ('', _('Choice action')),
         ('New', _('New')),

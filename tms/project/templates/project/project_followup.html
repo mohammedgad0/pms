@@ -4,6 +4,7 @@
 
 {% block stylesheets %}
   {{ block.super }}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.css" />
 {% endblock stylesheets %}
 
 {% block content %}
@@ -62,6 +63,7 @@
                
                
                {{task_list}}
+        
               </div>
             </div>
           </div>
@@ -72,5 +74,23 @@
 
 {% block javascripts %}
   {{ block.super }}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.jquery.js"></script>
+  <script>
+  $(document).ready(function(){
+     $(".chosen").data("placeholder","Select Frameworks...").chosen();
+     $(".chosen").chosen({no_results_text: "Oops, nothing found!"}); 
+                        $('.chosen').chosen({allow_single_deselect: true,no_results_text: "لا يوجد نتائج!"});
+$('.projects').DataTable();
+});
+
+
+
+
+  
+  
+
+</script>
+
+  
 {% endblock javascripts %}
 

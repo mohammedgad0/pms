@@ -787,22 +787,21 @@ def projectFlowUp(request,pk):
      if request.method == 'GET':
         form = FollowupForm(request.GET)
         if form.is_valid():
-           status=form.cleaned_data['taskstatus']
-           departement=form.cleaned_data['departement']
-           assignedto=form.cleaned_data['employee']
+           status_id=form.cleaned_data['taskstatus']
+           dept=form.cleaned_data['departement']
+           employee=form.cleaned_data['employee']
            
-           if departement:
-               task_list=Task.objects.all().filter(status__exact=status)
+           if dept:
+               task_list=VFollowup.objects.filter(deptcode__exact=dept.deptcode)
+           if status_id:
+               task_list=task_list.filter(status__exact=status_id)
+           if employee:
+               task_list=task_list.filter(assignedto__exact=employee.empid)
 
-           if assignedto:
-               task_list=task_list.filter(assignedto__exact=1)
-           if status:
-               task_list=task_list.filter(status__exact=status)
-
-           task_list= task_list.order_by('-id')
+           task_list=task_list.order_by('-id')
 
      else:
-        form = FollowupForm()
+        form = FollowupForm(employee=Employee.objects.filter(deptcode=2322))
      context={'form':form,'task_list':task_list}
      return render(request, 'project/project_followup.html', context)
     
