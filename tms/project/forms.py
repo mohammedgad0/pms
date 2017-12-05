@@ -137,8 +137,8 @@ class FollowupForm(forms.Form):
       query = VFollowup.objects.all()
       for data in query:
          department.append(data.deptcode)
-      departement = FollowupModelChoiceField(queryset=Department.objects.filter(deptcode__in= department), to_field_name="deptcode",empty_label=_('Select Departement'),widget=forms.Select(attrs={'class': 'chosen'} ))
-      employee = TeamModelChoiceField(queryset=Employee.objects.none(),to_field_name="empid" ,empty_label="(Select Employee)",widget=forms.Select(attrs={'class': 'chosen'} ),required=False)
+      departement = FollowupModelChoiceField(queryset=Department.objects.filter(deptcode__in= department), to_field_name="deptcode",empty_label=_('Select Departement'),widget=forms.Select(attrs={'class': 'chosen chosen form-control col-md-3'} ))
+      employee = TeamModelChoiceField(queryset=Employee.objects.none(),to_field_name="empid" ,empty_label="(Select Employee)",widget=forms.Select(attrs={'class': 'chosen form-control col-md-3'} ),required=False)
       TASK_STATUS = (
         ('', _('Choice action')),
         ('New', _('New')),
@@ -148,4 +148,4 @@ class FollowupForm(forms.Form):
         ('Cancelled', _('Cancelled')),
         ('Closed', _('Closed')),
         )
-      taskstatus= forms.ChoiceField(choices=TASK_STATUS,required=False,label=_("Select Status"))
+      taskstatus= forms.ChoiceField(choices=TASK_STATUS,required=False,label=_("Select Status"),widget=forms.Select(attrs={'class': ' form-control col-md-3'}) )
