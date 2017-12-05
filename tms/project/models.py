@@ -3,93 +3,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.db import models
 
 
-
-class ApDeptTab(models.Model):
-    dept_code = models.IntegerField(db_column='DEPT_CODE', blank=True, null=True)  # Field name made lowercase.
-    dept_name = models.CharField(db_column='DEPT_NAME', max_length=86, blank=True, null=True)  # Field name made lowercase.
-    branch_code = models.IntegerField(db_column='BRANCH_CODE', blank=True, null=True)  # Field name made lowercase.
-    note = models.CharField(db_column='NOTE', max_length=21, blank=True, null=True)  # Field name made lowercase.
-    manager_code = models.CharField(db_column='MANAGER_CODE', max_length=10, blank=True, null=True)  # Field name made lowercase.
-    manager_title = models.CharField(db_column='MANAGER_TITLE', max_length=105, blank=True, null=True)  # Field name made lowercase.
-    manager_ext = models.CharField(db_column='MANAGER_EXT', max_length=4, blank=True, null=True)  # Field name made lowercase.
-    manager_phone = models.CharField(db_column='MANAGER_PHONE', max_length=9, blank=True, null=True)  # Field name made lowercase.
-    resp_dept_code = models.CharField(db_column='RESP_DEPT_CODE', max_length=3, blank=True, null=True)  # Field name made lowercase.
-    manager_level = models.CharField(db_column='MANAGER_LEVEL', max_length=7, blank=True, null=True)  # Field name made lowercase.
-    authority_a = models.CharField(db_column='AUTHORITY_A', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    authority_b = models.CharField(db_column='AUTHORITY_B', max_length=50, blank=True, null=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'ap_dept_tab'
-
-
-
-class AuthGroup(models.Model):
-    name = models.CharField(unique=True, max_length=80)
-
-    class Meta:
-        managed = False
-        db_table = 'auth_group'
-
-
-class AuthGroupPermissions(models.Model):
-    group_id = models.IntegerField()
-    permission_id = models.IntegerField()
-
-    class Meta:
-        managed = False
-        db_table = 'auth_group_permissions'
-        unique_together = (('group_id', 'permission_id'),)
-
-
-class AuthPermission(models.Model):
-    name = models.CharField(max_length=255)
-    content_type_id = models.IntegerField()
-    codename = models.CharField(max_length=100)
-
-    class Meta:
-        managed = False
-        db_table = 'auth_permission'
-        unique_together = (('content_type_id', 'codename'),)
-
-
-class AuthUser(models.Model):
-    password = models.CharField(max_length=128)
-    last_login = models.DateTimeField(blank=True, null=True)
-    is_superuser = models.IntegerField()
-    username = models.CharField(unique=True, max_length=150)
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
-    email = models.CharField(max_length=254)
-    is_staff = models.IntegerField()
-    is_active = models.IntegerField()
-    date_joined = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'auth_user'
-
-
-class AuthUserGroups(models.Model):
-    user_id = models.IntegerField()
-    group_id = models.IntegerField()
-
-    class Meta:
-        managed = False
-        db_table = 'auth_user_groups'
-        unique_together = (('user_id', 'group_id'),)
-
-
-class AuthUserUserPermissions(models.Model):
-    user_id = models.IntegerField()
-    permission_id = models.IntegerField()
-
-    class Meta:
-        managed = False
-        db_table = 'auth_user_user_permissions'
-        unique_together = (('user_id', 'permission_id'),)
-
-
 class Department(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
     deptname = models.CharField(db_column='DeptName', max_length=200, blank=True, null=True)  # Field name made lowercase.
@@ -99,51 +12,6 @@ class Department(models.Model):
     class Meta:
         managed = False
         db_table = 'department'
-
-
-class DjangoAdminLog(models.Model):
-    action_time = models.DateTimeField()
-    object_id = models.TextField(blank=True, null=True)
-    object_repr = models.CharField(max_length=200)
-    action_flag = models.SmallIntegerField()
-    change_message = models.TextField()
-    content_type_id = models.IntegerField(blank=True, null=True)
-    user_id = models.IntegerField()
-
-    class Meta:
-        managed = False
-        db_table = 'django_admin_log'
-
-
-class DjangoContentType(models.Model):
-    app_label = models.CharField(max_length=100)
-    model = models.CharField(max_length=100)
-
-    class Meta:
-        managed = False
-        db_table = 'django_content_type'
-        unique_together = (('app_label', 'model'),)
-
-
-class DjangoMigrations(models.Model):
-    app = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
-    applied = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'django_migrations'
-
-
-class DjangoSession(models.Model):
-    session_key = models.CharField(primary_key=True, max_length=40)
-    session_data = models.TextField()
-    expire_date = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'django_session'
-
 
 class Employee(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
@@ -161,7 +29,6 @@ class Employee(models.Model):
     class Meta:
         managed = False
         db_table = 'employee'
-
 
 class Project(models.Model):
     name = models.CharField(db_column='Name', max_length=250)  # Field name made lowercase.
@@ -200,7 +67,6 @@ class ProjectStatus(models.Model):
     class Meta:
         managed = False
         db_table = 'project_status'
-
 
 class Sheet(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
@@ -342,7 +208,6 @@ class Task(models.Model):
         managed = False
         db_table = 'task'
 
-
 class TaskHistory(models.Model):
     projectid = models.IntegerField(db_column='ProjectId')  # Field name made lowercase.
     taskid = models.IntegerField(db_column='TaskId')  # Field name made lowercase.
@@ -361,7 +226,7 @@ class TaskStatus(models.Model):
     class Meta:
         managed = False
         db_table = 'task_status'
-        
+
 class ProjectMembers(models.Model):
     project =  models.ForeignKey(Project, on_delete=models.CASCADE)
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)

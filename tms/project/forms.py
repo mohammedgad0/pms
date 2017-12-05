@@ -100,38 +100,38 @@ class ProjectForm(ModelForm):
              },
 
         }
-        
-  
+
+
 
 class TaskStartForm(forms.Form):
        rsd = forms.DateField(label=_("Real Start Date"),
        widget=forms.DateInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Real Start Date'),'required': True}))
        notes = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':'Notes', 'size': '40','required': False}), required=False,error_messages={'required': 'note'})
-              
+
 class TaskFinishForm(forms.Form):
        ftime = forms.DateField(label=_("Finished on"),
        widget=forms.DateInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Finished on Date'),'required': True}))
-       notes = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':'Notes', 'size': '40','required': False}), required=False,error_messages={'required': 'notes'})                     
-   
+       notes = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':'Notes', 'size': '40','required': False}), required=False,error_messages={'required': 'notes'})
+
 class TaskCloseForm(forms.Form):
        ctime = forms.DateField(label=_("Closed on"),
        widget=forms.DateInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Closed on Date'),'required': True}))
-       notes = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':'Notes', 'size': '40','required': True}),required=True, max_length=500, error_messages={'required': 'note'})                     
+       notes = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':'Notes', 'size': '40','required': True}),required=True, max_length=500, error_messages={'required': 'note'})
 
 class TeamModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.empname
-    
+
 class FollowupModelChoiceField(ModelChoiceField):
   
     def label_from_instance(self, obj):
         return obj.deptname
-    
-    
+
+
 class TeamForm(forms.Form):
       employee = TeamModelChoiceField(queryset=Employee.objects.all(), empty_label="(Nothing)",widget=forms.Select(attrs={'class': 'chosen'} ))
 
-    
+
 class FollowupForm(forms.Form):
       departement = FollowupModelChoiceField(queryset=Department.objects.all(), to_field_name="deptcode",empty_label=_('Select Departement'),widget=forms.Select(attrs={'class': 'chosen'} ))
       employee = TeamModelChoiceField(queryset=Employee.objects.all(),to_field_name="empid" ,empty_label="(Select Employee)",widget=forms.Select(attrs={'class': 'chosen'} ),required=False)
@@ -145,4 +145,3 @@ class FollowupForm(forms.Form):
         ('Closed', _('Closed')),
         )
       taskstatus= forms.ChoiceField(choices=TASK_STATUS,required=False,label=_("Select Status"))
-    
