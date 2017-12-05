@@ -801,7 +801,7 @@ def projectFlowUp(request,pk):
            task_list=task_list.order_by('-id')
 
      else:
-        form = FollowupForm(employee=Employee.objects.filter(deptcode=2322))
+        form = FollowupForm()
      context={'form':form,'task_list':task_list}
      return render(request, 'project/project_followup.html', context)
     
