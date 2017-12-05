@@ -1,13 +1,16 @@
 {% extends "project/base_site.html" %}
+{% load i18n %}
 
-{% block title %} Plain Page {% endblock title %}
+
+{% block title %} {% trans "Projects" %} {% endblock title %}
 
 {% block stylesheets %}
-  {{ block.super }}
+{{ block.super }}
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.css" />
 {% endblock stylesheets %}
 
 {% block content %}
+{% get_current_language as LANGUAGE_CODE %}
     <div class="right_col" role="main">
       <div class="">
         <div class="page-title">
@@ -62,7 +65,62 @@
                </form>
                
                
-               {{task_list}}
+             
+               
+               
+                <!-- start task  list -->
+              <table class="table table-striped followup" id="followup-task-table">
+                <thead>
+                  <tr>
+                    <th style="width: 1%">ID</th>
+                    <th>{% trans "Task Name" %}</th>
+                    <th>{% trans "Project Name" %}</th>
+                    <th>{% trans "Assigned to" %}</th>
+                    <th>{% trans "Status" %}</th>
+                   
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for task in tasks %}
+                  <tr>
+                  <td></td>
+                    <td><a href="{% url 'ns-project:project-task-detail' task.id %}" class=" btn-link">{{task.taskname }}</a> </td>
+                    <td>{{task.projectname }}</td>
+                    <td>{{task.empname }}</td>
+                    <td id="status_{{task.id}}">
+                      {% if task.status == 'Closed' %}
+                      <span class="btn btn-dark btn-xs"> {{task.status }}</span>
+                      {% endif %}
+                       {% if task.status == 'Cancelled' %}
+                      <span  class="btn btn-danger btn-xs"> {{task.status }}</span>
+                      {% endif %}
+                       {% if task.status == 'Hold' %}
+                      <button type="button" class="btn btn-danger btn-xs"> {{task.status }}</button>
+                      {% endif %}
+                       {% if task.status == 'Done' %}
+                      <button type="button" class="btn btn-success btn-xs"> {{task.status }}</button>
+                      {% endif %}
+                       {% if task.status == 'InProgress' %}
+                      <span class="btn btn-warning btn-xs"> {{task.status }}</span>
+                      {% endif %}
+                          {% if task.status == 'New' %}
+                     <span class="btn btn-info btn-xs"> {{task.status }}</span>
+
+                      {% endif %}
+
+                    </td>
+                   
+                   
+                  </tr>
+               
+                  {% endfor %}
+                </tbody>
+              </table>
+              
+ 
+    
+              <!-- end task list -->
+
               </div>
             </div>
           </div>
@@ -78,8 +136,8 @@
   $(document).ready(function(){
      $(".chosen").data("placeholder","Select Frameworks...").chosen();
      $(".chosen").chosen({no_results_text: "Oops, nothing found!"}); 
-                        $('.chosen').chosen({allow_single_deselect: true,no_results_text: "لا يوجد نتائج!"});
-$('.projects').DataTable();
+      $('.chosen').chosen({allow_single_deselect: true,no_results_text: "لا يوجد نتائج!"});
+$('.followup').DataTable();
 });
 
 </script>
