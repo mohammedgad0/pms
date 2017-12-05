@@ -785,6 +785,7 @@ def ganttChart(request,pk):
 def projectFlowUp(request,pk):
      task_list=''
      if request.method == 'GET':
+        # form.fields["department"].queryset = Employee.objects.filter(deptcode = dept)
         form = FollowupForm(request.GET)
         dept = request.GET.get('departement')
         employee = request.GET.get('employee')
