@@ -789,14 +789,14 @@ def projectFlowUp(request,pk):
         if form.is_valid():
            status_id=form.cleaned_data['taskstatus']
            dept=form.cleaned_data['departement']
-           employee=form.cleaned_data['employee']
+           #employee=form.cleaned_data['employee']
            
            if dept:
                task_list=VFollowup.objects.filter(deptcode__exact=dept.deptcode)
            if status_id:
                task_list=task_list.filter(status__exact=status_id)
-           if employee:
-               task_list=task_list.filter(assignedto__exact=employee.empid)
+#            if employee:
+#                task_list=task_list.filter(assignedto__exact=employee.empid)
 
            task_list=task_list.order_by('-id')
 

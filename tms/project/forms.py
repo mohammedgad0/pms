@@ -134,7 +134,7 @@ class TeamForm(forms.Form):
 
 class FollowupForm(forms.Form):
       departement = FollowupModelChoiceField(queryset=Department.objects.all(), to_field_name="deptcode",empty_label=_('Select Departement'),widget=forms.Select(attrs={'class': 'chosen'} ))
-      employee = TeamModelChoiceField(queryset=Employee.objects.all(),to_field_name="empid" ,empty_label="(Select Employee)",widget=forms.Select(attrs={'class': 'chosen'} ),required=False)
+      #employee = TeamModelChoiceField(queryset=Employee.objects.all(),to_field_name="empid" ,empty_label="(Select Employee)",widget=forms.Select(attrs={'class': 'chosen'} ),required=False)
       TASK_STATUS = (
         ('', _('Choice action')),
         ('New', _('New')),
