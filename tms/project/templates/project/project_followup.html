@@ -63,11 +63,41 @@
               <div class="x_content">
                 <form method="Get" novalidate>
                 {% csrf_token %}
-               {{form}}
-               
-             <button type="submit" class="btn btn-success">{{_('Submit')}}</button>
-
+           
+                    <div class="form-group col-md-4 col-sm-12 col-xs-12">
              
+              {{form.departement.label_tag}}
+               {{form.departement}}
+               </div>
+               
+                 <div class="form-group col-md-3 col-sm-12 col-xs-12">
+            
+              {{form.employee.label_tag}}
+               {{form.employee}}
+               </div>
+             
+               
+                <div class="form-group col-md-3 col-sm-12 col-xs-12">
+         
+              {{form.taskstatus.label_tag}}
+               {{form.taskstatus}}
+               </div>
+              
+               
+                <div class="form-group col-md-12 col-sm-12 col-xs-12">
+             <button type="submit" class="btn btn-success">{{_('Submit')}}</button>
+             </div>
+
+               </div>
+               
+              
+ <div class="form-group col-md-12">
+              <div class="form-group text-danger ">
+                {{ form.departement.errors }}
+                {{ form.employee.errors }}
+                {{ form.taskstatus.errors }}
+              </div>
+              </div>
                </form>
                
                
@@ -146,7 +176,14 @@
      $(".chosen").data("placeholder","Select Frameworks...").chosen();
      $(".chosen").chosen({no_results_text: "Oops, nothing found!"}); 
       $('.chosen').chosen({allow_single_deselect: true,no_results_text: "لا يوجد نتائج!"});
-$('.followup').DataTable();
+$('.followup').DataTable(
+    {
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Arabic.json"
+        },
+         "filter":   false,
+         "dom": '<"top float-right"fl>rt<"bottom"pi><"clear">'
+    } );
 });
 
 </script>

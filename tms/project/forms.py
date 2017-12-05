@@ -148,4 +148,4 @@ class FollowupForm(forms.Form):
         ('Cancelled', _('Cancelled')),
         ('Closed', _('Closed')),
         )
-      taskstatus= forms.ChoiceField(choices=TASK_STATUS,required=False,label=_("Select Status"),widget=forms.Select(attrs={'class': ' form-control col-md-3'}) )
+      taskstatus= forms.ChoiceField(choices=TASK_STATUS,required=False,label=_("Select Status"),widget=forms.Select(attrs={'class': ' form-control col-md-3 chosen'}) )
