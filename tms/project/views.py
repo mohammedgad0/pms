@@ -795,7 +795,7 @@ def projectFlowUp(request,pk):
             form.fields["employee"].queryset = Employee.objects.filter(deptcode = dept)
         if status and dept:
             task_list=task_list.filter(status__exact=status)
-        if employee:
+        if employee and dept:
             task_list=task_list.filter(assignedto__exact=employee)
 
         # task_list=task_list.order_by('-id')
