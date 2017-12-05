@@ -790,9 +790,10 @@ def projectFlowUp(request,pk):
            status_id=form.cleaned_data['taskstatus']
            dept=form.cleaned_data['departement']
            employee=form.cleaned_data['employee']
-           
+
            if dept:
                task_list=VFollowup.objects.filter(deptcode__exact=dept.deptcode)
+               form.fields["employee"].queryset = Employee.objects.filter(deptcode = dept.deptcode)
            if status_id:
                task_list=task_list.filter(status__exact=status_id)
            if employee:
@@ -804,4 +805,3 @@ def projectFlowUp(request,pk):
         form = FollowupForm()
      context={'form':form,'task_list':task_list}
      return render(request, 'project/project_followup.html', context)
-    
