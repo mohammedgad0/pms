@@ -8,33 +8,19 @@
 {{ block.super }}
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.css" />
 
-  <link href="/static/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+ <!-- <link href="/static/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
   <link href="/static/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
   <link href="/static/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
   <link href="/static/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
   <link href="/static/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+  -->
 {% endblock stylesheets %}
 
 {% block content %}
 {% get_current_language as LANGUAGE_CODE %}
     <div class="right_col" role="main">
       <div class="">
-        <div class="page-title">
-          <div class="title_left">
-            <h3>Plain Page</h3>
-          </div>
-
-          <div class="title_right">
-            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-              <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search for...">
-                <span class="input-group-btn">
-                  <button class="btn btn-default" type="button">Go!</button>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
+      
 
         <div class="clearfix"></div>
 
@@ -42,21 +28,11 @@
           <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
               <div class="x_title">
-                <h2>Plain Page</h2>
+                <h2>{% trans "Follow-up Administration"  %}</h2>
                 <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                    <ul class="dropdown-menu" role="menu">
-                      <li><a href="#">Settings 1</a>
-                      </li>
-                      <li><a href="#">Settings 2</a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li><a class="close-link"><i class="fa fa-close"></i></a>
-                  </li>
+                
+            
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                 </ul>
                 <div class="clearfix"></div>
               </div>
@@ -83,14 +59,8 @@
                {{form.taskstatus}}
                </div>
               
-               
-                <div class="form-group col-md-12 col-sm-12 col-xs-12">
-             <button type="submit" class="btn btn-success">{{_('Submit')}}</button>
-             </div>
-
-               </div>
-               
               
+                            
  <div class="form-group col-md-12">
               <div class="form-group text-danger ">
                 {{ form.departement.errors }}
@@ -98,12 +68,28 @@
                 {{ form.taskstatus.errors }}
               </div>
               </div>
-               </form>
+                <div class="form-group col-md-12 col-sm-12 col-xs-12">
                
+             <button type="submit" class="btn btn-success"><i class="fa fa-search"></i>     {{_('Search')}}</button>
+           <a href="{% url 'ns-project:project-follow-up' %}">  <button type="button" class="btn btn-danger"><i class="fa fa-refresh "></i> {{_('Reset')}}</button></a>
+
+             </div>
+               
+                <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                  <div class="ln_solid"></div>
+             
+                          <div>  <i class="fa  fa-eye"></i> {% trans "Result Number :" %} <span>{{res}} </span> </div>
+
+             </div>
+
+               </div>
+               
+
+               </form>
                
              
                
-               
+               {% if tasks %}
                 <!-- start task  list -->
               <table class="table table-striped followup" id="followup-task-table">
                 <thead>
@@ -119,7 +105,7 @@
                 <tbody>
                   {% for task in tasks %}
                   <tr>
-                  <td></td>
+                  <td>{{task.id}}</td>
                     <td><a href="{% url 'ns-project:project-task-detail' task.id %}" class=" btn-link">{{task.taskname }}</a> </td>
                     <td>{{task.projectname }}</td>
                     <td>{{task.empname }}</td>
@@ -156,7 +142,46 @@
  
     
               <!-- end task list -->
+<!--  pager -->
+<div>
 
+{% if tasks.has_other_pages %}
+  <ul class="pagination">
+  
+ 
+    {% if tasks.has_previous %}
+      <li><a href="?page={{ tasks.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in tasks.paginator.page_range %}
+      {% if tasks.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }} {% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if tasks.has_next %}
+      <li><a href="?page={{ tasks.next_page_number }} {% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+{% endif %}
+
+
+ <ul class="pagination" >
+ <li>
+<span class="current">
+            {{ _('Page') }} {{ tasks.number }} of {{ tasks.paginator.num_pages }}
+        </span>
+        </li>
+        </ul>
+        
+        
+</div>
+<!-- end pager -->
+ {% endif  %}
               </div>
             </div>
           </div>
@@ -167,16 +192,18 @@
 
 {% block javascripts %}
   {{ block.super }}
-    <script src="/static/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+/*    <script src="/static/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
   <script src="/static/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
   <script src="/static/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+  */
       <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.jquery.js"></script>
   <script>
   $(document).ready(function(){
      $(".chosen").data("placeholder","Select Frameworks...").chosen();
      $(".chosen").chosen({no_results_text: "Oops, nothing found!"}); 
       $('.chosen').chosen({allow_single_deselect: true,no_results_text: "لا يوجد نتائج!"});
-$('.followup').DataTable(
+      ///datatable
+/* $('.followup').DataTable(
     {
         "language": {
             "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Arabic.json"
@@ -184,6 +211,7 @@ $('.followup').DataTable(
          "filter":   false,
          "dom": '<"top float-right"fl>rt<"bottom"pi><"clear">'
     } );
+    */ /*end datatable */
 });
 
 </script>

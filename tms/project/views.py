@@ -782,7 +782,7 @@ def ganttChart(request,pk):
     context={}
     return render(request, 'project/project_ganttchart.html', context)
 
-def projectFlowUp(request,pk):
+def projectFlowUp(request):
      task_list=''
      if request.method == 'GET':
         # form.fields["department"].queryset = Employee.objects.filter(deptcode = dept)
@@ -798,6 +798,22 @@ def projectFlowUp(request,pk):
         if employee and dept:
             task_list=task_list.filter(assignedto__exact=employee)
 
+        if task_list:
+            task_list=task_list.order_by('-id')
+            
+        res=len(task_list)    
+        paginator = Paginator(task_list, 5) # Show 5 contacts per page
+    
+        page = request.GET.get('page')
+        try:
+            task_list = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            task_list = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            task_list = paginator.page(paginator.num_pages)
+        
         # task_list=task_list.order_by('-id')
         # if form.is_valid():
         #    status_id=form.cleaned_data['taskstatus']
@@ -811,5 +827,5 @@ def projectFlowUp(request,pk):
         #    if employee:
         #        task_list=task_list.filter(assignedto__exact=employee.empid)
 
-     context={'form':form,'tasks':task_list}
+     context={'form':form,'tasks':task_list,'res':res}
      return render(request, 'project/project_followup.html', context)

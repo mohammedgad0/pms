@@ -37,7 +37,7 @@
            <li><a href="{% url 'ns-project:project-list' %}"><i class="fa fa-home"></i> {% trans "Projects" %} <span class="fa"></span></a>  </li>
            <li><a href="plain_page.html"><i class="fa fa-home"></i> {% trans "Tasks" %} <span class="fa"></span></a>  </li>
            <li><a href="{% url 'ns-project:my-sheet' %}"><i class="fa fa-list"></i> {% trans "My To Do List" %} <span class="fa"></span></a>  </li>
-              <li><a href="{% url 'ns-project:project-follow-up' 1 %}"><i class="fa fa-binoculars" aria-hidden="true"></i> {% trans "Follow-up Department" %} <span class="fa"></span></a>  </li>
+           <li><a href="{% url 'ns-project:project-follow-up' %}"><i class="fa fa-binoculars" aria-hidden="true"></i> {% trans "Follow-up Department" %} <span class="fa"></span></a>  </li>
          
            {% load user_group %}
            {% if request.user|has_group:"ismanager" %}

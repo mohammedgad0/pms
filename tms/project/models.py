@@ -182,12 +182,11 @@ class Task(models.Model):
         ('Cancelled', _('Cancelled')),
         ('Closed', _('Closed')),
     )
-    status = models.CharField(db_column='Status',max_length=10,choices=TASK_STATUS, blank=True, null=True)  # Field name made lowercase.
     startdate = models.DateTimeField(db_column='StartDate', blank=True, null=True)  # Field name made lowercase.
     enddate = models.DateTimeField(db_column='EndDate', blank=True, null=True)  # Field name made lowercase.
     departementid = models.IntegerField(db_column='DepartementId', blank=True, null=True)  # Field name made lowercase.
     assignedto = models.IntegerField(db_column='AssignedTo', blank=True, null=True)  # Field name made lowercase.
-    status = models.ForeignKey('ProjectStatus', on_delete=models.SET_NULL, null=True)
+    status = models.CharField(db_column='Status',max_length=10,choices=TASK_STATUS, blank=True, null=True)  # Field name made lowercase.
     assigneddate = models.DateTimeField(db_column='AssignedDate', blank=True, null=True)  # Field name made lowercase.
     realstartdate = models.DateTimeField(db_column='RealStartDate', blank=True, null=True)  # Field name made lowercase.
     realstartby = models.IntegerField(db_column='RealStartBy', blank=True, null=True)  # Field name made lowercase.
