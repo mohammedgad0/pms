@@ -660,23 +660,17 @@ class ProjectMembersListView(ListView):
         return context
 
 
-def ProjectTaskDetail(request,pk):
+def ProjectTaskDetail(request,projectid,taskid):
     createdBy=request.session.get('EmpID', '1056821208')
-    task_list= Task.objects.all().filter(createdby__exact=createdBy, projectid__exact=pk).order_by('-id')
-    paginator = Paginator(task_list, 5) # Show 5 contacts per page
+    project_list= Project.objects.all().filter(createdby__exact=createdBy).exclude(status=4).order_by('-id')
+    current_url ="ns-project:project-task"
+    project_detail= get_object_or_404(Project,pk=projectid)
+    task_detail= get_object_or_404(Task,pk=taskid)
+    projectmembers= ProjectMembers.objects.all().order_by('-id')
+    
 
-    page = request.GET.get('page')
-    try:
-        _plist = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        _plist = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        _plist = paginator.page(paginator.num_pages)
-
-    context = {'tasks':_plist}
-    return render(request, 'project/tasks.html', context)
+    context = {'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'task_detail':task_detail,'projectmembers':projectmembers}
+    return render(request, 'project/project_task_detail.html', context)
 
 
 def updateStartDate(request,pk):

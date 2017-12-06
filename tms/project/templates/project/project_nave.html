@@ -6,7 +6,7 @@
                     <ul id="menu3" class="dropdown-menu animated fadeInDown " role="menu" aria-labelledby="drop6">
                     
                         {% for project in project_list %}
-                         <li role="presentation"><a role="menuitem" tabindex="-1" href="{% url  current_url project.id %}"> <i class="fa fa-folder-o"></i> {{project.name}}</a> </li>
+                         <li role="presentation"><a role="menuitem" tabindex="-1" href="{% url  current_url project.id  %}"> <i class="fa fa-folder-o"></i> {{project.name}}</a> </li>
                         {% endfor %}
                         
                          <li role="presentation" class="divider"></li>
