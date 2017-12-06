@@ -120,8 +120,8 @@
                 <tbody>
                   {% for task in tasks %}
                   <tr>
-                    <td><a href="{% url 'ns-project:project-task-detail' task.id %}" class=" btn-link">{{task.id }}</a> </td>
-                    <td><a href="{% url 'ns-project:project-task-detail' task.id %}" class=" btn-link">{{task.name }}</a></td>
+                    <td><a href="{% url 'ns-project:project-task-detail' project_detail.id task.id   %}" class=" btn-link">{{task.id }}</a> </td>
+                    <td><a href="{% url 'ns-project:project-task-detail' project_detail.id task.id   %}" class=" btn-link">{{task.name }}</a></td>
                     <td>{{  task.startdate|date:"d M Y" }} </td>
                     <td>{{  task.enddate|date:"d M Y" }} </td>
                     <td id="status_{{task.id}}">
