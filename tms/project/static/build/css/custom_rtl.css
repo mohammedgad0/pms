@@ -5125,9 +5125,14 @@ fieldset{
     padding: .35em .625em .75em;
     margin: 0 2px;
     border: 1px solid silver;
+    margin-bottom: 15px;
 }
 legend {
-       border-bottom: 0px solid #e5e5e5;
-        width: auto;
+       border-bottom: 0px solid #e5e5e5 !important;
+        width: auto !important;  
 }
-   
+.basic_info{
+	
+	padding:5px;
+	margin:5px;
+}   

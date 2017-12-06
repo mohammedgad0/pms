@@ -692,7 +692,7 @@ def ProjectTaskDetail(request,projectid,taskid):
     projectmembers= ProjectMembers.objects.all().order_by('-id')
 
 
-    context = {'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'task_detail':task_detail,'projectmembers':projectmembers}
+    context = {'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'task':task_detail,'projectmembers':projectmembers}
     return render(request, 'project/project_task_detail.html', context)
 
 

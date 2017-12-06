@@ -33,176 +33,29 @@
             <div class="x_title">
             
           
-              <h2>  <div class="task_number"  >{{task_detail.id}}</div>  {{task_detail.name}}  </h2>
+              <h2>  <div class="task_number"  >{{task.id}}</div>  {{task.name}}  </h2>
                  <div class="clearfix"></div>
             </div>
 
             <div class="x_content">
 
               <div class="col-md-9 col-sm-9 col-xs-12">
-
-              
-              
-
- <!-- start project-detail sidebar -->
-              <div class="col-md-12 col-sm-12 col-xs-12">
+     <section class="panel">
+       <div class="panel-body">
+ <!-- start task detail ------------------------------------- -->
+ <div class="col-md-12 col-sm-12 col-xs-12">
 
 <!--  decription -->
-
 <fieldset class="fieldset_normal">
-        <legend>Task Description</legend>
-        <div class="article-content">test1</div>
+        <legend>{{ _('Task Description')}}</legend>
+        <div class="article-content">    <p>{{task.desc}} </p></div>
       </fieldset>
-      
-      
-                <section class="panel">
-
-                  <div class="x_title">
-                    <h2> {{ _('Task Description')}} </h2>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="panel-body">
-                    <p>{{Task.desc}} </p>
-                    <br />
-
-            
-                  </div>
-
-                </section>
+          
 <!--  attachmenet -->
-    <section class="panel">
-
-                  <div class="x_title">
-                    <h2> {{ _('Attachment')}} </h2>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="panel-body">
-                    <p>{{Task.desc}} </p>
-                    <br />
-
-            
-                  </div>
-
-                </section>
-                
-<!-- history -->
-    <section class="panel">
-
-                  <div class="x_title">
-                    <h2> {{ _('History')}} </h2>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="panel-body">
-                    <p>{{Task.desc}} </p>
-                    <br />
-
-            
-                  </div>
-
-                </section>
-
-              </div>
-              <!-- end project-detail sidebar -->
-
-
-
-
-                <div>
-
-                  <h4>{{ _('Recent Activity') }} </h4>
-
-                  <!-- end of user messages -->
-                  <ul class="messages">
-                    <li>
-                      <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                      <div class="message_date">
-                        <h3 class="date text-info">24</h3>
-                        <p class="month">مارس</p>
-                      </div>
-                      <div class="message_wrapper">
-                        <h4 class="heading">عبدالله بن ناصر </h4>
-                        <blockquote class="message">تغير حالة المهمة رقم 14 الى تم </blockquote>
-                        <br />
-                        <p class="url">
-                          <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
-                          <a href="#"><i class="fa fa-paperclip"></i> User Acceptance Test.doc </a>
-                        </p>
-                      </div>
-                    </li>
-                    
-                  
-                       <li>
-                      <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                      <div class="message_date">
-                        <h3 class="date text-info">23</h3>
-                        <p class="month">مارس</p>
-                      </div>
-                      <div class="message_wrapper">
-                        <h4 class="heading">طلال بن سعد </h4>
-                        <blockquote class="message">تغير حالة المهمة رقم 14 الى تم </blockquote>
-                        <br />
-                        <p class="url">
-                          <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
-                          <a href="#"><i class="fa fa-paperclip"></i> User Acceptance Test.doc </a>
-                        </p>
-                      </div>
-                    </li>
-                    
-                    
-                         <li>
-                      <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                      <div class="message_date">
-                        <h3 class="date text-info">22</h3>
-                        <p class="month">مارس</p>
-                      </div>
-                      <div class="message_wrapper">
-                        <h4 class="heading">احمد بن جاثم  بن محمد </h4>
-                        <blockquote class="message">تغير حالة المهمة رقم 14 الى تم </blockquote>
-                        <br />
-                        <p class="url">
-                          <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
-                          <a href="#"><i class="fa fa-paperclip"></i> User Acceptance Test.doc </a>
-                        </p>
-                      </div>
-                    </li>
-                     
-                  </ul>
-                  <!-- end of user messages -->
-
-
-                </div>
-
-
-              </div>
-
-              <!-- start project-detail sidebar -->
-              <div class="col-md-3 col-sm-3 col-xs-12">
-
-                <section class="panel">
-
-                  <div class="x_title">
-                    <h2> {{ _('Project Description')}} </h2>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="panel-body">
-                    <h3 class="green"><i class="fa fa-paint-brush"></i> {{project_detail.name}} </h3>
-
-                    <p>{{project_detail.desc}} </p>
-                    <br />
-
-                    <div class="project_detail">
-
-                      <p class="title">{{ _('Created By')}} </p>
-                      <p> {{ project_detail.createdby }} </p>
-                      
-                   
-                      <p class="title">{{ _('Created Date') }} </p>
-                   <p >{{project_detail.createddate}}</p>
-                    </div>
-
-                    <br />
-                    <h5>{{_('Attachments')}}</h5>
-                    <ul class="list-unstyled project_files">
+<fieldset class="fieldset_normal">
+        <legend>{{ _('Attachment')}}</legend>
+        <div class="article-content">   
+         <ul class="list-unstyled project_files">
                       <li><a href=""><i class="fa fa-file-word-o"></i> Functional-requirements.docx</a>
                       </li>
                       <li><a href=""><i class="fa fa-file-pdf-o"></i> UAT.pdf</a>
@@ -214,7 +67,53 @@
                       <li><a href=""><i class="fa fa-file-word-o"></i> Contract-10_12_2014.docx</a>
                       </li>
                     </ul>
-                    <br />
+        </div>
+      </fieldset>
+                
+<!-- history -->
+<fieldset class="fieldset_normal">
+        <legend>{{ _('Recent Activity')}}</legend>
+        <div class="article-content">    <p>{{task.desc}} </p></div>
+      </fieldset>
+
+</div>
+           </div>
+           </section>
+             
+              </div>
+              <!-- start project-detail sidebar -->
+              
+              <div class="col-md-3 col-sm-3 col-xs-12">
+
+                <section class="panel">
+
+             
+                  <div class="panel-body">
+                  
+                  
+        <fieldset class="fieldset_normal">
+        <legend>{{_("Basci Info")}}</legend>
+        <div class="article-content">   
+
+                    <ul class="list-unstyled project_files">
+                      <li><span class="basic_info">{{_("project")}}</span> <span class="basic_info">{{project_detail.name}}</span></li>
+                      <li><span class="basic_info">{{_("Assigned To")}}</span><span class="basic_info"> {{task.assignedto}}</span></li>
+                    </ul>
+                    
+        </div>
+      </fieldset>
+                  
+        <fieldset class="fieldset_normal">
+        <legend>{{project_detail.name}}</legend>
+        <div class="article-content">     <p class="title">{{ _('Created By')}} </p>
+                      <p> {{ project_detail.createdby }} </p>
+                      
+                   
+                      <p class="title">{{ _('Created Date') }} </p>
+                   <p >{{project_detail.createddate}}</p></div>
+      </fieldset>
+                   
+                 
 
                     <div class="text-center mtop20">
                       <a href="#" class="btn btn-sm btn-primary">Add files</a>
