@@ -35,14 +35,15 @@ urlpatterns = [
     url(r'^project_task/(?P<pk>\d+)$', views.ProjectTask, name='project-task'),
     url(r'^project_task/(?P<pk>\d+)/(?P<task_status>\w+)$', views.ProjectTask, name='project-task'),
     url(r'^project_task_detail/(?P<projectid>\d+)/(?P<taskid>\d+)$', views.ProjectTaskDetail, name='project-task-detail'),
-    url(r'^project_team/(?P<pk>\d+)$', views.ProjectTeam, name='project-team'),
+    # url(r'^project_team/(?P<pk>\d+)$', views.ProjectTeam, name='project-team'),
     url(r'^task_update_start/(?P<pk>\d+)$', views.updateStartDate, name='task-update-start'),
     url(r'^update_finish_task/(?P<pk>\d+)$',views.updateTaskFinish, name='update-finish-task'),
     url(r'^update_close_task/(?P<pk>\d+)$',views.updateTaskClose, name='update-close-task'),
     url(r'^project_gantt/(?P<pk>\d+)$',views.ganttChart, name='project-gantt'),
     url(r'^project_follow_up/$',views.projectFlowUp, name='project-follow-up'),
+    url(r'^project/(?P<project_id>\d+)/team$',views.ProjectTeam, name='project-team'),
 
     url(r'^ProjectMember/$', ProjectMembersListView.as_view(), name='ProjectMember-list'),
     url(r'^.*\.html', views.gentella_html, name='gentella'),
-    
+
 ]
