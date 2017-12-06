@@ -5120,3 +5120,14 @@ background-color:#5cb85c;
     border: 1px solid #a5a9ac;
     font-size: 12px;
 }
+/*normal filedset */
+fieldset{
+    padding: .35em .625em .75em;
+    margin: 0 2px;
+    border: 1px solid silver;
+}
+legend {
+       border-bottom: 0px solid #e5e5e5;
+        width: auto;
+}
+   
