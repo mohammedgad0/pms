@@ -4414,11 +4414,7 @@ div[data-role="editor-toolbar"] {
         height: 20px
     }
 
-fieldset {
-    border: none;
-    margin: 0;
-    padding: 0
-}
+
 
 .cropper .img-container,
 .cropper .img-preview {
@@ -5124,5 +5120,3 @@ background-color:#5cb85c;
     border: 1px solid #a5a9ac;
     font-size: 12px;
 }
-
-

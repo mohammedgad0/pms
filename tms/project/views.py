@@ -565,7 +565,7 @@ def ProjectDetail(request,pk):
     Q(createdby__exact=EmpID)|
     Q(id__in = project_id)
     ).exclude(status=4).order_by('-id')
-    
+
     current_url ="ns-project:" + resolve(request.path_info).url_name
     context={'project_detail':project_detail,'project_list':project_list,'current_url':current_url}
     return render(request, 'project/project_detail.html', context)
@@ -595,37 +595,43 @@ def ProjectDelete(request,pk):
           context={'p':p,'emp_obj':emp_obj}
           return render(request, 'project/project_delete.html',context)
 
-
 def ProjectTask(request,pk,task_status=None):
     current_url ="ns-project:" + resolve(request.path_info).url_name
-    empid=request.session.get('EmpID', '1056821208')
+    empid = request.session.get('EmpID')
     project_detail= get_object_or_404(Project,pk=pk)
     project_list= Project.objects.all().filter(createdby__exact=empid).exclude(status=4).order_by('-id')
+    task_list= Task.objects.all().filter(
+         Q(createdby__exact=empid)|
+         Q(assignedto = empid)&
+         Q(projectid__exact=pk)
+         ).order_by('-id')
 
     if task_status=="all":
-         task_list= Task.objects.all().filter(createdby__exact=empid, projectid__exact=pk).order_by('-id')
+         task_list= Task.objects.all().filter(
+         Q(createdby__exact=empid)|
+         Q(assignedto = empid)&
+         Q(projectid__exact=pk)
+         ).order_by('-id')
     elif task_status=="unclosed":
-         task_list= Task.objects.all().filter(createdby__exact=empid, projectid__exact=pk).exclude(status__exact='Closed').order_by('-id')
+         task_list = task_list.exclude(status__exact='Closed')
     elif task_status=="assignedtome":
-         task_list= Task.objects.all().filter( projectid__exact=pk,assignedto__exact=empid).order_by('-id')
+         task_list= task_list.filter(assignedto__exact=empid)
     elif task_status=="new":
-         task_list= Task.objects.all().filter(createdby__exact=empid, projectid__exact=pk,status__exact='New').order_by('-id')
+         task_list= task_list.filter(status__exact='New')
     elif task_status=="inprogress":
-         task_list= Task.objects.all().filter(createdby__exact=empid, projectid__exact=pk,status__exact='InProgress').order_by('-id')
+         task_list= task_list.filter(status__exact='InProgress')
     elif task_status=="finishedbyme":
-         task_list= Task.objects.all().filter(finishedby__exact=empid, projectid__exact=pk,status__exact='Done').order_by('-id')
+         task_list= task_list.filter(finishedby__exact=empid,status__exact='Done')
     elif task_status=="done":
-         task_list= Task.objects.all().filter( projectid__exact=pk,status__exact='Done').order_by('-id')
+         task_list= task_list.filter(status__exact='Done')
     elif task_status=="closed":
-         task_list= Task.objects.all().filter( projectid__exact=pk,status__exact='Closed').order_by('-id')
+         task_list= task_list.filter(status__exact='Closed')
     elif task_status=="cancelled":
-         task_list= Task.objects.all().filter( projectid__exact=pk,status__exact='Cancelled').order_by('-id')
+         task_list= task_list.filter(status__exact='Cancelled')
     elif task_status=="hold":
-         task_list= Task.objects.all().filter( projectid__exact=pk,status__exact='Hold').order_by('-id')
+         task_list= task_list.filter(status__exact='Hold')
     elif task_status=="delayed":
-         task_list= Task.objects.all().filter( projectid__exact=pk,enddate__lt = datetime.today()).order_by('-id')
-    else :
-       task_list= Task.objects.all().filter(createdby__exact=empid, projectid__exact=pk).order_by('-id')
+         task_list= task_list.filter(enddate__lt = datetime.today())
 
 
     paginator = Paginator(task_list, 5) # Show 5 contacts per page
@@ -684,7 +690,7 @@ def ProjectTaskDetail(request,projectid,taskid):
     project_detail= get_object_or_404(Project,pk=projectid)
     task_detail= get_object_or_404(Task,pk=taskid)
     projectmembers= ProjectMembers.objects.all().order_by('-id')
-    
+
 
     context = {'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'task_detail':task_detail,'projectmembers':projectmembers}
     return render(request, 'project/project_task_detail.html', context)
