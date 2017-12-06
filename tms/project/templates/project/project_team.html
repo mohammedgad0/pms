@@ -1,209 +1,111 @@
 {% extends "project/base_site.html" %}
 {% load i18n %}
-
-
 {% block title %} {% trans "Projects" %} {% endblock title %}
 
 {% block stylesheets %}
 {{ block.super }}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.css" />
-
-  <link href="/static/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
-  <link href="/static/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
-  <link href="/static/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
-  <link href="/static/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
-  <link href="/static/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
-  
 {% endblock stylesheets %}
 
 {% block content %}
-{% get_current_language as LANGUAGE_CODE %}
-
-    <div class="right_col" role="main">
-      <div class="">
-        <div class="page-title">
-          <div class="title_left">
-          {% include "project/project_nave.html" %}
-          </div>
-
-          <div class="title_right">
-            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-              <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search for...">
-                <span class="input-group-btn">
-                  <button class="btn btn-default" type="button">Go!</button>
-                </span>
-              </div>
-            </div>
-          </div>
+  <div class="right_col" role="main">
+    <div class="">
+      <div class="page-title">
+        <div class="title_left">
+          <h3>{% trans "Team members" %} </h3>
         </div>
+        <div class="title_right">
+        <!--  <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="{{_('Search for')}}...">
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button">{% trans "Go"  %}!</button>
+              </span>
+            </div>
+          </div> -->
+        </div>
+      </div>
 
-        <div class="clearfix"></div>
-
-        <div class="row">
-          <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="x_panel">
+      <div class="clearfix"></div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="x_panel">
               <div class="x_title">
-                <h2>Plain Page</h2>
-                <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                    <ul class="dropdown-menu" role="menu">
-                      <li><a href="#">Settings 1</a>
-                      </li>
-                      <li><a href="#">Settings 2</a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li><a class="close-link"><i class="fa fa-close"></i></a>
-                  </li>
-                </ul>
-                <div class="clearfix"></div>
-              </div>
-              <div class="x_content">
-              <form>
-                 {{form.as_p }}
-                {{formset}}
-                 
-                 <!-- multiple dropdown -->
-<!-- <select class="chosen" multiple="true" style="width:400px;">
-    <option>Choose...</option>
-    <option>jQuery</option>
-    <option selected="selected">MooTools</option>
-    <option>Prototype</option>
-    <option selected="selected">Dojo Toolkit</option>
-</select> -->
-
-
-                    
-            {{pm.as_p }}
-                 
-                 
-                       </form>
-                       
-    
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                        <!-- start project list -->
+            <!--  <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Settings 1</a>
+                    </li>
+                    <li><a href="#">Settings 2</a>
+                    </li>
+                  </ul>
+                </li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li>
+              </ul> -->
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              {% for message in messages %}
+                <div style="font-size: 16px;" class="alert {{ message.tags }} alert-dismissible" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  {{ message }}
+                </div>
+              {% endfor %}
+              <!-- start project list -->
               <table class="table table-striped projects">
                 <thead>
                   <tr>
                     <th style="width: 1%">#</th>
-                    <th>{% trans "Employee" %}</th>
-                    <th>{% trans "Project" %}</th>
-      
-                    <th style="width: 20%">{% trans "Edit" %}</th>
+                    <th style="width: 30%">{% trans "Employee name" %}</th>
+                    <th style="width: 30%">{% trans "Job title" %}</th>
+                    <th>{% trans "Total tasks" %}</th>
+                    <th>{% trans "tasks done" %}</th>
+                    <th>{% trans "Tasks Delayed" %}</th>
+                    <th>{% trans "Tasks inprogress" %}</th>
                   </tr>
                 </thead>
                 <tbody>
-                 {% for memeber in projectmembers%}
+                  {% for data in emp_data %}
                   <tr>
                     <td>#</td>
                     <td>
-                      <a>{{memeber.employee.empname}}</a>
-                    
+                      {{data.empname}}
                     </td>
-                  
-                    
-                     <td>
-                    {{memeber.project.name}}
-                     </td>
-                    
-                     
-                   
                     <td>
-                   
+                      {{data.jobtitle}}
                     </td>
-                  </tr>
-               
+                    <td class="project_progress">
+                      {{totaltask}}
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+
+                    </td>
+                    </tr>
                   {% endfor %}
-                </tbody>
+
+          </tbody>
               </table>
               <!-- end project list -->
-                      
-                 <!--  pager -->
-<div>
 
-{% if projectmembers.has_other_pages %}
-  <ul class="pagination">
-  
- 
-    {% if projectmembers.has_previous %}
-      <li><a href="?page={{ projectmembers.previous_page_number }}">&laquo;</a></li>
-    {% else %}
-      <li class="disabled"><span>&laquo;</span></li>
-    {% endif %}
-    {% for i in projectmembers.paginator.page_range %}
-      {% if projectmembers.number == i %}
-        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
-      {% else %}
-        <li><a href="?page={{ i }}">{{ i }}</a></li>
-      {% endif %}
-    {% endfor %}
-    {% if project_list.has_next %}
-      <li><a href="?page={{ projectmembers.next_page_number }}">&raquo;</a></li>
-    {% else %}
-      <li class="disabled"><span>&raquo;</span></li>
-    {% endif %}
-  </ul>
-{% endif %}
-
-
- <ul class="pagination" >
- <li>
-<span class="current">
-            {{ _('Page') }} {{ projectmembers.number }} of {{ projectmembers.paginator.num_pages }}
-        </span>
-        </li>
-        </ul>
-        
-        
-</div>
-<!-- end pager -->     
-                      
-                      
-                      
-                      
-                      
-                      
-              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 {% endblock content %}
 
 {% block javascripts %}
   {{ block.super }}
-    <!-- Datatables -->
-  <script src="/static/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-  <script src="/static/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-  <script src="/static/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.jquery.js"></script>
-  <script>
-  
-  $(document).ready(function(){
-     $(".chosen").data("placeholder","Select Frameworks...").chosen();
-     $(".chosen").chosen({no_results_text: "Oops, nothing found!"}); 
-                        $('.chosen').chosen({allow_single_deselect: true,no_results_text: "لا يوجد نتائج!"});
-$('.projects').DataTable();
-});
-
-
-
-
-  
-  
-
-</script>
 {% endblock javascripts %}
-
