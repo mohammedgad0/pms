@@ -5115,6 +5115,14 @@ background-color:#f0ad4e;
 .task-Finished{
 background-color:#5cb85c;
 }
-
+/* task number besdi task title */
+.task_number{
+	    float: right;
+    width: auto;
+    padding: 5px;
+    margin-left: 8px;
+    border: 1px solid #a5a9ac;
+    font-size: 12px;
+}
 
 

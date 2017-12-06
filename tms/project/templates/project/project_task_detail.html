@@ -33,7 +33,7 @@
             <div class="x_title">
             
           
-              <h2>  <button class="btn btn-default" >{{task_detail.id}}</button>  {{task_detail.name}}  </h2>
+              <h2>  <div class="task_number"  >{{task_detail.id}}</div>  {{task_detail.name}}  </h2>
                  <div class="clearfix"></div>
             </div>
 
@@ -42,9 +42,68 @@
               <div class="col-md-9 col-sm-9 col-xs-12">
 
               
-                <br />
+              
+
+ <!-- start project-detail sidebar -->
+              <div class="col-md-12 col-sm-12 col-xs-12">
+
+<!--  decription -->
 
 
+<fieldset>
+        <legend>Task Description</legend>
+        <div class="article-content">test1</div>
+      </fieldset>
+      
+      
+                <section class="panel">
+
+                  <div class="x_title">
+                    <h2> {{ _('Task Description')}} </h2>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="panel-body">
+                    <p>{{Task.desc}} </p>
+                    <br />
+
+            
+                  </div>
+
+                </section>
+<!--  attachmenet -->
+    <section class="panel">
+
+                  <div class="x_title">
+                    <h2> {{ _('Attachment')}} </h2>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="panel-body">
+                    <p>{{Task.desc}} </p>
+                    <br />
+
+            
+                  </div>
+
+                </section>
+                
+<!-- history -->
+    <section class="panel">
+
+                  <div class="x_title">
+                    <h2> {{ _('History')}} </h2>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="panel-body">
+                    <p>{{Task.desc}} </p>
+                    <br />
+
+            
+                  </div>
+
+                </section>
+
+              </div>
+              <!-- end project-detail sidebar -->
 
 
 
