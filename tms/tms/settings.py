@@ -112,13 +112,13 @@ DATABASES = {
    'default': {
        'ENGINE': 'django.db.backends.mysql',
        'NAME': 'tms_dev',
-       #'NAME': 'tms',
+       # 'NAME': 'tms',
        'USER': 'sakr',
-       #'USER': 'root',
+       # 'USER': 'root',
        'PASSWORD': 'Sakr!@#123',
-       #'PASSWORD': '',
+       # 'PASSWORD': '',
        'HOST': '192.168.0.192',   # Or an IP Address that your DB is hosted on
-       #'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
+       # 'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
        'PORT': '3306',
    }
 }

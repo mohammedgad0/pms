@@ -527,11 +527,19 @@ def AddProject(request):
 
     return render(request, 'project/add_project.html', {'form': form,'action_name': _('Ad Project')})
 
+@login_required
 def ProjectList(request):
-    createdBy=request.session.get('EmpID', '1056821208')
-    project_list= Project.objects.all().filter(createdby__exact=createdBy).order_by('-id')
-    paginator = Paginator(project_list, 5) # Show 5 contacts per page
+    EmpID=request.session.get('EmpID')
+    tasks_list = Task.objects.filter(assignedto = EmpID)
+    project_id = []
+    for data in tasks_list:
+        project_id.append(data.projectid)
+    project_list= Project.objects.all().filter(
+    Q(createdby__exact=EmpID)|
+    Q(id__in = project_id)
+    ).order_by('-id')
 
+    paginator = Paginator(project_list, 5) # Show 5 contacts per page
     page = request.GET.get('page')
     try:
         _plist = paginator.page(page)
@@ -547,8 +555,17 @@ def ProjectList(request):
 
 def ProjectDetail(request,pk):
     project_detail= get_object_or_404(Project,pk=pk)
-    createdBy=request.session.get('EmpID', '1056821208')
-    project_list= Project.objects.all().filter(createdby__exact=createdBy).exclude(status=4).order_by('-id')
+    EmpID=request.session.get('EmpID')
+    tasks_list = Task.objects.filter(assignedto = EmpID)
+    project_id = []
+    for data in tasks_list:
+        project_id.append(data.projectid)
+
+    project_list= Project.objects.all().filter(
+    Q(createdby__exact=EmpID)|
+    Q(id__in = project_id)
+    ).exclude(status=4).order_by('-id')
+    
     current_url ="ns-project:" + resolve(request.path_info).url_name
     context={'project_detail':project_detail,'project_list':project_list,'current_url':current_url}
     return render(request, 'project/project_detail.html', context)
@@ -794,10 +811,10 @@ def projectFlowUp(request):
 
         if task_list:
             task_list=task_list.order_by('-id')
-            
-        res=len(task_list)    
+
+        res=len(task_list)
         paginator = Paginator(task_list, 5) # Show 5 contacts per page
-    
+
         page = request.GET.get('page')
         try:
             task_list = paginator.page(page)
@@ -807,7 +824,7 @@ def projectFlowUp(request):
         except EmptyPage:
             # If page is out of range (e.g. 9999), deliver last page of results.
             task_list = paginator.page(paginator.num_pages)
-        
+
         # task_list=task_list.order_by('-id')
         # if form.is_valid():
         #    status_id=form.cleaned_data['taskstatus']
