@@ -40,7 +40,7 @@
                      <ul class="nav nav-pills left float-left" role="tablist">
                            <li>   <a href="{% url 'ns-project:project-task' project_detail.id 'all' %}" class="btn btn-app"> <i class="fa fa-play fa-2x paction text-primary"></i> {{_("Play")}}</a> </li>
                            <li>   <a class="btn btn-app"><i class="fa fa-check-square-o fa-2x paction text-primary"></i> {{_("Finish")}}</a> </li>
-                            <li>   <a class="btn btn-app"> <i class="fa fa-hand-o-right fa-2x paction text-primary"></i>{{_("Assign")}}  </a> </li>
+                            <li>   <a class="btn btn-app"> <i class="fa fa-hand-o-right fa-2x paction text-primary"></i>{{_("Assign To")}}  </a> </li>
                              <li>   <a class="btn btn-app"> <i class="fa fa-power-off  fa-2x paction text-danger"></i> {{_("Close")}}</a> </li>
                               <li>   <a class="btn btn-app"> <i class="fa fa-edit"></i> {{_("Edit")}}</a> </li>
                            </ul>
@@ -107,7 +107,7 @@
         <legend>{{_("Basci Info")}}</legend>
    
    <ul class="list-unstyled">
-                      <li class="clearfix"><div class="basic_info_lable col-md-4 float-right">{{_("project")}}</div> <div class="basic_info  col-md-7">{{project_detail.name}}</div>
+                      <li class="clearfix"><div class="basic_info_lable col-md-4 float-right">{{_("project Name")}}</div> <div class="basic_info  col-md-7">{{project_detail.name}}</div>
                       </li>
                       <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Assigned To")}}</div> <div class="basic_info col-md-7"> ثانى الحربى{{task.assignedto}}</div>
                       </li>

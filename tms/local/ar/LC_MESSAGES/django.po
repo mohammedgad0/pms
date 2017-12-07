@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-07 13:59+0300\n"
+"POT-Creation-Date: 2017-12-07 15:22+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -246,7 +246,7 @@ msgstr "برجاء التأكد من أن بياناتك مسجلة بشكل ص�
 msgid "Choice action"
 msgstr "اختر الحالة"
 
-#: .\project\forms.py:145 .\project\models.py:179 .\project\views.py:701
+#: .\project\forms.py:145 .\project\models.py:179 .\project\views.py:699
 msgid "InProgress"
 msgstr "جارى العمل"
 
@@ -261,7 +261,7 @@ msgid "Cancelled"
 msgstr "ملغية"
 
 #: .\project\forms.py:149 .\project\models.py:183
-#: .\project\templates\project\tasks.html:54 .\project\views.py:769
+#: .\project\templates\project\tasks.html:54 .\project\views.py:765
 msgid "Closed"
 msgstr "مغلقة"
 
@@ -429,7 +429,7 @@ msgstr "أسم الموظف او الإدارة"
 #: .\project\templates\project\dept_tasks.html:24
 #: .\project\templates\project\emp_sheet.html:122
 #: .\project\templates\project\my_tasks.html:21
-#: .\project\templates\project\project_team.html:21
+#: .\project\templates\project\project_team.html:24
 #: .\project\templates\project\projects.html:20
 #: .\project\templates\project\sheet_all_dept.html:41
 #: .\project\templates\project\tasks.html:22
@@ -448,7 +448,7 @@ msgstr "اسم الموظف"
 #: .\project\templates\project\all_emp_sheets.html:50
 #: .\project\templates\project\details_sheets.html:48
 #: .\project\templates\project\emp_sheet.html:38
-#: .\project\templates\project\project_team.html:65
+#: .\project\templates\project\project_team.html:68
 #: .\project\templates\project\sheet_all_dept.html:68
 #: .\project\templates\project\update_sheet.html:48
 msgid "Department"
@@ -493,7 +493,7 @@ msgstr "قائمة مهام الإدارة"
 #: .\project\templates\project\all_employee.html:23
 #: .\project\templates\project\dept_tasks.html:22
 #: .\project\templates\project\my_tasks.html:19
-#: .\project\templates\project\project_team.html:19
+#: .\project\templates\project\project_team.html:22
 #: .\project\templates\project\projects.html:18
 #: .\project\templates\project\tasks.html:20
 msgid "Search for"
@@ -504,7 +504,7 @@ msgid "Total employees"
 msgstr "إجمالى عدد الموظفين"
 
 #: .\project\templates\project\all_sheets.html:21
-#: .\project\templates\project\project_team.html:67
+#: .\project\templates\project\project_team.html:70
 msgid "Total tasks"
 msgstr "إجمالى عدد المهام"
 
@@ -559,7 +559,7 @@ msgstr "بيانات الموظف"
 
 #: .\project\templates\project\details_sheets.html:51
 #: .\project\templates\project\emp_sheet.html:41
-#: .\project\templates\project\project_team.html:66
+#: .\project\templates\project\project_team.html:69
 #: .\project\templates\project\update_sheet.html:51
 msgid "Job title"
 msgstr "المسمى الوظيفي"
@@ -743,15 +743,15 @@ msgstr "وقت المهمة"
 msgid "Assigned to"
 msgstr "مهام مسندة لى "
 
-#: .\project\templates\project\project_nave.html:13
+#: .\project\templates\project\project_nave.html:10
 msgid "Completed"
 msgstr "مكتمل"
 
-#: .\project\templates\project\project_nave.html:14
+#: .\project\templates\project\project_nave.html:11
 msgid "All Projects"
 msgstr "كل المهام"
 
-#: .\project\templates\project\project_nave.html:19
+#: .\project\templates\project\project_nave.html:16
 #: .\project\templates\project\sidebar.html:38
 msgid "Tasks"
 msgstr "المهام"
@@ -761,7 +761,7 @@ msgstr "المهام"
 msgid "Team Members"
 msgstr "اعضاء الفريق"
 
-#: .\project\templates\project\project_nave.html:23
+#: .\project\templates\project\project_nave.html:24
 msgid "Project Overview"
 msgstr "تفاصيل المشروع"
 
@@ -778,9 +778,8 @@ msgid "Finish"
 msgstr "إنهاء"
 
 #: .\project\templates\project\project_task_detail.html:43
-#: .\project\templates\project\tasks.html:146
-msgid "Assign"
-msgstr "مهام مسندة لى "
+msgid "Assign To"
+msgstr "إسناد الى"
 
 #: .\project\templates\project\project_task_detail.html:44
 #: .\project\templates\project\tasks.html:148
@@ -801,8 +800,8 @@ msgid "Basci Info"
 msgstr "المعلومات الأساسية"
 
 #: .\project\templates\project\project_task_detail.html:110
-msgid "project"
-msgstr "المشاريع"
+msgid "project Name"
+msgstr "أسم المشروع"
 
 #: .\project\templates\project\project_task_detail.html:112
 msgid "Assigned To"
@@ -837,31 +836,31 @@ msgstr "سبب الإلغاء"
 msgid "Last Edited"
 msgstr "أخر تعديل"
 
-#: .\project\templates\project\project_team.html:14
+#: .\project\templates\project\project_team.html:16
 msgid "Team members"
 msgstr "اعضاء الفريق"
 
-#: .\project\templates\project\project_team.html:64
+#: .\project\templates\project\project_team.html:67
 msgid "Employee Name"
 msgstr "اسم الموظف"
 
-#: .\project\templates\project\project_team.html:68
+#: .\project\templates\project\project_team.html:71
 msgid "tasks new"
 msgstr "مهام جديدة"
 
-#: .\project\templates\project\project_team.html:69
+#: .\project\templates\project\project_team.html:72
 msgid "Tasks inprogress"
 msgstr "مهام قيد التنفيذ"
 
-#: .\project\templates\project\project_team.html:70
+#: .\project\templates\project\project_team.html:73
 msgid "Tasks done"
 msgstr "مهام منجزة"
 
-#: .\project\templates\project\project_team.html:71
+#: .\project\templates\project\project_team.html:74
 msgid "Tasks closed"
 msgstr "مهام مغلقة"
 
-#: .\project\templates\project\project_team.html:72
+#: .\project\templates\project\project_team.html:75
 msgid "Tasks cancelled"
 msgstr "ألغيت"
 
@@ -997,6 +996,10 @@ msgstr "قمت أنا بإنجازها"
 msgid "Finshed Date"
 msgstr "قمت أنا بإنجازها"
 
+#: .\project\templates\project\tasks.html:146
+msgid "Assign"
+msgstr "مهام مسندة لى "
+
 #: .\project\templates\project\top_navigation.html:20
 msgid "Profile"
 msgstr "الملف الشخصى"
@@ -1049,25 +1052,25 @@ msgstr "تعديل المشروع"
 msgid "Project has deleted successfully"
 msgstr "تم إنشاء المشروع بنجاح"
 
-#: .\project\views.py:703
+#: .\project\views.py:701
 #, python-format
 msgid "Start Date Updated successfully for Task number %s "
 msgstr "تم تعديل تاريخ بدأ المهمة  %s بنجاح"
 
-#: .\project\views.py:734
+#: .\project\views.py:731
 msgid "Finished"
 msgstr "قمت أنا بإنجازها"
 
-#: .\project\views.py:735
+#: .\project\views.py:732
 #, python-format
 msgid " Finish Date Updated successfully for Task number %s "
 msgstr "تم تعديل تاريخ إنهاء المهمة %s بنجاح"
 
-#: .\project\views.py:754
+#: .\project\views.py:750
 msgid "Enter a notes ."
 msgstr "الرجاء إدخال السبب"
 
-#: .\project\views.py:771
+#: .\project\views.py:767
 #, python-format
 msgid " Close Date Updated successfully for Task number %s "
 msgstr "تم تعديل تاريخ إغلاق المهمة  رقم %s بنجاح"
@@ -1083,6 +1086,9 @@ msgstr "Arabic"
 #: .\tms\urls.py:13
 msgid "Task Management System cp"
 msgstr "لوحة تحكم نظام إدارة المهام"
+
+#~ msgid "project"
+#~ msgstr "المشاريع"
 
 #, fuzzy
 #~| msgid "Mailto To"
