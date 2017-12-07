@@ -657,30 +657,6 @@ def ProjectTask(request,pk,task_status=None):
     context = {'tasks':_plist,'project_detail':project_detail,'project_list':project_list,'current_url':current_url}
     return render(request, 'project/tasks.html', context)
 
-# def ProjectTeam(request,pk):
-#     createdBy=request.session.get('EmpID', '1056821208')
-#     project_list= Project.objects.all().filter(createdby__exact=createdBy).exclude(status=4).order_by('-id')
-#     current_url ="ns-project:" + resolve(request.path_info).url_name
-#     project_detail= get_object_or_404(Project,pk=pk)
-#     projectmembers= ProjectMembers.objects.all().order_by('-id')
-#
-#     paginator = Paginator(projectmembers, 5) # Show 5 contacts per page
-#     page = request.GET.get('page')
-#     try:
-#         _mlist = paginator.page(page)
-#     except PageNotAnInteger:
-#         # If page is not an integer, deliver first page.
-#         _mlist = paginator.page(1)
-#     except EmptyPage:
-#         # If page is out of range (e.g. 9999), deliver last page of results.
-#         _mlist = paginator.page(paginator.num_pages)
-#
-#
-#     #project team
-#     form=TeamForm()
-#
-#     context = {'form':form,'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'projectmembers':_mlist}
-#     return render(request, 'project/project_team.html', context)
 
 class ProjectMembersListView(ListView):
 
@@ -840,18 +816,6 @@ def projectFlowUp(request):
             # If page is out of range (e.g. 9999), deliver last page of results.
             task_list = paginator.page(paginator.num_pages)
 
-        # task_list=task_list.order_by('-id')
-        # if form.is_valid():
-        #    status_id=form.cleaned_data['taskstatus']
-        #    dept=form.cleaned_data['departement']
-        #    employee=form.cleaned_data['employee']
-        #    if dept:
-        #        task_list=VFollowup.objects.filter(deptcode__exact=dept.deptcode)
-        #        form.fields["employee"].queryset = Employee.objects.filter(deptcode = dept.deptcode)
-        #    if status_id:
-        #        task_list=task_list.filter(status__exact=status_id)
-        #    if employee:
-        #        task_list=task_list.filter(assignedto__exact=employee.empid)
 
      context={'form':form,'tasks':task_list,'res':res}
      return render(request, 'project/project_followup.html', context)

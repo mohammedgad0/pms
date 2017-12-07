@@ -4135,7 +4135,7 @@ a.hiddenanchor {
 }
 
 .left {
-    float: right
+    float: left
 }
 
 .alignleft {
@@ -5129,7 +5129,9 @@ fieldset{
 }
 legend {
        border-bottom: 0px solid #e5e5e5 !important;
-        width: auto !important;  
+        width: auto !important; 
+        font-weight: bold; 
+        #font-size: 13px;
 }
 .basic_info,.basic_info_lable{
 	
