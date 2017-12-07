@@ -95,10 +95,16 @@
         <legend>{{_("Basci Info")}}</legend>
         <div class="article-content">   
 
-                    <ul class="list-unstyled project_files">
-                      <li><span class="basic_info">{{_("project")}}</span> <span class="basic_info">{{project_detail.name}}</span></li>
-                      <li><span class="basic_info">{{_("Assigned To")}}</span><span class="basic_info"> {{task.assignedto}}</span></li>
-                    </ul>
+                    <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group"><span class="col-md-3 basic_info">{{_("project")}}</span> <span class="col-md-9  basic_info">{{project_detail.name}}</span></div>
+                      <div class="form-group"><span class="col-md-3  basic_info">{{_("Assigned To")}}</span><span class="col-md-9 basic_info"> {{task.assignedto}}</span></div>
+                   </div>
+                   </div>
+                   
+                   <table>
+                   <tr>
+                   </table>
                     
         </div>
       </fieldset>
@@ -111,9 +117,7 @@
                    
                       <p class="title">{{ _('Created Date') }} </p>
                    <p >{{project_detail.createddate}}</p></div>
-      </fieldset>
-                   
-                 
+                      </fieldset>
 
                     <div class="text-center mtop20">
                       <a href="#" class="btn btn-sm btn-primary">Add files</a>
