@@ -5131,8 +5131,9 @@ legend {
        border-bottom: 0px solid #e5e5e5 !important;
         width: auto !important;  
 }
-.basic_info{
+.basic_info,.basic_info_lable{
 	
 	padding:5px;
 	margin:5px;
-}   
+}
+.basic_info_lable{text-align:right;}   

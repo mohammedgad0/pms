@@ -93,32 +93,40 @@
                   
         <fieldset class="fieldset_normal">
         <legend>{{_("Basci Info")}}</legend>
-        <div class="article-content">   
+   
+   <ul class="list-unstyled">
+                      <li class="clearfix"><div class="basic_info_lable col-md-4 float-right">{{_("project")}}</div> <div class="basic_info  col-md-7">{{project_detail.name}}</div>
+                      </li>
+                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Assigned To")}}</div> <div class="basic_info col-md-7"> ثانى الحربى{{task.assignedto}}</div>
+                      </li>
+                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Status")}}</div><div class="basic_info col-md-7">جديد  {{task.Status}}</div>
+                      </li>
+                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Mailto To")}}</div> <div class="basic_info col-md-7"> sakr@stats.gov.sa{{task.mailto}}</div>
+                      </li>
+              
+                    </ul>
 
-                    <div class="row">
-                    <div class="col-md-12">
-                      <div class="form-group"><span class="col-md-3 basic_info">{{_("project")}}</span> <span class="col-md-9  basic_info">{{project_detail.name}}</span></div>
-                      <div class="form-group"><span class="col-md-3  basic_info">{{_("Assigned To")}}</span><span class="col-md-9 basic_info"> {{task.assignedto}}</span></div>
-                   </div>
-                   </div>
-                   
-                   <table>
-                   <tr>
-                   </table>
-                    
-        </div>
       </fieldset>
                   
-        <fieldset class="fieldset_normal">
-        <legend>{{project_detail.name}}</legend>
-        <div class="article-content">     <p class="title">{{ _('Created By')}} </p>
-                      <p> {{ project_detail.createdby }} </p>
-                      
-                   
-                      <p class="title">{{ _('Created Date') }} </p>
-                   <p >{{project_detail.createddate}}</p></div>
-                      </fieldset>
+               <fieldset class="fieldset_normal">
+        <legend>{{_("Actions")}}</legend>
+   
+   <ul class="list-unstyled">
+                      <li class="clearfix"><div class="basic_info_lable col-md-4 float-right">{{_("Created By")}}</div> <div class="basic_info  col-md-7 float-right">{{project_detail.name}}</div>
+                      </li>
+                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Finished By")}}</div> <div class="basic_info col-md-7 float-right"> ثانى الحربى{{task.assignedto}}</div>
+                      </li>
+                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Cancelled By")}}</div><div class="basic_info col-md-7 float-right">جديد  {{task.Status}}</div>
+                      </li>
+                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Closed By")}}</div> <div class="basic_info col-md-7 float-right"> sakr@stats.gov.sa{{task.mailto}}</div>
+                      </li>
+                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Cancelled Reason")}}</div> <div class="basic_info  col-md-7 float-right"> sakr@stats.gov.sa{{task.mailto}}</div>
+                      </li>
+                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Last Edited")}}</div> <div class="basic_info col-md-7 float-right"> sakr@stats.gov.sa{{task.mailto}}</div>
+                      </li>
+                    </ul>
 
+      </fieldset>
                     <div class="text-center mtop20">
                       <a href="#" class="btn btn-sm btn-primary">Add files</a>
                       <a href="#" class="btn btn-sm btn-warning">Report contact</a>
