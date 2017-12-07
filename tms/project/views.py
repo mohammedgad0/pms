@@ -21,7 +21,7 @@ from django.template.loader import  render_to_string
 from django.http import JsonResponse
 from django.views.generic.list import ListView
 from django.core.urlresolvers import resolve
-
+from .defs import test
 
 class BaseSheetFormSet(BaseModelFormSet):
     def clean(self):
@@ -667,7 +667,6 @@ class ProjectMembersListView(ListView):
 
         return context
 
-
 def ProjectTaskDetail(request,projectid,taskid):
     createdBy=request.session.get('EmpID', '1056821208')
     project_list= Project.objects.all().filter(createdby__exact=createdBy).exclude(status=4).order_by('-id')
@@ -679,7 +678,6 @@ def ProjectTaskDetail(request,projectid,taskid):
 
     context = {'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'task':task_detail,'projectmembers':projectmembers}
     return render(request, 'project/project_task_detail.html', context)
-
 
 def updateStartDate(request,pk):
     data = dict()
@@ -711,7 +709,6 @@ def updateStartDate(request,pk):
     data['html_form'] = render_to_string('project/update_start_task.html',context,request=request,)
     return JsonResponse(data)
 
-
 def updateTaskFinish(request,pk):
     data = dict()
     errors = []
@@ -742,7 +739,6 @@ def updateTaskFinish(request,pk):
     context = {'form': TaskFinishForm(),'pk':pk,'errors':errors}
     data['html_form'] = render_to_string('project/task/update_finish_task.html',context,request=request)
     return JsonResponse({data})
-
 
 def updateTaskClose(request,pk):
     data = dict()
@@ -821,6 +817,17 @@ def projectFlowUp(request):
      return render(request, 'project/project_followup.html', context)
 
 def ProjectTeam(request,project_id):
+    project_detail= get_object_or_404(Project,pk=project_id)
+    EmpID=request.session.get('EmpID')
+    tasks_list = Task.objects.filter(assignedto = EmpID)
+    projectid = []
+    for data in tasks_list:
+        projectid.append(data.projectid)
+    project_list= Project.objects.all().filter(
+    Q(createdby__exact=EmpID)|
+    Q(id__in = projectid)
+    ).exclude(status=4).order_by('-id')
     all_emp = VStatisticstaskdata.objects.filter(projectid = project_id)
-    context={'all_emp':all_emp}
+    current_url ="ns-project:" + resolve(request.path_info).url_name
+    context={'all_emp':all_emp,'project_detail':project_detail,'project_list':project_list,'current_url':current_url}
     return render(request, 'project/project_team.html', context)
