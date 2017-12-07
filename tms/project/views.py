@@ -673,6 +673,7 @@ def ProjectTaskDetail(request,projectid,taskid):
     current_url ="ns-project:project-task"
     project_detail= get_object_or_404(Project,pk=projectid)
     task_detail= get_object_or_404(Task,pk=taskid)
+    assignTo=Employee.objects.get(empid__exact=task_detail.assignedto);
     projectmembers= ProjectMembers.objects.all().order_by('-id')
 
 
