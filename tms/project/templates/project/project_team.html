@@ -61,35 +61,45 @@
                 <thead>
                   <tr>
                     <th style="width: 1%">#</th>
-                    <th style="width: 30%">{% trans "Employee name" %}</th>
-                    <th style="width: 30%">{% trans "Job title" %}</th>
+                    <th>{% trans "Employee Name" %}</th>
+                    <th>{% trans "Department" %}</th>
+                    <th>{% trans "Job title" %}</th>
                     <th>{% trans "Total tasks" %}</th>
-                    <th>{% trans "tasks done" %}</th>
-                    <th>{% trans "Tasks Delayed" %}</th>
+                    <th>{% trans "tasks new" %}</th>
                     <th>{% trans "Tasks inprogress" %}</th>
+                    <th>{% trans "Tasks done" %}</th>
+                    <th>{% trans "Tasks closed" %}</th>
+                    <th>{% trans "Tasks cancelled" %}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {% for data in emp_data %}
+                  {% for data in all_emp %}
                   <tr>
                     <td>#</td>
                     <td>
-                      {{data.empname}}
+                      {{data.employeename}}
                     </td>
+                    <td>  {{data.deptname}}</td>
                     <td>
                       {{data.jobtitle}}
                     </td>
                     <td class="project_progress">
-                      {{totaltask}}
+                      {{data.totaltask}}
                     </td>
                     <td>
-
+                        {{data.new}}
                     </td>
                     <td>
-
+                        {{data.inprogress}}
                     </td>
                     <td>
-
+                        {{data.done}}
+                    </td>
+                    <td>
+                        {{data.closed}}
+                    </td>
+                    <td>
+                        {{data.cancelled}}
                     </td>
                     </tr>
                   {% endfor %}

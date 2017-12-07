@@ -609,16 +609,17 @@ def ProjectTask(request,pk,task_status=None):
     Q(id__in = project_id)
     ).exclude(status=4).order_by('-id')
     task_list= Task.objects.all().filter(
+         Q(projectid__exact=pk)&
          Q(createdby__exact=empid)|
-         Q(assignedto = empid)&
-         Q(projectid__exact=pk)
+         Q(assignedto = empid)
          ).order_by('-id')
 
     if task_status=="all":
          task_list= Task.objects.all().filter(
+         Q(projectid__exact=pk)&
          Q(createdby__exact=empid)|
-         Q(assignedto = empid)&
-         Q(projectid__exact=pk)
+         Q(assignedto = empid)
+
          ).order_by('-id')
     elif task_status=="unclosed":
          task_list = task_list.exclude(status__exact='Closed')
@@ -856,12 +857,6 @@ def projectFlowUp(request):
      return render(request, 'project/project_followup.html', context)
 
 def ProjectTeam(request,project_id):
-    all_emp = Task.objects.filter(projectid = project_id)
-    emp_data = []
-    for data in all_emp:
-        emp_data.append(data.assignedto)
-    All_emp_data = Employee.objects.filter(empid__in = emp_data)
-    for data in All_emp_data:
-        tasks_count = Task.objects.filter(projectid = project_id , assignedto= data.empid).count()
-    context={'emp_data': All_emp_data , 'all_emp':all_emp, 'totaltask':tasks_count}
+    all_emp = VStatisticstaskdata.objects.filter(projectid = project_id)
+    context={'all_emp':all_emp}
     return render(request, 'project/project_team.html', context)
