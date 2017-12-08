@@ -51,9 +51,9 @@
 
             <div class="x_content">
 
-              <div class="col-md-9 col-sm-9 col-xs-12">
-     <section class="panel">
-       <div class="panel-body">
+              <div class="col-md-8 col-sm-8 col-xs-12">
+    
+       
  <!-- start task detail ------------------------------------- -->
  <div class="col-md-12 col-sm-12 col-xs-12">
 
@@ -89,19 +89,13 @@
       </fieldset>
 
 </div>
-           </div>
-           </section>
+          
+           
              
               </div>
               <!-- start project-detail sidebar -->
               
-              <div class="col-md-3 col-sm-3 col-xs-12">
-
-                <section class="panel">
-
-             
-                  <div class="panel-body">
-                  
+              <div class="col-md-4 col-sm-4 col-xs-12">
                   
         <fieldset class="fieldset_normal">
         <legend>{{_("Basci Info")}}</legend>
@@ -109,7 +103,7 @@
    <ul class="list-unstyled">
                       <li class="clearfix"><div class="basic_info_lable col-md-4 float-right">{{_("project Name")}}</div> <div class="basic_info  col-md-7">{{project_detail.name}}</div>
                       </li>
-                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Assigned To")}}</div> <div class="basic_info col-md-7"> ثانى الحربى{{task.assignedto}}</div>
+                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Assigned To")}}</div> <div class="basic_info col-md-7">  {{assignTo.empname}}</div>
                       </li>
                       <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Status")}}</div><div class="basic_info col-md-7">جديد  {{task.Status}}</div>
                       </li>
@@ -124,17 +118,17 @@
         <legend>{{_("Actions")}}</legend>
    
    <ul class="list-unstyled">
-                      <li class="clearfix"><div class="basic_info_lable col-md-4 float-right">{{_("Created By")}}</div> <div class="basic_info  col-md-7 float-right">{{project_detail.name}}</div>
+                      <li class="clearfix"><div class="basic_info_lable col-md-4 float-right">{{_("Created By")}}</div> <div class="basic_info  col-md-7 float-right">{{ createdby.empname}}</div>
                       </li>
-                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Finished By")}}</div> <div class="basic_info col-md-7 float-right"> ثانى الحربى{{task.assignedto}}</div>
+                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Finished By")}}</div> <div class="basic_info col-md-7 float-right">  {{ finishedby.empname }}</div>
                       </li>
-                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Cancelled By")}}</div><div class="basic_info col-md-7 float-right">جديد  {{task.Status}}</div>
+                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Cancelled By")}}</div><div class="basic_info col-md-7 float-right">  {{cancelledby.empname}}</div>
                       </li>
-                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Closed By")}}</div> <div class="basic_info col-md-7 float-right"> sakr@stats.gov.sa{{task.mailto}}</div>
+                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Closed By")}}</div> <div class="basic_info col-md-7 float-right">  {{closed.empname}}</div>
                       </li>
                       <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Cancelled Reason")}}</div> <div class="basic_info  col-md-7 float-right"> sakr@stats.gov.sa{{task.mailto}}</div>
                       </li>
-                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Last Edited")}}</div> <div class="basic_info col-md-7 float-right"> sakr@stats.gov.sa{{task.mailto}}</div>
+                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Last Edited")}}</div> <div class="basic_info col-md-7 float-right"> {{  task.lasteditdate|date:"d M Y" }}</div>
                       </li>
                     </ul>
 
@@ -143,9 +137,7 @@
                       <a href="#" class="btn btn-sm btn-primary">Add files</a>
                       <a href="#" class="btn btn-sm btn-warning">Report contact</a>
                     </div>
-                  </div>
-
-                </section>
+         
 
               </div>
               <!-- end project-detail sidebar -->

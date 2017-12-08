@@ -5129,9 +5129,12 @@ fieldset{
 }
 legend {
        border-bottom: 0px solid #e5e5e5 !important;
-        width: auto !important; 
-        font-weight: bold; 
-        #font-size: 13px;
+    width: auto !important;
+    font-weight: bold;
+    font-size: 14px;
+    color: #2a3f54 !important;
+    padding: 0px 5px 10px 5px;
+     margin-bottom: 10px;
 }
 .basic_info,.basic_info_lable{	
 	padding:5px;

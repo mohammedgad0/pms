@@ -668,16 +668,42 @@ class ProjectMembersListView(ListView):
         return context
 
 def ProjectTaskDetail(request,projectid,taskid):
+    data=[]
     createdBy=request.session.get('EmpID', '1056821208')
     project_list= Project.objects.all().filter(createdby__exact=createdBy).exclude(status=4).order_by('-id')
     current_url ="ns-project:project-task"
     project_detail= get_object_or_404(Project,pk=projectid)
     task_detail= get_object_or_404(Task,pk=taskid)
-    assignTo=Employee.objects.get(empid__exact=task_detail.assignedto);
     projectmembers= ProjectMembers.objects.all().order_by('-id')
+    createdby=get_object_or_404(Employee,empid__exact=task_detail.createdby);
+    try:
+        assignTo=Employee.objects.get(empid__exact=task_detail.assignedto);
+    except:
+        assignTo = None
+    try:
+        finishedby=Employee.objects.get(empid__exact=task_detail.finishedby);
+    except:
+        finishedby = None
+    try:
+        cancelledby=Employee.objects.get(empid__exact=task_detail.cancelledby);
+    except:
+        cancelledby = None
+    try:
+        clossedby=Employee.objects.get(empid__exact=task_detail.clossedby);
+    except:
+        clossedby = None
 
 
-    context = {'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'task':task_detail,'projectmembers':projectmembers}
+    context = {'project_detail':project_detail,
+               'project_list':project_list,
+               'current_url':current_url,
+               'task':task_detail,
+               'projectmembers':projectmembers,
+               'assignTo':assignTo,
+               'createdby':createdby,
+               'finishedby':finishedby,
+               'cancelledby':cancelledby
+               }
     return render(request, 'project/project_task_detail.html', context)
 
 def updateStartDate(request,pk):
