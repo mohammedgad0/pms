@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
+from simple_history.models import HistoricalRecords
 
 
 class Department(models.Model):
@@ -202,7 +203,7 @@ class Task(models.Model):
     deleted = models.IntegerField(db_column='Deleted', blank=True, null=True)  # Field name made lowercase.
     createdby = models.IntegerField(db_column='CreatedBy', blank=True, null=True)  # Field name made lowercase.
     createddate = models.DateTimeField(db_column='CreatedDate', blank=True, null=True)  # Field name made lowercase.
-
+    history = HistoricalRecords()
     class Meta:
         managed = False
         db_table = 'task'

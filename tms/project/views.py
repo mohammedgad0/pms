@@ -23,6 +23,7 @@ from django.views.generic.list import ListView
 from django.core.urlresolvers import resolve
 from .defs import test
 
+
 class BaseSheetFormSet(BaseModelFormSet):
     def clean(self):
         if any(self.errors):
@@ -668,7 +669,6 @@ class ProjectMembersListView(ListView):
         return context
 
 def ProjectTaskDetail(request,projectid,taskid):
-    data=[]
     createdBy=request.session.get('EmpID', '1056821208')
     project_list= Project.objects.all().filter(createdby__exact=createdBy).exclude(status=4).order_by('-id')
     current_url ="ns-project:project-task"
@@ -693,7 +693,7 @@ def ProjectTaskDetail(request,projectid,taskid):
     except:
         clossedby = None
 
-
+    history=Task.history.filter(id=taskid)
     context = {'project_detail':project_detail,
                'project_list':project_list,
                'current_url':current_url,
@@ -702,11 +702,14 @@ def ProjectTaskDetail(request,projectid,taskid):
                'assignTo':assignTo,
                'createdby':createdby,
                'finishedby':finishedby,
-               'cancelledby':cancelledby
+               'cancelledby':cancelledby,
+               'history':history,
                }
     return render(request, 'project/project_task_detail.html', context)
 
 def updateStartDate(request,pk):
+    from simple_history.utils import update_change_reason
+
     data = dict()
     errors = []
 
@@ -720,7 +723,11 @@ def updateStartDate(request,pk):
             _obj.status="InProgress"
             _obj.lasteditdate=datetime.now()
             _obj.lasteditby=request.session.get('EmpID', '1056821208')
+#             _obj.changeReason = 'Add a question'
+
             _obj.save()
+            #add to history 
+            update_change_reason(_obj, 'Update Start Date')
             data['form_is_valid'] = True
             data['id'] = pk
             data['status'] = _('InProgress')

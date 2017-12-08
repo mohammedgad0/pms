@@ -31,20 +31,21 @@
         <div class="col-md-12">
           <div class="x_panel">
             <div class="x_title">
-            
+            <div class="col-md-7 col-sm-12 col-xs-12">
           
               <h2 class="right">  <div class="task_number"  >{{task.id}}</div>  {{task.name}}  </h2>
               
-              
-              
+              </div>
+               <div class="col-md-5 col-sm-12 col-xs-12">
                      <ul class="nav nav-pills left float-left" role="tablist">
-                           <li>   <a href="{% url 'ns-project:project-task' project_detail.id 'all' %}" class="btn btn-app"> <i class="fa fa-play fa-2x paction text-primary"></i> {{_("Play")}}</a> </li>
-                           <li>   <a class="btn btn-app"><i class="fa fa-check-square-o fa-2x paction text-primary"></i> {{_("Finish")}}</a> </li>
-                            <li>   <a class="btn btn-app"> <i class="fa fa-hand-o-right fa-2x paction text-primary"></i>{{_("Assign To")}}  </a> </li>
-                             <li>   <a class="btn btn-app"> <i class="fa fa-power-off  fa-2x paction text-danger"></i> {{_("Close")}}</a> </li>
-                              <li>   <a class="btn btn-app"> <i class="fa fa-edit"></i> {{_("Edit")}}</a> </li>
+                           <li>   <a href="{% url 'ns-project:project-task' project_detail.id 'all' %}" class="btn btn-app" title="{{_('Start Task')}}"> <i class="fa fa-play fa-2x paction text-primary"></i> </a> </li>
+                           <li>   <a class="btn btn-app"><i class="fa fa-check-square-o fa-2x paction text-primary" title="{{_('Finish Task')}}"></i></a> </li>
+                            <li>   <a class="btn btn-app"> <i class="fa fa-hand-o-right fa-2x paction text-primary" title="{{_('Assign To')}}"></i>  </a> </li>
+                             <li>   <a class="btn btn-app"> <i class="fa fa-power-off  fa-2x paction text-danger" title="{{_('Close Task')}}"></i></a> </li>
+                              <li>   <a class="btn btn-app"> <i class="fa fa-edit" title="{{_('Edit')}}"></i> </a> </li>
+                                <li>   <a class="btn btn-app"> <i class="fa fa-trash" title="{{_('Delete')}}"></i> </a> </li>
                            </ul>
-              
+              </div>
               <div class="clearfix"></div>
             </div>
 
@@ -66,7 +67,7 @@
 <!--  attachmenet -->
 <fieldset class="fieldset_normal">
         <legend>{{ _('Attachment')}}</legend>
-        <div class="article-content">   
+      
          <ul class="list-unstyled project_files">
                       <li><a href=""><i class="fa fa-file-word-o"></i> Functional-requirements.docx</a>
                       </li>
@@ -79,13 +80,19 @@
                       <li><a href=""><i class="fa fa-file-word-o"></i> Contract-10_12_2014.docx</a>
                       </li>
                     </ul>
-        </div>
+        
       </fieldset>
                 
 <!-- history -->
 <fieldset class="fieldset_normal">
         <legend>{{ _('Recent Activity')}}</legend>
-        <div class="article-content">    <p>{{task.desc}} </p></div>
+        <div class="article-content">    
+         <ul class="list-unstyled project_files">
+         {% for h in history%}
+       <li> <span class="float-right"> {{h.lasteditdate}}  </span> , <span class="float-right">{{h.history_change_reason}} </span>     <span class="float-right">by {{h.lasteditby}}  </span></li>
+         {%endfor%}
+         </ul>
+        </div>
       </fieldset>
 
 </div>
@@ -131,6 +138,8 @@
                       <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Last Edited")}}</div> <div class="basic_info col-md-7 float-right"> {{  task.lasteditdate|date:"d M Y" }}</div>
                       </li>
                     </ul>
+                    
+                  
 
       </fieldset>
                     <div class="text-center mtop20">

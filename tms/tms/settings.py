@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'project.apps.AppConfig',
     'django_filters',
      'widget_tweaks',
+     'simple_history',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -75,7 +76,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'project.middleware.ForceLangMiddleware',
-
+    'simple_history.middleware.HistoryRequestMiddleware',
 
 ]
 ROOT_URLCONF = 'tms.urls'

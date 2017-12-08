@@ -5124,7 +5124,7 @@ background-color:#5cb85c;
 fieldset{
     padding: .35em .625em .75em;
     margin: 0 2px;
-    border: 1px solid silver;
+    border: 1px solid #e6e9ed;
     margin-bottom: 15px;
 }
 legend {
@@ -5141,3 +5141,13 @@ legend {
 	margin:5px;
 }
 .basic_info_lable{text-align:right;}   
+.btn.btn-app{
+ background-color: #ffffff;
+ height:40px;
+ padding: 10px 5px;
+ margin: 0 5px 5px 0;
+     min-width: 50px;
+}
+.x_title h2 {
+    white-space: normal;
+}
