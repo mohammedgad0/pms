@@ -37,11 +37,11 @@
               
               </div>
                <div class="col-md-5 col-sm-12 col-xs-12">
-                     <ul class="nav nav-pills left float-left" role="tablist">
-                           <li>   <a href="{% url 'ns-project:project-task' project_detail.id 'all' %}" class="btn btn-app" title="{{_('Start Task')}}"> <i class="fa fa-play fa-2x paction text-primary"></i> </a> </li>
-                           <li>   <a class="btn btn-app"><i class="fa fa-check-square-o fa-2x paction text-primary" title="{{_('Finish Task')}}"></i></a> </li>
-                           <li>   <a class="btn btn-app"> <i class="fa fa-hand-o-right fa-2x paction text-primary" title="{{_('Assign To')}}"></i>  </a> </li>
-                           <li>   <a class="btn btn-app"> <i class="fa fa-power-off  fa-2x paction text-danger" title="{{_('Close Task')}}"></i></a> </li>
+                     <ul class="nav nav-pills left float-left task-ctions" role="tablist">
+                           <li id="task-start">   <a href="#" data-url="{% url 'ns-project:task-update-start' task.id %}" class="btn btn-app update-task-start"  class="btn btn-app" title="{{_('Start Task')}}"> <i class="fa fa-play fa-2x paction text-primary"></i> </a> </li>
+                           <li  id="task-finish"> <a href="#" data-url="{% url 'ns-project:update-finish-task' task.id %}" class="btn btn-app update-task-finish"><i class="fa fa-check-square-o fa-2x paction text-primary" title="{{_('Finish Task')}}"></i></a> </li>
+                           <li  id="task-close">  <a href="#" data-url="{% url 'ns-project:update-close-task' task.id %}" class="btn btn-app update-task-close"> <i class="fa fa-hand-o-right fa-2x paction text-primary" title="{{_('Assign To')}}"></i>  </a> </li>
+                           <li  id="task-close">  <a href="#" data-url="{% url 'ns-project:update-close-task' task.id %}" class="btn btn-app update-task-close"> <i class="fa fa-power-off  fa-2x paction text-danger" title="{{_('Close Task')}}"></i></a> </li>
                            <li>   <a class="btn btn-app"> <i class="fa fa-edit" title="{{_('Edit')}}"></i> </a> </li>
                            <li>   <a href="{% url 'ns-project:project-task-delete' project_detail.id task.id %}" class="btn btn-app" title="{{_('Start Task')}}" class="btn btn-app"> <i class="fa fa-trash" title="{{_('Delete')}}"></i> </a> </li>
                            </ul>
@@ -89,7 +89,7 @@
         <div class="article-content">    
          <ul class="list-unstyled project_files">
          {% for h in history%}
-       <li> <span class="float-right"> {{h.lasteditdate}}  </span> , <span class="float-right">{{h.history_change_reason}} </span>     <span class="float-right">by {{h.lasteditby}}  </span></li>
+       <li><i class="fa fa-clock-o"></i>  <span class="float-right"> {{h.lasteditdate }}  </span> , <span class="float-right">{{h.history_change_reason|safe}} </span>     <span class="float-right">by {{h.lasteditby}}  </span></li>
          {%endfor%}
          </ul>
         </div>
@@ -112,7 +112,7 @@
                       </li>
                       <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Assigned To")}}</div> <div class="basic_info col-md-7">  {{assignTo.empname}}</div>
                       </li>
-                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Status")}}</div><div class="basic_info col-md-7">جديد  {{task.Status}}</div>
+                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Task Status")}}</div><div class="basic_info col-md-7">  {% trans task.status %} </div>
                       </li>
                       <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Mailto To")}}</div> <div class="basic_info col-md-7"> sakr@stats.gov.sa{{task.mailto}}</div>
                       </li>
@@ -131,11 +131,11 @@
                       </li>
                       <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Cancelled By")}}</div><div class="basic_info col-md-7 float-right">  {{cancelledby.empname}}</div>
                       </li>
-                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Closed By")}}</div> <div class="basic_info col-md-7 float-right">  {{closed.empname}}</div>
+                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Closed By")}}</div> <div class="basic_info col-md-7 float-right">  {{closedby.empname}}</div>
                       </li>
-                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Cancelled Reason")}}</div> <div class="basic_info  col-md-7 float-right"> sakr@stats.gov.sa{{task.mailto}}</div>
+                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Cancelled Reason")}}</div> <div class="basic_info  col-md-7 float-right"> {{task.mailto}}</div>
                       </li>
-                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Last Edited")}}</div> <div class="basic_info col-md-7 float-right"> {{  task.lasteditdate|date:"d M Y" }}</div>
+                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Last Edited")}}</div> <div class="basic_info col-md-7 float-right"> {{  task.lasteditdate|date:"d M Y ,  h:i a" }}</div>
                       </li>
                     </ul>
                     
@@ -157,10 +157,71 @@
       </div>
     </div>
   </div>
+  
+  <!-- THE MODAL WE WILL BE USING -->
+<div class="modal fade" id="modal-task">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+      </div>
+   </div>
+</div>
 {% endblock content %}
 
 {% block javascripts %}
   {{ block.super }}
-  <!-- ECharts -->
-  <script src="/static/vendors/echarts/dist/echarts.min.js"></script>
+
+<script>
+var loadForm = function () {
+btn = $(this);
+$.ajax({
+  url: $(this).attr("data-url"),
+  type: 'get',
+  dataType: 'json',
+  beforeSend: function () {
+    $("#modal-task").modal("show");
+  },
+  success: function (data) {
+    $("#modal-task .modal-content").html(data.html_form);
+  }
+});
+
+}; //end load form
+
+var saveForm = function () {
+var form = $(this);
+$.ajax({
+  url: form.attr("action"),
+  data: form.serialize(),
+  type: form.attr("method"),
+  dataType: 'json',
+  success: function (data) {
+    if (data.form_is_valid) {
+      $(".messages").html('<li class="alert alert-success">'+data.message+"</li>");
+      $("#status_"+data.id).html('<span class=" btn btn-warning  task-'+data.status+'" >'+data.status+'</span>');
+
+      $("#"+data.icon).addClass('paction_disable').closest('a').removeAttr("href").removeAttr("data-url").removeAttr("class");
+      $("#modal-task").modal("hide");
+      location.reload();
+    }
+    else {
+      $("#modal-task .modal-content").html(data.html_form);
+    }
+  }
+});
+return false;
+}; //end save form
+
+//Update task start date and status
+$(".task-ctions").on("click", ".update-task-start", loadForm);
+$("#modal-task").on("submit", ".task-update-start-form", saveForm);
+
+//finish task 
+$(".task-ctions").on("click", ".update-task-finish", loadForm);
+$("#modal-task").on("submit", ".update-finish-task-form", saveForm);
+
+//close task 
+$(".task-ctions").on("click", ".update-task-close", loadForm);
+$("#modal-task").on("submit", ".update-close-task-form", saveForm);
+
+</script>
 {% endblock javascripts %}

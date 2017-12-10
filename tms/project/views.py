@@ -22,6 +22,7 @@ from django.http import JsonResponse
 from django.views.generic.list import ListView
 from django.core.urlresolvers import resolve
 from .defs import test
+from simple_history.utils import update_change_reason
 
 
 class BaseSheetFormSet(BaseModelFormSet):
@@ -689,9 +690,9 @@ def ProjectTaskDetail(request,projectid,taskid):
     except:
         cancelledby = None
     try:
-        clossedby=Employee.objects.get(empid__exact=task_detail.clossedby);
+        closedby=Employee.objects.get(empid__exact=task_detail.closedby);
     except:
-        clossedby = None
+        closedby = None
 
     history=Task.history.filter(id=taskid)
     context = {'project_detail':project_detail,
@@ -703,13 +704,12 @@ def ProjectTaskDetail(request,projectid,taskid):
                'createdby':createdby,
                'finishedby':finishedby,
                'cancelledby':cancelledby,
+               'closedby':closedby,
                'history':history,
                }
     return render(request, 'project/project_task_detail.html', context)
 
 def updateStartDate(request,pk):
-    from simple_history.utils import update_change_reason
-
     data = dict()
     errors = []
 
@@ -723,11 +723,11 @@ def updateStartDate(request,pk):
             _obj.status="InProgress"
             _obj.lasteditdate=datetime.now()
             _obj.lasteditby=request.session.get('EmpID', '1056821208')
-#             _obj.changeReason = 'Add a question'
+#           _obj.changeReason = 'Add a question'
 
             _obj.save()
             #add to history 
-            update_change_reason(_obj, 'Update Start Date')
+            update_change_reason(_obj, _("Start Task")+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['notes'])
             data['form_is_valid'] = True
             data['id'] = pk
             data['status'] = _('InProgress')
@@ -759,6 +759,8 @@ def updateTaskFinish(request,pk):
             _obj.lasteditdate=datetime.now()
             _obj.lasteditby=request.session.get('EmpID', '1056821208')
             _obj.save()
+             #add to history 
+            update_change_reason(_obj, _("Finish Task")+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['notes'])
             data['form_is_valid'] = True
             data['icon'] = "f_%s" %pk
             data['id'] = pk
@@ -772,7 +774,7 @@ def updateTaskFinish(request,pk):
         data['form_is_valid'] = False
     context = {'form': TaskFinishForm(),'pk':pk,'errors':errors}
     data['html_form'] = render_to_string('project/task/update_finish_task.html',context,request=request)
-    return JsonResponse({data})
+    return JsonResponse(data)
 
 def updateTaskClose(request,pk):
     data = dict()
@@ -794,6 +796,8 @@ def updateTaskClose(request,pk):
             _obj.closeddate=datetime.now()
             _obj.lasteditdate=datetime.now()
             _obj.save()
+               #add to history 
+            update_change_reason(_obj, _("Close Task")+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['notes'])
             data['form_is_valid'] = True
             data['id'] = pk
             data['status'] = _('Closed')
@@ -875,9 +879,9 @@ def ProjectTaskDelete(request,projectid,taskid):
         task=None
         project=None
     if request.method == 'POST':
-          Task.objects.filter(id=task.id).delete()
-          messages.success(request, _("Task has deleted successfully"), fail_silently=True,)
-          return HttpResponseRedirect(reverse('ns-project:ProjectTask'))
+              Task.objects.filter(id=task.id).delete()
+              messages.success(request, _("Task has been deleted successfully"), fail_silently=True,)
+              return HttpResponseRedirect(reverse('ns-project:project-task', kwargs={'pk':project.id} ))
     else:
           context={'task':task,'project':project,'employee':employee}
           return render(request, 'project/project_task_delete.html', context)
