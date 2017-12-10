@@ -865,3 +865,20 @@ def ProjectTeam(request,project_id):
     current_url ="ns-project:" + resolve(request.path_info).url_name
     context={'all_emp':all_emp,'project_detail':project_detail,'project_list':project_list,'current_url':current_url}
     return render(request, 'project/project_team.html', context)
+
+def ProjectTaskDelete(request,projectid,taskid):
+    try:
+        task= get_object_or_404(Task,createdby__exact= request.session['EmpID'],projectid__exact= projectid,pk=taskid)
+        project=get_object_or_404(Project,pk=projectid)
+        employee=get_object_or_404(Employee,empid__exact= task.createdby)
+    except:
+        task=None
+        project=None
+    if request.method == 'POST':
+          Task.objects.filter(id=task.id).delete()
+          messages.success(request, _("Task has deleted successfully"), fail_silently=True,)
+          return HttpResponseRedirect(reverse('ns-project:ProjectTask'))
+    else:
+          context={'task':task,'project':project,'employee':employee}
+          return render(request, 'project/project_task_delete.html', context)
+    

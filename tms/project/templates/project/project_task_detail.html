@@ -40,10 +40,10 @@
                      <ul class="nav nav-pills left float-left" role="tablist">
                            <li>   <a href="{% url 'ns-project:project-task' project_detail.id 'all' %}" class="btn btn-app" title="{{_('Start Task')}}"> <i class="fa fa-play fa-2x paction text-primary"></i> </a> </li>
                            <li>   <a class="btn btn-app"><i class="fa fa-check-square-o fa-2x paction text-primary" title="{{_('Finish Task')}}"></i></a> </li>
-                            <li>   <a class="btn btn-app"> <i class="fa fa-hand-o-right fa-2x paction text-primary" title="{{_('Assign To')}}"></i>  </a> </li>
-                             <li>   <a class="btn btn-app"> <i class="fa fa-power-off  fa-2x paction text-danger" title="{{_('Close Task')}}"></i></a> </li>
-                              <li>   <a class="btn btn-app"> <i class="fa fa-edit" title="{{_('Edit')}}"></i> </a> </li>
-                                <li>   <a class="btn btn-app"> <i class="fa fa-trash" title="{{_('Delete')}}"></i> </a> </li>
+                           <li>   <a class="btn btn-app"> <i class="fa fa-hand-o-right fa-2x paction text-primary" title="{{_('Assign To')}}"></i>  </a> </li>
+                           <li>   <a class="btn btn-app"> <i class="fa fa-power-off  fa-2x paction text-danger" title="{{_('Close Task')}}"></i></a> </li>
+                           <li>   <a class="btn btn-app"> <i class="fa fa-edit" title="{{_('Edit')}}"></i> </a> </li>
+                           <li>   <a href="{% url 'ns-project:project-task-delete' project_detail.id task.id %}" class="btn btn-app" title="{{_('Start Task')}}" class="btn btn-app"> <i class="fa fa-trash" title="{{_('Delete')}}"></i> </a> </li>
                            </ul>
               </div>
               <div class="clearfix"></div>

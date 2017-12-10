@@ -41,6 +41,7 @@ urlpatterns = [
     url(r'^update_close_task/(?P<pk>\d+)$',views.updateTaskClose, name='update-close-task'),
     url(r'^project_gantt/(?P<pk>\d+)$',views.ganttChart, name='project-gantt'),
     url(r'^project_follow_up/$',views.projectFlowUp, name='project-follow-up'),
+    url(r'^project_task_delete/(?P<projectid>\d+)/(?P<taskid>\d+)$', views.ProjectTaskDelete, name='project-task-delete'),
     url(r'^project/(?P<project_id>\d+)/team$',views.ProjectTeam, name='project-team'),
 
     url(r'^ProjectMember/$', ProjectMembersListView.as_view(), name='ProjectMember-list'),
