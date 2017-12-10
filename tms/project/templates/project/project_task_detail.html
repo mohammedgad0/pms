@@ -40,6 +40,7 @@
                      <ul class="nav nav-pills left float-left task-ctions" role="tablist">
                            <li id="task-start">   <a href="#" data-url="{% url 'ns-project:task-update-start' task.id %}" class="btn btn-app update-task-start"  class="btn btn-app" title="{{_('Start Task')}}"> <i class="fa fa-play fa-2x paction text-primary"></i> </a> </li>
                            <li  id="task-finish"> <a href="#" data-url="{% url 'ns-project:update-finish-task' task.id %}" class="btn btn-app update-task-finish"><i class="fa fa-check-square-o fa-2x paction text-primary" title="{{_('Finish Task')}}"></i></a> </li>
+                           <li  id="task-finish"> <a href="#" data-url="{% url 'ns-project:update-finish-task' task.id %}" class="btn btn-app update-task-finish "><i class="fa fa-ban fa-2x paction text-danger" title="{{_('Finish Task')}}"></i></a> </li>
                            <li  id="task-close">  <a href="#" data-url="{% url 'ns-project:update-close-task' task.id %}" class="btn btn-app update-task-close"> <i class="fa fa-hand-o-right fa-2x paction text-primary" title="{{_('Assign To')}}"></i>  </a> </li>
                            <li  id="task-close">  <a href="#" data-url="{% url 'ns-project:update-close-task' task.id %}" class="btn btn-app update-task-close"> <i class="fa fa-power-off  fa-2x paction text-danger" title="{{_('Close Task')}}"></i></a> </li>
                            <li>   <a class="btn btn-app"> <i class="fa fa-edit" title="{{_('Edit')}}"></i> </a> </li>
@@ -129,6 +130,7 @@
                       </li>
                       <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Finished By")}}</div> <div class="basic_info col-md-7 float-right">  {{ finishedby.empname }}</div>
                       </li>
+                      
                       <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Cancelled By")}}</div><div class="basic_info col-md-7 float-right">  {{cancelledby.empname}}</div>
                       </li>
                       <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Closed By")}}</div> <div class="basic_info col-md-7 float-right">  {{closedby.empname}}</div>
