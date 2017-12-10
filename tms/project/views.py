@@ -733,14 +733,14 @@ def updateStartDate(request,pk):
             data['status'] = _('InProgress')
             data['icon'] = "p_%s" %pk
             data['message'] = _('Start Date Updated successfully for Task number %s ' %pk)
-            data['html_form'] = render_to_string('project/update_start_task.html',request=request)
+            data['html_form'] = render_to_string('project/task/update_start_task.html',request=request)
             return JsonResponse(data)
 
     # if a GET (or any other method) we'll create a blank form
     else:
         data['form_is_valid'] = False
     context = {'form': TaskStartForm(),'pk':pk,'errors':errors}
-    data['html_form'] = render_to_string('project/update_start_task.html',context,request=request,)
+    data['html_form'] = render_to_string('project/task/update_start_task.html',context,request=request,)
     return JsonResponse(data)
 
 def updateTaskFinish(request,pk):
@@ -813,6 +813,43 @@ def updateTaskClose(request,pk):
     data['html_form'] = render_to_string('project/task/update_close_task.html',context,request=request)
     return JsonResponse(data)
 
+def updateTaskCancel(request,pk):
+    data = dict()
+    errors = []
+    if 'notes' in request.POST:
+        notes = request.POST['notes']
+        if not notes:
+            errors.append(_('Enter a notes .'))
+
+    _obj =  get_object_or_404(Task,pk=pk)
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = TaskCancelForm(request.POST )
+        if form.is_valid():
+            _obj.status="Canceled"
+            _obj.cancelledby= request.session.get('EmpID', '1056821208')
+            _obj.canceleddate=datetime.now()
+            _obj.lasteditdate=datetime.now()
+            _obj.save()
+               #add to history 
+            update_change_reason(_obj, _("Cancel Task")+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['notes'])
+            data['form_is_valid'] = True
+            data['id'] = pk
+            data['status'] = _('Cancelled')
+            data['icon'] = "c_%s" %pk
+            data['message'] = _('Task has been cancelled successfully for Task number #')+ pk
+            data['html_form'] = render_to_string('project/task/update_cancel_task.html',request=request)
+            return JsonResponse(data)
+        else:
+            data['form_is_valid'] = False
+
+    # if a GET (or any other method) we'll create a blank form
+    context = {'form': TaskCloseForm(),'pk':pk,'errors':errors}
+    data['html_form'] = render_to_string('project/task/update_cancel_task.html',context,request=request)
+    return JsonResponse(data)
+    
+    
+    
 def ganttChart(request,pk):
 
     context={}

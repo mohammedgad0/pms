@@ -118,6 +118,9 @@ class TaskCloseForm(forms.Form):
        widget=forms.DateInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Closed on Date'),'required': True}))
        notes = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':'Notes', 'size': '40','required': True}),required=True, max_length=500, error_messages={'required': 'note'})
 
+class TaskCancelForm(forms.Form):
+       notes = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Notes"),'placeholder':_("Please enter a reason to cancel"), 'size': '40','required': 'True'}),required=True, max_length=500, error_messages={'required': 'note'})
+
 class TeamModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.empname
