@@ -848,8 +848,6 @@ def updateTaskCancel(request,pk):
     data['html_form'] = render_to_string('project/task/update_cancel_task.html',context,request=request)
     return JsonResponse(data)
 
-
-
 def ganttChart(request,pk):
 
     context={}
@@ -916,6 +914,7 @@ def AddTask(request,project_id):
         form = AddTaskForm()
     context ={}
     return render (request,'project/add_task.html', {'form':form})
+
 def ProjectTaskDelete(request,projectid,taskid):
     try:
         task= get_object_or_404(Task,createdby__exact= request.session['EmpID'],projectid__exact= projectid,pk=taskid)

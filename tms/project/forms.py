@@ -102,9 +102,12 @@ class ProjectForm(ModelForm):
 
 
 class AddTaskForm(ModelForm):
+    CHOICES = (('1', 'employee',), ('2', 'department',))
+    assigntype = forms.ChoiceField(widget=forms.RadioSelect(attrs={'class':'form-check-input'}), choices=CHOICES)
     class Meta:
         model = Task
-        fields = ['name','desc']
+        fields = ['name','desc','assigntype']
+
         widgets = {
             'name':TextInput(attrs={'class': 'form-control','placeholder':_('Task Name'),'required': True}),
             'desc': Textarea(attrs={'class':'form-control','placeholder':_('Task Details'),'required': True}),

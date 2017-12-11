@@ -37,7 +37,15 @@
                            <div class=" col-md-12">
                               {{form.desc.label_tag}}
                               {{form.desc}}
+              
                            </div>
+                        </div>
+
+                        <div class="form-check form-check-inline">
+                          <label>
+                          {{ form.assigntype.label }}
+                            {{ form.assigntype }}
+                          </label>
                         </div>
                         <div class="form-group text-danger ">
                            <div class="col-md-3"></div>
@@ -45,6 +53,7 @@
                               {{ form.name.errors }}
                               {{ form.desc.errors }}
                            </div>
+
                         </div>
                         <div class="form-group">
                            <div class="ln_solid"></div>
