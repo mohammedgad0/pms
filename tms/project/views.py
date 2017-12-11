@@ -726,7 +726,7 @@ def updateStartDate(request,pk):
 #           _obj.changeReason = 'Add a question'
 
             _obj.save()
-            #add to history 
+            #add to history
             update_change_reason(_obj, _("Start Task")+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['notes'])
             data['form_is_valid'] = True
             data['id'] = pk
@@ -759,7 +759,7 @@ def updateTaskFinish(request,pk):
             _obj.lasteditdate=datetime.now()
             _obj.lasteditby=request.session.get('EmpID', '1056821208')
             _obj.save()
-             #add to history 
+             #add to history
             update_change_reason(_obj, _("Finish Task")+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['notes'])
             data['form_is_valid'] = True
             data['icon'] = "f_%s" %pk
@@ -796,7 +796,7 @@ def updateTaskClose(request,pk):
             _obj.closeddate=datetime.now()
             _obj.lasteditdate=datetime.now()
             _obj.save()
-               #add to history 
+               #add to history
             update_change_reason(_obj, _("Close Task")+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['reason'])
             data['form_is_valid'] = True
             data['id'] = pk
@@ -831,7 +831,7 @@ def updateTaskCancel(request,pk):
             _obj.canceleddate=datetime.now()
             _obj.lasteditdate=datetime.now()
             _obj.save()
-               #add to history 
+               #add to history
             update_change_reason(_obj, _("Cancel Task")+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['reason'])
             data['form_is_valid'] = True
             data['id'] = pk
@@ -938,6 +938,16 @@ def ProjectTeam(request,project_id):
     context={'all_emp':all_emp,'project_detail':project_detail,'project_list':project_list,'current_url':current_url}
     return render(request, 'project/project_team.html', context)
 
+def AddTask(request,project_id):
+    if request.method=='POST':
+        form = AddTaskForm(request.POST)
+        if form.is_valid():
+            project_obj= form.save(commit=False)
+    else:
+        form = AddTaskForm()
+    context ={}
+    return render (request,'project/add_task.html', {'form':form})
+
 def ProjectTaskDelete(request,projectid,taskid):
     try:
         task= get_object_or_404(Task,createdby__exact= request.session['EmpID'],projectid__exact= projectid,pk=taskid)
@@ -987,5 +997,4 @@ def updateTaskAssignto(request,pk):
     context = {'form': form,'pk':pk,'errors':errors}
     data['html_form'] = render_to_string('project/task/update_assignto_task.html',context,request=request)
     return JsonResponse(data)     
-    
     

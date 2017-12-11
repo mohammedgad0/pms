@@ -55,7 +55,6 @@ class ProjectForm(ModelForm):
         super(ProjectForm, self).__init__(*args, **kwargs)
         self.fields['status'].empty_label = None
         self.fields['name'].widget.attrs['maxlength'] =255
-
     class Meta:
         model = Project
         fields = ['name','start','status','end','desc']
@@ -102,6 +101,21 @@ class ProjectForm(ModelForm):
         }
 
 
+class AddTaskForm(ModelForm):
+    CHOICES = (('1', 'employee',), ('2', 'department',))
+    assigntype = forms.ChoiceField(widget=forms.RadioSelect(attrs={'class':'form-check-input'}), choices=CHOICES)
+    class Meta:
+        model = Task
+        fields = ['name','desc','assigntype']
+
+        widgets = {
+            'name':TextInput(attrs={'class': 'form-control','placeholder':_('Task Name'),'required': True}),
+            'desc': Textarea(attrs={'class':'form-control','placeholder':_('Task Details'),'required': True}),
+        }
+        labels = {
+            'name': _('Task Name'),
+            'desc':_('Task Description'),
+        }
 
 class TaskStartForm(forms.Form):
        rsd = forms.DateField(label=_("Real Start Date"),
