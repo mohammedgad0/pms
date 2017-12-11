@@ -780,24 +780,24 @@ def updateTaskClose(request,pk):
     data = dict()
     errors = []
 
-    if 'notes' in request.POST:
-        notes = request.POST['notes']
-        if not notes:
-            errors.append(_('Enter a notes .'))
+    if 'reason' in request.POST:
+        reason = request.POST['reason']
+        if not reason:
+            errors.append(_('Enter a reason .'))
 
     _obj =  get_object_or_404(Task,pk=pk)
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = TaskCloseForm(request.POST )
         if form.is_valid():
-            _obj.closeddate=form.cleaned_data['ctime']
             _obj.status="Closed"
+            _obj.closeddate=datetime.now()
             _obj.closedby= request.session.get('EmpID', '1056821208')
             _obj.closeddate=datetime.now()
             _obj.lasteditdate=datetime.now()
             _obj.save()
                #add to history 
-            update_change_reason(_obj, _("Close Task")+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['notes'])
+            update_change_reason(_obj, _("Close Task")+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['reason'])
             data['form_is_valid'] = True
             data['id'] = pk
             data['status'] = _('Closed')
@@ -816,23 +816,23 @@ def updateTaskClose(request,pk):
 def updateTaskCancel(request,pk):
     data = dict()
     errors = []
-    if 'notes' in request.POST:
-        notes = request.POST['notes']
-        if not notes:
-            errors.append(_('Enter a notes .'))
+    if 'reason' in request.POST:
+        reason = request.POST['reason']
+        if not reason:
+            errors.append(_('Enter a reason .'))
 
     _obj =  get_object_or_404(Task,pk=pk)
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = TaskCancelForm(request.POST )
         if form.is_valid():
-            _obj.status="Canceled"
+            _obj.status="Cancelled"
             _obj.cancelledby= request.session.get('EmpID', '1056821208')
             _obj.canceleddate=datetime.now()
             _obj.lasteditdate=datetime.now()
             _obj.save()
                #add to history 
-            update_change_reason(_obj, _("Cancel Task")+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['notes'])
+            update_change_reason(_obj, _("Cancel Task")+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['reason'])
             data['form_is_valid'] = True
             data['id'] = pk
             data['status'] = _('Cancelled')
@@ -844,12 +844,43 @@ def updateTaskCancel(request,pk):
             data['form_is_valid'] = False
 
     # if a GET (or any other method) we'll create a blank form
-    context = {'form': TaskCloseForm(),'pk':pk,'errors':errors}
+    context = {'form': TaskCancelForm(),'pk':pk,'errors':errors}
     data['html_form'] = render_to_string('project/task/update_cancel_task.html',context,request=request)
     return JsonResponse(data)
-    
-    
-    
+
+def updateTaskPause(request,pk):
+    data = dict()
+    errors = []
+    if 'reason' in request.POST:
+        reason = request.POST['reason']
+        if not reason:
+            errors.append(_('Enter a reason .'))
+
+    _obj =  get_object_or_404(Task,pk=pk)
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = TaskPuseForm(request.POST )
+        if form.is_valid():
+            _obj.status="Hold"
+            _obj.lasteditdate=datetime.now()
+            _obj.save()
+            #add to history 
+            update_change_reason(_obj, _("Hold Task")+",<i class=\"fa fa-comment\"></i>" + form.cleaned_data['reason'])
+            data['form_is_valid'] = True
+            data['id'] = pk
+            data['status'] = _('Hold')
+            data['icon'] = "c_%s" %pk
+            data['message'] = _('Task has been pused successfully for Task number #')+ pk
+            data['html_form'] = render_to_string('project/task/update_pause_task.html',request=request)
+            return JsonResponse(data)
+        else:
+            data['form_is_valid'] = False
+
+    # if a GET (or any other method) we'll create a blank form
+    context = {'form': TaskPuseForm(),'pk':pk,'errors':errors}
+    data['html_form'] = render_to_string('project/task/update_pause_task.html',context,request=request)
+    return JsonResponse(data)     
+        
 def ganttChart(request,pk):
 
     context={}
@@ -922,4 +953,39 @@ def ProjectTaskDelete(request,projectid,taskid):
     else:
           context={'task':task,'project':project,'employee':employee}
           return render(request, 'project/project_task_delete.html', context)
+        
+def updateTaskAssignto(request,pk):
+    data = dict()
+    errors = []
+    
+#     if 'reason' in request.POST:
+#         reason = request.POST['reason']
+#         if not reason:
+#             errors.append(_('Enter a reason .'))
+
+    _obj =  get_object_or_404(Task,pk=pk)
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = TaskAssignToForm(request.POST )
+        if form.is_valid():
+            _obj.lasteditdate=datetime.now()
+            _obj.save()
+               #add to history 
+            update_change_reason(_obj, _("Assign Task to")+ form.cleaned_data['empid'])
+            data['form_is_valid'] = True
+            data['id'] = pk
+            data['message'] = _('Task has been assigned successfully for Task number #')+ pk
+            data['html_form'] = render_to_string('project/task/update_assignto_task.html',request=request)
+            return JsonResponse(data)
+        else:
+            data['form_is_valid'] = False
+    else:
+         form = TaskAssignToForm()
+         form.fields["employee"].queryset = Employee.objects.filter(deptcode = request.session['DeptCode'])
+
+    # if a GET (or any other method) we'll create a blank form
+    context = {'form': form,'pk':pk,'errors':errors}
+    data['html_form'] = render_to_string('project/task/update_assignto_task.html',context,request=request)
+    return JsonResponse(data)     
+    
     

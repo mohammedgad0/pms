@@ -114,13 +114,17 @@ class TaskFinishForm(forms.Form):
        notes = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':'Notes', 'size': '40','required': False}), required=False,error_messages={'required': 'notes'})
 
 class TaskCloseForm(forms.Form):
-       ctime = forms.DateField(label=_("Closed on"),
-       widget=forms.DateInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Closed on Date'),'required': True}))
-       notes = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':'Notes', 'size': '40','required': True}),required=True, max_length=500, error_messages={'required': 'note'})
+       ctime = forms.DateField(label=_("Closed on"),required=False,
+       widget=forms.DateInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Closed on Date'),'required': False}))
+       reason = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Please enter a reason to Close "), 'size': '40','required': True}),required=True, max_length=500, error_messages={'required': _('Reason')})
 
 class TaskCancelForm(forms.Form):
-       notes = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Notes"),'placeholder':_("Please enter a reason to cancel"), 'size': '40','required': 'True'}),required=True, max_length=500, error_messages={'required': 'note'})
+       reason = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Reason"),'placeholder':_("Please enter a reason to cancel"), 'size': '40','required': 'True'}),required=True, max_length=500, error_messages={'required': 'note'})
 
+
+class TaskPauseForm(forms.Form):
+       reason = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Reason"),'placeholder':_("Please enter a reason to cancel"), 'size': '40','required': 'True'}),required=True, max_length=500, error_messages={'required': 'note'})
+       
 class TeamModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.empname
@@ -133,6 +137,10 @@ class FollowupModelChoiceField(ModelChoiceField):
 
 class TeamForm(forms.Form):
       employee = TeamModelChoiceField(queryset=Employee.objects.all(), empty_label="(Nothing)",widget=forms.Select(attrs={'class': 'chosen'} ))
+
+class TaskAssignToForm(forms.Form):
+      employee = TeamModelChoiceField(queryset=Employee.objects.none(),to_field_name="empid" ,empty_label="(Select Employee)",widget=forms.Select(attrs={'class': 'chosen form-control col-md-8'} ),required=False)
+
 
 
 class FollowupForm(forms.Form):

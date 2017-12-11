@@ -38,13 +38,31 @@
               </div>
                <div class="col-md-5 col-sm-12 col-xs-12">
                      <ul class="nav nav-pills left float-left task-ctions" role="tablist">
+                     
+                     {% if  task.status == "Cancelled" or task.status == "Finished" or task.status == "Closed" %}
+                          <li id="task-start"> <a href="#"    class="btn btn-app disabled"><i class="fa fa-play fa-2x paction text-default "></i> </a> </li>
+                           <li  id="task-finish"> <a href="#"  class="btn btn-app disabled"><i class="fa fa-check-square-o fa-2x paction text-default disabled" title="{{_('Finish Task')}}"></i></a> </li>
+                           <li  id="task-cancel"> <a href="#"  class="btn btn-app disabled"><i class="fa fa-ban fa-2x paction text-default" title="{{_('Cancel Task')}}"></i></a> </li>
+                      {% else %}
+                      
+                          {% if  task.status == "InProgress"  or  task.status == "New"  %}
+                           <li id="task-puse">   <a href="#" data-url="{% url 'ns-project:update-pause-task' task.id %}" class="btn btn-app update-task-pause"  class="btn btn-app" title="{{_('Pause Task')}}"> <i class="fa fa-pause fa-2x paction text-primary"></i> </a> </li>
+                          {% else  %}
                            <li id="task-start">   <a href="#" data-url="{% url 'ns-project:task-update-start' task.id %}" class="btn btn-app update-task-start"  class="btn btn-app" title="{{_('Start Task')}}"> <i class="fa fa-play fa-2x paction text-primary"></i> </a> </li>
+                           {% endif %}
                            <li  id="task-finish"> <a href="#" data-url="{% url 'ns-project:update-finish-task' task.id %}" class="btn btn-app update-task-finish"><i class="fa fa-check-square-o fa-2x paction text-primary" title="{{_('Finish Task')}}"></i></a> </li>
-                           <li  id="task-cancel"> <a href="#" data-url="{% url 'ns-project:update-cancel-task' task.id %}" class="btn btn-app update-task-cancel "><i class="fa fa-ban fa-2x paction text-danger" title="{{_('Cancel Task')}}"></i></a> </li>
-                           <li  id="task-close">  <a href="#" data-url="{% url 'ns-project:update-close-task' task.id %}" class="btn btn-app update-task-close"> <i class="fa fa-hand-o-right fa-2x paction text-primary" title="{{_('Assign To')}}"></i>  </a> </li>
+                           <li  id="task-cancel"> <a href="#" data-url="{% url 'ns-project:update-cancel-task' task.id %}" class="btn btn-app update-task-cancel "><i class="fa fa-ban fa-2x paction text-danger" title="{{_('Cancel Task')}}"></i></a> </li> 
+                     {% endif %}
+                     {% if  task.status != "Closed "%}
+                           <li  id="task-assignto">  <a href="#" data-url="{% url 'ns-project:update-assignto-task' task.id %}" class="btn btn-app update-task-assignto"> <i class="fa fa-hand-o-right fa-2x paction text-primary" title="{{_('Assign To')}}"></i>  </a> </li>
                            <li  id="task-close">  <a href="#" data-url="{% url 'ns-project:update-close-task' task.id %}" class="btn btn-app update-task-close"> <i class="fa fa-power-off  fa-2x paction text-danger" title="{{_('Close Task')}}"></i></a> </li>
-                           <li>   <a class="btn btn-app"> <i class="fa fa-edit" title="{{_('Edit')}}"></i> </a> </li>
-                           <li>   <a href="{% url 'ns-project:project-task-delete' project_detail.id task.id %}" class="btn btn-app" title="{{_('Start Task')}}" class="btn btn-app"> <i class="fa fa-trash" title="{{_('Delete')}}"></i> </a> </li>
+                    {% else %}
+                           <li  id="task-assignto">  <a href="#"  class="btn btn-app disabled"> <i class="fa fa-hand-o-right fa-2x paction text-default" title="{{_('Assign To')}}"></i>  </a> </li>
+                           <li  id="task-close">  <a href="#"  class="btn btn-app disabled"> <i class="fa fa-power-off  fa-2x paction text-default" title="{{_('Close Task')}}"></i></a> </li>
+                    
+                      {% endif %}
+                           <li>   <a class="btn btn-app"> <i class="fa fa-edit fa-2x paction" title="{{_('Edit')}}"></i> </a> </li>
+                           <li>   <a href="{% url 'ns-project:project-task-delete' project_detail.id task.id %}" class="btn btn-app" title="{{_('Start Task')}}" class="btn btn-app"> <i class="fa fa-trash fa-2x paction" title="{{_('Delete')}}"></i> </a> </li>
                            </ul>
               </div>
               <div class="clearfix"></div>
@@ -144,10 +162,10 @@
                   
 
       </fieldset>
-                    <div class="text-center mtop20">
+                  <!--    <div class="text-center mtop20">
                       <a href="#" class="btn btn-sm btn-primary">Add files</a>
                       <a href="#" class="btn btn-sm btn-warning">Report contact</a>
-                    </div>
+                    </div>  -->
          
 
               </div>
@@ -228,5 +246,20 @@ $("#modal-task").on("submit", ".update-close-task-form", saveForm);
 //cancel task 
 $(".task-ctions").on("click", ".update-task-cancel", loadForm);
 $("#modal-task").on("submit", ".update-cancel-task-form", saveForm);
+
+//assign to task 
+$(".task-ctions").on("click", ".update-task-assignto", loadForm);
+$("#modal-task").on("submit", ".update-assignto-task-form", saveForm);
+</script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.jquery.js"></script>
+  <script>
+
+     $(".chosen").data("placeholder","Select Frameworks...").chosen();
+     $(".chosen").chosen({no_results_text: "Oops, nothing found!"}); 
+      $('.chosen').chosen({allow_single_deselect: true,no_results_text: "Ù„Ø§ ÙŠÙˆØ¬Ø¯ Ù†ØªØ§Ø¦Ø¬!"});
+
+
 </script>
 {% endblock javascripts %}
