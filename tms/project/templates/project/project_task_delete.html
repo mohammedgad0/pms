@@ -1,0 +1,92 @@
+{% extends "project/base_site.html" %}
+{% load i18n %}
+{% block title %} Plain Page {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+{% get_current_language as LANGUAGE_CODE %}
+    <div class="right_col" role="main">
+      <div class="">
+        <div class="page-title">
+          <div class="title_left">
+            <h3></h3>
+          </div>
+
+          <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+              <div class="input-group">
+           
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h3>{{ _('delete Task confirmation') }} </h3>
+           
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+              
+              <div class="col-md-12 col-sm-12 col-xs-12">
+
+                      <section class="panel">
+
+                        
+                        <div class="panel-body">
+                          <h3 class="green"><i class="fa fa-paint-brush"></i> {{task.name}}</h3>
+
+                          <p>{{task.desc}}</p>
+                          <br>
+
+                          <div class="project_detail">
+
+                            <p class="title">{{_('Created By')}}</p>
+                            <p>{{employee.empname}}</p>
+                            <p class="title">{{_('Created Date')}}</p>
+                            <p>{{task.createddate}}</p>
+                            <p class="title">{{ _('Status')}}</p>
+                            <p>
+
+                           
+                           {% trans task.status %}
+                             </p>
+                          </div>
+
+                        
+
+               
+                        </div>
+
+                      </section>
+           <div class="text-center mtop20">
+                            <form  action="" method="post" class="form-horizontal form-label-left input_mask" >
+                 {% csrf_token %}
+                <a href="{% url 'ns-project:project-task-detail' project.id task.id %}" >  <button type="button" class="btn btn-primary"> <i class="fa fa-arrow-right"></i>  {{ _('Back')}}</button></a>
+                 <a href="{% url 'ns-project:project-task' project.id %}" >   <button type="button" class="btn btn-primary"><i class="fa fa-list"></i>  {{ _('Task List')}}</button></a>
+                   <button type="submit" class="btn btn-danger" title="{{_('Can not go back after delete this task ')}}"> <i class="fa fa-trash" title="{{_('Delete')}}"></i> {{_('Delete')}}</button>
+               </form>
+                          </div>
+                    </div>
+              
+              
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+{% endblock javascripts %}
+
