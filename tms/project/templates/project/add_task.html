@@ -1,0 +1,93 @@
+{% extends "project/base_site.html" %}
+{% load i18n %}
+{% block title %} {% trans "sheets list" %} {% endblock title %}
+{% block stylesheets %}
+{{ block.super }}
+{% endblock stylesheets %}
+{% block content %}
+<div class="right_col" role="main">
+   <div class="">
+      <div class="page-title">
+         <div class="title_left">
+            <!--   <h3>{% trans "Ad Project" %} </h3> -->
+         </div>
+      </div>
+      <div class="clearfix"></div>
+      <div class="row">
+         <div class="col-md-12">
+            <div class="x_panel">
+               <div class="x_title">
+                  <h3>{{ action_name }}</h3>
+                  <ul class="nav navbar-right panel_toolbox">
+                  </ul>
+                  <div class="clearfix"></div>
+               </div>
+               <div class="x_content">
+                  <!-- #to stop html validation put novalidate in form tag -->
+                  <div class="col-md-8 col-sm-12   col-xs-12" >
+                     <form action="" method="post" class="form-horizontal form-label-left input_mask" novalidate enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                           <div class=" col-md-12">
+                              {{form.name.label_tag}}
+                              {{form.name}}
+                           </div>
+                        </div>
+                        <div class="form-group">
+                           <div class=" col-md-12">
+                              {{form.desc.label_tag}}
+                              {{form.desc}}
+                           </div>
+                        </div>
+                        <div class="form-group text-danger ">
+                           <div class="col-md-3"></div>
+                           <div class="col-md-9 col-sm-12 col-xs-12">
+                              {{ form.name.errors }}
+                              {{ form.desc.errors }}
+                           </div>
+                        </div>
+                        <div class="form-group">
+                           <div class="ln_solid"></div>
+                           <div class="col-md-12 col-sm-12 col-xs-12 col-md-offset-3">
+                              <a href="{% url 'ns-project:project-list' %}" >  <button type="button" class="btn btn-primary">{{ _('Back')}}</button></a>
+                              <!--  <button class="btn btn-primary" type="reset">{{_('Reset')}}</button>-->
+                              <button type="submit" class="btn btn-success">{{_('Submit')}}</button>
+                           </div>
+                        </div>
+                        <!--  {{ form.as_p }} -->
+                        <!--  {{ form.start.label_tag }} -->
+                     </form>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock content %}
+{% block javascripts %}
+{{ block.super }}
+<script>
+   $('#single_cal_1').daterangepicker({
+       singleDatePicker: true,
+       singleClasses: "picker_1",
+        locale: {
+             format: 'YYYY-MM-DD'
+         },
+   }, function(start, end, label) {
+
+   });
+
+   $('#single_cal_2').daterangepicker({
+       autoUpdateInput: true,
+       singleDatePicker: true,
+       singleClasses: "picker_1",
+       locale: {
+             format: 'YYYY-MM-DD',
+             language: 'ar-EG',
+         },
+   }, function(start, end, label) {
+
+   });
+</script>
+{% endblock javascripts %}

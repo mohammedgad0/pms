@@ -726,7 +726,7 @@ def updateStartDate(request,pk):
 #             _obj.changeReason = 'Add a question'
 
             _obj.save()
-            #add to history 
+            #add to history
             update_change_reason(_obj, 'Update Start Date')
             data['form_is_valid'] = True
             data['id'] = pk
@@ -865,3 +865,13 @@ def ProjectTeam(request,project_id):
     current_url ="ns-project:" + resolve(request.path_info).url_name
     context={'all_emp':all_emp,'project_detail':project_detail,'project_list':project_list,'current_url':current_url}
     return render(request, 'project/project_team.html', context)
+
+def AddTask(request,project_id):
+    if request.method=='POST':
+        form = AddTaskForm(request.POST)
+        if form.is_valid():
+            project_obj= form.save(commit=False)
+    else:
+        form = AddTaskForm()
+    context ={}
+    return render (request,'project/add_task.html', {'form':form})
