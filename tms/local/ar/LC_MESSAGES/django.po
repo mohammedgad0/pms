@@ -236,11 +236,11 @@ msgstr "تاريخ الإنشاء"
 
 #: .\project\forms.py:140
 msgid "Select Departement"
-msgstr "برجاء التأكد من أن بياناتك مسجلة بشكل صحيح فى نظام شئون الموظفين"
+msgstr "أختر القسم"
 
 #: .\project\forms.py:140
 msgid "Please Sealect Departement"
-msgstr "برجاء التأكد من أن بياناتك مسجلة بشكل صحيح فى نظام شئون الموظفين"
+msgstr "يرجى أختيار القسم"
 
 #: .\project\forms.py:143 .\project\models.py:91 .\project\models.py:177
 msgid "Choice action"
