@@ -5121,16 +5121,16 @@ $(document).ready(function() {
     init_autocomplete();
 
 });
+//custom by mohammed gad
 $.datepicker.setDefaults($.datepicker.regional["ar"]);
 $(document).ready(function(){
-
 $('#id_assigntype_0').change(function(){
-  $('#id_assignedto').prop("disabled", false);
-  $('#id_departementid').prop("disabled", true);
+  $('#id_employee').prop("disabled", false).trigger("chosen:updated");
+  $('#id_department').prop("disabled", true).trigger("chosen:updated");
 });
 $('#id_assigntype_1').change(function(){
-  $('#id_departementid').prop("disabled", false);
-  $('#id_assignedto').prop("disabled", true);
+  $('#id_department').prop("disabled", false).trigger("chosen:updated");
+  $('#id_employee').prop("disabled", true).trigger("chosen:updated");
 });
 
 var item = window.localStorage.getItem('q');
