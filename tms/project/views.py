@@ -967,21 +967,36 @@ def ProjectTaskDelete(request,projectid,taskid):
 def updateTaskAssignto(request,pk):
     data = dict()
     errors = []
-    
-#     if 'reason' in request.POST:
-#         reason = request.POST['reason']
-#         if not reason:
-#             errors.append(_('Enter a reason .'))
-
     _obj =  get_object_or_404(Task,pk=pk)
     if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
+        if 'assigntype' in request.POST:
+            assigntype = request.POST['assigntype']       
+        if not assigntype:
+            errors.append(_('Enter select assigntype'))           
+        if assigntype=="emp" :
+             employee=request.POST.get('employee')
+             if not employee:
+                 errors.append(_('Please select employee'))
+        if assigntype=="dept" :
+             departement=request.POST.get('departement')
+             if not departement:
+                 errors.append(_('Please select departement'))
+                 
         form = TaskAssignToForm(request.POST )
+        form.fields["employee"].queryset = Employee.objects.filter(deptcode = request.session['DeptCode'])
         if form.is_valid():
+            errors= errors.append(form.errors) 
+            _obj.assignedto=int(form.cleaned_data['employee'].empid)
+            _obj.realstartby=None
+            _obj.realstartdate=None
+            _obj.finishedby=None
+            _obj.finisheddate=None
+            _obj.cancelldby=None
+            _obj.cancelleddate=None
             _obj.lasteditdate=datetime.now()
             _obj.save()
                #add to history 
-            update_change_reason(_obj, _("Assign Task to")+ form.cleaned_data['empid'])
+            update_change_reason(_obj, _("Assign Task to")+ form.cleaned_data['employee'].empid)
             data['form_is_valid'] = True
             data['id'] = pk
             data['message'] = _('Task has been assigned successfully for Task number #')+ pk
@@ -989,11 +1004,11 @@ def updateTaskAssignto(request,pk):
             return JsonResponse(data)
         else:
             data['form_is_valid'] = False
-    else:
-         form = TaskAssignToForm()
-         form.fields["employee"].queryset = Employee.objects.filter(deptcode = request.session['DeptCode'])
+            data['errors'] = errors.append(form.errors) 
 
-    # if a GET (or any other method) we'll create a blank form
+
+    form = TaskAssignToForm()
+    form.fields["employee"].queryset = Employee.objects.filter(deptcode = request.session['DeptCode'])
     context = {'form': form,'pk':pk,'errors':errors}
     data['html_form'] = render_to_string('project/task/update_assignto_task.html',context,request=request)
     return JsonResponse(data)     

@@ -154,9 +154,9 @@ class TeamForm(forms.Form):
 
 class TaskAssignToForm(forms.Form):
       CHOICES=CHOICES=[('emp','emp'),('dept','dept')]
-      assigntyp =forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect(),initial="emp")
-      employee = TeamModelChoiceField(queryset=Employee.objects.none(),to_field_name="empid" ,empty_label="(Select Employee)",widget=forms.Select(attrs={'class': 'chosen form-control col-md-8'} ),required=False)
-      departement = FollowupModelChoiceField(queryset=Department.objects.all(), to_field_name="deptcode",empty_label=_('Select Departement'),widget=forms.Select(attrs={'class': 'chosen chosen form-control col-md-3'} ),error_messages={'required': _('Please Sealect Departement')})
+      assigntype =forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect(),initial="emp")
+      employee = TeamModelChoiceField(queryset=Employee.objects.none(),to_field_name="empid" ,empty_label="(Select Employee)",widget=forms.Select(attrs={'class': 'chosen form-control col-md-8'} ),required=True)
+      departement = FollowupModelChoiceField(queryset=Department.objects.all(), to_field_name="deptcode",empty_label=_('Select Departement'),widget=forms.Select(attrs={'class': 'chosen chosen form-control col-md-3'} ),error_messages={'required': _('Please Sealect Departement')},required=False)
 
 
 
