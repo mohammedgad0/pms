@@ -23,6 +23,7 @@ from django.views.generic.list import ListView
 from django.core.urlresolvers import resolve
 from .defs import test
 from simple_history.utils import update_change_reason
+from idlelib.debugobj import _object_browser
 
 
 class BaseSheetFormSet(BaseModelFormSet):
@@ -694,7 +695,7 @@ def ProjectTaskDetail(request,projectid,taskid):
     except:
         closedby = None
 
-    history=Task.history.filter(id=taskid)
+    history=Task.history.filter(id=taskid)[:10:1]
     context = {'project_detail':project_detail,
                'project_list':project_list,
                'current_url':current_url,
@@ -851,33 +852,33 @@ def updateTaskCancel(request,pk):
 def updateTaskPause(request,pk):
     data = dict()
     errors = []
-    if 'reason' in request.POST:
-        reason = request.POST['reason']
-        if not reason:
-            errors.append(_('Enter a reason .'))
+    if 'note' in request.POST:
+        note = request.POST['note']
+        if not note:
+            errors.append(_('Enter a note .'))
 
     _obj =  get_object_or_404(Task,pk=pk)
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
-        form = TaskPuseForm(request.POST )
+        form = TaskPauseForm(request.POST )
         if form.is_valid():
             _obj.status="Hold"
             _obj.lasteditdate=datetime.now()
             _obj.save()
             #add to history
-            update_change_reason(_obj, _("Hold Task")+",<i class=\"fa fa-comment\"></i>" + form.cleaned_data['reason'])
+            update_change_reason(_obj, _("Hold Task")+",<i class=\"fa fa-comment\"></i>" + form.cleaned_data['note'])
             data['form_is_valid'] = True
             data['id'] = pk
             data['status'] = _('Hold')
             data['icon'] = "c_%s" %pk
-            data['message'] = _('Task has been pused successfully for Task number #')+ pk
+            data['message'] = _('Task has been continuous successfully for Task number #')+ pk
             data['html_form'] = render_to_string('project/task/update_pause_task.html',request=request)
             return JsonResponse(data)
         else:
             data['form_is_valid'] = False
 
     # if a GET (or any other method) we'll create a blank form
-    context = {'form': TaskPuseForm(),'pk':pk,'errors':errors}
+    context = {'form': TaskPauseForm(),'pk':pk,'errors':errors}
     data['html_form'] = render_to_string('project/task/update_pause_task.html',context,request=request)
     return JsonResponse(data)
 
@@ -973,14 +974,20 @@ def ProjectTaskDelete(request,projectid,taskid):
 def updateTaskAssignto(request,pk):
     data = dict()
     errors = []
+    employee=None
+    departement=None
+    _assign=""
     _obj =  get_object_or_404(Task,pk=pk)
     if request.method == 'POST':
+        form = TaskAssignToForm(request.POST )
+        form.fields["employee"].queryset = Employee.objects.filter(deptcode = request.session['DeptCode'])
         if 'assigntype' in request.POST:
             assigntype = request.POST['assigntype']
         if not assigntype:
             errors.append(_('Enter select assigntype'))
         if assigntype=="emp" :
              employee=request.POST.get('employee')
+             departement=None
              if not employee:
                  errors.append(_('Please select employee'))
         if assigntype=="dept" :
@@ -988,11 +995,20 @@ def updateTaskAssignto(request,pk):
              if not departement:
                  errors.append(_('Please select departement'))
 
-        form = TaskAssignToForm(request.POST )
-        form.fields["employee"].queryset = Employee.objects.filter(deptcode = request.session['DeptCode'])
+        
         if form.is_valid():
             errors= errors.append(form.errors)
-            _obj.assignedto=int(form.cleaned_data['employee'].empid)
+            try :
+                _obj.assignedto=int(form.cleaned_data['employee'].empid)
+                _assign=_obj.assignedto
+            except :  
+                _obj.assignedto=None
+            try :
+                _obj.departementid=int(form.cleaned_data['departement'].deptcode)
+                _assign=_obj.departementid
+            except :  
+                _obj.departementid=None
+            _obj.status="New"      
             _obj.realstartby=None
             _obj.realstartdate=None
             _obj.finishedby=None
@@ -1002,7 +1018,7 @@ def updateTaskAssignto(request,pk):
             _obj.lasteditdate=datetime.now()
             _obj.save()
                #add to history
-            update_change_reason(_obj, _("Assign Task to")+ form.cleaned_data['employee'].empid)
+            update_change_reason(_obj, _("Assign Task to")+  str(_assign))
             data['form_is_valid'] = True
             data['id'] = pk
             data['message'] = _('Task has been assigned successfully for Task number #')+ pk

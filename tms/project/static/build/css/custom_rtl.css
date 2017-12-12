@@ -5154,3 +5154,6 @@ legend {
 .chosen-container {
 	width:100% !important;
 }
+.chosen-container-single .chosen-single{
+	height:35px !important;
+}

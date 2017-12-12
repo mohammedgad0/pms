@@ -1,5 +1,5 @@
   {% load i18n %}
-   <form action="/project/update_pause_task/{{pk}}" method="post" class="form-horizontal form-label-left input_mask update-cancel-task-form" novalidate enctype="multipart/form-data">
+   <form action="/project/update_pause_task/{{pk}}" method="post" class="form-horizontal form-label-left input_mask update-pause-task-form" novalidate enctype="multipart/form-data">
 
   {% csrf_token %}
      <div class="modal-header">
@@ -11,8 +11,8 @@
 
                <div class="form-group">
               <div class=" col-md-12">
-               {{form.reason.label_tag}}
-               {{form.reason}}
+               {{form.note.label_tag}}
+               {{form.note}}
               </div>
               </div>
                                   

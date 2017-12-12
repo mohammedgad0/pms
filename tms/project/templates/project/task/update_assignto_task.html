@@ -51,12 +51,23 @@
 {% block javascripts %}
 
        <script>
-      $(".chosen").css("width","100%");
+     $(".chosen").css("width","100%");
      $(".chosen").data("placeholder","اختر ...").chosen();
      $(".chosen").chosen({no_results_text: "لايوجد بيانات متاحة"}); 
-      $('.chosen').chosen({allow_single_deselect: true,no_results_text: "لايوجد بيانات متاحة"});
+     $('.chosen').chosen({allow_single_deselect: true,no_results_text: "لايوجد بيانات متاحة"});
 
-  
+     // disable /enable droplis
+    
+       $('#id_assigntype_0').change(function(){
+   	$('#id_employee').prop("disabled", false).trigger("chosen:updated");
+       $('#id_departement').prop("disabled", true).trigger("chosen:updated");
+   	});
+       
+       $('#id_assigntype_1').change(function(){
+       	$('#id_employee').prop("disabled", true).trigger("chosen:updated");
+           $('#id_departement').prop("disabled", false).trigger("chosen:updated");
+       	});
+     
 </script>
 
 {% endblock javascripts %}

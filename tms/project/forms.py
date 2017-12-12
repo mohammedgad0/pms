@@ -147,7 +147,7 @@ class TaskCancelForm(forms.Form):
 
 
 class TaskPauseForm(forms.Form):
-       reason = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Reason"),'placeholder':_("Please enter a reason to cancel"), 'size': '40','required': 'True'}),required=True, max_length=500, error_messages={'required': 'note'})
+       note = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Note"),'placeholder':_("Note"), 'size': '40','required': 'True'}),required=True, max_length=500, error_messages={'required': 'note'})
 
 class TeamModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
@@ -165,8 +165,8 @@ class TeamForm(forms.Form):
 class TaskAssignToForm(forms.Form):
       CHOICES=CHOICES=[('emp','emp'),('dept','dept')]
       assigntype =forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect(),initial="emp")
-      employee = TeamModelChoiceField(queryset=Employee.objects.none(),to_field_name="empid" ,empty_label="(Select Employee)",widget=forms.Select(attrs={'class': 'chosen form-control col-md-8'} ),required=True)
-      departement = FollowupModelChoiceField(queryset=Department.objects.all(), to_field_name="deptcode",empty_label=_('Select Departement'),widget=forms.Select(attrs={'class': 'chosen chosen form-control col-md-3'} ),error_messages={'required': _('Please Sealect Departement')},required=False)
+      employee = TeamModelChoiceField(queryset=Employee.objects.none(),to_field_name="empid" ,empty_label="(Select Employee)",widget=forms.Select(attrs={'class': 'chosen form-control col-md-8'} ),required=False)
+      departement = FollowupModelChoiceField(queryset=Department.objects.all(), to_field_name="deptcode",empty_label=_('Select Departement'),widget=forms.Select(attrs={'class': 'chosen  form-control col-md-3', 'disabled':'disabled'} ),error_messages={'required': _('Please Sealect Departement')},required=False)
 
 
 
