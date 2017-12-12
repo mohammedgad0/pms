@@ -163,7 +163,10 @@ class TeamForm(forms.Form):
       employee = TeamModelChoiceField(queryset=Employee.objects.all(), empty_label="(Nothing)",widget=forms.Select(attrs={'class': 'chosen'} ))
 
 class TaskAssignToForm(forms.Form):
-      employee = TeamModelChoiceField(queryset=Employee.objects.none(),to_field_name="empid" ,empty_label="(Select Employee)",widget=forms.Select(attrs={'class': 'chosen form-control col-md-8'} ),required=False)
+      CHOICES=CHOICES=[('emp','emp'),('dept','dept')]
+      assigntype =forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect(),initial="emp")
+      employee = TeamModelChoiceField(queryset=Employee.objects.none(),to_field_name="empid" ,empty_label="(Select Employee)",widget=forms.Select(attrs={'class': 'chosen form-control col-md-8'} ),required=True)
+      departement = FollowupModelChoiceField(queryset=Department.objects.all(), to_field_name="deptcode",empty_label=_('Select Departement'),widget=forms.Select(attrs={'class': 'chosen chosen form-control col-md-3'} ),error_messages={'required': _('Please Sealect Departement')},required=False)
 
 
 
@@ -173,7 +176,7 @@ class FollowupForm(forms.Form):
       for data in query:
          department.append(data.deptcode)
       departement = FollowupModelChoiceField(queryset=Department.objects.filter(deptcode__in= department), to_field_name="deptcode",empty_label=_('Select Departement'),widget=forms.Select(attrs={'class': 'chosen chosen form-control col-md-3'} ),error_messages={'required': _('Please Sealect Departement')})
-      employee = TeamModelChoiceField(queryset=Employee.objects.none(),to_field_name="empid" ,empty_label="(Select Employee)",widget=forms.Select(attrs={'class': 'chosen form-control col-md-3'} ),required=False)
+      employee = TeamModelChoiceField(queryset=Employee.objects.none(),to_field_name="empid" ,empty_label=_("Select Employee"),widget=forms.Select(attrs={'class': 'chosen form-control col-md-3'} ),required=False)
       TASK_STATUS = (
         ('', _('Choice action')),
         ('New', _('New')),

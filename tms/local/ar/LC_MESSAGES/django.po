@@ -282,11 +282,11 @@ msgstr ""
 
 #: .\project\forms.py:176
 msgid "Select Departement"
-msgstr "برجاء التأكد من أن بياناتك مسجلة بشكل صحيح فى نظام شئون الموظفين"
+msgstr "أختر القسم"
 
 #: .\project\forms.py:176
 msgid "Please Sealect Departement"
-msgstr "برجاء التأكد من أن بياناتك مسجلة بشكل صحيح فى نظام شئون الموظفين"
+msgstr "يرجى أختيار القسم"
 
 #: .\project\forms.py:179 .\project\models.py:92 .\project\models.py:178
 msgid "Choice action"
