@@ -100,13 +100,21 @@ class ProjectForm(ModelForm):
 
         }
 
+class EmployeeList(ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.empname
+class DepartmentList(ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.deptname
 
 class AddTaskForm(ModelForm):
-    CHOICES = (('1', 'employee',), ('2', 'department',))
-    assigntype = forms.ChoiceField(widget=forms.RadioSelect(attrs={'class':'form-check-input'}), choices=CHOICES)
+    CHOICES = (('1', _('employee'),), ('2', _('Department'),))
+    assignedto = EmployeeList(queryset=Employee.objects.all(),to_field_name="empid", empty_label="(Nothing)",widget=forms.Select(attrs={'class': 'form-control', 'disabled':'disabled'} ))
+    departementid = DepartmentList(queryset=Department.objects.all(),to_field_name="deptcode", empty_label="(Nothing)",widget=forms.Select(attrs={'class': 'form-control','disabled':'disabled'} ))
+    assigntype = forms.ChoiceField(label=_('Assignto'),widget=forms.RadioSelect(attrs={'class':'form-check-input-task'}), choices=CHOICES)
     class Meta:
         model = Task
-        fields = ['name','desc','assigntype']
+        fields = ['name','desc','assigntype','assignedto','departementid']
 
         widgets = {
             'name':TextInput(attrs={'class': 'form-control','placeholder':_('Task Name'),'required': True}),
@@ -115,7 +123,9 @@ class AddTaskForm(ModelForm):
         labels = {
             'name': _('Task Name'),
             'desc':_('Task Description'),
+            'assigntype':_('Assignto'),
         }
+
 
 class TaskStartForm(forms.Form):
        rsd = forms.DateField(label=_("Real Start Date"),
@@ -138,7 +148,7 @@ class TaskCancelForm(forms.Form):
 
 class TaskPauseForm(forms.Form):
        reason = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Reason"),'placeholder':_("Please enter a reason to cancel"), 'size': '40','required': 'True'}),required=True, max_length=500, error_messages={'required': 'note'})
-       
+
 class TeamModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.empname

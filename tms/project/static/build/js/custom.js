@@ -5123,15 +5123,21 @@ $(document).ready(function() {
 });
 $.datepicker.setDefaults($.datepicker.regional["ar"]);
 $(document).ready(function(){
-  
-  var item = window.localStorage.getItem('q');
+
+$('#id_assigntype_0').change(function(){
+  $('#id_assignedto').prop("disabled", false);
+  $('#id_departementid').prop("disabled", true);
+});
+$('#id_assigntype_1').change(function(){
+  $('#id_departementid').prop("disabled", false);
+  $('#id_assignedto').prop("disabled", true);
+});
+
+var item = window.localStorage.getItem('q');
 $('select[name=q]').val(item);
   $('select[name=q]').change(function() {
      window.localStorage.setItem('q', $(this).val());
   });
-
-
-
 
   $(".custom").each(function(){
 $(this).find('option').get(0).remove();

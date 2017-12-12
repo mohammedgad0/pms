@@ -864,7 +864,7 @@ def updateTaskPause(request,pk):
             _obj.status="Hold"
             _obj.lasteditdate=datetime.now()
             _obj.save()
-            #add to history 
+            #add to history
             update_change_reason(_obj, _("Hold Task")+",<i class=\"fa fa-comment\"></i>" + form.cleaned_data['reason'])
             data['form_is_valid'] = True
             data['id'] = pk
@@ -879,8 +879,8 @@ def updateTaskPause(request,pk):
     # if a GET (or any other method) we'll create a blank form
     context = {'form': TaskPuseForm(),'pk':pk,'errors':errors}
     data['html_form'] = render_to_string('project/task/update_pause_task.html',context,request=request)
-    return JsonResponse(data)     
-        
+    return JsonResponse(data)
+
 def ganttChart(request,pk):
 
     context={}
@@ -939,12 +939,18 @@ def ProjectTeam(request,project_id):
     return render(request, 'project/project_team.html', context)
 
 def AddTask(request,project_id):
+    deptcode = request.session.get('DeptCode')
+    form = AddTaskForm()
+    form.fields["assignedto"].queryset = Employee.objects.filter(deptcode = deptcode)
+
     if request.method=='POST':
         form = AddTaskForm(request.POST)
+        form.fields["assignto"].queryset = Employee.objects.filter(deptcode = dept)
         if form.is_valid():
             project_obj= form.save(commit=False)
     else:
-        form = AddTaskForm()
+        form =form
+
     context ={}
     return render (request,'project/add_task.html', {'form':form})
 
@@ -963,11 +969,11 @@ def ProjectTaskDelete(request,projectid,taskid):
     else:
           context={'task':task,'project':project,'employee':employee}
           return render(request, 'project/project_task_delete.html', context)
-        
+
 def updateTaskAssignto(request,pk):
     data = dict()
     errors = []
-    
+
 #     if 'reason' in request.POST:
 #         reason = request.POST['reason']
 #         if not reason:
@@ -980,7 +986,7 @@ def updateTaskAssignto(request,pk):
         if form.is_valid():
             _obj.lasteditdate=datetime.now()
             _obj.save()
-               #add to history 
+               #add to history
             update_change_reason(_obj, _("Assign Task to")+ form.cleaned_data['empid'])
             data['form_is_valid'] = True
             data['id'] = pk
@@ -996,5 +1002,4 @@ def updateTaskAssignto(request,pk):
     # if a GET (or any other method) we'll create a blank form
     context = {'form': form,'pk':pk,'errors':errors}
     data['html_form'] = render_to_string('project/task/update_assignto_task.html',context,request=request)
-    return JsonResponse(data)     
-    
+    return JsonResponse(data)

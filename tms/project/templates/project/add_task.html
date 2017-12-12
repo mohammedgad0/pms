@@ -3,6 +3,11 @@
 {% block title %} {% trans "sheets list" %} {% endblock title %}
 {% block stylesheets %}
 {{ block.super }}
+<style>
+#id_assigntype li {list-style: none; display: inline; padding-left:  37px;
+}
+.form-check-input-task{}
+  </style>
 {% endblock stylesheets %}
 {% block content %}
 <div class="right_col" role="main">
@@ -37,15 +42,20 @@
                            <div class=" col-md-12">
                               {{form.desc.label_tag}}
                               {{form.desc}}
-              
+
                            </div>
                         </div>
-
                         <div class="form-check form-check-inline">
-                          <label>
-                          {{ form.assigntype.label }}
-                            {{ form.assigntype }}
-                          </label>
+                            {{form.assigntype.label_tag}}
+                            {{form.assigntype}}
+                        </div>
+                        <div class="form-group">
+                           <div class="col-md-6">
+                              {{form.assignedto}}
+                           </div>
+                           <div class="col-md-6">
+                              {{form.departementid}}
+                           </div>
                         </div>
                         <div class="form-group text-danger ">
                            <div class="col-md-3"></div>
