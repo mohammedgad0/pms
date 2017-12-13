@@ -539,6 +539,7 @@ def ProjectTeam(request,project_id):
     return render(request, 'project/project_team.html', context)
 
 def AddTask(request,project_id):
+    empdata = get_object_or_404(Employee,empid=request.session.get('EmpID'))
     deptcode = request.session.get('DeptCode')
     form = AddTaskForm()
     # form.assignedto.queryset = Employee.objects.filter(deptcode = deptcode)
@@ -553,6 +554,7 @@ def AddTask(request,project_id):
             project_obj.projectid = project_id
             project_obj.status = 'New'
             project_obj.createdby = request.session.get('EmpID')
+            project_obj.lasteditdate = datetime.now()
             project_obj.createddate = datetime.now()
             if assignto_employee:
                 project_obj.assignedto = assignto_employee
@@ -561,7 +563,16 @@ def AddTask(request,project_id):
                 project_obj.departementid = assignto_department
                 project_obj.assigneddate = datetime.now()
             project_obj.save()
-            update_change_reason(project_obj, _("Add new Task"))            
+
+            if assignto_employee:
+                assigntodata = get_object_or_404(Employee , empid = assignto_employee )
+                update_change_reason(project_obj, _("Add new Task By") + empdata.empname + " " + _("And Assign to") + " " + assigntodata.empname)
+            elif assignto_department:
+                assigntodata = get_object_or_404(Department , deptcode = assignto_department )
+                update_change_reason(project_obj, _("Add new Task By") + empdata.empname + " " +_("And Assign to") + " " + assigntodata.deptname)
+            else:
+                update_change_reason(project_obj, _("Add new Task By")+empdata.empname)
+
             messages.success(request, _("Task Added"))
             return HttpResponseRedirect(reverse('ns-project:project-task' , kwargs={'pk':project_id} ))
 
@@ -612,20 +623,20 @@ def updateTaskAssignto(request,pk):
              if not departement:
                  errors.append(_('Please select departement'))
 
-        
+
         if form.is_valid():
             errors= errors.append(form.errors)
             try :
                 _obj.assignedto=int(form.cleaned_data['employee'].empid)
                 _assign=_obj.assignedto
-            except :  
+            except :
                 _obj.assignedto=None
             try :
                 _obj.departementid=int(form.cleaned_data['departement'].deptcode)
                 _assign=_obj.departementid
-            except :  
+            except :
                 _obj.departementid=None
-            _obj.status="New"      
+            _obj.status="New"
             _obj.realstartby=None
             _obj.realstartdate=None
             _obj.finishedby=None
@@ -659,10 +670,10 @@ def ProjectTaskEdit(request,projectid,taskid):
     project_detail= get_object_or_404(Project,pk=projectid)
     task_detail= get_object_or_404(Task,pk=taskid)
     form = EditTaskForm(request.POST or None, instance=task_detail)
-    # for use in futrure 
+    # for use in futrure
     #form.fields["createdby"].queryset = Employee.objects.filter(deptcode = request.session['DeptCode'])
     #form.fields["createdby"].initial=task_detail.createdby
-    
+
     try:
         assignTo=Employee.objects.get(empid__exact=task_detail.assignedto);
     except:
