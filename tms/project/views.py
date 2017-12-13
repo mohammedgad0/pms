@@ -27,6 +27,7 @@ from idlelib.debugobj import _object_browser
 from .timesheet import *
 
 
+
 class BaseSheetFormSet(BaseModelFormSet):
     def clean(self):
         if any(self.errors):
@@ -645,7 +646,6 @@ def updateTaskAssignto(request,pk):
             data['form_is_valid'] = False
             data['errors'] = errors.append(form.errors)
 
-
     form = TaskAssignToForm()
     form.fields["employee"].queryset = Employee.objects.filter(deptcode = request.session['DeptCode'])
     context = {'form': form,'pk':pk,'errors':errors}
@@ -653,8 +653,8 @@ def updateTaskAssignto(request,pk):
     return JsonResponse(data)
 
 def ProjectTaskEdit(request,projectid,taskid):
-    createdby=get_object_or_404(Employee,empid__exact=request.session['EmpID']);
-    project_list= Project.objects.all().filter(createdby__exact=createdby).exclude(status=4).order_by('-id')
+    employee=get_object_or_404(Employee,empid__exact=request.session['EmpID']);
+    project_list= Project.objects.all().filter(createdby__exact=employee).exclude(status=4).order_by('-id')
     current_url ="ns-project:project-task"
     project_detail= get_object_or_404(Project,pk=projectid)
     task_detail= get_object_or_404(Task,pk=taskid)
@@ -684,7 +684,9 @@ def ProjectTaskEdit(request,projectid,taskid):
        instance=form.save()
        instance.save()
        messages.success(request, _("Task has been updated successfully"), fail_silently=True,)
-       return HttpResponseRedirect(reverse('ns-project:project_task_detail', kwargs={'projectid':project_id,'taskid':taskid}))
+       #add to history
+       update_change_reason(instance, _("Edit Task successfully by ")+  str( employee.empname))
+       return HttpResponseRedirect(reverse('ns-project:project-task-detail', kwargs={'projectid':projectid,'taskid':taskid}))
     else:
         context = {'project_detail':project_detail,
                'project_list':project_list,
@@ -692,7 +694,7 @@ def ProjectTaskEdit(request,projectid,taskid):
                'task':task_detail,
                'form':form,
                 'assignTo':assignTo,
-                'createdby':createdby,
+                'createdby':employee,
                 'finishedby':finishedby,
                 'cancelledby':cancelledby,
                 'closedby':closedby,
