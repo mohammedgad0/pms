@@ -679,7 +679,14 @@ def ProjectTaskEdit(request,projectid,taskid):
         closedby=Employee.objects.get(empid__exact=task_detail.closedby);
     except:
         closedby = None
-    context = {'project_detail':project_detail,
+   
+    if form.is_valid():
+       instance=form.save()
+       instance.save()
+       messages.success(request, _("Task has been updated successfully"), fail_silently=True,)
+       return HttpResponseRedirect(reverse('ns-project:project_task_detail', kwargs={'projectid':project_id,'taskid':taskid}))
+    else:
+        context = {'project_detail':project_detail,
                'project_list':project_list,
                'current_url':current_url,
                'task':task_detail,
@@ -690,4 +697,4 @@ def ProjectTaskEdit(request,projectid,taskid):
                 'cancelledby':cancelledby,
                 'closedby':closedby,
                }
-    return render(request, 'project/project_task_edit.html', context)
+        return render(request, 'project/project_task_edit.html', context)
