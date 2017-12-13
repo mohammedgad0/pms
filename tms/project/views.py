@@ -682,10 +682,11 @@ def ProjectTaskEdit(request,projectid,taskid):
    
     if form.is_valid():
        instance=form.save()
+       #instance.note=form.cleaned_data['note']
        instance.save()
        messages.success(request, _("Task has been updated successfully"), fail_silently=True,)
        #add to history
-       update_change_reason(instance, _("Edit Task successfully by ")+  str( employee.empname))
+       update_change_reason(instance, _("Edit Task successfully by ")+  str( employee.empname)+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['note'])
        return HttpResponseRedirect(reverse('ns-project:project-task-detail', kwargs={'projectid':projectid,'taskid':taskid}))
     else:
         context = {'project_detail':project_detail,

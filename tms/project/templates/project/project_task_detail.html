@@ -41,7 +41,7 @@
                <div class="col-md-5 col-sm-12 col-xs-12">
                      <ul class="nav nav-pills left float-left task-ctions" role="tablist">
                      
-                     {% if  task.status == "Cancelled" or task.status == "Finished" or task.status == "Closed" %}
+                     {% if  task.status == "Cancelled" or task.status == "Done" or task.status == "Closed" %}
                           <li id="task-start"> <a href="#"    class="btn btn-app disabled"><i class="fa fa-play fa-2x paction text-default "></i> </a> </li>
                            <li  id="task-finish"> <a href="#"  class="btn btn-app disabled"><i class="fa fa-check-square-o fa-2x paction text-default disabled" title="{{_('Finish Task')}}"></i></a> </li>
                            <li  id="task-cancel"> <a href="#"  class="btn btn-app disabled"><i class="fa fa-ban fa-2x paction text-default" title="{{_('Cancel Task')}}"></i></a> </li>
@@ -120,7 +120,7 @@
          <ul class="list-unstyled project_files">
          {% for h in history%}
        <li><i class="fa fa-clock-o"></i>  <span class="float-right"> {{h.lasteditdate }}  </span> , <span class="float-right">{{h.history_change_reason|safe}} </span>     <span class="float-right">by {{h.lasteditby}}  </span></li>
-         {%endfor%}
+         {% endfor %}
          </ul>
         </div>
       </fieldset>
@@ -143,6 +143,10 @@
                       <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Assigned To")}}</div> <div class="basic_info col-md-7">  {{assignTo.empname}}</div>
                       </li>
                       <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Task Status")}}</div><div class="basic_info col-md-7">  {% trans task.status %} </div>
+                      </li>
+                       <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Start Date")}}</div><div class="basic_info col-md-7">  {{task.startdate|date:"d M Y"  }} </div>
+                      </li>
+                       <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("End Date")}}</div><div class="basic_info col-md-7">  {{ task.enddate|date:"d M Y"  }} </div>
                       </li>
                       <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Mailto To")}}</div> <div class="basic_info col-md-7"> sakr@stats.gov.sa{{task.mailto}}</div>
                       </li>
