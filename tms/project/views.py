@@ -651,3 +651,43 @@ def updateTaskAssignto(request,pk):
     context = {'form': form,'pk':pk,'errors':errors}
     data['html_form'] = render_to_string('project/task/update_assignto_task.html',context,request=request)
     return JsonResponse(data)
+
+def ProjectTaskEdit(request,projectid,taskid):
+    createdby=get_object_or_404(Employee,empid__exact=request.session['EmpID']);
+    project_list= Project.objects.all().filter(createdby__exact=createdby).exclude(status=4).order_by('-id')
+    current_url ="ns-project:project-task"
+    project_detail= get_object_or_404(Project,pk=projectid)
+    task_detail= get_object_or_404(Task,pk=taskid)
+    form = EditTaskForm(request.POST or None, instance=task_detail)
+    # for use in futrure 
+    #form.fields["createdby"].queryset = Employee.objects.filter(deptcode = request.session['DeptCode'])
+    #form.fields["createdby"].initial=task_detail.createdby
+    
+    try:
+        assignTo=Employee.objects.get(empid__exact=task_detail.assignedto);
+    except:
+        assignTo = None
+    try:
+        finishedby=Employee.objects.get(empid__exact=task_detail.finishedby);
+    except:
+        finishedby = None
+    try:
+        cancelledby=Employee.objects.get(empid__exact=task_detail.cancelledby);
+    except:
+        cancelledby = None
+    try:
+        closedby=Employee.objects.get(empid__exact=task_detail.closedby);
+    except:
+        closedby = None
+    context = {'project_detail':project_detail,
+               'project_list':project_list,
+               'current_url':current_url,
+               'task':task_detail,
+               'form':form,
+                'assignTo':assignTo,
+                'createdby':createdby,
+                'finishedby':finishedby,
+                'cancelledby':cancelledby,
+                'closedby':closedby,
+               }
+    return render(request, 'project/project_task_edit.html', context)

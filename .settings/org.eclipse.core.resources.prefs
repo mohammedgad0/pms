@@ -3,6 +3,7 @@ encoding//tms/project/static/build/css/custom_rtl.css=UTF-8
 encoding//tms/project/templates/project/my_tasks.html=UTF-8
 encoding//tms/project/templates/project/project_task_delete.html=UTF-8
 encoding//tms/project/templates/project/project_task_detail.html=UTF-8
+encoding//tms/project/templates/project/project_task_edit.html=UTF-8
 encoding//tms/project/templates/project/projects.html=UTF-8
 encoding//tms/project/templates/project/task/update_assignto_task.html=UTF-8
 encoding//tms/project/templates/project/task/update_start_task.html=UTF-8

@@ -163,7 +163,7 @@ msgstr "تفاصيل المشروع"
 
 #: .\project\forms.py:67
 msgid "Select Status"
-msgstr "الحالة"
+msgstr "اختر الحالة"
 
 #: .\project\forms.py:75 .\project\forms.py:187
 #: .\project\templates\project\all_emp_sheets.html:55

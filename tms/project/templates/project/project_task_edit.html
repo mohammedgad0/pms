@@ -1,3 +1,4 @@
+from pygments import style
 {% extends "project/base_site.html" %}
 {% load i18n %}
 {% block title %} {% trans "Project Details" %} {% endblock title %}
@@ -6,7 +7,8 @@
 
 {% block stylesheets %}
   {{ block.super }}
-  
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.css" />
+
   <style>
  /* .scrollable-menu {
     height: auto;
@@ -26,43 +28,22 @@
    
 
       <div class="clearfix"></div>
-
+ <form action="" method="post" class="form-horizontal form-label-left input_mask" novalidate enctype="multipart/form-data">
+{% csrf_token %}
       <div class="row">
         <div class="col-md-12">
           <div class="x_panel">
             <div class="x_title">
             <div class="col-md-7 col-sm-12 col-xs-12">
           
-              <h2 class="right">  <div class="task_number"  >{{task.id}}</div>  {{task.name}}  </h2>
+              <h2 class="right">  <div class="task_number"  >  {{task.id}}</div>  {{task.name}}  </h2>
               
               </div>
                <div class="col-md-5 col-sm-12 col-xs-12">
                      <ul class="nav nav-pills left float-left task-ctions" role="tablist">
                      
-                     {% if  task.status == "Cancelled" or task.status == "Finished" or task.status == "Closed" %}
-                          <li id="task-start"> <a href="#"    class="btn btn-app disabled"><i class="fa fa-play fa-2x paction text-default "></i> </a> </li>
-                           <li  id="task-finish"> <a href="#"  class="btn btn-app disabled"><i class="fa fa-check-square-o fa-2x paction text-default disabled" title="{{_('Finish Task')}}"></i></a> </li>
-                           <li  id="task-cancel"> <a href="#"  class="btn btn-app disabled"><i class="fa fa-ban fa-2x paction text-default" title="{{_('Cancel Task')}}"></i></a> </li>
-                      {% else %}
-                      
-                          {% if  task.status == "InProgress"    %}
-                           <li id="task-puse">   <a href="#" data-url="{% url 'ns-project:update-pause-task' task.id %}" class="btn btn-app update-task-pause"  class="btn btn-app" title="{{_('Pause Task')}}"> <i class="fa fa-pause fa-2x paction text-primary"></i> </a> </li>
-                          {% elif   task.status == "New"  %}
-                           <li id="task-start">   <a href="#" data-url="{% url 'ns-project:task-update-start' task.id %}" class="btn btn-app update-task-start"  class="btn btn-app" title="{{_('Start Task')}}"> <i class="fa fa-play fa-2x paction text-primary"></i> </a> </li>
-                           {% endif %}
-                           <li  id="task-finish"> <a href="#" data-url="{% url 'ns-project:update-finish-task' task.id %}" class="btn btn-app update-task-finish"><i class="fa fa-check-square-o fa-2x paction text-primary" title="{{_('Finish Task')}}"></i></a> </li>
-                           <li  id="task-cancel"> <a href="#" data-url="{% url 'ns-project:update-cancel-task' task.id %}" class="btn btn-app update-task-cancel "><i class="fa fa-ban fa-2x paction text-danger" title="{{_('Cancel Task')}}"></i></a> </li> 
-                     {% endif %}
-                     {% if  task.status != "Closed "%}
-                           <li  id="task-assignto">  <a href="#" data-url="{% url 'ns-project:update-assignto-task' task.id %}" class="btn btn-app update-task-assignto"> <i class="fa fa-hand-o-right fa-2x paction text-primary" title="{{_('Assign To')}}"></i>  </a> </li>
-                           <li  id="task-close">  <a href="#" data-url="{% url 'ns-project:update-close-task' task.id %}" class="btn btn-app update-task-close"> <i class="fa fa-power-off  fa-2x paction text-danger" title="{{_('Close Task')}}"></i></a> </li>
-                    {% else %}
-                           <li  id="task-assignto">  <a href="#"  class="btn btn-app disabled"> <i class="fa fa-hand-o-right fa-2x paction text-default" title="{{_('Assign To')}}"></i>  </a> </li>
-                           <li  id="task-close">  <a href="#"  class="btn btn-app disabled"> <i class="fa fa-power-off  fa-2x paction text-default" title="{{_('Close Task')}}"></i></a> </li>
-                    
-                      {% endif %}
-                           <li>   <a href="{% url 'ns-project:project-task-edit' project_detail.id task.id %}" class="btn btn-app" title="{{_('Edit Task')}}"> <i class="fa fa-edit fa-2x paction" title="{{_('Edit')}}"></i> </a> </li>
-                           <li>   <a href="{% url 'ns-project:project-task-delete' project_detail.id task.id %}" class="btn btn-app" title="{{_('Start Task')}}"> <i class="fa fa-trash fa-2x paction" title="{{_('Delete')}}"></i> </a> </li>
+                 
+                             <button type="submit" class="btn btn-success">  <li>   <i class="fa fa-save"></i>  {{_('Save Changes')}}</button></li>
                            </ul>
               </div>
               <div class="clearfix"></div>
@@ -76,12 +57,26 @@
        
  <!-- start task detail ------------------------------------- -->
  <div class="col-md-12 col-sm-12 col-xs-12">
-
+ 
+<div class="form-group">
+<!-- task title -->
+{{form.name.label_tag}}
+ {{form.name}}
+            </div>
+                            
 <!--  decription -->
-<fieldset class="fieldset_normal">
-        <legend>{{ _('Task Description')}}</legend>
-        <div class="article-content">    <p>{{task.desc}} </p></div>
-      </fieldset>
+ <div class="form-group">    
+ {{form.desc.label_tag}}
+    {{form.desc}}
+     </div>
+  
+  <!--  decription -->
+ <div class="form-group">    
+ {{form.note.label_tag}}
+    {{form.note}}
+     </div>
+     
+                      
           
 <!--  attachmenet -->
 <fieldset class="fieldset_normal">
@@ -101,18 +96,17 @@
                     </ul>
         
       </fieldset>
-                
-<!-- history -->
-<fieldset class="fieldset_normal">
-        <legend>{{ _('Recent Activity')}}</legend>
-        <div class="article-content">    
-         <ul class="list-unstyled project_files">
-         {% for h in history%}
-       <li><i class="fa fa-clock-o"></i>  <span class="float-right"> {{h.lasteditdate }}  </span> , <span class="float-right">{{h.history_change_reason|safe}} </span>     <span class="float-right">by {{h.lasteditby}}  </span></li>
-         {%endfor%}
-         </ul>
-        </div>
-      </fieldset>
+     
+     
+      <!--  save and return control -->
+ <div class="form-group"> 
+  
+     <a href="{% url 'ns-project:project-list' %}" >  <button type="button" class="btn btn-primary">{{ _('Back')}}</button></a>
+
+      <button type="submit" class="btn btn-success">    <i class="fa fa-save"></i>  {{_('Save Changes')}}</button>
+        </div>  
+                   
+
 
 </div>
           
@@ -127,14 +121,34 @@
         <legend>{{_("Basci Info")}}</legend>
    
    <ul class="list-unstyled">
-                      <li class="clearfix"><div class="basic_info_lable col-md-4 float-right">{{_("project Name")}}</div> <div class="basic_info  col-md-7">{{project_detail.name}}</div>
+                      <li class="clearfix"><div class="basic_info_lable col-md-4 float-right">{{_("project Name")}}</div> <div class="basic_info  col-md-7">{{project_detail.name}} </div>
                       </li>
-                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Assigned To")}}</div> <div class="basic_info col-md-7">  {{assignTo.empname}}</div>
+                      <li class="clearfix task-ctions"><div class="basic_info_lable  col-md-4 float-right">{{_("Assigned To")}} </div> <div class="basic_info col-md-7" style="position:relative;">  {{form.assignedto}} 
+                                             <a href="#" data-url="{% url 'ns-project:update-assignto-task' task.id %}" class="update-task-assignto" style="    position: absolute;
+    top: 0px;
+    left: 0px;
+    /* margin-top: 8px; */
+    height: 38px;
+    color: #bbb;
+    line-height: 24px;
+    font-size: 15px;
+    /* height: 5px; */
+    width: 51px;
+    display: inline-block;">
+
+                      <i class="fa fa-search form-control-feedback right" aria-hidden="true"></i>
+                  
+                      </a>
+                      </div>
                       </li>
-                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Task Status")}}</div><div class="basic_info col-md-7">  {% trans task.status %} </div>
-                      </li>
-                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Mailto To")}}</div> <div class="basic_info col-md-7"> sakr@stats.gov.sa{{task.mailto}}</div>
-                      </li>
+                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Status")}}</div> <div class="basic_info col-md-7">  {{form.status}}</div>
+                        </li>
+                     <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Start Date")}}</div> <div class="basic_info col-md-7">  {{form.startdate}}                 <span class="fa fa-calendar-o form-control-feedback right"  aria-hidden="true"></span>
+</div>
+                        </li>
+                        <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("End Date")}}</div> <div class="basic_info col-md-7">  {{form.enddate}}                 <span class="fa fa-calendar-o form-control-feedback right"  aria-hidden="true"></span>
+</div>
+                        </li>
                     </ul>
 
       </fieldset>
@@ -153,8 +167,7 @@
                       </li>
                       <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Cancelled Reason")}}</div> <div class="basic_info  col-md-7 float-right"> {{task.mailto}}</div>
                       </li>
-                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Last Edited")}}</div> <div class="basic_info col-md-7 float-right"> {{  task.lasteditdate|date:"d M Y ,  h:i a" }}</div>
-                      </li>
+                     
                     </ul>
                     
 
@@ -175,6 +188,7 @@
     </div>
   </div>
   
+  </form>
   <!-- THE MODAL WE WILL BE USING -->
 <div class="modal fade" id="modal-task">
    <div class="modal-dialog modal-lg">
@@ -218,7 +232,7 @@ $.ajax({
 
       $("#"+data.icon).addClass('paction_disable').closest('a').removeAttr("href").removeAttr("data-url").removeAttr("class");
       $("#modal-task").modal("hide");
-      location.reload();
+     // location.reload();
     }
     else {
       $("#modal-task .modal-content").html(data.html_form);
@@ -259,10 +273,36 @@ $("#modal-task").on("submit", ".update-assignto-task-form", saveForm);
 
      $(".chosen").data("placeholder","Select Frameworks...").chosen();
      $(".chosen").chosen({no_results_text: "Oops, nothing found!"}); 
-      $('.chosen').chosen({allow_single_deselect: true,no_results_text: "Ù„Ø§ ÙŠÙˆØ¬Ø¯ Ù†ØªØ§Ø¦Ø¬!"});
+      $('.chosen').chosen({allow_single_deselect: true,no_results_text: "Ã™â€žÃ˜Â§ Ã™Å Ã™Ë†Ã˜Â¬Ã˜Â¯ Ã™â€ Ã˜ÂªÃ˜Â§Ã˜Â¦Ã˜Â¬!"});
 
 
       
       
 </script>
+
+
+  <script>
+  $('#single_cal_1').daterangepicker({
+      singleDatePicker: true,
+      singleClasses: "picker_1",
+       locale: {
+            format: 'YYYY-MM-DD'
+        },
+  }, function(start, end, label) {
+     
+  });
+  
+  $('#single_cal_2').daterangepicker({
+      autoUpdateInput: true,
+      singleDatePicker: true,
+      singleClasses: "picker_1",
+      locale: {
+            format: 'YYYY-MM-DD',
+            language: 'ar-EG',
+        },
+  }, function(start, end, label) {
+    
+  });
+  </script>
+  
 {% endblock javascripts %}

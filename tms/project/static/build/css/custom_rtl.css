@@ -5155,5 +5155,11 @@ legend {
 	width:100% !important;
 }
 .chosen-container-single .chosen-single{
-	height:35px !important;
+	height:30px !important;
+}
+
+.extended_search_icon {
+	   left: -10px;
+    position: absolute;
+    top: 10px;
 }
