@@ -27,6 +27,7 @@ from idlelib.debugobj import _object_browser
 from .timesheet import *
 
 
+
 class BaseSheetFormSet(BaseModelFormSet):
     def clean(self):
         if any(self.errors):
@@ -656,7 +657,6 @@ def updateTaskAssignto(request,pk):
             data['form_is_valid'] = False
             data['errors'] = errors.append(form.errors)
 
-
     form = TaskAssignToForm()
     form.fields["employee"].queryset = Employee.objects.filter(deptcode = request.session['DeptCode'])
     context = {'form': form,'pk':pk,'errors':errors}
@@ -664,8 +664,8 @@ def updateTaskAssignto(request,pk):
     return JsonResponse(data)
 
 def ProjectTaskEdit(request,projectid,taskid):
-    createdby=get_object_or_404(Employee,empid__exact=request.session['EmpID']);
-    project_list= Project.objects.all().filter(createdby__exact=createdby).exclude(status=4).order_by('-id')
+    employee=get_object_or_404(Employee,empid__exact=request.session['EmpID']);
+    project_list= Project.objects.all().filter(createdby__exact=employee).exclude(status=4).order_by('-id')
     current_url ="ns-project:project-task"
     project_detail= get_object_or_404(Project,pk=projectid)
     task_detail= get_object_or_404(Task,pk=taskid)
@@ -690,15 +690,25 @@ def ProjectTaskEdit(request,projectid,taskid):
         closedby=Employee.objects.get(empid__exact=task_detail.closedby);
     except:
         closedby = None
-    context = {'project_detail':project_detail,
+
+    if form.is_valid():
+       instance=form.save()
+       #instance.note=form.cleaned_data['note']
+       instance.save()
+       messages.success(request, _("Task has been updated successfully"), fail_silently=True,)
+       #add to history
+       update_change_reason(instance, _("Edit Task successfully by ")+  str( employee.empname)+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['note'])
+       return HttpResponseRedirect(reverse('ns-project:project-task-detail', kwargs={'projectid':projectid,'taskid':taskid}))
+    else:
+        context = {'project_detail':project_detail,
                'project_list':project_list,
                'current_url':current_url,
                'task':task_detail,
                'form':form,
                 'assignTo':assignTo,
-                'createdby':createdby,
+                'createdby':employee,
                 'finishedby':finishedby,
                 'cancelledby':cancelledby,
                 'closedby':closedby,
                }
-    return render(request, 'project/project_task_edit.html', context)
+        return render(request, 'project/project_task_edit.html', context)
