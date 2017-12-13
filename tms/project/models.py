@@ -208,6 +208,7 @@ class Task(models.Model):
         managed = False
         db_table = 'task'
 
+
 class TaskHistory(models.Model):
     projectid = models.IntegerField(db_column='ProjectId')  # Field name made lowercase.
     taskid = models.IntegerField(db_column='TaskId')  # Field name made lowercase.

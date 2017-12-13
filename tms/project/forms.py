@@ -113,11 +113,14 @@ class AddTaskForm(ModelForm):
         model = Task
         fields = ['name','desc','assigntype',
         'employee',
-        'departementid']
+        'departementid','startdate','enddate']
         widgets = {
             'name':TextInput(attrs={'class': 'form-control','placeholder':_('Task Name'),'required': True}),
             'desc': Textarea(attrs={'class':'form-control','placeholder':_('Task Details'),'required': True}),
+            'startdate':TextInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Start Date'),'required': True}),
+            'enddate':TextInput(attrs={'class': 'form-control has-feedback-left col-md-6 ','id':'single_cal_2','aria-describedby':'inputSuccess2Status','placeholder':_('End Date'),'required': True}),
         }
+
         labels = {
             'name': _('Task Name'),
             'desc':_('Task Description'),
@@ -129,25 +132,25 @@ class EditTaskForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(EditTaskForm, self).__init__(*args, **kwargs)
         self.fields['name'].widget.attrs['maxlength'] =255
-        
+
     CHOICES = (('1', _('employee'),), ('2', _('Department'),))
     createdby = EmployeeList(queryset=Employee.objects.all(),to_field_name="empid", empty_label="(Nothing)",required=False,widget=forms.Select(attrs={'class': 'chosen form-control'} ))
     department = DepartmentList(queryset=Department.objects.all(),to_field_name="deptcode", empty_label="(Nothing)",required=False,widget=forms.Select(attrs={'class': 'chosen form-control','disabled':'disabled'} ))
     assigntype = forms.ChoiceField(label=_('Assignto'),required=False,widget=forms.RadioSelect(attrs={'class':'form-check-input-task'}), choices=CHOICES)
-    note = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Note"),'placeholder':_("Note"), 'rows':'5','size': '40','required': 'True'}),required=True, max_length=500, error_messages={'required': 'note'})
+    note = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Note"),'placeholder':_("Note"), 'rows':'5','size': '40','required': 'True'}),required=False, max_length=500, error_messages={'required': 'note'})
 
 
-      
+
     class Meta:
         model = Task
-        fields = ['name','desc','startdate','enddate','assigntype','departementid','status','assignedto']
+        fields = ['name','desc','startdate','enddate','assigntype','department','status','assignedto']
         widgets = {
             'name':TextInput(attrs={'class': 'form-control','placeholder':_('Task Name'),'required': True}),
-            'desc': Textarea(attrs={'class':'form-control','placeholder':_('Task Details'),'required': True}),
-            'startdate':TextInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Start Date'),'required': True}),
-            'enddate':TextInput(attrs={'class': 'form-control has-feedback-left col-md-6 ','id':'single_cal_2','aria-describedby':'inputSuccess2Status','placeholder':_('End Date'),'required': True}),
-            'status':forms.Select(attrs={'class': 'form-control','placeholder':_('Select Status')}),
-            'assignedto':TextInput(attrs={'class': 'form-control','placeholder':_('Task Name'),'required': True}),
+            'desc': Textarea(attrs={'class':'form-control','placeholder':_('Task Details'),'required': False}),
+            'startdate':TextInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Start Date'),'required': False}),
+            'enddate':TextInput(attrs={'class': 'form-control has-feedback-left col-md-6 ','id':'single_cal_2','aria-describedby':'inputSuccess2Status','placeholder':_('End Date'),'required': False}),
+            'status':forms.Select(attrs={'class': 'form-control','placeholder':_('Select Status'),'required': False}),
+            'assignedto':TextInput(attrs={'class': 'form-control','placeholder':_('Task Name'),'required': False}),
 
         }
         labels = {
