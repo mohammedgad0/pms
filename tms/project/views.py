@@ -25,6 +25,7 @@ from .defs import test
 from simple_history.utils import update_change_reason
 from idlelib.debugobj import _object_browser
 from .timesheet import *
+from _datetime import date
 
 
 
@@ -682,11 +683,23 @@ def ProjectTaskEdit(request,projectid,taskid):
    
     if form.is_valid():
        instance=form.save()
-       #instance.note=form.cleaned_data['note']
+       instance.status=form.cleaned_data['status']
+       #check if status changed to new 
+       if form.cleaned_data['status'] =="New" or form.cleaned_data['status'] =="Inprogress" :
+           instance.closeby=None
+           instance.closeddate=None
+           instance.canceleddate=None
+           instance.cancelledby=None
+           instance.finisheddate=None
+           instance.finishedby=None
+           instance.lasteditdate=datetime.now()
+           instance.lasteditby=request.session['EmpID']
+           
+       
        instance.save()
        messages.success(request, _("Task has been updated successfully"), fail_silently=True,)
        #add to history
-       update_change_reason(instance, _("Edit Task successfully by ")+  str( employee.empname)+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['note'])
+       update_change_reason(instance, _("Edit Task successfully by")+  str( employee.empname)+ (",    <i class=\"fa fa-comment\"></i>  "+ form.cleaned_data['note']  if form.cleaned_data['note'] else " "))
        return HttpResponseRedirect(reverse('ns-project:project-task-detail', kwargs={'projectid':projectid,'taskid':taskid}))
     else:
         context = {'project_detail':project_detail,

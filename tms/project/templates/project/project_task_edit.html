@@ -97,6 +97,18 @@ from pygments import style
         
       </fieldset>
      
+    
+    
+           <div class="form-group text-danger ">
+     <div class="col-md-3"></div><div class="col-md-9 col-sm-12 col-xs-12">
+    {{ form.name.errors }}
+    {{ form.desc.errors }}
+    {{ form.start.errors}}
+    {{ form.end.errors  }}
+   
+    </div>
+</div>
+    
      
       <!--  save and return control -->
  <div class="form-group"> 
@@ -189,15 +201,6 @@ from pygments import style
   </div>
   
   
-       <div class="form-group text-danger ">
-     <div class="col-md-3"></div><div class="col-md-9 col-sm-12 col-xs-12">
-    {{ form.name.errors }}
-    {{ form.desc.errors }}
-    {{ form.start.errors}}
-    {{ form.end.errors  }}
-   
-    </div>
-</div>
 
 
   </form>

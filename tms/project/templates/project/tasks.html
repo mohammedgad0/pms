@@ -150,7 +150,7 @@
                               <a href="#" data-url="{% url 'ns-project:update-close-task' task.id %}" class="update-close-task" ><i class="fa fa-power-off  fa-2x paction  text-primary" title="{% trans "Close" %}" id="c_{{task.id}}"></i> </a>
                               {% endif %}
                               <!-- manager edit task -->
-                              <a href="{% url 'ns-project:project-edit' task.id %}" ><i class="fa fa-edit fa-2x paction  text-primary" title="{% trans "Edit" %}"></i>  </a>
+                              <a href="{% url 'ns-project:project-task-edit' project_detail.id task.id %}" ><i class="fa fa-edit fa-2x paction  text-primary" title="{% trans "Edit" %}"></i>  </a>
                               {% endif %}
                            </td>
                         </tr>
