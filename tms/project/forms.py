@@ -181,7 +181,23 @@ class EditTaskForm(ModelForm):
             'desc':_('Task Description'),
             'assigntype':_('Assignto'),
         }
+        error_messages = {
+            'name': {
+                    'max_length': _("The Task's name is too long."),
+                    'required': _("Task's name is required."),
+             },
+            'startdate': {
+                    'required': _("Start Date  is required."),
+             },
+            'enddate': {
+                    'required': _("End Date  is required."),
+             },
+            'desc': {
+                    'max_length': _("The Task's Description is too long."),
+                    'required': _("Description is required."),
+             },
 
+        }
 
 class TaskStartForm(forms.Form):
        rsd = forms.DateField(label=_("Real Start Date"),

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-14 10:54+0300\n"
+"POT-Creation-Date: 2017-12-14 11:54+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -83,7 +83,7 @@ msgstr "نوع المهمة"
 msgid "Duration"
 msgstr "المدة التقريبية للإنجاز"
 
-#: .\project\forms.py:39 .\project\forms.py:238 .\project\models.py:93
+#: .\project\forms.py:39 .\project\forms.py:254 .\project\models.py:93
 #: .\project\models.py:100 .\project\models.py:179
 #: .\project\templates\project\emp_sheet.html:170
 #: .\project\templates\project\emp_sheet.html:181
@@ -122,7 +122,7 @@ msgstr "حالة الإعتماد"
 msgid "in progres"
 msgstr "قيد التنفيذ"
 
-#: .\project\forms.py:46 .\project\forms.py:240 .\project\models.py:102
+#: .\project\forms.py:46 .\project\forms.py:256 .\project\models.py:102
 #: .\project\models.py:181 .\project\templates\project\emp_sheet.html:187
 #: .\project\templates\project\my_tasks.html:114
 #: .\project\templates\project\tasks.html:53
@@ -172,7 +172,7 @@ msgstr "تفاصيل المشروع"
 msgid "Select Status"
 msgstr "اختر الحالة"
 
-#: .\project\forms.py:71 .\project\forms.py:245
+#: .\project\forms.py:71 .\project\forms.py:261
 #: .\project\templates\project\all_emp_sheets.html:55
 #: .\project\templates\project\all_sheets.html:80
 #: .\project\templates\project\dept_tasks.html:64
@@ -207,11 +207,11 @@ msgstr "اسم المشروع طويل جدا"
 msgid "Project's name is required."
 msgstr "اسم المشروع مطلوب"
 
-#: .\project\forms.py:87 .\project\forms.py:140
+#: .\project\forms.py:87 .\project\forms.py:140 .\project\forms.py:190
 msgid "Start Date  is required."
 msgstr "تاريخ البدء مطلوب"
 
-#: .\project\forms.py:90 .\project\forms.py:143
+#: .\project\forms.py:90 .\project\forms.py:143 .\project\forms.py:193
 msgid "End Date  is required."
 msgstr "تاريخ الإنتهاء مطلوب"
 
@@ -219,7 +219,7 @@ msgstr "تاريخ الإنتهاء مطلوب"
 msgid "The Project's Description is too long."
 msgstr "اسم المشروع طويل جدا"
 
-#: .\project\forms.py:94 .\project\forms.py:147
+#: .\project\forms.py:94 .\project\forms.py:147 .\project\forms.py:197
 msgid "Description is required."
 msgstr "الوصف مطلوب"
 
@@ -262,77 +262,85 @@ msgstr "وصف المهمة"
 msgid "write a Description for task ."
 msgstr "اكتب وصفا للمهمة"
 
-#: .\project\forms.py:146
+#: .\project\forms.py:146 .\project\forms.py:196
 msgid "The Task's Description is too long."
 msgstr "اسم المشروع طويل جدا"
 
-#: .\project\forms.py:163 .\project\forms.py:206
+#: .\project\forms.py:163 .\project\forms.py:222
 msgid "Note"
 msgstr "ملاحظة"
 
-#: .\project\forms.py:187 .\project\forms.py:188
+#: .\project\forms.py:186
+msgid "The Task's name is too long."
+msgstr "اسم المهمه طويل جدا"
+
+#: .\project\forms.py:187
+msgid "Task's name is required."
+msgstr "اسم المهمه مطلوب"
+
+#: .\project\forms.py:203 .\project\forms.py:204
 msgid "Real Start Date"
 msgstr "تاريخ البدأ الفعلى"
 
-#: .\project\forms.py:192
+#: .\project\forms.py:208
 msgid "Finished on"
 msgstr "الإنجاز"
 
-#: .\project\forms.py:193
+#: .\project\forms.py:209
 msgid "Finished on Date"
 msgstr "تاريخ الإنجاز"
 
-#: .\project\forms.py:197
+#: .\project\forms.py:213
 msgid "Closed on"
 msgstr "الإغلاق"
 
-#: .\project\forms.py:198
+#: .\project\forms.py:214
 msgid "Closed on Date"
 msgstr "تاريخ الإغلاق"
 
-#: .\project\forms.py:199
+#: .\project\forms.py:215
 msgid "Please enter a reason to Close "
 msgstr "يرجى إدخال سبب الإغلاق"
 
-#: .\project\forms.py:199 .\project\forms.py:202
+#: .\project\forms.py:215 .\project\forms.py:218
 msgid "Reason"
 msgstr "السبب"
 
-#: .\project\forms.py:202
+#: .\project\forms.py:218
 msgid "Please enter a reason to cancel"
 msgstr "يرجى إدخال سبب الإلغاء"
 
-#: .\project\forms.py:225 .\project\forms.py:234
+#: .\project\forms.py:241 .\project\forms.py:250
 msgid "Select Departement"
 msgstr "أختر القسم"
 
-#: .\project\forms.py:225 .\project\forms.py:234
+#: .\project\forms.py:241 .\project\forms.py:250
 msgid "Please Sealect Departement"
 msgstr "يرجى أختيار القسم"
 
-#: .\project\forms.py:235
+#: .\project\forms.py:251
 msgid "Select Employee"
 msgstr "أختر موظف"
 
-#: .\project\forms.py:237 .\project\models.py:92 .\project\models.py:178
+#: .\project\forms.py:253 .\project\models.py:92 .\project\models.py:178
 msgid "Choice action"
 msgstr "اختر الحالة"
 
-#: .\project\forms.py:239 .\project\models.py:180 .\project\views.py:335
+#: .\project\forms.py:255 .\project\models.py:180 .\project\views.py:335
 msgid "InProgress"
 msgstr "جارى العمل"
 
-#: .\project\forms.py:241 .\project\models.py:182
+#: .\project\forms.py:257 .\project\models.py:182
 #: .\project\templates\project\tasks.html:56 .\project\views.py:473
 msgid "Hold"
 msgstr "متوقف"
 
-#: .\project\forms.py:242 .\project\models.py:183
+#: .\project\forms.py:258 .\project\models.py:183
 #: .\project\templates\project\tasks.html:55 .\project\views.py:440
 msgid "Cancelled"
 msgstr "ملفى"
 
-#: .\project\forms.py:243 .\project\models.py:184
+#: .\project\forms.py:259 .\project\models.py:184
 #: .\project\templates\project\tasks.html:54 .\project\views.py:405
 msgid "Closed"
 msgstr "مغلق"
@@ -1201,8 +1209,9 @@ msgid "Enter a reason ."
 msgstr "الرجاء إدخال السبب"
 
 #: .\project\views.py:407
-#, python-format
-msgid " Close Date Updated successfully for Task number"
+#, fuzzy, python-format
+#| msgid " Close Date Updated successfully for Task number"
+msgid " Close Date Updated successfully for Task number %s "
 msgstr "تم تعديل تاريخ إغلاق المهمه بنجاح"
 
 #: .\project\views.py:442

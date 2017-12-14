@@ -171,8 +171,8 @@ class ApfDeptView(models.Model):
 
 class Task(models.Model):
     projectid = models.IntegerField(db_column='ProjectId')  # Field name made lowercase.
-    name = models.CharField(db_column='Name', max_length=100, blank=True, null=True)  # Field name made lowercase.
-    desc = models.CharField(db_column='Desc', max_length=2500, blank=True, null=True)  # Field name made lowercase.
+    name = models.CharField(db_column='Name', max_length=100, blank=False, null=False)  # Field name made lowercase.
+    desc = models.CharField(db_column='Desc', max_length=2500, blank=False, null=False)  # Field name made lowercase.
 
     TASK_STATUS = (
         ('', _('Choice action')),
