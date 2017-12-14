@@ -542,6 +542,7 @@ def ProjectTeam(request,project_id):
 def AddTask(request,project_id):
     empdata = get_object_or_404(Employee,empid=request.session.get('EmpID'))
     deptcode = request.session.get('DeptCode')
+    upload_file = UploadFile
     form = AddTaskForm()
     # form.assignedto.queryset = Employee.objects.filter(deptcode = deptcode)
     form.fields["employee"].queryset = Employee.objects.filter(deptcode = deptcode)
@@ -564,7 +565,17 @@ def AddTask(request,project_id):
                 project_obj.departementid = assignto_department
                 project_obj.assigneddate = datetime.now()
             project_obj.save()
-
+            upload_form = UploadFile(request.POST, request.FILES)
+            if upload_form.is_valid():
+                obj_file = upload_form.save(commit=False)
+                obj_file.projectid = project_id
+                obj_file.taskid = project_obj.id
+                obj_file.filename = project_obj.name
+                obj_file.save()
+                data = {'is_valid': True, 'name': photo.file.name, 'url': photo.file.url}
+            else:
+                data = {'is_valid': False}
+                return JsonResponse(data)
             if assignto_employee:
                 assigntodata = get_object_or_404(Employee , empid = assignto_employee )
                 update_change_reason(project_obj, _("Add new Task By") + empdata.empname + " " + _("And Assign to") + " " + assigntodata.empname)
@@ -581,8 +592,8 @@ def AddTask(request,project_id):
     else:
         form = form
 
-    context ={}
-    return render (request,'project/add_task.html', {'form':form})
+    context ={'upload_file':upload_file,'form':form}
+    return render (request,'project/add_task.html', context)
 
 def ProjectTaskDelete(request,projectid,taskid):
     try:

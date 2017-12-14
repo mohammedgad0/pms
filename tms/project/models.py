@@ -270,3 +270,12 @@ class VStatisticstaskdata(models.Model):
     class Meta:
         managed = False
         db_table = 'v_statisticstaskdata'
+
+class Media(models.Model):
+    id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
+    projectid = models.IntegerField(blank=True, null=True)
+    taskid = models.IntegerField(blank=True, null=True)
+    filename = models.CharField(blank=True,null=True, max_length=100)
+    filepath = models.FileField(_('Files Upload'),upload_to='documents/',blank=True, null=True)
+    class Meta:
+        db_table = 'media'

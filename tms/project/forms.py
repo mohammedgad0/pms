@@ -99,6 +99,7 @@ class ProjectForm(ModelForm):
 class EmployeeList(ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.empname
+
 class DepartmentList(ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.deptname
@@ -126,7 +127,6 @@ class AddTaskForm(ModelForm):
             'desc':_('Task Description'),
             'assigntype':_('Assignto'),
         }
-
 
 class EditTaskForm(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -159,7 +159,6 @@ class EditTaskForm(ModelForm):
             'assigntype':_('Assignto'),
         }
 
-
 class TaskStartForm(forms.Form):
        rsd = forms.DateField(label=_("Real Start Date"),
        widget=forms.DateInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Real Start Date'),'required': True}))
@@ -178,7 +177,6 @@ class TaskCloseForm(forms.Form):
 class TaskCancelForm(forms.Form):
        reason = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Reason"),'placeholder':_("Please enter a reason to cancel"), 'size': '40','required': 'True'}),required=True, max_length=500, error_messages={'required': 'note'})
 
-
 class TaskPauseForm(forms.Form):
        note = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Note"),'placeholder':_("Note"), 'size': '40','required': 'True'}),required=True, max_length=500, error_messages={'required': 'note'})
 
@@ -191,7 +189,6 @@ class FollowupModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.deptname
 
-
 class TeamForm(forms.Form):
       employee = TeamModelChoiceField(queryset=Employee.objects.all(), empty_label="(Nothing)",widget=forms.Select(attrs={'class': 'chosen'} ))
 
@@ -200,8 +197,6 @@ class TaskAssignToForm(forms.Form):
       assigntype =forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect(),initial="emp")
       employee = TeamModelChoiceField(queryset=Employee.objects.none(),to_field_name="empid" ,empty_label="(Select Employee)",widget=forms.Select(attrs={'class': 'chosen form-control col-md-8'} ),required=False)
       departement = FollowupModelChoiceField(queryset=Department.objects.all(), to_field_name="deptcode",empty_label=_('Select Departement'),widget=forms.Select(attrs={'class': 'chosen  form-control col-md-3', 'disabled':'disabled'} ),error_messages={'required': _('Please Sealect Departement')},required=False)
-
-
 
 class FollowupForm(forms.Form):
       department=[]
@@ -220,3 +215,8 @@ class FollowupForm(forms.Form):
         ('Closed', _('Closed')),
         )
       taskstatus= forms.ChoiceField(choices=TASK_STATUS,required=False,label=_("Status"),widget=forms.Select(attrs={'class': ' form-control col-md-3 chosen'}) )
+
+class UploadFile(ModelForm):
+    class Meta:
+        model = Media
+        fields = ['filepath']
