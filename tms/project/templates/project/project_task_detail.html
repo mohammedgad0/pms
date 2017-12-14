@@ -144,6 +144,8 @@
                       </li>
                       <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Task Status")}}</div><div class="basic_info col-md-7">  {% trans task.status %} </div>
                       </li>
+                         <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Progress")}}</div><div class="basic_info col-md-7">  {{ task.progress}} % </div>
+                      </li>
                        <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Start Date")}}</div><div class="basic_info col-md-7">  {{task.startdate|date:"d M Y"  }} </div>
                       </li>
                        <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("End Date")}}</div><div class="basic_info col-md-7">  {{ task.enddate|date:"d M Y"  }} </div>

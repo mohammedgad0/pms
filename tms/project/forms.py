@@ -166,7 +166,7 @@ class EditTaskForm(ModelForm):
 
     class Meta:
         model = Task
-        fields = ['name','desc','startdate','enddate','assigntype','department','status','assignedto']
+        fields = ['name','desc','startdate','enddate','assigntype','department','status','assignedto','progress']
         widgets = {
             'name':TextInput(attrs={'class': 'form-control','placeholder':_('Task Name'),'required': True}),
             'desc': Textarea(attrs={'class':'form-control','placeholder':_('Task Details'),'required': False}),
@@ -174,6 +174,7 @@ class EditTaskForm(ModelForm):
             'enddate':TextInput(attrs={'class': 'form-control has-feedback-left col-md-6 ','id':'single_cal_2','aria-describedby':'inputSuccess2Status','placeholder':_('End Date'),'required': False}),
             'status':forms.Select(attrs={'class': 'form-control','placeholder':_('Select Status'),'required': False}),
             'assignedto':TextInput(attrs={'class': 'form-control','placeholder':_('Task Name'),'required': False}),
+            'progress':TextInput(attrs={'class': 'form-control','placeholder':_('Progress'),'required': False}),
 
         }
         labels = {
