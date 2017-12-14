@@ -97,11 +97,23 @@ from pygments import style
         
       </fieldset>
      
+    
+    
+           <div class="form-group text-danger ">
+     <div class="col-md-3"></div><div class="col-md-9 col-sm-12 col-xs-12">
+    {{ form.name.errors }}
+    {{ form.desc.errors }}
+    {{ form.start.errors}}
+    {{ form.end.errors  }}
+   
+    </div>
+</div>
+    
      
       <!--  save and return control -->
  <div class="form-group"> 
   
-     <a href="{% url 'ns-project:project-list' %}" >  <button type="button" class="btn btn-primary">{{ _('Back')}}</button></a>
+     <a href="{% url 'ns-project:project-task-detail' project_detail.id task.id %}" >  <button type="button" class="btn btn-primary">{{ _('Back')}}</button></a>
 
       <button type="submit" class="btn btn-success">    <i class="fa fa-save"></i>  {{_('Save Changes')}}</button>
         </div>  
@@ -124,7 +136,7 @@ from pygments import style
                       <li class="clearfix"><div class="basic_info_lable col-md-4 float-right">{{_("project Name")}}</div> <div class="basic_info  col-md-7">{{project_detail.name}} </div>
                       </li>
                       <li class="clearfix task-ctions"><div class="basic_info_lable  col-md-4 float-right">{{_("Assigned To")}} </div> <div class="basic_info col-md-7" style="position:relative;">  {{form.assignedto}} 
-                                             <a href="#" data-url="{% url 'ns-project:update-assignto-task' task.id %}" class="update-task-assignto" style="    position: absolute;
+                         <a href="#" data-url="{% url 'ns-project:update-assignto-task' task.id %}" class="update-task-assignto" style="    position: absolute;
     top: 0px;
     left: 0px;
     /* margin-top: 8px; */
@@ -142,6 +154,8 @@ from pygments import style
                       </div>
                       </li>
                       <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Status")}}</div> <div class="basic_info col-md-7">  {{form.status}}</div>
+                        </li>
+                         <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Progress")}}</div> <div class="basic_info col-md-7">  {{form.progress}}</div>
                         </li>
                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Start Date")}}</div> <div class="basic_info col-md-7">  {{form.startdate}}                 <span class="fa fa-calendar-o form-control-feedback right"  aria-hidden="true"></span>
 </div>
@@ -189,15 +203,6 @@ from pygments import style
   </div>
   
   
-       <div class="form-group text-danger ">
-     <div class="col-md-3"></div><div class="col-md-9 col-sm-12 col-xs-12">
-    {{ form.name.errors }}
-    {{ form.desc.errors }}
-    {{ form.start.errors}}
-    {{ form.end.errors  }}
-   
-    </div>
-</div>
 
 
   </form>

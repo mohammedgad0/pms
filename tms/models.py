@@ -235,6 +235,18 @@ class Employee(models.Model):
         db_table = 'employee'
 
 
+class Media(models.Model):
+    id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
+    projectid = models.IntegerField(blank=True, null=True)
+    taskid = models.IntegerField(blank=True, null=True)
+    filename = models.CharField(max_length=100, blank=True, null=True)
+    filepath = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'media'
+
+
 class Member(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
     empid = models.IntegerField(db_column='EmpId', blank=True, null=True)  # Field name made lowercase.
@@ -270,22 +282,40 @@ class Project(models.Model):
         db_table = 'project'
 
 
-class ProjectEmployee1(models.Model):
-    id = models.IntegerField(db_column='Id', primary_key=True)  # Field name made lowercase.
-    empid = models.CharField(db_column='EmpId', unique=True, max_length=45, blank=True, null=True)  # Field name made lowercase.
-    empname = models.CharField(db_column='EmpName', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    deptcode = models.CharField(db_column='DeptCode', max_length=45, blank=True, null=True)  # Field name made lowercase.
-    deptname = models.CharField(db_column='DeptName', max_length=200, blank=True, null=True)  # Field name made lowercase.
-    ismanager = models.IntegerField(db_column='IsManager', blank=True, null=True)  # Field name made lowercase.
-    ext = models.CharField(db_column='Ext', max_length=45, blank=True, null=True)  # Field name made lowercase.
-    mobile = models.CharField(db_column='Mobile', max_length=45, blank=True, null=True)  # Field name made lowercase.
-    email = models.CharField(db_column='Email', max_length=100, blank=True, null=True)  # Field name made lowercase.
-    jobtitle = models.CharField(db_column='JobTitle', max_length=200, blank=True, null=True)  # Field name made lowercase.
-    managercode = models.BigIntegerField(db_column='ManagerCode', blank=True, null=True)  # Field name made lowercase.
+class ProjectHistoricaltask(models.Model):
+    id = models.IntegerField()
+    projectid = models.IntegerField(db_column='ProjectId')  # Field name made lowercase.
+    name = models.CharField(db_column='Name', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    desc = models.CharField(db_column='Desc', max_length=2500, blank=True, null=True)  # Field name made lowercase.
+    startdate = models.DateTimeField(db_column='StartDate', blank=True, null=True)  # Field name made lowercase.
+    enddate = models.DateTimeField(db_column='EndDate', blank=True, null=True)  # Field name made lowercase.
+    departementid = models.IntegerField(db_column='DepartementId', blank=True, null=True)  # Field name made lowercase.
+    assignedto = models.IntegerField(db_column='AssignedTo', blank=True, null=True)  # Field name made lowercase.
+    status = models.CharField(db_column='Status', max_length=10, blank=True, null=True)  # Field name made lowercase.
+    assigneddate = models.DateTimeField(db_column='AssignedDate', blank=True, null=True)  # Field name made lowercase.
+    realstartdate = models.DateTimeField(db_column='RealStartDate', blank=True, null=True)  # Field name made lowercase.
+    realstartby = models.IntegerField(db_column='RealStartBy', blank=True, null=True)  # Field name made lowercase.
+    finishedby = models.IntegerField(db_column='FinishedBy', blank=True, null=True)  # Field name made lowercase.
+    finisheddate = models.DateTimeField(db_column='FinishedDate', blank=True, null=True)  # Field name made lowercase.
+    cancelledby = models.IntegerField(db_column='Cancelledby', blank=True, null=True)  # Field name made lowercase.
+    cancelleddate = models.DateTimeField(db_column='CancelledDate', blank=True, null=True)  # Field name made lowercase.
+    closedby = models.IntegerField(db_column='ClosedBy', blank=True, null=True)  # Field name made lowercase.
+    closeddate = models.DateTimeField(db_column='ClosedDate', blank=True, null=True)  # Field name made lowercase.
+    closereson = models.CharField(db_column='CloseReson', max_length=500, blank=True, null=True)  # Field name made lowercase.
+    lasteditdate = models.DateTimeField(db_column='LastEditDate', blank=True, null=True)  # Field name made lowercase.
+    lasteditby = models.IntegerField(db_column='LastEditBy', blank=True, null=True)  # Field name made lowercase.
+    deleted = models.IntegerField(db_column='Deleted', blank=True, null=True)  # Field name made lowercase.
+    createdby = models.IntegerField(db_column='CreatedBy', blank=True, null=True)  # Field name made lowercase.
+    createddate = models.DateTimeField(db_column='CreatedDate', blank=True, null=True)  # Field name made lowercase.
+    history_id = models.AutoField(primary_key=True)
+    history_date = models.DateTimeField(blank=True, null=True)
+    history_change_reason = models.CharField(max_length=360, blank=True, null=True)
+    history_type = models.CharField(max_length=1)
+    history_user_id = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'project_employee1'
+        db_table = 'project_historicaltask'
 
 
 class ProjectStatus(models.Model):
@@ -328,20 +358,21 @@ class Sheet(models.Model):
 
 class Task(models.Model):
     projectid = models.IntegerField(db_column='ProjectId')  # Field name made lowercase.
-    name = models.CharField(db_column='Name', max_length=100, blank=True, null=True)  # Field name made lowercase.
-    desc = models.CharField(db_column='Desc', max_length=2500, blank=True, null=True)  # Field name made lowercase.
+    name = models.CharField(db_column='Name', max_length=100)  # Field name made lowercase.
+    desc = models.CharField(db_column='Desc', max_length=2500)  # Field name made lowercase.
     status = models.CharField(db_column='Status', max_length=10, blank=True, null=True)  # Field name made lowercase.
     startdate = models.DateTimeField(db_column='StartDate', blank=True, null=True)  # Field name made lowercase.
     enddate = models.DateTimeField(db_column='EndDate', blank=True, null=True)  # Field name made lowercase.
     departementid = models.IntegerField(db_column='DepartementId', blank=True, null=True)  # Field name made lowercase.
     assignedto = models.IntegerField(db_column='AssignedTo', blank=True, null=True)  # Field name made lowercase.
     assigneddate = models.DateTimeField(db_column='AssignedDate', blank=True, null=True)  # Field name made lowercase.
+    progress = models.SmallIntegerField(blank=True, null=True)
     realstartdate = models.DateTimeField(db_column='RealStartDate', blank=True, null=True)  # Field name made lowercase.
     realstartby = models.IntegerField(db_column='RealStartBy', blank=True, null=True)  # Field name made lowercase.
     finishedby = models.IntegerField(db_column='FinishedBy', blank=True, null=True)  # Field name made lowercase.
     finisheddate = models.DateTimeField(db_column='FinishedDate', blank=True, null=True)  # Field name made lowercase.
-    canceledby = models.IntegerField(db_column='CanceledBy', blank=True, null=True)  # Field name made lowercase.
-    canceleddate = models.DateTimeField(db_column='CanceledDate', blank=True, null=True)  # Field name made lowercase.
+    cancelledby = models.IntegerField(db_column='CancelledBy', blank=True, null=True)  # Field name made lowercase.
+    cancelleddate = models.DateTimeField(db_column='CancelledDate', blank=True, null=True)  # Field name made lowercase.
     closedby = models.IntegerField(db_column='ClosedBy', blank=True, null=True)  # Field name made lowercase.
     closeddate = models.DateTimeField(db_column='ClosedDate', blank=True, null=True)  # Field name made lowercase.
     closereson = models.CharField(db_column='CloseReson', max_length=500, blank=True, null=True)  # Field name made lowercase.

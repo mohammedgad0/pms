@@ -127,6 +127,29 @@ class AddTaskForm(ModelForm):
             'desc':_('Task Description'),
             'assigntype':_('Assignto'),
         }
+        help_texts = {
+            'desc': _('write a Description for task .'),
+            'startdate':_('Please use the following format: <em>YYYY-MM-DD</em>.'),
+            'enddate':_('Please use the following format: <em>YYYY-MM-DD</em>.'),
+        }
+        error_messages = {
+            'name': {
+                    'max_length': _("The Project's name is too long."),
+                    'required': _("Project's name is required."),
+             },
+            'startdate': {
+                    'required': _("Start Date  is required."),
+             },
+            'enddate': {
+                    'required': _("End Date  is required."),
+             },
+            'desc': {
+                    'max_length': _("The Task's Description is too long."),
+                    'required': _("Description is required."),
+             },
+
+        }
+
 
 class EditTaskForm(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -137,13 +160,13 @@ class EditTaskForm(ModelForm):
     createdby = EmployeeList(queryset=Employee.objects.all(),to_field_name="empid", empty_label="(Nothing)",required=False,widget=forms.Select(attrs={'class': 'chosen form-control'} ))
     department = DepartmentList(queryset=Department.objects.all(),to_field_name="deptcode", empty_label="(Nothing)",required=False,widget=forms.Select(attrs={'class': 'chosen form-control','disabled':'disabled'} ))
     assigntype = forms.ChoiceField(label=_('Assignto'),required=False,widget=forms.RadioSelect(attrs={'class':'form-check-input-task'}), choices=CHOICES)
-    note = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Note"),'placeholder':_("Note"), 'rows':'5','size': '40','required': 'True'}),required=False, max_length=500, error_messages={'required': 'note'})
+    note = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Note"),'placeholder':_("Note"), 'rows':'3','size': '40','required': 'True'}),required=False, max_length=250, error_messages={'required': 'note'})
 
 
 
     class Meta:
         model = Task
-        fields = ['name','desc','startdate','enddate','assigntype','department','status','assignedto']
+        fields = ['name','desc','startdate','enddate','assigntype','department','status','assignedto','progress']
         widgets = {
             'name':TextInput(attrs={'class': 'form-control','placeholder':_('Task Name'),'required': True}),
             'desc': Textarea(attrs={'class':'form-control','placeholder':_('Task Details'),'required': False}),
@@ -151,12 +174,30 @@ class EditTaskForm(ModelForm):
             'enddate':TextInput(attrs={'class': 'form-control has-feedback-left col-md-6 ','id':'single_cal_2','aria-describedby':'inputSuccess2Status','placeholder':_('End Date'),'required': False}),
             'status':forms.Select(attrs={'class': 'form-control','placeholder':_('Select Status'),'required': False}),
             'assignedto':TextInput(attrs={'class': 'form-control','placeholder':_('Task Name'),'required': False}),
+            'progress':TextInput(attrs={'class': 'form-control','placeholder':_('Progress'),'required': False}),
 
         }
         labels = {
             'name': _('Task Name'),
             'desc':_('Task Description'),
             'assigntype':_('Assignto'),
+        }
+        error_messages = {
+            'name': {
+                    'max_length': _("The Task's name is too long."),
+                    'required': _("Task's name is required."),
+             },
+            'startdate': {
+                    'required': _("Start Date  is required."),
+             },
+            'enddate': {
+                    'required': _("End Date  is required."),
+             },
+            'desc': {
+                    'max_length': _("The Task's Description is too long."),
+                    'required': _("Description is required."),
+             },
+
         }
 
 class TaskStartForm(forms.Form):
