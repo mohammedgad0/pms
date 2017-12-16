@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from simple_history.models import HistoricalRecords
-
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Department(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
@@ -183,13 +183,13 @@ class Task(models.Model):
         ('Cancelled', _('Cancelled')),
         ('Closed', _('Closed')),
     )
-    status = models.CharField(db_column='Status',max_length=10,choices=TASK_STATUS, blank=True, null=True)  # Field name made lowercase.
+    status = models.CharField(db_column='Status',max_length=10,choices=TASK_STATUS, blank=False, null=False)  # Field name made lowercase.
     startdate = models.DateTimeField(db_column='StartDate', blank=True, null=True)  # Field name made lowercase.
     enddate = models.DateTimeField(db_column='EndDate', blank=True, null=True)  # Field name made lowercase.
     departementid = models.IntegerField(db_column='DepartementId', blank=True, null=True)  # Field name made lowercase.
     assignedto = models.IntegerField(db_column='AssignedTo', blank=True, null=True)  # Field name made lowercase.
     assigneddate = models.DateTimeField(db_column='AssignedDate', blank=True, null=True)  # Field name made lowercase.
-    progress = models.SmallIntegerField(blank=True, null=True)
+    progress = models.PositiveSmallIntegerField(blank=True, null=True)
     realstartdate = models.DateTimeField(db_column='RealStartDate', blank=True, null=True)  # Field name made lowercase.
     realstartby = models.IntegerField(db_column='RealStartBy', blank=True, null=True)  # Field name made lowercase.
     finishedby = models.IntegerField(db_column='FinishedBy', blank=True, null=True)  # Field name made lowercase.

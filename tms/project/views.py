@@ -273,17 +273,26 @@ class ProjectMembersListView(ListView):
         return context
 
 def ProjectTaskDetail(request,projectid,taskid):
+    assignToEmp=None
+    assignToDept=None
+    
     createdBy=request.session.get('EmpID', '1056821208')
     project_list= Project.objects.all().filter(createdby__exact=createdBy).exclude(status=4).order_by('-id')
     current_url ="ns-project:project-task"
     project_detail= get_object_or_404(Project,pk=projectid)
-    task_detail= get_object_or_404(Task,pk=taskid)
+    task_detail= get_object_or_404(Task,projectid__exact= projectid,pk=taskid)
     projectmembers= ProjectMembers.objects.all().order_by('-id')
     createdby=get_object_or_404(Employee,empid__exact=task_detail.createdby);
     try:
-        assignTo=Employee.objects.get(empid__exact=task_detail.assignedto);
+        assignToEmp=Employee.objects.get(empid__exact=task_detail.assignedto);
     except:
-        assignTo = None
+        assignToEmp=None
+        
+    try:
+       assignToDept=Department.objects.get(deptcode__exact=task_detail.assignedto);
+    except: 
+       assignToDept = None
+        
     try:
         finishedby=Employee.objects.get(empid__exact=task_detail.finishedby);
     except:
@@ -303,7 +312,7 @@ def ProjectTaskDetail(request,projectid,taskid):
                'current_url':current_url,
                'task':task_detail,
                'projectmembers':projectmembers,
-               'assignTo':assignTo,
+               'assignToEmp':assignToEmp,'assignToDept':assignToDept,
                'createdby':createdby,
                'finishedby':finishedby,
                'cancelledby':cancelledby,
@@ -329,7 +338,7 @@ def updateStartDate(request,pk):
 
             _obj.save()
             #add to history
-            update_change_reason(_obj, _("Start Task")+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['notes'])
+            update_change_reason(_obj, _("Update start date for task ")+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['notes'])
             data['form_is_valid'] = True
             data['id'] = pk
             data['status'] = _('InProgress')
@@ -355,7 +364,7 @@ def updateTaskFinish(request,pk):
         form = TaskFinishForm(request.POST)
         if form.is_valid():
             _obj.ftime=form.cleaned_data['ftime']
-            _obj.status="Finished"
+            _obj.status="Done"
             _obj.finisheddate=datetime.now()
             _obj.finishedby=request.session.get('EmpID', '1056821208')
             _obj.lasteditdate=datetime.now()
@@ -467,7 +476,7 @@ def updateTaskPause(request,pk):
             _obj.lasteditdate=datetime.now()
             _obj.save()
             #add to history
-            update_change_reason(_obj, _("Hold Task")+",<i class=\"fa fa-comment\"></i>" + form.cleaned_data['note'])
+            update_change_reason(_obj, _("Task Pause")+",<i class=\"fa fa-comment\"></i>" + form.cleaned_data['note'])
             data['form_is_valid'] = True
             data['id'] = pk
             data['status'] = _('Hold')
@@ -612,9 +621,10 @@ def ProjectTaskDelete(request,projectid,taskid):
           context={'task':task,'project':project,'employee':employee}
           return render(request, 'project/project_task_delete.html', context)
 
-def updateTaskAssignto(request,pk):
+def updateTaskAssignto(request,pk,save=None):
     data = dict()
     errors = []
+    assigntype="emp"
     employee=None
     departement=None
     _assign=""
@@ -628,41 +638,42 @@ def updateTaskAssignto(request,pk):
             errors.append(_('Enter select assigntype'))
         if assigntype=="emp" :
              employee=request.POST.get('employee')
-             departement=None
-             if not employee:
-                 errors.append(_('Please select employee'))
+             data['assignedto_empid']=employee
+             form.fields["departement"].required=False  #make required filed in model false
+#              if not employee:
+#                  errors.append(_('Enter a employee .'))
         if assigntype=="dept" :
              departement=request.POST.get('departement')
-             if not departement:
-                 errors.append(_('Please select departement'))
-
+             data['assignedto_depid']=departement
+             form.fields["employee"].required=False  #make required filed in model false
+#              if not departement:
+#                  errors.append(_('Enter a departement .'))
+#         if not employee and not departement :
+#              errors.append(_('Enter a note .'))         
 
         if form.is_valid():
-            errors= errors.append(form.errors)
-            try :
-                _obj.assignedto=int(form.cleaned_data['employee'].empid)
-                _assign=_obj.assignedto
-            except :
-                _obj.assignedto=None
-            try :
-                _obj.departementid=int(form.cleaned_data['departement'].deptcode)
-                _assign=_obj.departementid
-            except :
-                _obj.departementid=None
-            _obj.status="New"
-            _obj.realstartby=None
-            _obj.realstartdate=None
-            _obj.finishedby=None
-            _obj.finisheddate=None
-            _obj.cancelldby=None
-            _obj.cancelleddate=None
-            _obj.lasteditdate=datetime.now()
-            _obj.save()
-               #add to history
-            update_change_reason(_obj, _("Assign Task to")+  str(_assign))
+            if save !="False" :
+               # errors= errors.append(form.errors)
+                try :
+                    _obj.assignedto=int(form.cleaned_data['employee'].empid)
+                    _assign=form.cleaned_data['employee'].empname
+                except :
+                    _obj.assignedto=None
+                try :
+                    _obj.departementid=int(form.cleaned_data['departement'].deptcode)
+                    _assign=form.cleaned_data['departement'].deptname
+                except :
+                    _obj.departementid=None
+                _obj.lasteditdate=datetime.now()
+                _obj.save()
+                   #add to history
+                update_change_reason(_obj,_(" by ")+ request.session['EmpName']  +  _(" ,  Assign Task to ")+  str(_assign))
+                messages.success(request, "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>"+_(" Task has been updated successfully "), fail_silently=True,)
+            
+
             data['form_is_valid'] = True
             data['id'] = pk
-            data['message'] = _('Task has been assigned successfully for Task number #')+ pk
+            data['message'] = "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>" + _('Task has been assigned successfully for Task number #')+ pk
             data['html_form'] = render_to_string('project/task/update_assignto_task.html',request=request)
             return JsonResponse(data)
         else:
@@ -670,8 +681,13 @@ def updateTaskAssignto(request,pk):
             data['errors'] = errors.append(form.errors)
 
     form = TaskAssignToForm()
+    if assigntype=="emp" :
+        form.fields["departement"].disabled = True
+    if assigntype=="dept" :
+        form.fields["employee"].disabled = True
+    form.fields["assigntype"].initial = assigntype
     form.fields["employee"].queryset = Employee.objects.filter(deptcode = request.session['DeptCode'])
-    context = {'form': form,'pk':pk,'errors':errors}
+    context = {'form': form,'pk':pk,'save':save,'errors':errors}
     data['html_form'] = render_to_string('project/task/update_assignto_task.html',context,request=request)
     return JsonResponse(data)
 
@@ -704,25 +720,41 @@ def ProjectTaskEdit(request,projectid,taskid):
         closedby = None
 
     if form.is_valid():
-       instance=form.save()
-       instance.status=form.cleaned_data['status']
-       #check if status changed to new 
-       if form.cleaned_data['status'] =="New" or form.cleaned_data['status'] =="Inprogress" :
+        instance=form.save()
+        instance.status=form.cleaned_data['status']
+        #check if status changed to new 
+        if form.cleaned_data['status'] =="New" or form.cleaned_data['status'] =="Inprogress" :
            instance.closeby=None
            instance.closeddate=None
            instance.canceleddate=None
            instance.cancelledby=None
            instance.finisheddate=None
            instance.finishedby=None
-           instance.lasteditdate=datetime.now()
-           instance.lasteditby=request.session['EmpID']
+        if form.cleaned_data['status']=="Done":
+           instance.closeby=None
+           instance.closeddate=None
+           instance.canceleddate=None
+           instance.cancelledby=None
+           instance.finisheddate=datetime.now()
+           instance.finishedby=request.session['EmpID']
+        if form.cleaned_data['status']=="Hold":
+           pass
+        if form.cleaned_data['status']=="Cancelled":
+            instance.canceleddate=datetime.now()
+            instance.cancelledby=request.session['EmpID']
+        if form.cleaned_data['status']=="Closed":
+            instance.closeddate=datetime.now()
+            instance.closeby=request.session['EmpID']   
            
-       
-       instance.save()
-       messages.success(request, _("Task has been updated successfully"), fail_silently=True,)
-       #add to history
-       update_change_reason(instance, _("Edit Task successfully by")+  str( employee.empname)+ (",    <i class=\"fa fa-comment\"></i>  "+ form.cleaned_data['note']  if form.cleaned_data['note'] else " "))
-       return HttpResponseRedirect(reverse('ns-project:project-task-detail', kwargs={'projectid':projectid,'taskid':taskid}))
+        instance.lasteditdate=datetime.now()
+        instance.lasteditby=request.session['EmpID']
+           
+        
+        instance.save()
+        messages.success(request, _(" Task has been updated successfully "), fail_silently=True,)
+        #add to history
+        update_change_reason(instance, _(" Edit Task successfully by ")+  str( employee.empname)+ (",    <i class=\"fa fa-comment\"></i>  "+ form.cleaned_data['note']  if form.cleaned_data['note'] else " "))
+        return HttpResponseRedirect(reverse('ns-project:project-task-detail', kwargs={'projectid':projectid,'taskid':taskid}))
     else:
         context = {'project_detail':project_detail,
                'project_list':project_list,

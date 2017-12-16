@@ -1244,7 +1244,7 @@ msgstr "مهام منجزة"
 
 #: .\project\views.py:598
 msgid "Task has been deleted successfully"
-msgstr "تم إنشاء المشروع بنجاح"
+msgstr "تم حذف المهمة بنجاح"
 
 #: .\project\views.py:617
 msgid "Enter select assigntype"

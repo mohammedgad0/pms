@@ -3,7 +3,7 @@
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.css" />
   {% endblock stylesheets %}
   {% load i18n %}
-   <form action="/project/update_assignto_task/{{pk}}" method="post" class="form-horizontal form-label-left input_mask update-assignto-task-form" novalidate enctype="multipart/form-data">
+   <form action="/project/update_assignto_task/{{pk}}/{{save}}" method="post" class="form-horizontal form-label-left input_mask update-assignto-task-form" novalidate enctype="multipart/form-data">
 
   {% csrf_token %}
      <div class="modal-header">
@@ -13,7 +13,7 @@
                   </div>
     <div class="modal-body"> 
 
-  <div class="form-group col-md-8 col-sm-12 col-xs-12">
+  <div class="form-group col-md-8 col-sm-12 col-xs-12 list-inline-item">
                {{form.assigntype.label_tag}}
                {{form.assigntype}}
               </div>
@@ -29,12 +29,15 @@
             <div class="Clearfix"></div>
                   <div class="col-md-12 col-sm-12 col-xs-12  Clearfix">    
                 <div class="form-group">
+               
                 {% if errors %}
-             <ul>
-            {% for error in errors %}
-            <li class="text-danger">{{ error }}</li>
+           
+              
+              {% for error in errors %}
+            <li class="text-danger">  {{ error.as_text }}</li>
+           
             {% endfor %}
-           </ul>
+           
     {% endif %}  
                   </div>
                   
@@ -59,13 +62,13 @@
      // disable /enable droplis
     
        $('#id_assigntype_0').change(function(){
-   	$('#id_employee').prop("disabled", false).trigger("chosen:updated");
+   	   $('#id_employee').prop("disabled", false).trigger("chosen:updated");
        $('#id_departement').prop("disabled", true).trigger("chosen:updated");
    	});
        
        $('#id_assigntype_1').change(function(){
-       	$('#id_employee').prop("disabled", true).trigger("chosen:updated");
-           $('#id_departement').prop("disabled", false).trigger("chosen:updated");
+       $('#id_employee').prop("disabled", true).trigger("chosen:updated");
+       $('#id_departement').prop("disabled", false).trigger("chosen:updated");
        	});
      
 </script>

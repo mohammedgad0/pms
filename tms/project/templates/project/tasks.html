@@ -74,7 +74,7 @@
                      {% for message in messages %}
                      <li{% if message.tags %} class="alert {{ message.tags }}"{% endif %}>
                      {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
-                     {{ message }}
+                     {{ message|safe }}
                      </li>
                      {% endfor %}
                      {% endif %}
@@ -124,13 +124,14 @@
                               {% endif %}
                            </td>
                            {% if request.user|has_group:"ismanager" %}
-                           <td>{{task.assignedto.Employee.empname }}</td>
                            {% endif %}
+                           <td>{{task.assignedto }} {{task.departement }}</td>
+                           
                            <td>{{task.finishedby }}</td>
                            <td>{{  task.finisheddate|date:"d M Y" }} </td>
                            <td>
                               <!-- user start task  -->
-                              {% if task.realstartdate %}
+                              {% if task.status != "New" %}
                               <i class="fa fa-play fa-2x paction  paction_disable" title="{% trans "Play" %}" id="p_{{task.id}}" ></i>
                               {% else %}
                               <a href="#" data-url="{% url 'ns-project:task-update-start' task.id %}" class="update-task-start" ><i class="fa fa-play fa-2x paction  text-primary" title="{% trans "Play" %}" id="p_{{task.id}}" ></i> </a>
@@ -143,7 +144,7 @@
                               {% endif %}
                               {% if request.user|has_group:"ismanager" %}
                               <!-- manager close task -->
-                              <a href="{% url 'ns-project:task-update-start' task.id %}" class="js-task-start" ><i class="fa fa-hand-o-right fa-2x paction text-primary" title="{% trans "Assign" %} "></i></a>
+                              <a href="#" data-url="{% url 'ns-project:update-assignto-task' task.id %}" class="update-assignto-task" ><i class="fa fa-hand-o-right fa-2x paction text-primary" title="{% trans "Assign" %} "></i></a>
                               {% if task.closeddate %}
                               <i class="fa fa-power-off  fa-2x paction  paction_disable" title="{% trans "Close" %}" id="c_{{task.id}}"></i>
                               {% else %}
@@ -233,11 +234,12 @@
      dataType: 'json',
      success: function (data) {
        if (data.form_is_valid) {
-         $(".messages").html('<li class="alert alert-success">'+data.message+"</li>");
-         $("#status_"+data.id).html('<span class=" btn btn-warning  task-'+data.status+'" >'+data.status+'</span>');
+        // $(".messages").html('<li class="alert alert-success">'+data.message+"</li>");
+        // $("#status_"+data.id).html('<span class=" btn btn-warning  task-'+data.status+'" >'+data.status+'</span>');
 
-         $("#"+data.icon).addClass('paction_disable').closest('a').removeAttr("href").removeAttr("data-url").removeAttr("class");
+       // $("#"+data.icon).addClass('paction_disable').closest('a').removeAttr("href").removeAttr("data-url").removeAttr("class");
          $("#modal-task").modal("hide");
+          location.reload();
        }
        else {
          $("#modal-task .modal-content").html(data.html_form);
@@ -260,5 +262,22 @@
    //update task close date and staus
    $("#task-table").on("click", ".update-close-task", loadForm);
    $("#modal-task").on("submit", ".update-close-task-form", saveForm);
+   
+   //update assign to task
+   $("#task-table").on("click", ".update-assignto-task", loadForm);
+   $("#modal-task").on("submit", ".update-assignto-task-form", saveForm);
+   
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.jquery.js"></script>
+  <script>
+
+     $(".chosen").data("placeholder","Select Frameworks...").chosen();
+     $(".chosen").chosen({no_results_text: "Oops, nothing found!"}); 
+      $('.chosen').chosen({allow_single_deselect: true,no_results_text: "لا يوجد نتائج!"});
+
+
+      
+      
 </script>
 {% endblock javascripts %}

@@ -42,6 +42,7 @@ urlpatterns = [
     url(r'^update_cancel_task/(?P<pk>\d+)$',views.updateTaskCancel, name='update-cancel-task'),
     url(r'^update_pause_task/(?P<pk>\d+)$',views.updateTaskPause, name='update-pause-task'),
     url(r'^update_assignto_task/(?P<pk>\d+)$',views.updateTaskAssignto, name='update-assignto-task'),
+    url(r'^update_assignto_task/(?P<pk>\d+)/(?P<save>\w+)$',views.updateTaskAssignto, name='update-assignto-task'),
 
     url(r'^project_gantt/(?P<pk>\d+)$',views.ganttChart, name='project-gantt'),
     url(r'^project_follow_up/$',views.projectFlowUp, name='project-follow-up'),
