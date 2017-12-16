@@ -1,3 +1,4 @@
+from _datetime import date
 {% extends "project/base_site.html" %}
 {% load i18n %}
 {% load user_group %}
@@ -91,7 +92,8 @@
                            {% if request.user|has_group:"ismanager" %}
                            <th>{% trans "AssignedTo" %}</th>
                            {% endif %}
-                           <th>{% trans "Finshed By" %}</th>
+                           <th>{% trans "Progress" %}
+                         <!--   <th>{% trans "Finshed By" %}</th> -->
                            <th>{% trans "Finshed Date" %}</th>
                            <th style="width: 20%">{% trans "Actions" %}</th>
                         </tr>
@@ -100,9 +102,9 @@
                         {% for task in tasks %}
                         <tr>
                            <td><a href="{% url 'ns-project:project-task-detail' project_detail.id task.id   %}" class=" btn-link">{{task.id }}</a> </td>
-                           <td><a href="{% url 'ns-project:project-task-detail' project_detail.id task.id   %}" class=" btn-link">{{task.name }}</a></td>
-                           <td>{{  task.startdate|date:"d M Y" }} </td>
-                           <td>{{  task.enddate|date:"d M Y" }} </td>
+                           <td><a href="{% url 'ns-project:project-task-detail' project_detail.id task.id   %}" class=" btn-link" title="{{task.name}}">{{ task.name|truncatechars:20 }}</a></td>
+                           <td>{{  task.startdate|date:"Y-m-d" }} </td>
+                           <td>{{  task.enddate|date:"Y-m-d" }} </td>
                            <td id="status_{{task.id}}">
                               {% if task.status == 'Closed' %}
                               <span class="btn btn-dark btn-xs"> {{task.get_status_display }}</span>
@@ -125,9 +127,29 @@
                            </td>
                            {% if request.user|has_group:"ismanager" %}
                            {% endif %}
-                           <td>{{task.assignedto }} {{task.departement }}</td>
+                           <td>{{ task.assignedto|truncatechars:15 }}{{ task.departement|truncatechars:15 }} </td>
+                           <td>% {{task.progress }}
+                          <!--  {{ task.startdate|timesince:task.enddate }} -->
+                           <!-- {{ task.enddate|timeuntil }} -->
                            
-                           <td>{{task.finishedby }}</td>
+
+                           <!-- delyaed -->
+                           {% if task.finisheddate %}
+                                {% if  task.finisheddate|date:"Ymd"  >  task.enddate|date:"Ymd" %}
+                                  <span class="text-danger"> ( {{ _('Delayed')}} )</span>
+                                {% endif%}
+                          {%else %}
+                            {% now "Ymd" as current_date  %}
+                                  {% if  current_date > task.enddate|date:"Ymd"%}
+                                 <span class="text-danger"> ( {{ _('Delayed')}} )</span>
+                                   {% endif %}
+                         {% endif %}
+                                
+                                
+                           
+                           
+                           </td>
+                         <!--  <td>{{task.finishedby }}</td> -->
                            <td>{{  task.finisheddate|date:"d M Y" }} </td>
                            <td>
                               <!-- user start task  -->

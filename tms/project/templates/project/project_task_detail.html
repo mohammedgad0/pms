@@ -157,7 +157,9 @@
                       </li>
                        <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("End Date")}}</div><div class="basic_info col-md-7">  {{ task.enddate|date:"d M Y"  }} </div>
                       </li>
-                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Mailto To")}}</div> <div class="basic_info col-md-7">{{task.mailto}}</div>
+                         <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Finished Date")}}</div><div class="basic_info col-md-7">  {{ task.finisheddate|date:"d M Y"  }} </div>
+                      </li>
+                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Mailto To")}}</div> <div class="basic_info col-md-7">{{ assignToEmp.email|urlizetrunc:25 }}</div>
                       </li>
                     </ul>
 

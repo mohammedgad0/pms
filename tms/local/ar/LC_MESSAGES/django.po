@@ -338,7 +338,7 @@ msgstr "متوقف"
 #: .\project\forms.py:258 .\project\models.py:183
 #: .\project\templates\project\tasks.html:55 .\project\views.py:440
 msgid "Cancelled"
-msgstr "ملفى"
+msgstr "ملغى"
 
 #: .\project\forms.py:259 .\project\models.py:184
 #: .\project\templates\project\tasks.html:54 .\project\views.py:405
@@ -1093,7 +1093,7 @@ msgstr "مهام مسندة الي "
 
 #: .\project\templates\project\tasks.html:41
 msgid "Delayed"
-msgstr "متأخرة"
+msgstr "متأخر"
 
 #: .\project\templates\project\tasks.html:44
 msgid "More"
@@ -1121,7 +1121,7 @@ msgid "Finshed By"
 msgstr "انجزت بواسطه"
 
 #: .\project\templates\project\tasks.html:95
-msgid "Finshed Date"
+msgid "Finished Date"
 msgstr "تاريخ الإنجاز"
 
 #: .\project\templates\project\tasks.html:134

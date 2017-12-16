@@ -21,11 +21,11 @@ from django.template.loader import  render_to_string
 from django.http import JsonResponse
 from django.views.generic.list import ListView
 from django.core.urlresolvers import resolve
-from .defs import test
+#from .defs import test
 from simple_history.utils import update_change_reason
 from idlelib.debugobj import _object_browser
 from .timesheet import *
-from _datetime import date
+#from _datetime import date
 
 
 
@@ -722,6 +722,7 @@ def ProjectTaskEdit(request,projectid,taskid):
     if form.is_valid():
         instance=form.save()
         instance.status=form.cleaned_data['status']
+        #instance.finisheddate=form.cleaned_data['finisheddate']
         #check if status changed to new 
         if form.cleaned_data['status'] =="New" or form.cleaned_data['status'] =="Inprogress" :
            instance.closeby=None
@@ -735,7 +736,6 @@ def ProjectTaskEdit(request,projectid,taskid):
            instance.closeddate=None
            instance.canceleddate=None
            instance.cancelledby=None
-           instance.finisheddate=datetime.now()
            instance.finishedby=request.session['EmpID']
         if form.cleaned_data['status']=="Hold":
            pass

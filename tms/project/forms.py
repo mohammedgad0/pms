@@ -165,12 +165,13 @@ class EditTaskForm(ModelForm):
     progress = forms.IntegerField(validators=[ MaxValueValidator(100, message="Progress Over 100"),MinValueValidator(0, message="Progress less 0")],min_value=0, max_value=100)
     class Meta:
         model = Task
-        fields = ['name','desc','startdate','enddate','assigntype','department','status','assignedto','progress']
+        fields = ['name','desc','startdate','enddate','finisheddate','assigntype','department','status','assignedto','progress']
         widgets = {
             'name':TextInput(attrs={'class': 'form-control','placeholder':_('Task Name'),'required': True}),
             'desc': Textarea(attrs={'class':'form-control','placeholder':_('Task Details'),'required': True}),
             'startdate':TextInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Start Date'),'required': False}),
             'enddate':TextInput(attrs={'class': 'form-control has-feedback-left col-md-6 ','id':'single_cal_2','aria-describedby':'inputSuccess2Status','placeholder':_('End Date'),'required': False}),
+            'finisheddate':TextInput(attrs={'class': 'form-control has-feedback-left col-md-6 ','id':'single_cal_3','aria-describedby':'inputSuccess2Status','placeholder':_('End Date'),'required': False}),
             'assignedto':TextInput(attrs={'class': 'form-control','placeholder':_('Responsible'),'required': False,}),
             'progress': forms.NumberInput(attrs={'class': 'form-control','placeholder':_('Progress'),'required': False,'min': 0, 'max': 100 }),
             'status':forms.Select(attrs={'class': 'form-control','placeholder':_('Select Status')})

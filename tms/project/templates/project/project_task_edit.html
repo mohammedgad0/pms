@@ -163,6 +163,9 @@ from pygments import style
                         <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("End Date")}}</div> <div class="basic_info col-md-7">  {{form.enddate}}                 <span class="fa fa-calendar-o form-control-feedback form-control-feedback-black left"  aria-hidden="true"></span>
 </div>
                         </li>
+                         <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Finished Date")}}</div> <div class="basic_info col-md-7">  {{form.finisheddate}}                 <span class="fa fa-calendar-o form-control-feedback form-control-feedback-black left"  aria-hidden="true"></span>
+</div>
+                        </li>
                     </ul>
 
       </fieldset>
@@ -320,7 +323,7 @@ $("#modal-task").on("submit", ".update-assignto-task-form", saveForm);
      
   });
   
-  $('#single_cal_2').daterangepicker({
+  $('#single_cal_2,#single_cal_3').daterangepicker({
       autoUpdateInput: true,
       singleDatePicker: true,
       singleClasses: "picker_1",
