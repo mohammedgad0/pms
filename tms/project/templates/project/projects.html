@@ -30,9 +30,9 @@
                <div class="x_title">
                  {% load user_group %}
                  {% if request.user|has_group:"ismanager" %}
-                  <a href="{% url 'ns-project:add-project' %}" >  <button type="button" class="btn btn-primary btn-md"> <i class="fa fa-plus"></i>  {% trans "Ad Project" %}</button></a>
+                  <a href="{% url 'ns-project:add-project' %}" style="float:left" >  <button type="button" class="btn btn-primary btn-md"> <i class="fa fa-plus"></i>  {% trans "Ad Project" %}</button></a>
                   {% endif %}
-                  <a href="{% url 'ns-project:project-list' %}" > <button type="button" class="btn btn-primary btn-md">  <i class="fa fa-th-list"></i>  {% trans "Projects List" %} </button></a>
+                  <a href="{% url 'ns-project:project-list' %}" style="float:left" > <button type="button" class="btn btn-primary btn-md">  <i class="fa fa-th-list"></i>  {% trans "Projects List" %} </button></a>
                   <div class="clearfix"></div>
                </div>
                <div class="x_content">

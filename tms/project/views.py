@@ -160,6 +160,7 @@ def ProjectList(request):
     context = {'project_list':_plist}
     return render(request, 'project/projects.html', context)
 
+@login_required
 def ProjectDetail(request,pk):
     project_detail= get_object_or_404(Project,pk=pk)
     EmpID=request.session.get('EmpID')
@@ -186,6 +187,7 @@ def ProjectDetail(request,pk):
     context={'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'projectProgress':projectProgress,'tasks_list':tasks_list,'history':history}
     return render(request, 'project/project_detail.html', context)
 
+@login_required
 def ProjectEdit(request,pk):
     instance = get_object_or_404(Project,pk=pk)
     form = ProjectForm(request.POST or None, instance=instance)
@@ -199,7 +201,7 @@ def ProjectEdit(request,pk):
         #messages.add_message(request, messages.ERROR, 'Can not update project.', fail_silently=True, extra_tags='alert')
         #messages.error(request, _("Can not update project."))
         return render(request, 'project/add_project.html', {'form': form,'action_name': _('Edit Project')})
-
+@login_required
 def ProjectDelete(request,pk):
     p= get_object_or_404(Project,pk=pk)
     emp_obj=Employee.objects.get(empid__exact=p.createdby)
@@ -211,6 +213,7 @@ def ProjectDelete(request,pk):
           context={'p':p,'emp_obj':emp_obj}
           return render(request, 'project/project_delete.html',context)
 
+@login_required
 def ProjectTask(request,pk,task_status=None):
     current_url ="ns-project:" + resolve(request.path_info).url_name
     empid = request.session.get('EmpID')
@@ -232,11 +235,8 @@ def ProjectTask(request,pk,task_status=None):
          ).order_by('-id')
 
     if task_status=="all":
-         task_list= Task.objects.all().filter(
-         Q(projectid__exact=pk)&
-         Q(createdby__exact=empid)|
-         Q(assignedto = empid)
-         ).order_by('-id')
+         task_list= task_list
+        
     elif task_status=="unclosed":
          task_list = task_list.exclude(status__exact='Closed')
     elif task_status=="assignedtome":
@@ -257,6 +257,8 @@ def ProjectTask(request,pk,task_status=None):
          task_list= task_list.filter(status__exact='Hold')
     elif task_status=="delayed":
          task_list= task_list.filter(enddate__lt = datetime.today())
+    elif task_status=="assignedtodept":
+         task_list= task_list.filter(departementid__exact= request.session['DeptCode'])
 
 
 
@@ -272,19 +274,19 @@ def ProjectTask(request,pk,task_status=None):
         _plist = paginator.page(paginator.num_pages)
 
     #relace empid with empname
-    for data in _plist:
-
-          try:
-                data.assignedto=Employee.objects.get(empid=data.assignedto).empname
-          except :
-                data.assignedto=data.assignedto
+#     for data in _plist:
+# 
+#           try:
+#                 data.assignedto=Employee.objects.get(empid=data.assignedto).empname
+#           except :
+#                 data.assignedto=data.assignedto
 #           try:
 #                 data.departementid=Department.objects.get(deptcode__exact = data.departementid).deptname
 #           except :
 #                data.departementid=data.departementid
 
 
-    task_list =data
+    #task_list =data
 
 
     context = {'tasks':_plist,'project_detail':project_detail,'project_list':project_list,'current_url':current_url}
@@ -300,6 +302,7 @@ class ProjectMembersListView(ListView):
 
         return context
 
+@login_required
 def ProjectTaskDetail(request,projectid,taskid):
     assignToEmp=None
     assignToDept=None
@@ -349,6 +352,7 @@ def ProjectTaskDetail(request,projectid,taskid):
                }
     return render(request, 'project/project_task_detail.html', context)
 
+@login_required
 def updateStartDate(request,pk):
     data = dict()
     errors = []
@@ -382,6 +386,7 @@ def updateStartDate(request,pk):
     data['html_form'] = render_to_string('project/task/update_start_task.html',context,request=request,)
     return JsonResponse(data)
 
+@login_required
 def updateTaskFinish(request,pk):
     data = dict()
     errors = []
@@ -415,6 +420,7 @@ def updateTaskFinish(request,pk):
     data['html_form'] = render_to_string('project/task/update_finish_task.html',context,request=request)
     return JsonResponse(data)
 
+@login_required
 def updateTaskClose(request,pk):
     data = dict()
     errors = []
@@ -452,6 +458,7 @@ def updateTaskClose(request,pk):
     data['html_form'] = render_to_string('project/task/update_close_task.html',context,request=request)
     return JsonResponse(data)
 
+@login_required
 def updateTaskCancel(request,pk):
     data = dict()
     errors = []
@@ -487,6 +494,7 @@ def updateTaskCancel(request,pk):
     data['html_form'] = render_to_string('project/task/update_cancel_task.html',context,request=request)
     return JsonResponse(data)
 
+@login_required
 def updateTaskPause(request,pk):
     data = dict()
     errors = []
@@ -520,11 +528,13 @@ def updateTaskPause(request,pk):
     data['html_form'] = render_to_string('project/task/update_pause_task.html',context,request=request)
     return JsonResponse(data)
 
+@login_required
 def ganttChart(request,pk):
 
     context={}
     return render(request, 'project/project_ganttchart.html', context)
 
+@login_required
 def projectFlowUp(request):
      task_list=''
      if request.method == 'GET':
@@ -561,6 +571,7 @@ def projectFlowUp(request):
      context={'form':form,'tasks':task_list,'res':res}
      return render(request, 'project/project_followup.html', context)
 
+@login_required
 def ProjectTeam(request,project_id):
     project_detail= get_object_or_404(Project,pk=project_id)
     EmpID=request.session.get('EmpID')
@@ -577,6 +588,7 @@ def ProjectTeam(request,project_id):
     context={'all_emp':all_emp,'project_detail':project_detail,'project_list':project_list,'current_url':current_url}
     return render(request, 'project/project_team.html', context)
 
+@login_required
 def AddTask(request,project_id):
     empdata = get_object_or_404(Employee,empid=request.session.get('EmpID'))
     deptcode = request.session.get('DeptCode')
@@ -634,6 +646,7 @@ def AddTask(request,project_id):
     context ={'upload_file':FormSet, 'form':form}
     return render (request,'project/add_task.html', context)
 
+@login_required
 def ProjectTaskDelete(request,projectid,taskid):
     try:
         task= get_object_or_404(Task,createdby__exact= request.session['EmpID'],projectid__exact= projectid,pk=taskid)
@@ -650,6 +663,7 @@ def ProjectTaskDelete(request,projectid,taskid):
           context={'task':task,'project':project,'employee':employee}
           return render(request, 'project/project_task_delete.html', context)
 
+@login_required
 def updateTaskAssignto(request,pk,save=None):
     data = dict()
     errors = []
@@ -658,6 +672,8 @@ def updateTaskAssignto(request,pk,save=None):
     departement=None
     _assign=""
     _obj =  get_object_or_404(Task,pk=pk)
+  
+    
     if request.method == 'POST':
         form = TaskAssignToForm(request.POST )
         form.fields["employee"].queryset = Employee.objects.filter(deptcode = request.session['DeptCode'])
@@ -710,6 +726,9 @@ def updateTaskAssignto(request,pk,save=None):
             data['errors'] = errors.append(form.errors)
 
     form = TaskAssignToForm()
+      #if user not create dtha task disable assifn to departement
+    if _obj.createdby!= request.session['EmpID']:
+        form.fields["departement"].disabled = True
     if assigntype=="emp" :
         form.fields["departement"].disabled = True
     if assigntype=="dept" :
@@ -720,6 +739,7 @@ def updateTaskAssignto(request,pk,save=None):
     data['html_form'] = render_to_string('project/task/update_assignto_task.html',context,request=request)
     return JsonResponse(data)
 
+@login_required
 def ProjectTaskEdit(request,projectid,taskid):
     employee=get_object_or_404(Employee,empid__exact=request.session['EmpID']);
     project_list= Project.objects.all().filter(createdby__exact=employee).exclude(status=4).order_by('-id')
