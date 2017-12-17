@@ -28,15 +28,15 @@
          <div class="col-md-12">
             <div class="x_panel">
                <div class="x_title">
-               
-               
+
+
                <nav   role="tablist"  style="background-color: ;">
                      <div class="container-fluid">
                         <ul class="nav nav-pills navbar-right" role="tablist">
                            <li role="presentation" class="active"><a href="{% url 'ns-project:project-task' 1 'all' %}">{{ _('All Project Tasks')}} </a></li>
                            <li role="presentation"><a href="{% url 'ns-project:project-task' 1 'unclosed' %}" >{{ _('Open Tasks')}} </a></li>
                            <li role="presentation"><a href="{% url 'ns-project:project-task' 1 'delayed' %}">{{ _('Delayed')}} </a></li>
-                      
+
                         </ul>
 
                          {% load user_group %}
@@ -47,10 +47,10 @@
                   <div class="clearfix"></div>
                      </div>
                   </nav>
-                  
-                  
-                  
-               
+
+
+
+
                </div>
                <div class="x_content">
                   {% if messages %}
@@ -63,10 +63,7 @@
                      {% endfor %}
                   </ul>
                   {% endif %}
-                {% for key, value in aDict.items %}
-                {{key}}=={{value}}
-                <br>
-                {% endfor %}
+
                   <!-- start project list -->
                   <table class="table table-striped projects">
                      <thead>
@@ -83,6 +80,7 @@
                      </thead>
                      <tbody>
                         {% for project in project_list %}
+
                         <tr>
                            <td>{{project.id}}</td>
                            <td>
@@ -113,10 +111,21 @@
                               {{project.end}}
                            </td>
                            <td class="project_progress">
+                             {% for key, value in aDict.items %}
+                               {% if project.id == key %}
                               <div class="progress progress_sm">
-                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="57"></div>
+                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="{{value}}"></div>
                               </div>
-                              <small>57% {% trans "Complete" %}</small>
+                              <small>{{value}}% {% trans "Complete" %}</small>
+                              {%endif%}
+                               {% endfor %}
+
+                           <!-- <td class="project_progress">
+                              <div class="progress progress_sm">
+                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="0"></div>
+
+                              </div>
+                              <small>0% {% trans "Complete" %}</small> -->
                            </td>
                            <td>
                              {{project_id}}
@@ -135,7 +144,9 @@
                               <a href="{% url 'ns-project:project-delete' project.id %}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> {% trans "Delete" %} </a>
                               {% endif %}
                            </td>
+
                         </tr>
+
                         {% endfor %}
                      </tbody>
                   </table>

@@ -150,10 +150,12 @@ def ProjectList(request):
     Q(createdby__exact=EmpID)|
     Q(id__in = project_id)
     ).order_by('-id')
-    task_list = Task.objects.all()
+
     for project in project_list:
+        task_list = Task.objects.all().filter(projectid= project.id)
+        allTakProgress = 0
         for data in task_list:
-            allTakProgress=allTakProgress+data.progress
+            allTakProgress = allTakProgress+data.progress
             if len(task_list)==0:
                 projectProgress=0
             else :
@@ -251,7 +253,7 @@ def ProjectTask(request,pk,task_status=None):
 
     if task_status=="all":
          task_list= task_list
-        
+
     elif task_status=="unclosed":
          task_list = task_list.exclude(status__exact='Closed')
     elif task_status=="assignedtome":
@@ -290,7 +292,7 @@ def ProjectTask(request,pk,task_status=None):
 
     #relace empid with empname
 #     for data in _plist:
-# 
+#
 #           try:
 #                 data.assignedto=Employee.objects.get(empid=data.assignedto).empname
 #           except :
@@ -687,8 +689,8 @@ def updateTaskAssignto(request,pk,save=None):
     departement=None
     _assign=""
     _obj =  get_object_or_404(Task,pk=pk)
-  
-    
+
+
     if request.method == 'POST':
         form = TaskAssignToForm(request.POST )
         form.fields["employee"].queryset = Employee.objects.filter(deptcode = request.session['DeptCode'])
