@@ -1,3 +1,4 @@
+from _datetime import date
 {% extends "project/base_site.html" %}
 {% load i18n %}
 {% load user_group %}
@@ -9,22 +10,13 @@
 {% get_current_language as LANGUAGE_CODE %}
 <div class="right_col" role="main">
    <div class="">
-      <div class="page-title">
-         <div class="title_left">
-            <!-- <h3>{% trans "Task List" %}   </h3> -->
-            {% include "project/project_nave.html" %}
-         </div>
-         <div class="title_right">
-            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-               <div class="input-group">
-                  <input type="text" class="form-control" placeholder="{{_('Search for')}}...">
-                  <span class="input-group-btn">
-                  <button class="btn btn-default" type="button">{% trans "Go"  %}!</button>
-                  </span>
-               </div>
-            </div>
-         </div>
-      </div>
+   
+         
+      <!-- top menu bar -->
+{% include "project/project_nave.html" %}
+        
+        
+      
       <div class="clearfix"></div>
       <div class="row">
          <div class="col-md-12">
@@ -74,7 +66,7 @@
                      {% for message in messages %}
                      <li{% if message.tags %} class="alert {{ message.tags }}"{% endif %}>
                      {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
-                     {{ message }}
+                     {{ message|safe }}
                      </li>
                      {% endfor %}
                      {% endif %}
@@ -91,7 +83,8 @@
                            {% if request.user|has_group:"ismanager" %}
                            <th>{% trans "AssignedTo" %}</th>
                            {% endif %}
-                           <th>{% trans "Finshed By" %}</th>
+                           <th>{% trans "Progress" %}
+                         <!--   <th>{% trans "Finshed By" %}</th> -->
                            <th>{% trans "Finshed Date" %}</th>
                            <th style="width: 20%">{% trans "Actions" %}</th>
                         </tr>
@@ -100,9 +93,9 @@
                         {% for task in tasks %}
                         <tr>
                            <td><a href="{% url 'ns-project:project-task-detail' project_detail.id task.id   %}" class=" btn-link">{{task.id }}</a> </td>
-                           <td><a href="{% url 'ns-project:project-task-detail' project_detail.id task.id   %}" class=" btn-link">{{task.name }}</a></td>
-                           <td>{{  task.startdate|date:"d M Y" }} </td>
-                           <td>{{  task.enddate|date:"d M Y" }} </td>
+                           <td><a href="{% url 'ns-project:project-task-detail' project_detail.id task.id   %}" class=" btn-link" title="{{task.name}}">{{ task.name|truncatechars:20 }}</a></td>
+                           <td>{{  task.startdate|date:"Y-m-d" }} </td>
+                           <td>{{  task.enddate|date:"Y-m-d" }} </td>
                            <td id="status_{{task.id}}">
                               {% if task.status == 'Closed' %}
                               <span class="btn btn-dark btn-xs"> {{task.get_status_display }}</span>
@@ -124,13 +117,42 @@
                               {% endif %}
                            </td>
                            {% if request.user|has_group:"ismanager" %}
-                           <td>{{task.assignedto.Employee.empname }}</td>
                            {% endif %}
-                           <td>{{task.finishedby }}</td>
-                           <td>{{  task.finisheddate|date:"d M Y" }} </td>
+                           <td>
+                         
+                          {%if task.assignedto%}
+                           {{ task.assignedto|truncatewords:3 }}
+                            {% endif %}
+                         {%if task.departementid%}
+                           {{ task.departementid|truncatechars:3 }}
+                               {% endif %}
+                                </td>
+                           <td>% {{task.progress }}
+                          <!--  {{ task.startdate|timesince:task.enddate }} -->
+                           <!-- {{ task.enddate|timeuntil }} -->
+                           
+
+                           <!-- delyaed -->
+                           {% if task.finisheddate %}
+                                {% if  task.finisheddate|date:"Ymd"  >  task.enddate|date:"Ymd" %}
+                                  <small class="text-danger"> ( {{ _('Delayed')}} )</small>
+                                {% endif%}
+                          {%else %}
+                            {% now "Ymd" as current_date  %}
+                                  {% if  current_date > task.enddate|date:"Ymd"%}
+                                 <small class="text-danger"> ( {{ _('Delayed')}} )</small>
+                                   {% endif %}
+                         {% endif %}
+                                
+                                
+                           
+                           
+                           </td>
+                         <!--  <td>{{task.finishedby }}</td> -->
+                           <td>{{  task.finisheddate|date:"d-m-Y" }} </td>
                            <td>
                               <!-- user start task  -->
-                              {% if task.realstartdate %}
+                              {% if task.status != "New" %}
                               <i class="fa fa-play fa-2x paction  paction_disable" title="{% trans "Play" %}" id="p_{{task.id}}" ></i>
                               {% else %}
                               <a href="#" data-url="{% url 'ns-project:task-update-start' task.id %}" class="update-task-start" ><i class="fa fa-play fa-2x paction  text-primary" title="{% trans "Play" %}" id="p_{{task.id}}" ></i> </a>
@@ -143,7 +165,7 @@
                               {% endif %}
                               {% if request.user|has_group:"ismanager" %}
                               <!-- manager close task -->
-                              <a href="{% url 'ns-project:task-update-start' task.id %}" class="js-task-start" ><i class="fa fa-hand-o-right fa-2x paction text-primary" title="{% trans "Assign" %} "></i></a>
+                              <a href="#" data-url="{% url 'ns-project:update-assignto-task' task.id %}" class="update-assignto-task" ><i class="fa fa-hand-o-right fa-2x paction text-primary" title="{% trans "Assign" %} "></i></a>
                               {% if task.closeddate %}
                               <i class="fa fa-power-off  fa-2x paction  paction_disable" title="{% trans "Close" %}" id="c_{{task.id}}"></i>
                               {% else %}
@@ -233,11 +255,12 @@
      dataType: 'json',
      success: function (data) {
        if (data.form_is_valid) {
-         $(".messages").html('<li class="alert alert-success">'+data.message+"</li>");
-         $("#status_"+data.id).html('<span class=" btn btn-warning  task-'+data.status+'" >'+data.status+'</span>');
+        // $(".messages").html('<li class="alert alert-success">'+data.message+"</li>");
+        // $("#status_"+data.id).html('<span class=" btn btn-warning  task-'+data.status+'" >'+data.status+'</span>');
 
-         $("#"+data.icon).addClass('paction_disable').closest('a').removeAttr("href").removeAttr("data-url").removeAttr("class");
+       // $("#"+data.icon).addClass('paction_disable').closest('a').removeAttr("href").removeAttr("data-url").removeAttr("class");
          $("#modal-task").modal("hide");
+          location.reload();
        }
        else {
          $("#modal-task .modal-content").html(data.html_form);
@@ -260,5 +283,22 @@
    //update task close date and staus
    $("#task-table").on("click", ".update-close-task", loadForm);
    $("#modal-task").on("submit", ".update-close-task-form", saveForm);
+   
+   //update assign to task
+   $("#task-table").on("click", ".update-assignto-task", loadForm);
+   $("#modal-task").on("submit", ".update-assignto-task-form", saveForm);
+   
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.jquery.js"></script>
+  <script>
+
+     $(".chosen").data("placeholder","Select Frameworks...").chosen();
+     $(".chosen").chosen({no_results_text: "Oops, nothing found!"}); 
+      $('.chosen').chosen({allow_single_deselect: true,no_results_text: "لا يوجد نتائج!"});
+
+
+      
+      
 </script>
 {% endblock javascripts %}

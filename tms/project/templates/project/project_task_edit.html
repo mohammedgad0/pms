@@ -7,7 +7,6 @@ from pygments import style
 
 {% block stylesheets %}
   {{ block.super }}
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.css" />
 
   <style>
  /* .scrollable-menu {
@@ -105,7 +104,8 @@ from pygments import style
     {{ form.desc.errors }}
     {{ form.start.errors}}
     {{ form.end.errors  }}
-   
+       {{ form.status.errors  }}
+      {{ form.progress.errors  }}
     </div>
 </div>
     
@@ -136,7 +136,7 @@ from pygments import style
                       <li class="clearfix"><div class="basic_info_lable col-md-4 float-right">{{_("project Name")}}</div> <div class="basic_info  col-md-7">{{project_detail.name}} </div>
                       </li>
                       <li class="clearfix task-ctions"><div class="basic_info_lable  col-md-4 float-right">{{_("Assigned To")}} </div> <div class="basic_info col-md-7" style="position:relative;">  {{form.assignedto}} 
-                         <a href="#" data-url="{% url 'ns-project:update-assignto-task' task.id %}" class="update-task-assignto" style="    position: absolute;
+                         <a href="#" data-url="{% url 'ns-project:update-assignto-task' task.id 'False' %}" class="update-task-assignto" style="    position: absolute;
     top: 0px;
     left: 0px;
     /* margin-top: 8px; */
@@ -148,19 +148,22 @@ from pygments import style
     width: 51px;
     display: inline-block;">
 
-                      <i class="fa fa-search form-control-feedback right" aria-hidden="true"></i>
+                      <i class="fa fa-search form-control-feedback form-control-feedback-black right" aria-hidden="true"></i>
                   
                       </a>
                       </div>
                       </li>
                       <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Status")}}</div> <div class="basic_info col-md-7">  {{form.status}}</div>
                         </li>
-                         <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Progress")}}</div> <div class="basic_info col-md-7">  {{form.progress}}</div>
-                        </li>
-                     <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Start Date")}}</div> <div class="basic_info col-md-7">  {{form.startdate}}                 <span class="fa fa-calendar-o form-control-feedback right"  aria-hidden="true"></span>
+                         <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Progress")}}</div> <div class="basic_info col-md-7">  {{form.progress}} %  <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="top" title="" data-original-title="{% trans 'Rang from 0 t0 100' %}"></i> </div>
+
+                     <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Start Date")}}</div> <div class="basic_info col-md-7">  {{form.startdate}}                 <span class="fa fa-calendar-o form-control-feedback form-control-feedback-black left"  aria-hidden="true"></span>
 </div>
                         </li>
-                        <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("End Date")}}</div> <div class="basic_info col-md-7">  {{form.enddate}}                 <span class="fa fa-calendar-o form-control-feedback right"  aria-hidden="true"></span>
+                        <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("End Date")}}</div> <div class="basic_info col-md-7">  {{form.enddate}}                 <span class="fa fa-calendar-o form-control-feedback form-control-feedback-black left"  aria-hidden="true"></span>
+</div>
+                        </li>
+                         <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Finished Date")}}</div> <div class="basic_info col-md-7">  {{form.finisheddate}}                 <span class="fa fa-calendar-o form-control-feedback form-control-feedback-black left"  aria-hidden="true"></span>
 </div>
                         </li>
                     </ul>
@@ -207,6 +210,10 @@ from pygments import style
 
   </form>
   <!-- THE MODAL WE WILL BE USING -->
+  <style>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.css" />
+  </style>
+  
 <div class="modal fade" id="modal-task">
    <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -249,6 +256,13 @@ $.ajax({
 
       $("#"+data.icon).addClass('paction_disable').closest('a').removeAttr("href").removeAttr("data-url").removeAttr("class");
       $("#modal-task").modal("hide");
+      
+      if(data.assignedto_empid){
+      $("#id_assignedto").val(data.assignedto_empid ); 
+      }
+      else if(data.assignedto_depid){
+      $("#id_assignedto").val(data.assignedto_depid );
+      }
      // location.reload();
     }
     else {
@@ -309,7 +323,7 @@ $("#modal-task").on("submit", ".update-assignto-task-form", saveForm);
      
   });
   
-  $('#single_cal_2').daterangepicker({
+  $('#single_cal_2,#single_cal_3').daterangepicker({
       autoUpdateInput: true,
       singleDatePicker: true,
       singleClasses: "picker_1",

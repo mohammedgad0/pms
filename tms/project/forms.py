@@ -7,6 +7,7 @@ from .models import *
 from django.forms import ModelForm, Textarea,TextInput,DateField
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.forms import ModelChoiceField
+from django.core.exceptions import ValidationError
 
 
 class BootstrapAuthenticationForm(AuthenticationForm):
@@ -161,20 +162,19 @@ class EditTaskForm(ModelForm):
     department = DepartmentList(queryset=Department.objects.all(),to_field_name="deptcode", empty_label="(Nothing)",required=False,widget=forms.Select(attrs={'class': 'chosen form-control','disabled':'disabled'} ))
     assigntype = forms.ChoiceField(label=_('Assignto'),required=False,widget=forms.RadioSelect(attrs={'class':'form-check-input-task'}), choices=CHOICES)
     note = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Note"),'placeholder':_("Note"), 'rows':'3','size': '40','required': 'True'}),required=False, max_length=250, error_messages={'required': 'note'})
-
-
-
+    progress = forms.IntegerField(validators=[ MaxValueValidator(100, message="Progress Over 100"),MinValueValidator(0, message="Progress less 0")],min_value=0, max_value=100)
     class Meta:
         model = Task
-        fields = ['name','desc','startdate','enddate','assigntype','department','status','assignedto','progress']
+        fields = ['name','desc','startdate','enddate','finisheddate','assigntype','department','status','assignedto','progress']
         widgets = {
             'name':TextInput(attrs={'class': 'form-control','placeholder':_('Task Name'),'required': True}),
-            'desc': Textarea(attrs={'class':'form-control','placeholder':_('Task Details'),'required': False}),
+            'desc': Textarea(attrs={'class':'form-control','placeholder':_('Task Details'),'required': True}),
             'startdate':TextInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Start Date'),'required': False}),
             'enddate':TextInput(attrs={'class': 'form-control has-feedback-left col-md-6 ','id':'single_cal_2','aria-describedby':'inputSuccess2Status','placeholder':_('End Date'),'required': False}),
-            'status':forms.Select(attrs={'class': 'form-control','placeholder':_('Select Status'),'required': False}),
-            'assignedto':TextInput(attrs={'class': 'form-control','placeholder':_('Task Name'),'required': False}),
-            'progress':TextInput(attrs={'class': 'form-control','placeholder':_('Progress'),'required': False}),
+            'finisheddate':TextInput(attrs={'class': 'form-control has-feedback-left col-md-6 ','id':'single_cal_3','aria-describedby':'inputSuccess2Status','placeholder':_('End Date'),'required': False}),
+            'assignedto':TextInput(attrs={'class': 'form-control','placeholder':_('Responsible'),'required': False,}),
+            'progress': forms.NumberInput(attrs={'class': 'form-control','placeholder':_('Progress'),'required': False,'min': 0, 'max': 100 }),
+            'status':forms.Select(attrs={'class': 'form-control','placeholder':_('Select Status')})
 
         }
         labels = {
@@ -196,6 +196,13 @@ class EditTaskForm(ModelForm):
             'desc': {
                     'max_length': _("The Task's Description is too long."),
                     'required': _("Description is required."),
+             },
+            'progress': {
+                    'MaxValueValidator': _("The Task's Pogress is over rang 100."),
+                    'MinValueValidator': _("Task's name is less than 0."),
+             },
+            'status': {
+                    'required': _("Status is required."),
              },
 
         }
@@ -234,10 +241,10 @@ class TeamForm(forms.Form):
       employee = TeamModelChoiceField(queryset=Employee.objects.all(), empty_label="(Nothing)",widget=forms.Select(attrs={'class': 'chosen'} ))
 
 class TaskAssignToForm(forms.Form):
-      CHOICES=CHOICES=[('emp','emp'),('dept','dept')]
-      assigntype =forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect(),initial="emp")
-      employee = TeamModelChoiceField(queryset=Employee.objects.none(),to_field_name="empid" ,empty_label="(Select Employee)",widget=forms.Select(attrs={'class': 'chosen form-control col-md-8'} ),required=False)
-      departement = FollowupModelChoiceField(queryset=Department.objects.all(), to_field_name="deptcode",empty_label=_('Select Departement'),widget=forms.Select(attrs={'class': 'chosen  form-control col-md-3', 'disabled':'disabled'} ),error_messages={'required': _('Please Sealect Departement')},required=False)
+      CHOICES=CHOICES=[('emp','Employee'),('dept','    Departement')]
+      assigntype =forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect(attrs={'class':''}),initial="emp")
+      employee = TeamModelChoiceField(queryset=Employee.objects.none(),to_field_name="empid" ,empty_label="(Select Employee)",widget=forms.Select(attrs={'class': 'chosen form-control col-md-8'} ),required=True,error_messages={'required': _('Please Sealect Employee')})
+      departement = FollowupModelChoiceField(queryset=Department.objects.all(), to_field_name="deptcode",empty_label=_('Select Departement'),widget=forms.Select(attrs={'class': 'chosen  form-control col-md-3',} ),error_messages={'required': _('Please Sealect Departement')},required=True)
 
 class FollowupForm(forms.Form):
       department=[]

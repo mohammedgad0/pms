@@ -2625,7 +2625,8 @@ legend {
 .form-control-feedback {
     margin-top: 8px;
     height: 23px;
-    color: #bbb;
+   / color: #bbb;
+    color: #2a3f54;
     line-height: 24px;
     font-size: 15px
 }
@@ -3482,7 +3483,7 @@ ul.messages {
     ul.messages li,
     .tasks li {
         border-bottom: 1px dotted #e6e6e6;
-        padding: 8px 0
+        padding: 8px 10px
     }
 
         ul.messages li img.avatar,
@@ -5162,4 +5163,10 @@ legend {
 	   left: -10px;
     position: absolute;
     top: 10px;
+}
+//@sign to modal
+#id_assigntype {list-style: none;}
+//change form contotl color foo icons gary to balck 
+.form-control-feedback-black {
+    color: #2a3f54 !important;
 }

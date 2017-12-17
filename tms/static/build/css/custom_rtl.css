@@ -5163,3 +5163,9 @@ legend {
     position: absolute;
     top: 10px;
 }
+//@sign to modal
+#id_assigntype {list-style: none;}
+//change form contotl color foo icons gary to balck 
+.form-control-feedback-black {
+    color: #2a3f54 !important;
+}

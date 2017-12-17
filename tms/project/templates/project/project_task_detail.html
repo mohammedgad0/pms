@@ -49,13 +49,13 @@
                       
                           {% if  task.status == "InProgress"    %}
                            <li id="task-puse">   <a href="#" data-url="{% url 'ns-project:update-pause-task' task.id %}" class="btn btn-app update-task-pause"  class="btn btn-app" title="{{_('Pause Task')}}"> <i class="fa fa-pause fa-2x paction text-primary"></i> </a> </li>
-                          {% elif   task.status == "New"  %}
+                          {% elif   task.status == "New" or   task.status == "Hold"  %}
                            <li id="task-start">   <a href="#" data-url="{% url 'ns-project:task-update-start' task.id %}" class="btn btn-app update-task-start"  class="btn btn-app" title="{{_('Start Task')}}"> <i class="fa fa-play fa-2x paction text-primary"></i> </a> </li>
-                           {% endif %}
+                          {% endif %}
                            <li  id="task-finish"> <a href="#" data-url="{% url 'ns-project:update-finish-task' task.id %}" class="btn btn-app update-task-finish"><i class="fa fa-check-square-o fa-2x paction text-primary" title="{{_('Finish Task')}}"></i></a> </li>
                            <li  id="task-cancel"> <a href="#" data-url="{% url 'ns-project:update-cancel-task' task.id %}" class="btn btn-app update-task-cancel "><i class="fa fa-ban fa-2x paction text-danger" title="{{_('Cancel Task')}}"></i></a> </li> 
                      {% endif %}
-                     {% if  task.status != "Closed "%}
+                     {% if  task.status != "Closed" %}
                            <li  id="task-assignto">  <a href="#" data-url="{% url 'ns-project:update-assignto-task' task.id %}" class="btn btn-app update-task-assignto"> <i class="fa fa-hand-o-right fa-2x paction text-primary" title="{{_('Assign To')}}"></i>  </a> </li>
                            <li  id="task-close">  <a href="#" data-url="{% url 'ns-project:update-close-task' task.id %}" class="btn btn-app update-task-close"> <i class="fa fa-power-off  fa-2x paction text-danger" title="{{_('Close Task')}}"></i></a> </li>
                     {% else %}
@@ -80,7 +80,7 @@
                      {% for message in messages %}
                      <li{% if message.tags %} class="alert {{ message.tags }}"{% endif %}>
                      {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
-                     {{ message }}
+                     {{ message|safe }}
                      </li>
                      {% endfor %}
                   </ul>
@@ -140,7 +140,14 @@
    <ul class="list-unstyled">
                       <li class="clearfix"><div class="basic_info_lable col-md-4 float-right">{{_("project Name")}}</div> <div class="basic_info  col-md-7">{{project_detail.name}}</div>
                       </li>
-                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Assigned To")}}</div> <div class="basic_info col-md-7">  {{assignTo.empname}}</div>
+                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Assigned To")}}</div> <div class="basic_info col-md-7">    
+                                                                                                                                                                {% if assignToEmp.empname  %}
+                                    
+                                                                                                                                                       {{ assignToEmp.empname}}
+                                                                                                                                                             {% elif  assignToDept.deptname %}
+                                                                                                                                                             {{ assignToDept.deptname }}
+                                                                                                                                                             {% endif %}
+                                                                                                                                                             </div>
                       </li>
                       <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Task Status")}}</div><div class="basic_info col-md-7">  {% trans task.status %} </div>
                       </li>
@@ -150,7 +157,9 @@
                       </li>
                        <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("End Date")}}</div><div class="basic_info col-md-7">  {{ task.enddate|date:"d M Y"  }} </div>
                       </li>
-                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Mailto To")}}</div> <div class="basic_info col-md-7"> sakr@stats.gov.sa{{task.mailto}}</div>
+                         <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Finished Date")}}</div><div class="basic_info col-md-7">  {{ task.finisheddate|date:"d M Y"  }} </div>
+                      </li>
+                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Mailto To")}}</div> <div class="basic_info col-md-7">{{ assignToEmp.email|urlizetrunc:25 }}</div>
                       </li>
                     </ul>
 

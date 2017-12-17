@@ -1,3 +1,4 @@
+{% load i18n %}
 <ul class="nav nav-pills" role="tablist">
       <!-- project name select -->
       <li role="presentation" class="dropdown">
@@ -22,4 +23,14 @@
       {% endif %}
        <!-- project over view -->
       <li role="presentation"><a href="{% url 'ns-project:project-detail'  project_detail.id %}">{{_('Project Overview')}} </a>  </li>
+                         <!--   <a href="{% url 'ns-project:project-list' %}"  style="float:left" >  <button type="button" class="btn btn-primary btn-md"> <i class="fa fa-th-list"></i>  {% trans "Projects List" %}</button></a> 
+
+{% if request.user|has_group:"ismanager" %}
+                  <a href="{% url 'ns-project:add-project' %}" style="float:left">  <button type="button" class="btn btn-primary btn-md"> <i class="fa fa-plus"></i>  {% trans "Ad Project" %}</button></a>
+                  {% endif %}
+               -->
+
+
 </ul>
+
+                       
