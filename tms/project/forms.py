@@ -260,4 +260,4 @@ class FollowupForm(forms.Form):
 class UploadFile(ModelForm):
     class Meta:
         model = Media
-        fields = ['filepath']
+        fields = ['filepath','filename']

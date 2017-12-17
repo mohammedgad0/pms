@@ -26,7 +26,7 @@ from simple_history.utils import update_change_reason
 from idlelib.debugobj import _object_browser
 from .timesheet import *
 from _datetime import date
-
+from django.forms.models import modelformset_factory
 
 
 class BaseSheetFormSet(BaseModelFormSet):
@@ -539,11 +539,13 @@ def ProjectTeam(request,project_id):
     current_url ="ns-project:" + resolve(request.path_info).url_name
     context={'all_emp':all_emp,'project_detail':project_detail,'project_list':project_list,'current_url':current_url}
     return render(request, 'project/project_team.html', context)
-
+ 
 def AddTask(request,project_id):
     empdata = get_object_or_404(Employee,empid=request.session.get('EmpID'))
     deptcode = request.session.get('DeptCode')
-    upload_file = UploadFile
+    # upload_file = UploadFile
+    upload = modelformset_factory(Media,form=UploadFile,extra = 1)
+    FormSet = upload(queryset=Media.objects.filter(taskid = 0))
     form = AddTaskForm()
     # form.assignedto.queryset = Employee.objects.filter(deptcode = deptcode)
     form.fields["employee"].queryset = Employee.objects.filter(deptcode = deptcode)
@@ -566,14 +568,13 @@ def AddTask(request,project_id):
                 project_obj.departementid = assignto_department
                 project_obj.assigneddate = datetime.now()
             project_obj.save()
-            upload_form = UploadFile(request.POST, request.FILES)
+            upload_form = upload(request.POST, request.FILES)
             if upload_form.is_valid():
                 obj_file = upload_form.save(commit=False)
-                obj_file.projectid = project_id
-                obj_file.taskid = project_obj.id
-                obj_file.filename = project_obj.name
-                obj_file.save()
-                data = {'is_valid': True, 'name': photo.file.name, 'url': photo.file.url}
+                for obj in obj_file:
+                    obj.projectid = project_id
+                    obj.taskid = project_obj.id
+                    obj.save()
             else:
                 data = {'is_valid': False}
                 return JsonResponse(data)
@@ -593,7 +594,7 @@ def AddTask(request,project_id):
     else:
         form = form
 
-    context ={'upload_file':upload_file,'form':form}
+    context ={'upload_file':FormSet, 'form':form}
     return render (request,'project/add_task.html', context)
 
 def ProjectTaskDelete(request,projectid,taskid):
@@ -706,7 +707,7 @@ def ProjectTaskEdit(request,projectid,taskid):
     if form.is_valid():
        instance=form.save()
        instance.status=form.cleaned_data['status']
-       #check if status changed to new 
+       #check if status changed to new
        if form.cleaned_data['status'] =="New" or form.cleaned_data['status'] =="Inprogress" :
            instance.closeby=None
            instance.closeddate=None
@@ -716,8 +717,8 @@ def ProjectTaskEdit(request,projectid,taskid):
            instance.finishedby=None
            instance.lasteditdate=datetime.now()
            instance.lasteditby=request.session['EmpID']
-           
-       
+
+
        instance.save()
        messages.success(request, _("Task has been updated successfully"), fail_silently=True,)
        #add to history
