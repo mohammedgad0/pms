@@ -827,12 +827,12 @@ msgid "Projects List"
 msgstr "قائمة المشاريع"
 
 #: .\project\templates\project\project_detail.html:56
-msgid "  Remaining Time"
-msgstr ""
+msgid "Remaining Time"
+msgstr "الوقت المتبقى"
 
 #: .\project\templates\project\project_detail.html:61
 msgid "Number of tasks"
-msgstr "عفواً, لا يوجد مهام تمت إضافتها"
+msgstr "عدد المهام"
 
 #: .\project\templates\project\project_detail.html:65
 msgid "Completion Rate"

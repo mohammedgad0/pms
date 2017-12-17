@@ -50,10 +50,10 @@
                   <li style="width:22%;">
                     <span class="name"> {% trans "Duration" %} </span>
        
-                    <span class="value text-success" "> {{ project_detail.start|timesince:project_detail.end  }} </span>
+                    <span class="value text-success" > {{ project_detail.start|timesince:project_detail.end  }} </span>
                   </li>
                   <li class="hidden-phone" style="width:25%;">
-                    <span class="name"> {% trans "  Remaining Time" %} </span>
+                    <span class="name"> {% trans "Remaining Time" %} </span>
                      {% now "Ymd" as current_date  %}
                     <span class="value text-success"> {{  project_detail.end|timeuntil }} </span>
                   </li>
