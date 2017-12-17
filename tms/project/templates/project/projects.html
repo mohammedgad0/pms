@@ -63,9 +63,9 @@
                      <tbody>
                         {% for project in project_list %}
                         <tr>
-                           <td>#</td>
+                           <td>{{project.id}}</td>
                            <td>
-                              <a>{{ project.name}}</a>
+                              <a href="{% url 'ns-project:project-detail' project.id %}">{{ project.name}}</a>
                               <br />
                               <small>{{_('Created Date')}} {{project.createddate}}</small>
                            </td>

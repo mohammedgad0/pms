@@ -81,8 +81,10 @@ from _datetime import date
                            <th>{% trans "End Date" %}</th>
                            <th>{% trans "Status" %}</th>
                            {% if request.user|has_group:"ismanager" %}
-                           <th>{% trans "AssignedTo" %}</th>
+                           
                            {% endif %}
+                           <th>{% trans "AssignedTo" %}</th>
+                           
                            <th>{% trans "Progress" %}
                          <!--   <th>{% trans "Finshed By" %}</th> -->
                            <th>{% trans "Finshed Date" %}</th>
@@ -120,12 +122,12 @@ from _datetime import date
                            {% endif %}
                            <td>
                          
-                          {%if task.assignedto%}
-                           {{ task.assignedto|truncatewords:3 }}
-                            {% endif %}
-                         {%if task.departementid%}
-                           {{ task.departementid|truncatechars:3 }}
-                               {% endif %}
+                         {% if task.assignedto%}
+                           {{ task.assignedto|truncatewords:5 }}
+                        
+                         {% elif task.departementid%}
+                           {{ task.departementid|truncatechars:5 }}
+                         {% endif %}
                                 </td>
                            <td>% {{task.progress }}
                           <!--  {{ task.startdate|timesince:task.enddate }} -->
