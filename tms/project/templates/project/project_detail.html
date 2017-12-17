@@ -1,3 +1,4 @@
+from pygments import style
 {% extends "project/base_site.html" %}
 {% load i18n %}
 {% block title %} {% trans "Project Details" %} {% endblock title %}
@@ -39,33 +40,40 @@
 
             <div class="x_content">
 
-              <div class="col-md-9 col-sm-9 col-xs-12">
+              <div class="col-md-8 col-sm-8 col-xs-12">
 
                 <ul class="stats-overview">
-                  <li>
-                    <span class="name"> {% trans "Estimated Time" %} </span>
-                    <span class="value text-success"> 230 </span>
+                  <li style="width:22%;">
+                    <span class="name"> {% trans "Duration" %} </span>
+       
+                    <span class="value text-success" "> {{ project_detail.start|timesince:project_detail.end  }} </span>
                   </li>
-                  <li>
-                    <span class="name"> {% trans "Eylapsid Time" %} </span>
-                    <span class="value text-success"> 20 </span>
+                  <li class="hidden-phone" style="width:25%;">
+                    <span class="name"> {% trans "  Remaining Time" %} </span>
+                     {% now "Ymd" as current_date  %}
+                    <span class="value text-success"> {{  project_detail.end|timeuntil }} </span>
                   </li>
-                  <li class="hidden-phone">
+                          <li class="hidden-phone" style="width:25%;">
+                    <span class="name">{% trans "Number of tasks" %} </span>
+                    <span class="value text-success"> {{ tasks_list|length}}</span>
+                  </li>
+                  <li class="hidden-phone" style="width:20%;">
                     <span class="name">{% trans "Completion Rate" %} </span>
-                    <span class="value text-success"> 80% </span>
+                    <span class="value text-success">% {{ projectProgress}}</span>
                   </li>
                 </ul>
                 <br />
 
-                <div id="mainb" style="height:350px;"></div>
-
+             <div id="mainb" style="height:350px;"></div>
                 <div>
 
                   <h4>{{ _('Recent Activity') }} </h4>
-
+  {% for h in history%}
+       <li style="word-wrap: break-word;"><i class="fa fa-clock-o"></i>  <span class="float-right"> {{h.lasteditdate }}  </span> , <span class="float-right">{{h.history_change_reason|safe}} </span>     </li>
+         {% endfor %}
                   <!-- end of user messages -->
                   <ul class="messages">
-                    <li>
+                  <!--  <li>
                       <img src="/static/images/user.png" class="avatar" alt="Avatar">
                       <div class="message_date">
                         <h3 class="date text-info">24</h3>
@@ -80,43 +88,11 @@
                           <a href="#"><i class="fa fa-paperclip"></i> User Acceptance Test.doc </a>
                         </p>
                       </div>
-                    </li>
+                    </li>  -->
                     
                   
-                       <li>
-                      <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                      <div class="message_date">
-                        <h3 class="date text-info">23</h3>
-                        <p class="month">مارس</p>
-                      </div>
-                      <div class="message_wrapper">
-                        <h4 class="heading">طلال بن سعد </h4>
-                        <blockquote class="message">تغير حالة المهمة رقم 14 الى تم </blockquote>
-                        <br />
-                        <p class="url">
-                          <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
-                          <a href="#"><i class="fa fa-paperclip"></i> User Acceptance Test.doc </a>
-                        </p>
-                      </div>
-                    </li>
-                    
-                    
-                         <li>
-                      <img src="/static/images/user.png" class="avatar" alt="Avatar">
-                      <div class="message_date">
-                        <h3 class="date text-info">22</h3>
-                        <p class="month">مارس</p>
-                      </div>
-                      <div class="message_wrapper">
-                        <h4 class="heading">احمد بن جاثم  بن محمد </h4>
-                        <blockquote class="message">تغير حالة المهمة رقم 14 الى تم </blockquote>
-                        <br />
-                        <p class="url">
-                          <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
-                          <a href="#"><i class="fa fa-paperclip"></i> User Acceptance Test.doc </a>
-                        </p>
-                      </div>
-                    </li>
+                   
+                  
                      
                   </ul>
                   <!-- end of user messages -->
@@ -128,7 +104,7 @@
               </div>
 
               <!-- start project-detail sidebar -->
-              <div class="col-md-3 col-sm-3 col-xs-12">
+              <div class="col-md-4 col-sm-4 col-xs-12">
 
                 <section class="panel">
 
@@ -168,10 +144,7 @@
                     </ul>
                     <br />
 
-                    <div class="text-center mtop20">
-                      <a href="#" class="btn btn-sm btn-primary">Add files</a>
-                      <a href="#" class="btn btn-sm btn-warning">Report contact</a>
-                    </div>
+                 
                   </div>
 
                 </section>

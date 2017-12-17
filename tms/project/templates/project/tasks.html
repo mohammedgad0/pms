@@ -10,22 +10,13 @@ from _datetime import date
 {% get_current_language as LANGUAGE_CODE %}
 <div class="right_col" role="main">
    <div class="">
-      <div class="page-title">
-         <div class="title_left">
-            <!-- <h3>{% trans "Task List" %}   </h3> -->
-            {% include "project/project_nave.html" %}
-         </div>
-         <div class="title_right">
-            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-               <div class="input-group">
-                  <input type="text" class="form-control" placeholder="{{_('Search for')}}...">
-                  <span class="input-group-btn">
-                  <button class="btn btn-default" type="button">{% trans "Go"  %}!</button>
-                  </span>
-               </div>
-            </div>
-         </div>
-      </div>
+   
+         
+      <!-- top menu bar -->
+{% include "project/project_nave.html" %}
+        
+        
+      
       <div class="clearfix"></div>
       <div class="row">
          <div class="col-md-12">
@@ -127,7 +118,15 @@ from _datetime import date
                            </td>
                            {% if request.user|has_group:"ismanager" %}
                            {% endif %}
-                           <td>{{ task.assignedto|truncatechars:15 }}{{ task.departement|truncatechars:15 }} </td>
+                           <td>
+                         
+                          {%if task.assignedto%}
+                           {{ task.assignedto|truncatewords:3 }}
+                            {% endif %}
+                         {%if task.departementid%}
+                           {{ task.departementid|truncatechars:3 }}
+                               {% endif %}
+                                </td>
                            <td>% {{task.progress }}
                           <!--  {{ task.startdate|timesince:task.enddate }} -->
                            <!-- {{ task.enddate|timeuntil }} -->
@@ -136,12 +135,12 @@ from _datetime import date
                            <!-- delyaed -->
                            {% if task.finisheddate %}
                                 {% if  task.finisheddate|date:"Ymd"  >  task.enddate|date:"Ymd" %}
-                                  <span class="text-danger"> ( {{ _('Delayed')}} )</span>
+                                  <small class="text-danger"> ( {{ _('Delayed')}} )</small>
                                 {% endif%}
                           {%else %}
                             {% now "Ymd" as current_date  %}
                                   {% if  current_date > task.enddate|date:"Ymd"%}
-                                 <span class="text-danger"> ( {{ _('Delayed')}} )</span>
+                                 <small class="text-danger"> ( {{ _('Delayed')}} )</small>
                                    {% endif %}
                          {% endif %}
                                 
@@ -150,7 +149,7 @@ from _datetime import date
                            
                            </td>
                          <!--  <td>{{task.finishedby }}</td> -->
-                           <td>{{  task.finisheddate|date:"d M Y" }} </td>
+                           <td>{{  task.finisheddate|date:"d-m-Y" }} </td>
                            <td>
                               <!-- user start task  -->
                               {% if task.status != "New" %}

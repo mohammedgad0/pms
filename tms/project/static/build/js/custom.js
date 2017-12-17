@@ -3042,7 +3042,7 @@ function init_echarts() {
                 trigger: 'axis'
             },
             legend: {
-                data: ['sales', 'purchases']
+                data: ['مهمام مفتوحة', 'مهمام مغلقة']
             },
             toolbox: {
                 show: false
@@ -3056,7 +3056,7 @@ function init_echarts() {
                 type: 'value'
             }],
             series: [{
-                name: 'sales',
+                name: 'مهمام مغلقة',
                 type: 'bar',
                 data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
                 markPoint: {
@@ -3075,17 +3075,17 @@ function init_echarts() {
                     }]
                 }
             }, {
-                name: 'purchases',
+                name: 'مهمام مفتوحة',
                 type: 'bar',
                 data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
                 markPoint: {
                     data: [{
-                        name: 'sales',
+                        name: 'مهمام مفتوحة',
                         value: 182.2,
                         xAxis: 7,
                         yAxis: 183,
                     }, {
-                        name: 'purchases',
+                        name: 'مهمام مفتوحة',
                         value: 2.3,
                         xAxis: 11,
                         yAxis: 3

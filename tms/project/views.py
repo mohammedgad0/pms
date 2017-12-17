@@ -161,18 +161,27 @@ def ProjectList(request):
 def ProjectDetail(request,pk):
     project_detail= get_object_or_404(Project,pk=pk)
     EmpID=request.session.get('EmpID')
-    tasks_list = Task.objects.filter(assignedto = EmpID)
+    tasks_list = Task.objects.filter(projectid__exact = pk)
+    
+    allTakProgress = 0 
+    projectProgress=0    
     project_id = []
     for data in tasks_list:
         project_id.append(data.projectid)
+        allTakProgress=allTakProgress+data.progress
+    if len(tasks_list)==0:
+        projectProgress=0
+    else :
+        projectProgress=round(allTakProgress/len(tasks_list), 2)
 
     project_list= Project.objects.all().filter(
     Q(createdby__exact=EmpID)|
     Q(id__in = project_id)
     ).exclude(status=4).order_by('-id')
 
+    history=Task.history.filter(projectid=pk)[:10:1]
     current_url ="ns-project:" + resolve(request.path_info).url_name
-    context={'project_detail':project_detail,'project_list':project_list,'current_url':current_url}
+    context={'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'projectProgress':projectProgress,'tasks_list':tasks_list,'history':history}
     return render(request, 'project/project_detail.html', context)
 
 def ProjectEdit(request,pk):
@@ -213,6 +222,7 @@ def ProjectTask(request,pk,task_status=None):
     Q(createdby__exact=empid)|
     Q(id__in = project_id)
     ).exclude(status=4).order_by('-id')
+    
     task_list= Task.objects.all().filter(
          Q(projectid__exact=pk)&
          Q(createdby__exact=empid)|
@@ -224,7 +234,6 @@ def ProjectTask(request,pk,task_status=None):
          Q(projectid__exact=pk)&
          Q(createdby__exact=empid)|
          Q(assignedto = empid)
-
          ).order_by('-id')
     elif task_status=="unclosed":
          task_list = task_list.exclude(status__exact='Closed')
@@ -247,7 +256,8 @@ def ProjectTask(request,pk,task_status=None):
     elif task_status=="delayed":
          task_list= task_list.filter(enddate__lt = datetime.today())
 
-
+   
+        
     paginator = Paginator(task_list, 5) # Show 5 contacts per page
     page = request.GET.get('page')
     try:
@@ -259,6 +269,22 @@ def ProjectTask(request,pk,task_status=None):
         # If page is out of range (e.g. 9999), deliver last page of results.
         _plist = paginator.page(paginator.num_pages)
 
+    #relace empid with empname
+    for data in _plist:
+
+          try: 
+                data.assignedto=Employee.objects.get(empid=data.assignedto).empname
+          except :
+                data.assignedto=data.assignedto
+#           try: 
+#                 data.departementid=Department.objects.get(deptcode__exact = data.departementid).deptname
+#           except :
+#                data.departementid=data.departementid
+
+      
+    task_list =data
+    
+        
     context = {'tasks':_plist,'project_detail':project_detail,'project_list':project_list,'current_url':current_url}
     return render(request, 'project/tasks.html', context)
 
@@ -289,7 +315,7 @@ def ProjectTaskDetail(request,projectid,taskid):
         assignToEmp=None
         
     try:
-       assignToDept=Department.objects.get(deptcode__exact=task_detail.assignedto);
+       assignToDept=Department.objects.get(deptcode__exact=task_detail.departementid);
     except: 
        assignToDept = None
         
