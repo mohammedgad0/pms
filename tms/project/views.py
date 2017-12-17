@@ -366,7 +366,7 @@ def updateStartDate(request,pk):
 
             _obj.save()
             #add to history
-            update_change_reason(_obj, _("Update start date for task ")+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['notes'])
+            update_change_reason(_obj, _("Update start date for task by ")+request.session['EmpName']+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['notes'])
             data['form_is_valid'] = True
             data['id'] = pk
             data['status'] = _('InProgress')
@@ -399,7 +399,7 @@ def updateTaskFinish(request,pk):
             _obj.lasteditby=request.session.get('EmpID', '1056821208')
             _obj.save()
              #add to history
-            update_change_reason(_obj, _("Finish Task")+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['notes'])
+            update_change_reason(_obj, _("Finish Task ")+request.session['EmpName']+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['notes'])
             data['form_is_valid'] = True
             data['icon'] = "f_%s" %pk
             data['id'] = pk
@@ -436,7 +436,7 @@ def updateTaskClose(request,pk):
             _obj.lasteditdate=datetime.now()
             _obj.save()
                #add to history
-            update_change_reason(_obj, _("Close Task")+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['reason'])
+            update_change_reason(_obj, _("Close Task by ")+request.session['EmpName']+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['reason'])
             data['form_is_valid'] = True
             data['id'] = pk
             data['status'] = _('Closed')
@@ -471,7 +471,7 @@ def updateTaskCancel(request,pk):
             _obj.lasteditdate=datetime.now()
             _obj.save()
                #add to history
-            update_change_reason(_obj, _("Cancel Task")+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['reason'])
+            update_change_reason(_obj, _("Cancel Task by ")+request.session['EmpName']+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['reason'])
             data['form_is_valid'] = True
             data['id'] = pk
             data['status'] = _('Cancelled')
@@ -504,7 +504,7 @@ def updateTaskPause(request,pk):
             _obj.lasteditdate=datetime.now()
             _obj.save()
             #add to history
-            update_change_reason(_obj, _("Task Pause")+",<i class=\"fa fa-comment\"></i>" + form.cleaned_data['note'])
+            update_change_reason(_obj, _("Task Pause by ")+ request.session['EmpName'] +",<i class=\"fa fa-comment\"></i>" + form.cleaned_data['note'])
             data['form_is_valid'] = True
             data['id'] = pk
             data['status'] = _('Hold')
