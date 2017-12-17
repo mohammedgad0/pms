@@ -1,4 +1,3 @@
-from pygments import style
 {% extends "project/base_site.html" %}
 {% load i18n %}
 {% block title %} {% trans "Project Details" %} {% endblock title %}
@@ -35,6 +34,8 @@ from pygments import style
             
           {{ log_entry }}
               <h2> {{project_detail.name}}  </h2>
+                                                 <a href="{% url 'ns-project:project-list' %}"  style="float:left" >  <button type="button" class="btn btn-primary btn-md"> <i class="fa fa-th-list"></i>  {% trans "Projects List" %}</button></a>
+              
                  <div class="clearfix"></div>
             </div>
 
@@ -61,7 +62,9 @@ from pygments import style
                     <span class="name">{% trans "Completion Rate" %} </span>
                     <span class="value text-success">% {{ projectProgress}}</span>
                   </li>
+                  
                 </ul>
+                
                 <br />
 
              <div id="mainb" style="height:350px;"></div>
