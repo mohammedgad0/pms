@@ -1,4 +1,3 @@
-from pygments import style
 {% extends "project/base_site.html" %}
 {% load i18n %}
 {% block title %} {% trans "Project Details" %} {% endblock title %}
@@ -21,10 +20,10 @@ from pygments import style
 {% block content %}
   <div class="right_col" role="main">
     <div class="">
-   
+
    <!-- top menu bar -->
 {% include "project/project_nave.html" %}
-   
+
 
       <div class="clearfix"></div>
  <form action="" method="post" class="form-horizontal form-label-left input_mask" novalidate enctype="multipart/form-data">
@@ -34,14 +33,14 @@ from pygments import style
           <div class="x_panel">
             <div class="x_title">
             <div class="col-md-7 col-sm-12 col-xs-12">
-          
+
               <h2 class="right">  <div class="task_number"  >  {{task.id}}</div>  {{task.name}}  </h2>
-              
+
               </div>
                <div class="col-md-5 col-sm-12 col-xs-12">
                      <ul class="nav nav-pills left float-left task-ctions" role="tablist">
-                     
-                 
+
+
                              <button type="submit" class="btn btn-success">  <li>   <i class="fa fa-save"></i>  {{_('Save Changes')}}</button></li>
                            </ul>
               </div>
@@ -52,35 +51,35 @@ from pygments import style
             <div class="x_content">
 
               <div class="col-md-8 col-sm-8 col-xs-12">
-    
-       
+
+
  <!-- start task detail ------------------------------------- -->
  <div class="col-md-12 col-sm-12 col-xs-12">
- 
+
 <div class="form-group">
 <!-- task title -->
 {{form.name.label_tag}}
  {{form.name}}
             </div>
-                            
+
 <!--  decription -->
- <div class="form-group">    
+ <div class="form-group">
  {{form.desc.label_tag}}
     {{form.desc}}
      </div>
-  
+
   <!--  decription -->
- <div class="form-group">    
+ <div class="form-group">
  {{form.note.label_tag}}
     {{form.note}}
      </div>
-     
-                      
-          
+
+
+
 <!--  attachmenet -->
 <fieldset class="fieldset_normal">
         <legend>{{ _('Attachment')}}</legend>
-      
+
          <ul class="list-unstyled project_files">
                       <li><a href=""><i class="fa fa-file-word-o"></i> Functional-requirements.docx</a>
                       </li>
@@ -93,11 +92,11 @@ from pygments import style
                       <li><a href=""><i class="fa fa-file-word-o"></i> Contract-10_12_2014.docx</a>
                       </li>
                     </ul>
-        
+
       </fieldset>
-     
-    
-    
+
+
+
            <div class="form-group text-danger ">
      <div class="col-md-3"></div><div class="col-md-9 col-sm-12 col-xs-12">
     {{ form.name.errors }}
@@ -108,34 +107,34 @@ from pygments import style
       {{ form.progress.errors  }}
     </div>
 </div>
-    
-     
+
+
       <!--  save and return control -->
- <div class="form-group"> 
-  
+ <div class="form-group">
+
      <a href="{% url 'ns-project:project-task-detail' project_detail.id task.id %}" >  <button type="button" class="btn btn-primary">{{ _('Back')}}</button></a>
 
       <button type="submit" class="btn btn-success">    <i class="fa fa-save"></i>  {{_('Save Changes')}}</button>
-        </div>  
-                   
+        </div>
+
 
 
 </div>
-          
-           
-             
+
+
+
               </div>
               <!-- start project-detail sidebar -->
-              
+
               <div class="col-md-4 col-sm-4 col-xs-12">
-                  
+
         <fieldset class="fieldset_normal">
         <legend>{{_("Basci Info")}}</legend>
-   
+
    <ul class="list-unstyled">
                       <li class="clearfix"><div class="basic_info_lable col-md-4 float-right">{{_("project Name")}}</div> <div class="basic_info  col-md-7">{{project_detail.name}} </div>
                       </li>
-                      <li class="clearfix task-ctions"><div class="basic_info_lable  col-md-4 float-right">{{_("Assigned To")}} </div> <div class="basic_info col-md-7" style="position:relative;">  {{form.assignedto}} 
+                      <li class="clearfix task-ctions"><div class="basic_info_lable  col-md-4 float-right">{{_("Assigned To")}} </div> <div class="basic_info col-md-7" style="position:relative;">  {{form.assignedto}}
                          <a href="#" data-url="{% url 'ns-project:update-assignto-task' task.id 'False' %}" class="update-task-assignto" style="    position: absolute;
     top: 0px;
     left: 0px;
@@ -149,7 +148,7 @@ from pygments import style
     display: inline-block;">
 
                       <i class="fa fa-search form-control-feedback form-control-feedback-black right" aria-hidden="true"></i>
-                  
+
                       </a>
                       </div>
                       </li>
@@ -169,10 +168,10 @@ from pygments import style
                     </ul>
 
       </fieldset>
-                  
+
                <fieldset class="fieldset_normal">
         <legend>{{_("Actions")}}</legend>
-   
+
    <ul class="list-unstyled">
                       <li class="clearfix"><div class="basic_info_lable col-md-4 float-right">{{_("Created By")}}</div> <div class="basic_info  col-md-7 float-right">{{ createdby.empname}}</div>
                       </li>
@@ -184,16 +183,16 @@ from pygments import style
                       </li>
                       <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Cancelled Reason")}}</div> <div class="basic_info  col-md-7 float-right"> {{task.mailto}}</div>
                       </li>
-                     
+
                     </ul>
-                    
+
 
       </fieldset>
                   <!--    <div class="text-center mtop20">
                       <a href="#" class="btn btn-sm btn-primary">Add files</a>
                       <a href="#" class="btn btn-sm btn-warning">Report contact</a>
                     </div>  -->
-         
+
 
               </div>
               <!-- end project-detail sidebar -->
@@ -204,8 +203,8 @@ from pygments import style
       </div>
     </div>
   </div>
-  
-  
+
+
 
 
   </form>
@@ -213,7 +212,7 @@ from pygments import style
   <style>
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.css" />
   </style>
-  
+
 <div class="modal fade" id="modal-task">
    <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -256,9 +255,9 @@ $.ajax({
 
       $("#"+data.icon).addClass('paction_disable').closest('a').removeAttr("href").removeAttr("data-url").removeAttr("class");
       $("#modal-task").modal("hide");
-      
+
       if(data.assignedto_empid){
-      $("#id_assignedto").val(data.assignedto_empid ); 
+      $("#id_assignedto").val(data.assignedto_empid );
       }
       else if(data.assignedto_depid){
       $("#id_assignedto").val(data.assignedto_depid );
@@ -277,15 +276,15 @@ return false;
 $(".task-ctions").on("click", ".update-task-start", loadForm);
 $("#modal-task").on("submit", ".task-update-start-form", saveForm);
 
-//finish task 
+//finish task
 $(".task-ctions").on("click", ".update-task-finish", loadForm);
 $("#modal-task").on("submit", ".update-finish-task-form", saveForm);
 
-//close task 
+//close task
 $(".task-ctions").on("click", ".update-task-close", loadForm);
 $("#modal-task").on("submit", ".update-close-task-form", saveForm);
 
-//cancel task 
+//cancel task
 $(".task-ctions").on("click", ".update-task-cancel", loadForm);
 $("#modal-task").on("submit", ".update-cancel-task-form", saveForm);
 
@@ -293,7 +292,7 @@ $("#modal-task").on("submit", ".update-cancel-task-form", saveForm);
 $(".task-ctions").on("click", ".update-task-pause", loadForm);
 $("#modal-task").on("submit", ".update-pause-task-form", saveForm);
 
-//assign to task 
+//assign to task
 $(".task-ctions").on("click", ".update-task-assignto", loadForm);
 $("#modal-task").on("submit", ".update-assignto-task-form", saveForm);
 </script>
@@ -303,12 +302,12 @@ $("#modal-task").on("submit", ".update-assignto-task-form", saveForm);
   <script>
 
      $(".chosen").data("placeholder","Select Frameworks...").chosen();
-     $(".chosen").chosen({no_results_text: "Oops, nothing found!"}); 
+     $(".chosen").chosen({no_results_text: "Oops, nothing found!"});
       $('.chosen').chosen({allow_single_deselect: true,no_results_text: "Ã™â€žÃ˜Â§ Ã™Å Ã™Ë†Ã˜Â¬Ã˜Â¯ Ã™â€ Ã˜ÂªÃ˜Â§Ã˜Â¦Ã˜Â¬!"});
 
 
-      
-      
+
+
 </script>
 
 
@@ -320,9 +319,9 @@ $("#modal-task").on("submit", ".update-assignto-task-form", saveForm);
             format: 'YYYY-MM-DD'
         },
   }, function(start, end, label) {
-     
+
   });
-  
+
   $('#single_cal_2,#single_cal_3').daterangepicker({
       autoUpdateInput: true,
       singleDatePicker: true,
@@ -332,8 +331,8 @@ $("#modal-task").on("submit", ".update-assignto-task-form", saveForm);
             language: 'ar-EG',
         },
   }, function(start, end, label) {
-    
+
   });
   </script>
-  
+
 {% endblock javascripts %}

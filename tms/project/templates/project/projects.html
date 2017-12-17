@@ -46,6 +46,10 @@
                      {% endfor %}
                   </ul>
                   {% endif %}
+                {% for key, value in aDict.items %}
+                {{key}}=={{value}}
+                <br>
+                {% endfor %}
                   <!-- start project list -->
                   <table class="table table-striped projects">
                      <thead>

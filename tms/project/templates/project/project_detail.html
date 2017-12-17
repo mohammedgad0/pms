@@ -1,4 +1,3 @@
-from pygments import style
 {% extends "project/base_site.html" %}
 {% load i18n %}
 {% block title %} {% trans "Project Details" %} {% endblock title %}
@@ -7,7 +6,7 @@ from pygments import style
 
 {% block stylesheets %}
   {{ block.super }}
-  
+
   <style>
  /* .scrollable-menu {
     height: auto;
@@ -21,10 +20,10 @@ from pygments import style
 {% block content %}
   <div class="right_col" role="main">
     <div class="">
-   
+
    <!-- top menu bar -->
 {% include "project/project_nave.html" %}
-   
+
 
       <div class="clearfix"></div>
 
@@ -32,9 +31,10 @@ from pygments import style
         <div class="col-md-12">
           <div class="x_panel">
             <div class="x_title">
-            
+
           {{ log_entry }}
               <h2> {{project_detail.name}}  </h2>
+              {{taskprogress}}
                  <div class="clearfix"></div>
             </div>
 
@@ -45,7 +45,7 @@ from pygments import style
                 <ul class="stats-overview">
                   <li style="width:22%;">
                     <span class="name"> {% trans "Duration" %} </span>
-       
+
                     <span class="value text-success" "> {{ project_detail.start|timesince:project_detail.end  }} </span>
                   </li>
                   <li class="hidden-phone" style="width:25%;">
@@ -89,11 +89,11 @@ from pygments import style
                         </p>
                       </div>
                     </li>  -->
-                    
-                  
-                   
-                  
-                     
+
+
+
+
+
                   </ul>
                   <!-- end of user messages -->
 
@@ -122,8 +122,8 @@ from pygments import style
 
                       <p class="title">{{ _('Created By')}} </p>
                       <p> {{ project_detail.createdby }} </p>
-                      
-                   
+
+
                       <p class="title">{{ _('Created Date') }} </p>
                    <p >{{project_detail.createddate}}</p>
                     </div>
@@ -144,7 +144,7 @@ from pygments import style
                     </ul>
                     <br />
 
-                 
+
                   </div>
 
                 </section>

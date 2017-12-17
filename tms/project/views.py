@@ -21,13 +21,12 @@ from django.template.loader import  render_to_string
 from django.http import JsonResponse
 from django.views.generic.list import ListView
 from django.core.urlresolvers import resolve
-#from .defs import test
 from simple_history.utils import update_change_reason
 from idlelib.debugobj import _object_browser
 from .timesheet import *
 from _datetime import date
 from django.forms.models import modelformset_factory
-#from _datetime import date
+
 
 
 
@@ -136,15 +135,30 @@ def AddProject(request):
 
 @login_required
 def ProjectList(request):
-    EmpID=request.session.get('EmpID')
-    tasks_list = Task.objects.filter(assignedto = EmpID)
+    EmpID = request.session.get('EmpID')
+    emp_data  = get_object_or_404(Employee, empid = EmpID)
+    tasks_list = Task.objects.filter(assignedto = EmpID,departementid = request.session.get('DeptCode'))
+    all_project = Project.objects.all()
     project_id = []
+    aDict = {}
+    allTakProgress = 0
+    projectProgress=0
+
     for data in tasks_list:
         project_id.append(data.projectid)
     project_list= Project.objects.all().filter(
     Q(createdby__exact=EmpID)|
     Q(id__in = project_id)
     ).order_by('-id')
+    task_list = Task.objects.all()
+    for project in project_list:
+        for data in task_list:
+            allTakProgress=allTakProgress+data.progress
+            if len(task_list)==0:
+                projectProgress=0
+            else :
+                projectProgress = round(allTakProgress/len(task_list), 2)
+            aDict.update({project.id: projectProgress})
 
     paginator = Paginator(project_list, 5) # Show 5 contacts per page
     page = request.GET.get('page')
@@ -157,7 +171,7 @@ def ProjectList(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         _plist = paginator.page(paginator.num_pages)
 
-    context = {'project_list':_plist}
+    context = {'project_list':_plist , 'aDict':aDict}
     return render(request, 'project/projects.html', context)
 
 def ProjectDetail(request,pk):
@@ -176,14 +190,15 @@ def ProjectDetail(request,pk):
     else :
         projectProgress=round(allTakProgress/len(tasks_list), 2)
 
-    project_list= Project.objects.all().filter(
+    project_list = Project.objects.all().filter(
     Q(createdby__exact=EmpID)|
     Q(id__in = project_id)
     ).exclude(status=4).order_by('-id')
 
     history=Task.history.filter(projectid=pk)[:10:1]
     current_url ="ns-project:" + resolve(request.path_info).url_name
-    context={'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'projectProgress':projectProgress,'tasks_list':tasks_list,'history':history}
+    context={'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'projectProgress':projectProgress,
+    'taskprogress':allTakProgress,'tasks_list':tasks_list,'history':history}
     return render(request, 'project/project_detail.html', context)
 
 def ProjectEdit(request,pk):
