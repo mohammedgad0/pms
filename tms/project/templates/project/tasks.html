@@ -28,6 +28,7 @@
                            <li role="presentation"><a href="{% url 'ns-project:project-task' project_detail.id 'unclosed' %}" >{{ _('Open Tasks')}} </a></li>
                            {% if request.user|has_group:"ismanager" %}
                            <li role="presentation"><a href="{% url 'ns-project:project-task' project_detail.id 'assignedtome' %}">{{ _('Assigned to Me')}} </a></li>
+                            <li role="presentation"><a href="{% url 'ns-project:project-task' project_detail.id 'assignedtodept' %}">{{ _('Assigned to Departement')}} </a></li>
                            {% endif %}
                            <li role="presentation"><a href="{% url 'ns-project:project-task' project_detail.id 'delayed' %}">{{ _('Delayed')}} </a></li>
                            <li role="presentation" class="dropdown">

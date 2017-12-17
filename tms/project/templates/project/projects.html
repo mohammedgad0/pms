@@ -28,12 +28,29 @@
          <div class="col-md-12">
             <div class="x_panel">
                <div class="x_title">
-                 {% load user_group %}
+               
+               
+               <nav   role="tablist"  style="background-color: ;">
+                     <div class="container-fluid">
+                        <ul class="nav nav-pills navbar-right" role="tablist">
+                           <li role="presentation" class="active"><a href="{% url 'ns-project:project-task' 1 'all' %}">{{ _('All Project Tasks')}} </a></li>
+                           <li role="presentation"><a href="{% url 'ns-project:project-task' 1 'unclosed' %}" >{{ _('Open Tasks')}} </a></li>
+                           <li role="presentation"><a href="{% url 'ns-project:project-task' 1 'delayed' %}">{{ _('Delayed')}} </a></li>
+                      
+                        </ul>
+
+                         {% load user_group %}
                  {% if request.user|has_group:"ismanager" %}
-                  <a href="{% url 'ns-project:add-project' %}" >  <button type="button" class="btn btn-primary btn-md"> <i class="fa fa-plus"></i>  {% trans "Ad Project" %}</button></a>
+                  <a href="{% url 'ns-project:add-project' %}" style="float:left" >  <button type="button" class="btn btn-primary btn-md"> <i class="fa fa-plus"></i>  {% trans "Ad Project" %}</button></a>
                   {% endif %}
-                  <a href="{% url 'ns-project:project-list' %}" > <button type="button" class="btn btn-primary btn-md">  <i class="fa fa-th-list"></i>  {% trans "Projects List" %} </button></a>
+                  <a href="{% url 'ns-project:project-list' %}" style="float:left" > <button type="button" class="btn btn-primary btn-md">  <i class="fa fa-th-list"></i>  {% trans "Projects List" %} </button></a>
                   <div class="clearfix"></div>
+                     </div>
+                  </nav>
+                  
+                  
+                  
+               
                </div>
                <div class="x_content">
                   {% if messages %}

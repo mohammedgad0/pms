@@ -32,9 +32,13 @@
           <div class="x_panel">
             <div class="x_title">
 
-          {{ log_entry }}
               <h2> {{project_detail.name}}  </h2>
-              {{taskprogress}}
+              {% load user_group %}
+                 {% if request.user|has_group:"ismanager" %}
+                  <a href="{% url 'ns-project:add-project' %}" style="float:left" >  <button type="button" class="btn btn-primary btn-md"> <i class="fa fa-plus"></i>  {% trans "Ad Project" %}</button></a>
+                  {% endif %}
+               <a href="{% url 'ns-project:project-list' %}"  style="float:left" >  <button type="button" class="btn btn-primary btn-md"> <i class="fa fa-th-list"></i>  {% trans "Projects List" %}</button></a>
+
                  <div class="clearfix"></div>
             </div>
 
@@ -46,10 +50,10 @@
                   <li style="width:22%;">
                     <span class="name"> {% trans "Duration" %} </span>
 
-                    <span class="value text-success" "> {{ project_detail.start|timesince:project_detail.end  }} </span>
+                    <span class="value text-success" > {{ project_detail.start|timesince:project_detail.end  }} </span>
                   </li>
                   <li class="hidden-phone" style="width:25%;">
-                    <span class="name"> {% trans "  Remaining Time" %} </span>
+                    <span class="name"> {% trans "Remaining Time" %} </span>
                      {% now "Ymd" as current_date  %}
                     <span class="value text-success"> {{  project_detail.end|timeuntil }} </span>
                   </li>
@@ -61,7 +65,9 @@
                     <span class="name">{% trans "Completion Rate" %} </span>
                     <span class="value text-success">% {{ projectProgress}}</span>
                   </li>
+
                 </ul>
+
                 <br />
 
              <div id="mainb" style="height:350px;"></div>
