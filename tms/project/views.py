@@ -163,7 +163,7 @@ def ProjectList(request):
                 projectProgress = round(allTakProgress/len(task_list), 2)
             aDict.update({project.id: projectProgress})
 
-    paginator = Paginator(project_list, 5) # Show 5 contacts per page
+    paginator = Paginator(project_list, 20) # Show 5 contacts per page
     page = request.GET.get('page')
     try:
         _plist = paginator.page(page)
@@ -249,7 +249,7 @@ def ProjectTask(request,pk,task_status=None):
     task_list= Task.objects.all().filter(
          Q(projectid__exact=pk)&
          Q(createdby__exact=empid)|
-         Q(assignedto = empid)
+         Q(assignedto = empid,projectid__exact=pk)
          ).order_by('-id')
 
     if task_status=="all":
