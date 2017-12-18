@@ -137,21 +137,25 @@ def AddProject(request):
 def ProjectList(request,project_status=None):
     EmpID = request.session.get('EmpID')
     emp_data  = get_object_or_404(Employee, empid = EmpID)
-    tasks_list = Task.objects.filter(assignedto = EmpID,departementid = request.session.get('DeptCode'))
+    dept_data = get_object_or_404(Department, deptcode = request.session.get('DeptCode'))
+
+    tasks_list = Task.objects.filter(assignedto = EmpID)
+    # Q(assignedto = EmpID)|
+    # Q(departementid = request.session.get('DeptCode'))
+    # )
+    if EmpID == dept_data.managerid:
+        tasks_list = Task.objects.filter(
+        Q(assignedto = EmpID)|
+        Q(departementid = request.session.get('DeptCode'))
+        )
     all_project = Project.objects.all()
-
-
 
     project_id = []
     aDict = {}
     allTakProgress = 0
     projectProgress=0
-
     for data in tasks_list:
         project_id.append(data.projectid)
-
-
-
 
     project_list= Project.objects.all().filter(
     Q( createdby__exact=EmpID)|
@@ -164,9 +168,6 @@ def ProjectList(request,project_status=None):
     elif project_status is not None :
          project_status = project_status.lower()
          project_list=project_list.filter(status__name__contains=project_status)
-
-
-
 
     for project in project_list:
         task_list = Task.objects.all().filter(projectid= project.id)
