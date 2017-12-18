@@ -9,11 +9,12 @@ Project List:
   basic:
   - remove team member.
   - search box not active
+  - manager can't see project assigned to him from another department
 
 project detail:
   basic:
   -
-
+  
 Add Task:
   basic:
   - Calendar not arabic.
