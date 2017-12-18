@@ -155,7 +155,8 @@ def ProjectList(request):
         task_list = Task.objects.all().filter(projectid= project.id)
         allTakProgress = 0
         for data in task_list:
-            allTakProgress = allTakProgress+data.progress
+            if data.progress is not None:
+                allTakProgress = allTakProgress + data.progress
             if len(task_list)==0:
                 projectProgress=0
             else :
@@ -627,6 +628,7 @@ def AddTask(request,project_id):
             project_obj.createdby = request.session.get('EmpID')
             project_obj.lasteditdate = datetime.now()
             project_obj.createddate = datetime.now()
+            project_obj.progress = 0
             if assignto_employee:
                 project_obj.assignedto = assignto_employee
                 project_obj.assigneddate = datetime.now()
