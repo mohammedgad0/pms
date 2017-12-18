@@ -134,11 +134,14 @@ def AddProject(request):
     return render(request, 'project/add_project.html', {'form': form,'action_name': _('Ad Project')})
 
 @login_required
-def ProjectList(request):
+def ProjectList(request,project_status=None):
     EmpID = request.session.get('EmpID')
     emp_data  = get_object_or_404(Employee, empid = EmpID)
     tasks_list = Task.objects.filter(assignedto = EmpID,departementid = request.session.get('DeptCode'))
     all_project = Project.objects.all()
+
+
+
     project_id = []
     aDict = {}
     allTakProgress = 0
@@ -146,10 +149,24 @@ def ProjectList(request):
 
     for data in tasks_list:
         project_id.append(data.projectid)
+
+
+
+
     project_list= Project.objects.all().filter(
-    Q(createdby__exact=EmpID)|
+    Q( createdby__exact=EmpID)|
     Q(id__in = project_id)
     ).order_by('-id')
+
+    #check fi;ter by status
+    if project_status =="all" :
+          project_list=project_list
+    elif project_status is not None :
+         project_status = project_status.lower()
+         project_list=project_list.filter(status__name__contains=project_status)
+
+
+
 
     for project in project_list:
         task_list = Task.objects.all().filter(projectid= project.id)
