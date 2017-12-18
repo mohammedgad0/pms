@@ -139,9 +139,9 @@ def ProjectList(request,project_status=None):
     emp_data  = get_object_or_404(Employee, empid = EmpID)
     tasks_list = Task.objects.filter(assignedto = EmpID,departementid = request.session.get('DeptCode'))
     all_project = Project.objects.all()
-    
-         
-         
+
+
+
     project_id = []
     aDict = {}
     allTakProgress = 0
@@ -149,25 +149,25 @@ def ProjectList(request,project_status=None):
 
     for data in tasks_list:
         project_id.append(data.projectid)
-        
 
-       
-        
+
+
+
     project_list= Project.objects.all().filter(
     Q( createdby__exact=EmpID)|
     Q(id__in = project_id)
     ).order_by('-id')
 
-    #check fi;ter by status 
+    #check fi;ter by status
     if project_status =="all" :
           project_list=project_list
     elif project_status is not None :
          project_status = project_status.lower()
          project_list=project_list.filter(status__name__contains=project_status)
- 
-        
 
-         
+
+
+
     for project in project_list:
         task_list = Task.objects.all().filter(projectid= project.id)
         allTakProgress = 0
@@ -180,9 +180,7 @@ def ProjectList(request,project_status=None):
                 projectProgress = round(allTakProgress/len(task_list), 2)
             aDict.update({project.id: projectProgress})
 
-   
-         
-    paginator = Paginator(project_list, 5) # Show 5 contacts per page
+    paginator = Paginator(project_list, 20) # Show 5 contacts per page
     page = request.GET.get('page')
     try:
         _plist = paginator.page(page)
@@ -268,7 +266,7 @@ def ProjectTask(request,pk,task_status=None):
     task_list= Task.objects.all().filter(
          Q(projectid__exact=pk)&
          Q(createdby__exact=empid)|
-         Q(assignedto = empid)
+         Q(assignedto = empid,projectid__exact=pk)
          ).order_by('-id')
 
     if task_status=="all":
