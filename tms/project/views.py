@@ -134,7 +134,7 @@ def AddProject(request):
     return render(request, 'project/add_project.html', {'form': form,'action_name': _('Ad Project')})
 
 @login_required
-def ProjectList(request):
+def ProjectList(request,project_status=None):
     EmpID = request.session.get('EmpID')
     emp_data  = get_object_or_404(Employee, empid = EmpID)
     tasks_list = Task.objects.filter(assignedto = EmpID,departementid = request.session.get('DeptCode'))

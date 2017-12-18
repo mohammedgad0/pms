@@ -33,9 +33,11 @@
                <nav   role="tablist"  style="background-color: ;">
                      <div class="container-fluid">
                         <ul class="nav nav-pills navbar-right" role="tablist">
-                           <li role="presentation" class="active"><a href="{% url 'ns-project:project-task' 1 'all' %}">{{ _('All Project Tasks')}} </a></li>
-                           <li role="presentation"><a href="{% url 'ns-project:project-task' 1 'unclosed' %}" >{{ _('Open Tasks')}} </a></li>
-                           <li role="presentation"><a href="{% url 'ns-project:project-task' 1 'delayed' %}">{{ _('Delayed')}} </a></li>
+                           <li role="presentation" class="active"><a href="{% url 'ns-project:project-list' 'all' %}">{{ _('All Projects')}} </a></li>
+                           <li role="presentation"><a href="{% url 'ns-project:project-list' 'new' %}" >{{ _('New Projects')}} </a></li>
+                           <li role="presentation"><a href="{% url 'ns-project:project-list' 'inprogress' %}">{{ _('Inprogress Projects')}} </a></li>
+                           <li role="presentation"><a href="{% url 'ns-project:project-list' 'done' %}">{{ _('Done Projects')}} </a></li>
+                           <li role="presentation"><a href="{% url 'ns-project:project-list' 'hold' %}">{{ _('Hold Projects')}} </a></li>
 
                         </ul>
 

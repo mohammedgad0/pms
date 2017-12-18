@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^sheet/(?P<empid>\d+)/show/$', views.EmpSheet, name='emp-sheet'),
     url(r'^add_project/$', views.AddProject, name='add-project'),
     url(r'^project_list/$', views.ProjectList, name='project-list'),
+     url(r'^project_list/(?P<project_status>\w+)$', views.ProjectList, name='project-list'),
     url(r'^project_detail/(?P<pk>\d+)$', views.ProjectDetail, name='project-detail'),
     url(r'^project_edit/(?P<pk>\d+)$', views.ProjectEdit, name='project-edit'),
     url(r'^project_delete/(?P<pk>\d+)$', views.ProjectDelete, name='project-delete'),
