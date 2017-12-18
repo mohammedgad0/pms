@@ -855,3 +855,66 @@ def ProjectTaskEdit(request,projectid,taskid):
                 'closedby':closedby,
                }
         return render(request, 'project/project_task_edit.html', context)
+
+@login_required
+def TaskListExternal(request,task_status=None):
+    current_url ="ns-project:" + resolve(request.path_info).url_name
+    empid = request.session.get('EmpID')
+    tasks_list = Task.objects.filter(assignedto = empid)
+    project_id = []
+    for data in tasks_list:
+        project_id.append(data.projectid)
+
+    project_list= Project.objects.all().filter(
+    Q(createdby__exact=empid)|
+    Q(id__in = project_id)
+    ).exclude(status=4).order_by('-id')
+
+    task_list= Task.objects.all().filter(
+       
+         Q(assignedto = empid)
+         ).exclude(createdby__exact=empid).order_by('-id')
+
+    if task_status=="all":
+         task_list= task_list
+
+    elif task_status=="unclosed":
+         task_list = task_list.exclude(status__exact='Closed')
+    elif task_status=="assignedtome":
+         task_list= task_list.filter(assignedto__exact=empid)
+    elif task_status=="new":
+         task_list= task_list.filter(status__exact='New')
+    elif task_status=="inprogress":
+         task_list= task_list.filter(status__exact='InProgress')
+    elif task_status=="finishedbyme":
+         task_list= task_list.filter(finishedby__exact=empid,status__exact='Done')
+    elif task_status=="done":
+         task_list= task_list.filter(status__exact='Done')
+    elif task_status=="closed":
+         task_list= task_list.filter(status__exact='Closed')
+    elif task_status=="cancelled":
+         task_list= task_list.filter(status__exact='Cancelled')
+    elif task_status=="hold":
+         task_list= task_list.filter(status__exact='Hold')
+    elif task_status=="delayed":
+         task_list= task_list.filter(enddate__lt = datetime.today())
+    elif task_status=="assignedtodept":
+         task_list= task_list.filter(departementid__exact= request.session['DeptCode'])
+
+
+
+    paginator = Paginator(task_list, 5) # Show 5 contacts per page
+    page = request.GET.get('page')
+    try:
+        _plist = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        _plist = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        _plist = paginator.page(paginator.num_pages)
+
+
+
+    context = {'tasks':_plist,'project_list':project_list,'current_url':current_url}
+    return render(request, 'project/tasks_from_external_dept.html', context)
