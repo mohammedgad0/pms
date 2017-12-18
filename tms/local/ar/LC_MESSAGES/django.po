@@ -1185,7 +1185,7 @@ msgstr "إضافة مهمة"
 
 #: .\project\templates\project\tasks.html:86
 msgid "AssignedTo"
-msgstr "مهام مسندة"
+msgstr "مسندة الى"
 
 #: .\project\templates\project\tasks.html:89
 msgid "Finshed By"

@@ -869,8 +869,7 @@ def TaskListExternal(request,task_status=None):
     ).exclude(status=4).order_by('-id')
 
     task_list= Task.objects.all().filter(
-       
-         Q(assignedto = empid)
+         Q(assignedto = empid)|Q(departementid =  request.session['DeptCode'])
          ).exclude(createdby__exact=empid).order_by('-id')
 
     if task_status=="all":
