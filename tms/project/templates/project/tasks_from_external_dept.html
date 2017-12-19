@@ -135,6 +135,9 @@
                          <!--  <td>{{task.finishedby }}</td> -->
                            <td>{{  task.finisheddate|date:"d-m-Y" }} </td>
                            <td>
+                           
+                      {# if task not closed #}
+                        {% if task.status != "closed" %}
                               <!-- user start task  -->
                               {% if task.status != "New" %}
                               <i class="fa fa-play fa-2x paction  paction_disable" title="{% trans "Play" %}" id="p_{{task.id}}" ></i>
@@ -146,17 +149,32 @@
                               <i class="fa fa-check-square-o fa-2x paction  paction_disable" title="{% trans "Finish" %}"></i>
                               {% else %}
                               <a href="#" data-url="{% url 'ns-project:update-finish-task' task.id %}" class="update-finish-task" ><i class="fa fa-check-square-o fa-2x paction  text-primary" title="{% trans "Finish" %}" id="f_{{task.id}}"></i> </a>
-                              {% endif %}
-                              {% if request.user|has_group:"ismanager" %}
-                                                            <a href="#" data-url="{% url 'ns-project:update-assignto-task' task.id %}" class="update-assignto-task" ><i class="fa fa-hand-o-right fa-2x paction text-primary" title="{% trans "Assign" %} "></i></a>
+                              {% endif %} 
                               
-                              <!-- manager cancel task -->
-                              <a href="#" data-url="{% url 'ns-project:update-assignto-task' task.id %}" class="update-assignto-task" ><i class="fa fa-ban fa-1x paction text-danger" title="{% trans "Assign" %} "></i></a>
-                              {% if task.closeddate %}
-                              <i class="fa fa-ban fa-1x paction text-danger" title="{% trans "Close" %}" id="c_{{task.id}}"></i>
+                              
+                              
+                                <!-- user cancel task -->
+                              {% if task.cancelledby %}
+                              <i class="fa fa-ban fa-2x paction text-danger" title="{% trans "Finish" %}"></i>
                               {% else %}
+                               <a href="#" data-url="{% url 'ns-project:update-cancel-task' task.id %}" class="update-task-cancel "><i class="fa fa-ban fa-2x paction text-danger" title="{{_('Cancel Task')}}"></i></a>
+                              <a href="#" data-url="{% url 'ns-project:update-finish-task' task.id %}" class="update-finish-task" ><i class="fa fa-check-square-o fa-2x paction  text-primary" title="{% trans "Finish" %}" id="f_{{task.id}}"></i> </a>
+
+                              {% endif %} 
+                              
+                              
+
+
+                              <!-- assign task -->
+                              {% if request.user|has_group:"ismanager" %}
+                              <a href="#" data-url="{% url 'ns-project:update-assignto-task' task.id %}" class="update-assignto-task" ><i class="fa fa-hand-o-right fa-2x paction text-primary" title="{% trans "Assign" %} "></i></a>
                               {% endif %}
-                              {% endif %}
+                        {% endif %} 
+                        {%  if task.status == "closed" %}
+                           
+                  
+                         {% endif %}{#  closed end #}
+                            
                               
                            </td>
                         </tr>
@@ -274,6 +292,12 @@
    //update assign to task
    $("#task-table").on("click", ".update-assignto-task", loadForm);
    $("#modal-task").on("submit", ".update-assignto-task-form", saveForm);
+   
+    
+    //cancel task 
+    $(".task-ctions").on("click", ".update-task-cancel", loadForm);
+    $("#modal-task").on("submit", ".update-cancel-task-form", saveForm);
+
 
 </script>
 

@@ -811,14 +811,14 @@ def ProjectTaskEdit(request,projectid,taskid):
         #instance.finisheddate=form.cleaned_data['finisheddate']
         #check if status changed to new
         if form.cleaned_data['status'] =="New" or form.cleaned_data['status'] =="Inprogress" :
-           instance.closeby=None
+           instance.closedby=None
            instance.closeddate=None
            instance.canceleddate=None
            instance.cancelledby=None
            instance.finisheddate=None
            instance.finishedby=None
         if form.cleaned_data['status']=="Done":
-           instance.closeby=None
+           instance.closedby=None
            instance.closeddate=None
            instance.canceleddate=None
            instance.cancelledby=None
@@ -856,23 +856,29 @@ def ProjectTaskEdit(request,projectid,taskid):
         return render(request, 'project/project_task_edit.html', context)
 
 @login_required
-def TaskListExternal(request,task_status=None):
+def TaskListExternal(request,task_status=None):   
     current_url ="ns-project:" + resolve(request.path_info).url_name
     empid = request.session.get('EmpID')
     tasks_list = Task.objects.filter(assignedto = empid)
+     
+    
     project_id = []
     for data in tasks_list:
         project_id.append(data.projectid)
 
-    project_list= Project.objects.all().filter(
-    Q(createdby__exact=empid)|
-    Q(id__in = project_id)
-    ).exclude(status=4).order_by('-id')
 
+    #no of new task 
+    new_tasks_count= len(Task.objects.all().filter(Q(status__exact='New')&(
+         Q(assignedto = empid)|Q(departementid =  request.session['DeptCode']))
+         ).exclude(createdby__exact=empid))
+
+
+    #get all tasks assign to dept from external project 
     task_list= Task.objects.all().filter(
          Q(assignedto = empid)|Q(departementid =  request.session['DeptCode'])
          ).exclude(createdby__exact=empid).order_by('-id')
 
+ 
     if task_status=="all":
          task_list= task_list
 
@@ -914,5 +920,5 @@ def TaskListExternal(request,task_status=None):
 
 
 
-    context = {'tasks':_plist,'project_list':project_list,'current_url':current_url}
+    context = {'tasks':_plist,'current_url':current_url,'new_tasks_count':new_tasks_count}
     return render(request, 'project/tasks_from_external_dept.html', context)
