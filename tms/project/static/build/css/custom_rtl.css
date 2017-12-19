@@ -5170,3 +5170,10 @@ legend {
 .form-control-feedback-black {
     color: #2a3f54 !important;
 }
+.btn_app_custom {
+    background-color: #ffffff;
+    height: 30px !important;
+    padding: 4px 5px !important;
+    margin: 0 5px 5px 0;
+    min-width: 50px;
+}

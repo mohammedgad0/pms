@@ -728,30 +728,34 @@ def updateTaskAssignto(request,pk,save=None):
              departement=request.POST.get('departement')
              data['assignedto_depid']=departement
              form.fields["employee"].required=False  #make required filed in model false
-#              if not departement:
-#                  errors.append(_('Enter a departement .'))
-#         if not employee and not departement :
-#              errors.append(_('Enter a note .'))
+
 
         if form.is_valid():
             if save !="False" :
-               # errors= errors.append(form.errors)
-                try :
+             
+                if  employee :
                     _obj.assignedto=int(form.cleaned_data['employee'].empid)
                     _assign=form.cleaned_data['employee'].empname
-                except :
-                    _obj.assignedto=None
-                try :
-                    _obj.departementid=int(form.cleaned_data['departement'].deptcode)
-                    _assign=form.cleaned_data['departement'].deptname
-                except :
-                    _obj.departementid=None
-                _obj.lasteditdate=datetime.now()
-                _obj.save()
-                   #add to history
-                update_change_reason(_obj,_(" by ")+ request.session['EmpName']  +  _(" ,  Assign Task to ")+  str(_assign))
-                messages.success(request, "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>"+_(" Task has been updated successfully "), fail_silently=True,)
+                    _obj.departementid=Employee.objects.get(empid__exact= _obj.assignedto).deptcode
 
+                    
+                elif departement :
+                        _obj.departementid=int(form.cleaned_data['departement'].deptcode)
+                        _assign=form.cleaned_data['departement'].deptname
+                        _obj.assignedto=None
+
+                      
+            _obj.canncelleddate=None
+            _obj.cancelledby=None
+            _obj.closeddate=None
+            _obj.closedby=None  
+            _obj.finisheddate=None
+            _obj.finishedby=None   
+            _obj.lasteditdate=datetime.now()
+            _obj.save()
+            #add to history
+            update_change_reason(_obj,_(" by ")+ request.session['EmpName']  +  _(" ,  Assign Task to ")+  str(_assign))
+            messages.success(request, "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>"+_(" Task has been updated successfully "), fail_silently=True,)
 
             data['form_is_valid'] = True
             data['id'] = pk
@@ -875,7 +879,7 @@ def TaskListExternal(request,task_status=None):
 
     #get all tasks assign to dept from external project 
     task_list= Task.objects.all().filter(
-         Q(assignedto = empid)|Q(departementid =  request.session['DeptCode'])
+         Q(departementid =  request.session['DeptCode'])
          ).exclude(createdby__exact=empid).order_by('-id')
 
  
@@ -906,7 +910,6 @@ def TaskListExternal(request,task_status=None):
          task_list= task_list.filter(departementid__exact= request.session['DeptCode'])
 
 
-
     paginator = Paginator(task_list, 5) # Show 5 contacts per page
     page = request.GET.get('page')
     try:
@@ -917,7 +920,6 @@ def TaskListExternal(request,task_status=None):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         _plist = paginator.page(paginator.num_pages)
-
 
 
     context = {'tasks':_plist,'current_url':current_url,'new_tasks_count':new_tasks_count}
