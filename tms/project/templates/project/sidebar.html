@@ -43,6 +43,8 @@
          
            {% load user_group %}
            {% if request.user|has_group:"ismanager" %}
+           <li><a href="{% url 'ns-project:task-list-external' 'all' %}"><i class="fa fa-code-fork" aria-hidden="true"></i> {% trans "Tasks assigned to departement" %}<span class="badge badge-success" style="position:relative;right:5px;">{{new_tasks_count}}</span><span class="fa"></span></a>  </li>
+          
            <li><a href=" /sheet/{{request.session.DeptCode}}/dept "><i class="fa fa-pencil-square-o"></i> {% trans "manage all sheets" %} <span class="fa"></span></a>  </li>
 
             <li><a><i class="fa fa-file-text-o"></i> {% trans "Reports" %} <span class="fa fa-chevron-down"></span></a>
