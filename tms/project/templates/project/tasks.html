@@ -129,7 +129,7 @@
                            {{ task.departementid|truncatechars:5 }}
                          {% endif %}
                                 </td>
-                           <td>% {{task.progress }}
+                           <td>   <span>  % {{task.progress }}</span>    
                           <!--  {{ task.startdate|timesince:task.enddate }} -->
                            <!-- {{ task.enddate|timeuntil }} -->
 
@@ -145,9 +145,6 @@
                                  <small class="text-danger"> ( {{ _('Delayed')}} )</small>
                                    {% endif %}
                          {% endif %}
-
-
-
 
                            </td>
                          <!--  <td>{{task.finishedby }}</td> -->
@@ -165,7 +162,7 @@
                               <i class="fa fa-check-square-o fa-2x paction  paction_disable" title="{% trans "Finish" %}"></i>
                               {% else %}
                               <a href="#" data-url="{% url 'ns-project:update-finish-task' task.id %}" class="update-finish-task" ><i class="fa fa-check-square-o fa-2x paction  text-primary" title="{% trans "Finish" %}" id="f_{{task.id}}"></i> </a>
-                              <a href="#" data-url="{% url 'ns-project:task-update-start' task.id %}" class="update-task-start" ><i class="fa fa-edit fa-2x paction  text-primary" title="{% trans "Play" %}" id="p_{{task.id}}" ></i> </a>
+                          <!--      <a href="#" data-url="{% url 'ns-project:task-update-start' task.id %}" class="update-task-start" ><i class="fa fa-edit fa-2x paction  text-primary" title="{% trans "Play" %}" id="p_{{task.id}}" ></i> </a>--> 
                             
                             
                               {% endif %}
