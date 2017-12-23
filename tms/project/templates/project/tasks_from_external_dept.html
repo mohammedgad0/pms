@@ -32,7 +32,7 @@
           <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
               <div class="x_title">
-                <h2>{% trans "Tasks assined to departement" %}</h2>
+                <h2>{% trans "Tasks assigned to departement" %}</h2>
               
                 <div class="clearfix"></div>
               </div>
@@ -153,15 +153,19 @@
                           {% endif %}
                            <li  id="task-finish"> <a href="#" data-url="{% url 'ns-project:update-finish-task' task.id %}" class="btn btn-app btn_app_custom update-task-finish"><i class="fa fa-check-square-o fa-2x paction text-primary" title="{{_('Finish Task')}}"></i></a> </li>
                            <li  id="task-cancel"> <a href="#" data-url="{% url 'ns-project:update-cancel-task' task.id %}" class="btn btn-app btn_app_custom update-task-cancel "><i class="fa fa-ban fa-2x paction text-danger" title="{{_('Cancel Task')}}"></i></a> </li> 
-                                               <li  id="task-progress"> <a href="#"  class="btn btn-app btn_app_custom "><i class="fa fa-external-link right fa-2x paction text-primary" title="{{_('Task Progress')}}"></i></a> </li>
-                  
+                     <li  id="task-progress"> 
+                           <a href="#" data-url="{% url 'ns-project:update-progress-task' task.id %}" class="btn btn-app btn_app_custom update-task-progress"><i class="fa fa-external-link fa-2x paction text-primary" title="{{_('Task Progress')}}"></i></a>
+                            </li> 
                       {% endif %}
                         {% load user_group %}
+                       
                         {% if request.user|has_group:"ismanager" %}
-                     		 {% if  task.status != "Closed" or task.status != "Cancelled" %}
-                     		     <li  id="task-assignto">  <a href="#" data-url="{% url 'ns-project:update-assignto-task' task.id %}" class="btn btn-app btn_app_custom update-task-assignto"> <i class="fa fa-hand-o-right fa-2x paction text-primary" title="{{_('Assign To')}}"></i>  </a> </li>
-                   			 {% else %}
-                   			    <li  id="task-assignto">  <a href="#"  class="btn btn-app btn_app_custom disabled"> <i class="fa fa-hand-o-right fa-2x paction text-default" title="{{_('Assign To')}}"></i>  </a> </li>
+                     		 {% if  task.status == "Closed" or task.status == "Cancelled" %}
+                   			                                   <li  id="task-assignto">  <a href="#"  class="btn btn-app btn_app_custom disabled"> <i class="fa fa-hand-o-right fa-2x paction text-default" title="{{_('Assign To')}}"></i>  </a> </li>
+
+                                {% else %}
+                                                                  <li  id="task-assignto">  <a href="#" data-url="{% url 'ns-project:update-assignto-task' task.id %}" class="btn btn-app btn_app_custom update-task-assignto"> <i class="fa fa-hand-o-right fa-2x paction text-primary" title="{{_('Assign To')}}"></i>  </a> </li>
+
                     		  {% endif %}
                         {% endif %}
                            </ul>  
@@ -274,6 +278,10 @@
  $(".task-ctions").on("click", ".update-task-finish", loadForm);
  $("#modal-task").on("submit", ".update-finish-task-form", saveForm);
 
+ //close task 
+ $(".task-ctions").on("click", ".update-task-progress", loadForm);
+ $("#modal-task").on("submit", ".update-progress-task-form", saveForm);
+ 
  //close task 
  $(".task-ctions").on("click", ".update-task-close", loadForm);
  $("#modal-task").on("submit", ".update-close-task-form", saveForm);

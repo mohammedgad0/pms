@@ -343,7 +343,7 @@ def ProjectTaskDetail(request,projectid,taskid):
     assignToEmp=None
     assignToDept=None
 
-    createdBy=request.session.get('EmpID', '1056821208')
+    createdBy=request.session['EmpID']
     project_list= Project.objects.all().filter(createdby__exact=createdBy).exclude(status=4).order_by('-id')
     current_url ="ns-project:project-task"
     project_detail= get_object_or_404(Project,pk=projectid)
@@ -434,6 +434,7 @@ def updateTaskFinish(request,pk):
         if form.is_valid():
             _obj.ftime=form.cleaned_data['ftime']
             _obj.status="Done"
+            _obj.progress=100
             _obj.finisheddate=datetime.now()
             _obj.finishedby=request.session.get('EmpID', '1056821208')
             _obj.lasteditdate=datetime.now()
@@ -778,6 +779,32 @@ def updateTaskAssignto(request,pk,save=None):
     form.fields["employee"].queryset = Employee.objects.filter(deptcode = request.session['DeptCode'])
     context = {'form': form,'pk':pk,'save':save,'errors':errors}
     data['html_form'] = render_to_string('project/task/update_assignto_task.html',context,request=request)
+    return JsonResponse(data)
+
+@login_required
+def updateTaskProgress(request,pk):
+    data = dict()
+    _task =  get_object_or_404(Task,pk=pk)
+    # create a form instance and populate it with data from the request:
+    form = TaskProgressForm(request.POST or None, instance=_task)
+    if form.is_valid():
+        _task.progress= form.cleaned_data['progress']
+#             if _task.progress==100 :
+#                 _task.status="Done"
+        _task.lasteditdate=datetime.now()
+        _task.save()
+           #add to history
+        update_change_reason(_task, _("Task Progress chenged by ")+request.session['EmpName']+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['note'])
+        data['form_is_valid'] = True
+        data['message'] = _('Progress Updated successfully for Task number'+ pk)
+        data['html_form'] = render_to_string('project/task/update_progress_task.html',request=request)
+        return JsonResponse(data)
+    else:
+        data['form_is_valid'] = False
+
+    # if a GET (or any other method) we'll create a blank form
+    context = {'form': form,'pk':pk}
+    data['html_form'] = render_to_string('project/task/update_progress_task.html',context,request=request)
     return JsonResponse(data)
 
 @login_required
