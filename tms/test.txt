@@ -1,0 +1,28 @@
+Add project:
+  basic:
+  - Calendar not arabic.
+  - No permission check on add new project(Employee can add project)
+  advanced:
+  - No validation on start date and end date(can choice end date less than start date).
+
+Project List:
+  basic:
+  - remove team member.
+  - search box not active
+  - manager can't see project assigned to him from another department
+
+project detail:
+  basic:
+  -
+  
+Add Task:
+  basic:
+  - Calendar not arabic.
+  advanced:
+  - Date should be in logic with start date and end date for project.
+  - No validation on start date and end date(can choice end date less than start date).
+
+Task list:
+  basic:
+  - Hover on selected status.
+  - Name instead code in assign column

@@ -76,7 +76,7 @@
                           {{form.filepath.label_tag}}
                          {{ form.filepath|add_class:"upload"}}
                        </div>
-                           <span class="input-group-btn"><button class="delete btn btn-danger remove-form-row"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button></span>
+                           {# <span class="input-group-btn"><button class="delete btn btn-danger remove-form-row"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button></span> #}
                          </div>
                         <!-- <div class="form-group item">
                           <div class=" col-md-6">
@@ -91,7 +91,7 @@
 
                         </div> -->
                         {% endfor%}
-                        <span id="add" class="input-group-btn"><button class="btn btn-success add-form-row"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button></span>
+                        <span id="add" class="input-group-btn"><button class="btn btn-success add-form-row"><span class="glyphicon glyphicon-plus" aria-hidden="true"> </span>{{_('add new file')}}</button></span>
 
                         </fieldset>
 

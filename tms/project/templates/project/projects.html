@@ -33,10 +33,11 @@
                <nav   role="tablist"  style="background-color: ;">
                      <div class="container-fluid">
                         <ul class="nav nav-pills navbar-right" role="tablist">
-                           <li role="presentation" class="active"><a href="{% url 'ns-project:project-task' 1 'all' %}">{{ _('All Project Tasks')}} </a></li>
-                           <li role="presentation"><a href="{% url 'ns-project:project-task' 1 'unclosed' %}" >{{ _('Open Tasks')}} </a></li>
-                           <li role="presentation"><a href="{% url 'ns-project:project-task' 1 'delayed' %}">{{ _('Delayed')}} </a></li>
-
+                           <li role="presentation" class="active"><a href="{% url 'ns-project:project-list' 'all' %}">{{ _('All Projects')}} </a></li>
+                           <li role="presentation"><a href="{% url 'ns-project:project-list' 'new' %}" >{{ _('New Projects')}} </a></li>
+                           <li role="presentation"><a href="{% url 'ns-project:project-list' 'inprogress' %}">{{ _('Inprogress Projects')}} </a></li>
+                           <li role="presentation"><a href="{% url 'ns-project:project-list' 'done' %}">{{ _('Done Projects')}} </a></li>
+                           <li role="presentation"><a href="{% url 'ns-project:project-list' 'hold' %}">{{ _('Hold Projects')}} </a></li>
                         </ul>
 
                          {% load user_group %}
@@ -139,10 +140,15 @@
                            </td>
                            <td>
                               <a href="{% url 'ns-project:project-detail' project.id %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> {% trans "View" %} </a>
-                              {% if request.user|has_group:"ismanager" %}
+                              {% if request.user|has_group:"ismanager" and  project.createdby == request.session.EmpID%}
                               <a href="{% url 'ns-project:project-edit' project.id %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> {% trans "Edit" %} </a>
                               <a href="{% url 'ns-project:project-delete' project.id %}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> {% trans "Delete" %} </a>
+                              {%elif request.user|has_group:"ismanager" and project.createdby != request.session.EmpID%}
+                              <a href="#" class="btn btn-info btn-xs disabled"><i class="fa fa-pencil"></i> {% trans "Edit" %} </a>
+                              <a href="#" class="btn btn-danger btn-xs disabled"><i class="fa fa-trash-o"></i> {% trans "Delete" %} </a>
                               {% endif %}
+
+
                            </td>
 
                         </tr>

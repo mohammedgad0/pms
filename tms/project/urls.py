@@ -29,9 +29,11 @@ urlpatterns = [
     url(r'^sheet/(?P<empid>\d+)/show/$', views.EmpSheet, name='emp-sheet'),
     url(r'^add_project/$', views.AddProject, name='add-project'),
     url(r'^project_list/$', views.ProjectList, name='project-list'),
+     url(r'^project_list/(?P<project_status>\w+)$', views.ProjectList, name='project-list'),
     url(r'^project_detail/(?P<pk>\d+)$', views.ProjectDetail, name='project-detail'),
     url(r'^project_edit/(?P<pk>\d+)$', views.ProjectEdit, name='project-edit'),
     url(r'^project_delete/(?P<pk>\d+)$', views.ProjectDelete, name='project-delete'),
+    url(r'^task_list_external/(?P<task_status>\w+)$', views.TaskListExternal, name='task-list-external'),
     url(r'^project_task/(?P<pk>\d+)$', views.ProjectTask, name='project-task'),
     url(r'^project_task/(?P<pk>\d+)/(?P<task_status>\w+)$', views.ProjectTask, name='project-task'),
     url(r'^project_task_detail/(?P<projectid>\d+)/(?P<taskid>\d+)$', views.ProjectTaskDetail, name='project-task-detail'),
@@ -43,7 +45,8 @@ urlpatterns = [
     url(r'^update_pause_task/(?P<pk>\d+)$',views.updateTaskPause, name='update-pause-task'),
     url(r'^update_assignto_task/(?P<pk>\d+)$',views.updateTaskAssignto, name='update-assignto-task'),
     url(r'^update_assignto_task/(?P<pk>\d+)/(?P<save>\w+)$',views.updateTaskAssignto, name='update-assignto-task'),
-
+    url(r'^update_progress_task/(?P<pk>\d+)$',views.updateTaskProgress, name='update-progress-task'),
+  
     url(r'^project_gantt/(?P<pk>\d+)$',views.ganttChart, name='project-gantt'),
     url(r'^project_follow_up/$',views.projectFlowUp, name='project-follow-up'),
     url(r'^project_task_delete/(?P<projectid>\d+)/(?P<taskid>\d+)$', views.ProjectTaskDelete, name='project-task-delete'),

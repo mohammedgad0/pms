@@ -134,35 +134,54 @@ def AddProject(request):
     return render(request, 'project/add_project.html', {'form': form,'action_name': _('Ad Project')})
 
 @login_required
-def ProjectList(request):
+def ProjectList(request,project_status=None):
     EmpID = request.session.get('EmpID')
     emp_data  = get_object_or_404(Employee, empid = EmpID)
-    tasks_list = Task.objects.filter(assignedto = EmpID,departementid = request.session.get('DeptCode'))
+    dept_data = get_object_or_404(Department, deptcode = request.session.get('DeptCode'))
+
+    tasks_list = Task.objects.filter(assignedto = EmpID)
+    # Q(assignedto = EmpID)|
+    # Q(departementid = request.session.get('DeptCode'))
+    # )
+    if EmpID == dept_data.managerid:
+        tasks_list = Task.objects.filter(
+        Q(assignedto = EmpID)|
+        Q(departementid = request.session.get('DeptCode'))
+        )
     all_project = Project.objects.all()
+
     project_id = []
     aDict = {}
     allTakProgress = 0
     projectProgress=0
-
     for data in tasks_list:
         project_id.append(data.projectid)
+
     project_list= Project.objects.all().filter(
-    Q(createdby__exact=EmpID)|
+    Q( createdby__exact=EmpID)|
     Q(id__in = project_id)
     ).order_by('-id')
+
+    #check fi;ter by status
+    if project_status =="all" :
+          project_list=project_list
+    elif project_status is not None :
+         project_status = project_status.lower()
+         project_list=project_list.filter(status__name__contains=project_status)
 
     for project in project_list:
         task_list = Task.objects.all().filter(projectid= project.id)
         allTakProgress = 0
         for data in task_list:
-            allTakProgress = allTakProgress+data.progress
+            if data.progress is not None:
+                allTakProgress = allTakProgress + data.progress
             if len(task_list)==0:
                 projectProgress=0
             else :
                 projectProgress = round(allTakProgress/len(task_list), 2)
             aDict.update({project.id: projectProgress})
 
-    paginator = Paginator(project_list, 5) # Show 5 contacts per page
+    paginator = Paginator(project_list, 20) # Show 5 contacts per page
     page = request.GET.get('page')
     try:
         _plist = paginator.page(page)
@@ -248,7 +267,7 @@ def ProjectTask(request,pk,task_status=None):
     task_list= Task.objects.all().filter(
          Q(projectid__exact=pk)&
          Q(createdby__exact=empid)|
-         Q(assignedto = empid)
+         Q(assignedto = empid,projectid__exact=pk)
          ).order_by('-id')
 
     if task_status=="all":
@@ -324,7 +343,7 @@ def ProjectTaskDetail(request,projectid,taskid):
     assignToEmp=None
     assignToDept=None
 
-    createdBy=request.session.get('EmpID', '1056821208')
+    createdBy=request.session['EmpID']
     project_list= Project.objects.all().filter(createdby__exact=createdBy).exclude(status=4).order_by('-id')
     current_url ="ns-project:project-task"
     project_detail= get_object_or_404(Project,pk=projectid)
@@ -415,6 +434,7 @@ def updateTaskFinish(request,pk):
         if form.is_valid():
             _obj.ftime=form.cleaned_data['ftime']
             _obj.status="Done"
+            _obj.progress=100
             _obj.finisheddate=datetime.now()
             _obj.finishedby=request.session.get('EmpID', '1056821208')
             _obj.lasteditdate=datetime.now()
@@ -627,6 +647,7 @@ def AddTask(request,project_id):
             project_obj.createdby = request.session.get('EmpID')
             project_obj.lasteditdate = datetime.now()
             project_obj.createddate = datetime.now()
+            project_obj.progress = 0
             if assignto_employee:
                 project_obj.assignedto = assignto_employee
                 project_obj.assigneddate = datetime.now()
@@ -708,30 +729,34 @@ def updateTaskAssignto(request,pk,save=None):
              departement=request.POST.get('departement')
              data['assignedto_depid']=departement
              form.fields["employee"].required=False  #make required filed in model false
-#              if not departement:
-#                  errors.append(_('Enter a departement .'))
-#         if not employee and not departement :
-#              errors.append(_('Enter a note .'))
+
 
         if form.is_valid():
             if save !="False" :
-               # errors= errors.append(form.errors)
-                try :
+             
+                if  employee :
                     _obj.assignedto=int(form.cleaned_data['employee'].empid)
                     _assign=form.cleaned_data['employee'].empname
-                except :
-                    _obj.assignedto=None
-                try :
-                    _obj.departementid=int(form.cleaned_data['departement'].deptcode)
-                    _assign=form.cleaned_data['departement'].deptname
-                except :
-                    _obj.departementid=None
-                _obj.lasteditdate=datetime.now()
-                _obj.save()
-                   #add to history
-                update_change_reason(_obj,_(" by ")+ request.session['EmpName']  +  _(" ,  Assign Task to ")+  str(_assign))
-                messages.success(request, "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>"+_(" Task has been updated successfully "), fail_silently=True,)
+                    _obj.departementid=Employee.objects.get(empid__exact= _obj.assignedto).deptcode
 
+                    
+                elif departement :
+                        _obj.departementid=int(form.cleaned_data['departement'].deptcode)
+                        _assign=form.cleaned_data['departement'].deptname
+                        _obj.assignedto=None
+
+                      
+            _obj.canncelleddate=None
+            _obj.cancelledby=None
+            _obj.closeddate=None
+            _obj.closedby=None  
+            _obj.finisheddate=None
+            _obj.finishedby=None   
+            _obj.lasteditdate=datetime.now()
+            _obj.save()
+            #add to history
+            update_change_reason(_obj,_(" by ")+ request.session['EmpName']  +  _(" ,  Assign Task to ")+  str(_assign))
+            messages.success(request, "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>"+_(" Task has been updated successfully "), fail_silently=True,)
 
             data['form_is_valid'] = True
             data['id'] = pk
@@ -754,6 +779,32 @@ def updateTaskAssignto(request,pk,save=None):
     form.fields["employee"].queryset = Employee.objects.filter(deptcode = request.session['DeptCode'])
     context = {'form': form,'pk':pk,'save':save,'errors':errors}
     data['html_form'] = render_to_string('project/task/update_assignto_task.html',context,request=request)
+    return JsonResponse(data)
+
+@login_required
+def updateTaskProgress(request,pk):
+    data = dict()
+    _task =  get_object_or_404(Task,pk=pk)
+    # create a form instance and populate it with data from the request:
+    form = TaskProgressForm(request.POST or None, instance=_task)
+    if form.is_valid():
+        _task.progress= form.cleaned_data['progress']
+#             if _task.progress==100 :
+#                 _task.status="Done"
+        _task.lasteditdate=datetime.now()
+        _task.save()
+           #add to history
+        update_change_reason(_task, _("Task Progress chenged by ")+request.session['EmpName']+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['note'])
+        data['form_is_valid'] = True
+        data['message'] = _('Progress Updated successfully for Task number'+ pk)
+        data['html_form'] = render_to_string('project/task/update_progress_task.html',request=request)
+        return JsonResponse(data)
+    else:
+        data['form_is_valid'] = False
+
+    # if a GET (or any other method) we'll create a blank form
+    context = {'form': form,'pk':pk}
+    data['html_form'] = render_to_string('project/task/update_progress_task.html',context,request=request)
     return JsonResponse(data)
 
 @login_required
@@ -791,14 +842,14 @@ def ProjectTaskEdit(request,projectid,taskid):
         #instance.finisheddate=form.cleaned_data['finisheddate']
         #check if status changed to new
         if form.cleaned_data['status'] =="New" or form.cleaned_data['status'] =="Inprogress" :
-           instance.closeby=None
+           instance.closedby=None
            instance.closeddate=None
            instance.canceleddate=None
            instance.cancelledby=None
            instance.finisheddate=None
            instance.finishedby=None
         if form.cleaned_data['status']=="Done":
-           instance.closeby=None
+           instance.closedby=None
            instance.closeddate=None
            instance.canceleddate=None
            instance.cancelledby=None
@@ -834,3 +885,69 @@ def ProjectTaskEdit(request,projectid,taskid):
                 'closedby':closedby,
                }
         return render(request, 'project/project_task_edit.html', context)
+
+@login_required
+def TaskListExternal(request,task_status=None):   
+    current_url ="ns-project:" + resolve(request.path_info).url_name
+    empid = request.session.get('EmpID')
+    tasks_list = Task.objects.filter(assignedto = empid)
+     
+    
+    project_id = []
+    for data in tasks_list:
+        project_id.append(data.projectid)
+
+
+    #no of new task 
+    new_tasks_count= len(Task.objects.all().filter(Q(status__exact='New')&(
+         Q(assignedto = empid)|Q(departementid =  request.session['DeptCode']))
+         ).exclude(createdby__exact=empid))
+
+
+    #get all tasks assign to dept from external project 
+    task_list= Task.objects.all().filter(
+         Q(departementid =  request.session['DeptCode'])
+         ).exclude(createdby__exact=empid).order_by('-id')
+
+ 
+    if task_status=="all":
+         task_list= task_list
+
+    elif task_status=="unclosed":
+         task_list = task_list.exclude(status__exact='Closed')
+    elif task_status=="assignedtome":
+         task_list= task_list.filter(assignedto__exact=empid)
+    elif task_status=="new":
+         task_list= task_list.filter(status__exact='New')
+    elif task_status=="inprogress":
+         task_list= task_list.filter(status__exact='InProgress')
+    elif task_status=="finishedbyme":
+         task_list= task_list.filter(finishedby__exact=empid,status__exact='Done')
+    elif task_status=="done":
+         task_list= task_list.filter(status__exact='Done')
+    elif task_status=="closed":
+         task_list= task_list.filter(status__exact='Closed')
+    elif task_status=="cancelled":
+         task_list= task_list.filter(status__exact='Cancelled')
+    elif task_status=="hold":
+         task_list= task_list.filter(status__exact='Hold')
+    elif task_status=="delayed":
+         task_list= task_list.filter(enddate__lt = datetime.today())
+    elif task_status=="assignedtodept":
+         task_list= task_list.filter(departementid__exact= request.session['DeptCode'])
+
+
+    paginator = Paginator(task_list, 5) # Show 5 contacts per page
+    page = request.GET.get('page')
+    try:
+        _plist = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        _plist = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        _plist = paginator.page(paginator.num_pages)
+
+
+    context = {'tasks':_plist,'current_url':current_url,'new_tasks_count':new_tasks_count}
+    return render(request, 'project/tasks_from_external_dept.html', context)
