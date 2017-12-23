@@ -130,11 +130,17 @@
          </ul>
         </div>
       </fieldset>
+      
+          {% if  request.META.HTTP_REFERER ==  request.build_absolute_uri or request.META.HTTP_REFERER == None   %}     
+               <a href="{% url 'ns-project:project-task' project_detail.id  %}" >  <button type="button" class="btn btn-primary">{{ _('Back')}}</button></a>
+                {%else%}
+                 <a href="{{request.META.HTTP_REFERER}}" >  <button type="button" class="btn btn-primary"><i class="fa fa-angle-double-right"></i> {{ _('Back')}}</button></a>
+
+{%endif%}
 
 </div>
           
-           
-             
+  
               </div>
               <!-- start project-detail sidebar -->
               

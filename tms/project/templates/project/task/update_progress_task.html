@@ -10,9 +10,10 @@
     <div class="modal-body"> 
 
                  <div class="form-group">
-              <div class=" col-md-12">
+              <div class=" col-md-2" style="position:relative">
                {{form.progress.label_tag}}
-               {{form.progress}}
+               {{form.progress}} <i class="fa fa-percent" aria-hidden="true"  style="position: absolute;top: 30px;left: -5px;"></i>
+
               </div>
               </div>
                
@@ -26,11 +27,11 @@
                 <div class="form-group">
            
                 {% if errors %}
-        <ul>
+        <div  class="text-danger">
             {% for error in errors %}
-            <li class="text-danger">{{ error }}</li>
+         {{ error }}
             {% endfor %}
-        </ul>
+  </div>
     {% endif %}
     
                  

@@ -10,7 +10,12 @@
 <div class="right_col" role="main">
    <div class="">
 
+ 
 
+
+
+ 
+ 
       <!-- top menu bar -->
 {% include "project/project_nave.html" %}
 
@@ -22,20 +27,29 @@
                   <nav class="navbar "  style="background-color: ;">
                      <div class="container-fluid">
                         <ul class="nav nav-pills navbar-right" role="tablist">
-                           <li role="presentation" class="active"><a href="{% url 'ns-project:project-task' project_detail.id 'all' %}">{{ _('All Project Tasks')}} </a></li>
-                           <li role="presentation"><a href="{% url 'ns-project:project-task' project_detail.id 'unclosed' %}" >{{ _('Open Tasks')}} </a></li>
+                           <li role="presentation" class={% if request.resolver_match.kwargs.task_status == 'all' or  request.resolver_match.kwargs.task_status == None %}  {{'active'}} {% else  %} {{'inactive' }} {% endif  %}><a href="{% url 'ns-project:project-task' project_detail.id 'all' %}">{{ _('All Project Tasks')}} </a></li>
+                           <li role="presentation"   class={% if request.resolver_match.kwargs.task_status == 'unclosed' %}  {{'active'}} {% else  %} {{'inactive' }} {% endif  %}
+ ><a href="{% url 'ns-project:project-task' project_detail.id 'unclosed' %}" >{{ _('Open Tasks')}} </a></li>
                            {% if request.user|has_group:"ismanager" %}
-                           <li role="presentation"><a href="{% url 'ns-project:project-task' project_detail.id 'assignedtome' %}">{{ _('Assigned to Me')}} </a></li>
-                            <li role="presentation"><a href="{% url 'ns-project:project-task' project_detail.id 'assignedtodept' %}">{{ _('Assigned to Departement')}} </a></li>
+                           <li role="presentation"  class={% if request.resolver_match.kwargs.task_status == 'assignedtome' %}  {{'active'}} {% else  %} {{'inactive' }} {% endif  %}><a href="{% url 'ns-project:project-task' project_detail.id 'assignedtome' %}">{{ _('Assigned to Me')}} </a></li>
+                         
+                            <!-- <li role="presentation"  class={% if request.resolver_match.kwargs.task_status == 'assignedtodept' %}  {{'active'}} {% else  %} {{'inactive' }} {% endif  %}><a href="{% url 'ns-project:project-task' project_detail.id 'assignedtodept' %}" >{{ _('Assigned to Departement')}} </a></li> -->
                            {% endif %}
-                           <li role="presentation"><a href="{% url 'ns-project:project-task' project_detail.id 'delayed' %}">{{ _('Delayed')}} </a></li>
-                           <li role="presentation" class="dropdown">
+                           <li role="presentation"  class={% if request.resolver_match.kwargs.task_status == 'delayed' %}  {{'active'}} {% else  %} {{'inactive' }} {% endif  %}><a href="{% url 'ns-project:project-task' project_detail.id 'delayed' %}">{{ _('Delayed')}} </a></li>
+                           <li role="presentation" 
+                           class="dropdown extra_menue class=
+                           {% if request.resolver_match.kwargs.task_status == 'finishedbyme'  or  request.resolver_match.kwargs.task_status == 'inprogress' or request.resolver_match.kwargs.task_status == 'done'  or request.resolver_match.kwargs.task_status == 'closed' or request.resolver_match.kwargs.task_status == 'cancelled'  or request.resolver_match.kwargs.task_status == 'hold'  or request.resolver_match.kwargs.task_status == 'new'  or request.resolver_match.kwargs.task_status == 'inprogress' %}  
+                               {{'active'}}
+                                {% else  %}
+                                 {{'inactive' }}
+                                {% endif  %}">
+                           
                               <a id="drop4" href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
                               {{_('More')}}
                               <span class="caret"></span>
                               </a>
                               <ul id="menu6" class="dropdown-menu animated fadeInDown" role="menu">
-                                 <li role="presentation"><a role="menuitem" tabindex="-1" href="{% url 'ns-project:project-task' project_detail.id 'new' %}">{{_('New')}}</a></li>
+                                 <li role="presentation"  class={% if request.resolver_match.kwargs.task_status == 'new' %}  {{'active'}} {% else  %} {{'inactive' }} {% endif  %}><a role="menuitem" tabindex="-1" href="{% url 'ns-project:project-task' project_detail.id 'new' %}">{{_('New')}}</a></li>
                                  <li role="presentation"><a role="menuitem" tabindex="-1" href="{% url 'ns-project:project-task' project_detail.id 'inprogress' %}">{{_('Inprogress')}}</a></li>
                                  {% if request.user|has_group:"ismanager" %}
                                  <li role="presentation"><a role="menuitem" tabindex="-1" href="{% url 'ns-project:project-task' project_detail.id 'finishedbyme' %}">{{_('Finished By Me') }} </a></li>
@@ -162,12 +176,11 @@
                               {% endif %}
                               <!-- user finish task -->
                               {% if task.finisheddate %}
+                             <i class="fa fa-clock-o fa-2x paction  paction_disable" title="{% trans "Progress" %}"></i>
                               <i class="fa fa-check-square-o fa-2x paction  paction_disable" title="{% trans "Finish" %}"></i>
                               {% else %}
+                             <a href="#" data-url="{% url 'ns-project:update-progress-task' task.id %}" class="update-finish-task" ><i class="fa fa-clock-o fa-2x paction  text-primary" title="{% trans "Progress" %}" id="f_{{task.id}}"></i> </a>
                               <a href="#" data-url="{% url 'ns-project:update-finish-task' task.id %}" class="update-finish-task" ><i class="fa fa-check-square-o fa-2x paction  text-primary" title="{% trans "Finish" %}" id="f_{{task.id}}"></i> </a>
-                          <!--      <a href="#" data-url="{% url 'ns-project:task-update-start' task.id %}" class="update-task-start" ><i class="fa fa-edit fa-2x paction  text-primary" title="{% trans "Play" %}" id="p_{{task.id}}" ></i> </a>--> 
-                            
-                            
                               {% endif %}
                               {% if request.user|has_group:"ismanager" %}
                               <!-- manager close task -->
@@ -286,6 +299,10 @@
    $("#task-table").on("click", ".update-finish-task", loadForm);
    $("#modal-task").on("submit", ".update-finish-task-form", saveForm);
 
+   //progress task 
+   $(".task-ctions").on("click", ".update-task-progress", loadForm);
+   $("#modal-task").on("submit", ".update-progress-task-form", saveForm);
+ 
    //update task close date and staus
    $("#task-table").on("click", ".update-close-task", loadForm);
    $("#modal-task").on("submit", ".update-close-task-form", saveForm);
@@ -301,5 +318,19 @@
      $(".chosen").data("placeholder","Select Frameworks...").chosen();
      $(".chosen").chosen({no_results_text: "Oops, nothing found!"});
      $('.chosen').chosen({allow_single_deselect: true,no_results_text: "لا يوجد نتائج!"});
+     
+     /*change selected label in more btn filter*/
+     $(function(){
+    $(".extra_menue ul li a").click(function(){
+    //alert($(this).text())
+     sessionStorage.setItem("extra_filter", $(this).text());
+   });
+});
+
+if (sessionStorage.extra_filter){
+      $("#drop4").html(sessionStorage.extra_filter +' <span class="caret"></span>');
+    }
+
 </script>
+
 {% endblock javascripts %}

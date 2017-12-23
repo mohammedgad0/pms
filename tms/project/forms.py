@@ -223,6 +223,7 @@ class TaskCloseForm(forms.Form):
        reason = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Please enter a reason to Close "), 'size': '40','required': True}),required=True, max_length=500, error_messages={'required': _('Reason')})
 
 class TaskProgressForm(ModelForm):
+      progress = forms.IntegerField(validators=[ MaxValueValidator(100, message="Progress Over 100"),MinValueValidator(0, message="Progress less 0")],min_value=0, max_value=100)
       note = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':'Notes', 'size': '40','required': False}), required=False,error_messages={'required': 'notes'})
 
       class Meta:

@@ -181,7 +181,7 @@ def ProjectList(request,project_status=None):
                 projectProgress = round(allTakProgress/len(task_list), 2)
             aDict.update({project.id: projectProgress})
 
-    paginator = Paginator(project_list, 20) # Show 5 contacts per page
+    paginator = Paginator(project_list, 10) # Show 5 contacts per page
     page = request.GET.get('page')
     try:
         _plist = paginator.page(page)
@@ -341,7 +341,6 @@ def ProjectTaskDetail(request,projectid,taskid):
     current_url ="ns-project:project-task"
     project_detail= get_object_or_404(Project,pk=projectid)
     task_detail= get_object_or_404(Task,projectid__exact= projectid,pk=taskid)
-    projectmembers= ProjectMembers.objects.all().order_by('-id')
     createdby=get_object_or_404(Employee,empid__exact=task_detail.createdby);
     try:
         assignToEmp=Employee.objects.get(empid__exact=task_detail.assignedto);
@@ -371,7 +370,6 @@ def ProjectTaskDetail(request,projectid,taskid):
                'project_list':project_list,
                'current_url':current_url,
                'task':task_detail,
-               'projectmembers':projectmembers,
                'assignToEmp':assignToEmp,'assignToDept':assignToDept,
                'createdby':createdby,
                'finishedby':finishedby,
@@ -636,6 +634,7 @@ def AddTask(request,project_id):
             # form.save()
             project_obj = form.save(commit=False)
             project_obj.projectid = project_id
+            project_obj.project = get_object_or_404(Project,pk=project_id)
             project_obj.status = 'New'
             project_obj.createdby = request.session.get('EmpID')
             project_obj.lasteditdate = datetime.now()
@@ -777,6 +776,7 @@ def updateTaskAssignto(request,pk,save=None):
 @login_required
 def updateTaskProgress(request,pk):
     data = dict()
+    errors = []
     _task =  get_object_or_404(Task,pk=pk)
     # create a form instance and populate it with data from the request:
     form = TaskProgressForm(request.POST or None, instance=_task)
@@ -794,9 +794,10 @@ def updateTaskProgress(request,pk):
         return JsonResponse(data)
     else:
         data['form_is_valid'] = False
+        data['errors'] = errors.append(form.errors)
 
     # if a GET (or any other method) we'll create a blank form
-    context = {'form': form,'pk':pk}
+    context = {'form': form,'pk':pk,'errors':errors}
     data['html_form'] = render_to_string('project/task/update_progress_task.html',context,request=request)
     return JsonResponse(data)
 
