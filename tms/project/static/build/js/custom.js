@@ -3372,7 +3372,7 @@ function init_echarts() {
             legend: {
                 x: 220,
                 y: 40,
-                data: ['Intent', 'Pre-order', 'Deal']
+                data: ['Intent', 'مهام مغلقة', 'مهام مفتوحة']
             },
             toolbox: {
                 show: true,
@@ -3401,13 +3401,13 @@ function init_echarts() {
             xAxis: [{
                 type: 'category',
                 boundaryGap: false,
-                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                data: [ '12-12-2017', '16-12-2017', '20-12-2017', '24-12-2017', '28-12-2017']
             }],
             yAxis: [{
                 type: 'value'
             }],
             series: [{
-                name: 'Deal',
+                name: 'مهام مفتوحة',
                 type: 'line',
                 smooth: true,
                 itemStyle: {
@@ -3417,9 +3417,9 @@ function init_echarts() {
                         }
                     }
                 },
-                data: [10, 12, 21, 54, 260, 830, 710]
+                data: [50, 28, 19, 12, 0]
             }, {
-                name: 'Pre-order',
+                name: 'مهام مغلقة',
                 type: 'line',
                 smooth: true,
                 itemStyle: {
@@ -3429,20 +3429,8 @@ function init_echarts() {
                         }
                     }
                 },
-                data: [30, 182, 434, 791, 390, 30, 10]
-            }, {
-                name: 'Intent',
-                type: 'line',
-                smooth: true,
-                itemStyle: {
-                    normal: {
-                        areaStyle: {
-                            type: 'default'
-                        }
-                    }
-                },
-                data: [1320, 1132, 601, 234, 120, 90, 20]
-            }]
+                data: [0, 15  , 22, 33, 50]
+            },  ]
         });
 
     }
