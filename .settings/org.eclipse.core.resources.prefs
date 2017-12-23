@@ -1,5 +1,6 @@
 eclipse.preferences.version=1
 encoding//tms/project/static/build/css/custom_rtl.css=UTF-8
+encoding//tms/project/templates/project/dashboard_manager.html=UTF-8
 encoding//tms/project/templates/project/my_tasks.html=UTF-8
 encoding//tms/project/templates/project/project_task_delete.html=UTF-8
 encoding//tms/project/templates/project/project_task_detail.html=UTF-8

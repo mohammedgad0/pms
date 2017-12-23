@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load user_group %}
 <div class="left_col scroll-view">
   <div class="navbar nav_title" style="border: 0;">
 
@@ -35,7 +36,9 @@
     <div class="menu_section">
       <!-- <h3>{%  trans "General" %}</h3> -->
       <ul class="nav side-menu">
-           <li><a href="index.html"><i class="fa fa-home"></i> {% trans "Home" %} <span class="fa"></span></a>  </li>
+        {% if request.user|has_group:"ismanager" %}
+           <li><a href="{% url 'ns-project:dashboard-manager'  %}"><i class="fa fa-home"></i> {% trans "Home" %} <span class="fa"></span></a>  </li>
+        {% endif %}
            <li><a href="{% url 'ns-project:project-list' %}"><i class="fa fa-briefcase"></i> {% trans "Projects" %} <span class="fa"></span></a>  </li>
           <!--   <li><a href="plain_page.html"><i class="fa fa-home"></i> {% trans "Tasks" %} <span class="fa"></span></a>  </li>  -->
            <li><a href="{% url 'ns-project:my-sheet' %}"><i class="fa fa-list"></i> {% trans "My To Do List" %} <span class="fa"></span></a>  </li>

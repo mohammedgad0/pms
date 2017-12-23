@@ -3245,21 +3245,9 @@ function init_echarts() {
             tooltip: {
                 formatter: "{a} <br/>{b} : {c}%"
             },
-            toolbox: {
-                show: true,
-                feature: {
-                    restore: {
-                        show: true,
-                        title: "Restore"
-                    },
-                    saveAsImage: {
-                        show: true,
-                        title: "Save Image"
-                    }
-                }
-            },
+       
             series: [{
-                name: 'Performance',
+                name: 'الاداء',
                 type: 'gauge',
                 center: ['50%', '50%'],
                 startAngle: 140,
@@ -3272,10 +3260,10 @@ function init_echarts() {
                     show: true,
                     lineStyle: {
                         color: [
-                            [0.2, 'lightgreen'],
+                            [0.2, '#ff4500'],
                             [0.4, 'orange'],
                             [0.8, 'skyblue'],
-                            [1, '#ff4500']
+                            [1, 'lightgreen']
                         ],
                         width: 30
                     }
@@ -3294,14 +3282,14 @@ function init_echarts() {
                     show: true,
                     formatter: function(v) {
                         switch (v + '') {
-                            case '10':
-                                return 'a';
-                            case '30':
-                                return 'b';
-                            case '60':
-                                return 'c';
                             case '90':
-                                return 'd';
+                                return 'ممتاز';
+                            case '60':
+                                return 'جيد جدا';
+                            case '30':
+                                return 'جيد';
+                            case '10':
+                                return 'مقبول';
                             default:
                                 return '';
                         }
@@ -3347,8 +3335,8 @@ function init_echarts() {
                     }
                 },
                 data: [{
-                    value: 50,
-                    name: 'Performance'
+                    value: 80,
+                    name: 'الأداء'
                 }]
             }]
         });

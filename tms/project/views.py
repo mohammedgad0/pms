@@ -945,3 +945,7 @@ def TaskListExternal(request,task_status=None):
 
     context = {'tasks':_plist,'current_url':current_url,'new_tasks_count':new_tasks_count}
     return render(request, 'project/tasks_from_external_dept.html', context)
+
+def DashboardManager(request):
+    context = {}
+    return render(request, 'project/dashboard_manager.html', context)
