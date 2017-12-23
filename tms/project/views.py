@@ -329,14 +329,7 @@ def ProjectTask(request,pk,task_status=None):
     return render(request, 'project/tasks.html', context)
 
 
-class ProjectMembersListView(ListView):
 
-    model = ProjectMembers
-    paginate_by=3
-    def get_context_data(self, **kwargs):
-        context = super(ProjectMembersListView, self).get_context_data(**kwargs)
-
-        return context
 
 @login_required
 def ProjectTaskDetail(request,projectid,taskid):

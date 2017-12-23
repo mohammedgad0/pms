@@ -14,8 +14,6 @@
       <!-- top menu bar -->
 {% include "project/project_nave.html" %}
 
-
-
       <div class="clearfix"></div>
       <div class="row">
          <div class="col-md-12">
@@ -57,10 +55,15 @@
                         </ul>
                         {% endif %}
                      </div>
+                     
+                     
                   </nav>
+                  
                   <div class="clearfix"></div>
                </div>
                <div class="x_content">
+               
+               
                   <ul class="messages">
                      {% if messages %}
                      {% for message in messages %}
@@ -295,13 +298,8 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.jquery.js"></script>
   <script>
-
      $(".chosen").data("placeholder","Select Frameworks...").chosen();
      $(".chosen").chosen({no_results_text: "Oops, nothing found!"});
-      $('.chosen').chosen({allow_single_deselect: true,no_results_text: "لا يوجد نتائج!"});
-
-
-
-
+     $('.chosen').chosen({allow_single_deselect: true,no_results_text: "لا يوجد نتائج!"});
 </script>
 {% endblock javascripts %}

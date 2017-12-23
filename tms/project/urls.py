@@ -1,6 +1,6 @@
 from django.conf.urls import url ,include
 from project import views
-from project.views import ProjectMembersListView
+
 #application namespace
 app_name = 'ns-project'
 
@@ -54,7 +54,6 @@ urlpatterns = [
 
     url(r'^project/(?P<project_id>\d+)/team$',views.ProjectTeam, name='project-team'),
     url(r'^project/(?P<project_id>\d+)/addtask$',views.AddTask, name='add-task'),
-    url(r'^ProjectMember/$', ProjectMembersListView.as_view(), name='ProjectMember-list'),
     url(r'^.*\.html', views.gentella_html, name='gentella'),
 
 ]

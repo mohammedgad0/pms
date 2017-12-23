@@ -170,6 +170,7 @@ class ApfDeptView(models.Model):
         db_table = 'apf_dept_view'
 
 class Task(models.Model):
+    project = models.ForeignKey('Project', on_delete=models.SET_NULL, null=True)
     projectid = models.IntegerField(db_column='ProjectId')  # Field name made lowercase.
     name = models.CharField(db_column='Name', max_length=100)  # Field name made lowercase.
     desc = models.CharField(db_column='Desc', max_length=2500)  # Field name made lowercase.
@@ -230,14 +231,14 @@ class TaskStatus(models.Model):
         managed = False
         db_table = 'task_status'
 
-class ProjectMembers(models.Model):
-    project =  models.ForeignKey(Project, on_delete=models.CASCADE)
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
-    createddate = models.DateTimeField(db_column='CreatedDate', blank=True, null=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'project_members'
+# class ProjectMembers(models.Model):
+#     project =  models.ForeignKey(Project, on_delete=models.CASCADE)
+#     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+#     createddate = models.DateTimeField(db_column='CreatedDate', blank=True, null=True)  # Field name made lowercase.
+# 
+#     class Meta:
+#         managed = False
+#         db_table = 'project_members'
 
 class VFollowup(models.Model):
      taskname = models.CharField(db_column='taskName', max_length=100, blank=True, null=True)  # Field name made lowercase.

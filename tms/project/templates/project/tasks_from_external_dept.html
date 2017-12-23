@@ -77,7 +77,7 @@
                          
                            <td><a href="{% url 'ns-project:project-task-detail' task.projectid task.id   %}" class=" btn-link" title="{{task.name}}">{{ task.name|truncatechars:20 }}</a></td>
                          
-                           <td><a href="{% url 'ns-project:project-task-detail' task.projectid task.id   %}" class=" btn-link" title="{{task.projectid}}">{{ task.projectid|truncatechars:20 }}</a></td>
+                           <td><a href="{% url 'ns-project:project-detail' task.project.id   %}" class=" btn-link" title="{{task.project.name}}">{{ task.project.name|truncatechars:20 }}</a></td>
                            <td>{{  task.startdate|date:"Y-m-d" }} </td>
                            <td>{{  task.enddate|date:"Y-m-d" }} </td>
                            <td id="status_{{task.id}}">
