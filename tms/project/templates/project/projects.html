@@ -3,6 +3,11 @@
 {% block title %} {% trans "Projects" %} {% endblock title %}
 {% block stylesheets %}
 {{ block.super }}
+<style>
+.nav-pills> li a:active{
+  background: #000;
+}
+</style>
 {% endblock stylesheets %}
 {% block content %}
 {% get_current_language as LANGUAGE_CODE %}
@@ -38,6 +43,7 @@
                            <li role="presentation"><a href="{% url 'ns-project:project-list' 'inprogress' %}">{{ _('Inprogress Projects')}} </a></li>
                            <li role="presentation"><a href="{% url 'ns-project:project-list' 'done' %}">{{ _('Done Projects')}} </a></li>
                            <li role="presentation"><a href="{% url 'ns-project:project-list' 'hold' %}">{{ _('Hold Projects')}} </a></li>
+                           <li role="presentation"><a href="{% url 'ns-project:project-list' 'department' %}">{{ _('Project From another department')}} </a></li>
                         </ul>
 
                          {% load user_group %}
@@ -48,7 +54,6 @@
                   <div class="clearfix"></div>
                      </div>
                   </nav>
-
 
 
 
@@ -129,7 +134,7 @@
                               <small>0% {% trans "Complete" %}</small> -->
                            </td>
                            <td>
-                             {{project_id}}
+
                               <button type="button" class="btn btn-{{ project.status.color }} btn-xs">
                               {% if LANGUAGE_CODE == 'ar' %}
                               {{ project.status.name_ar  }}
@@ -197,5 +202,15 @@
 </div>
 {% endblock content %}
 {% block javascripts %}
+
 {{ block.super }}
+<script>
+$(document).ready(function(){
+// $(".navbar-right li a").click(function() {
+//   console.log("good ")
+//   $(this).parent().addClass('active').siblings().removeClass('active');
+//
+//   });
+});
+  </script>
 {% endblock javascripts %}

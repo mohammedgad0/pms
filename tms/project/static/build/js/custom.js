@@ -5124,6 +5124,7 @@ $(document).ready(function() {
 //custom by mohammed gad
 $.datepicker.setDefaults($.datepicker.regional["ar"]);
 $(document).ready(function(){
+
 $('#id_assigntype_0').change(function(){
   $('#id_employee').prop("disabled", false).trigger("chosen:updated");
   $('#id_department').prop("disabled", true).trigger("chosen:updated");

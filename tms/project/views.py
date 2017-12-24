@@ -148,6 +148,11 @@ def ProjectList(request,project_status=None):
         Q(assignedto = EmpID)|
         Q(departementid = request.session.get('DeptCode'))
         )
+    if project_status =="department":
+         tasks_list = Task.objects.filter(
+         Q(departementid = request.session.get('DeptCode'))
+
+         )
     all_project = Project.objects.all()
 
     project_id = []
@@ -168,6 +173,11 @@ def ProjectList(request,project_status=None):
     elif project_status is not None :
          project_status = project_status.lower()
          project_list=project_list.filter(status__name__contains=project_status)
+    if project_status =="department":
+        project_list= Project.objects.filter(
+        ~Q( createdby__exact=EmpID)&
+        Q(id__in = project_id)
+        )
 
     for project in project_list:
         task_list = Task.objects.all().filter(projectid= project.id)
@@ -192,7 +202,7 @@ def ProjectList(request,project_status=None):
         # If page is out of range (e.g. 9999), deliver last page of results.
         _plist = paginator.page(paginator.num_pages)
 
-    context = {'project_list':_plist , 'aDict':aDict}
+    context = {'project_list':_plist , 'aDict':aDict,'tasks_list':tasks_list,"project_id":project_id}
     return render(request, 'project/projects.html', context)
 
 @login_required
@@ -732,25 +742,25 @@ def updateTaskAssignto(request,pk,save=None):
 
         if form.is_valid():
             if save !="False" :
-             
+
                 if  employee :
                     _obj.assignedto=int(form.cleaned_data['employee'].empid)
                     _assign=form.cleaned_data['employee'].empname
                     _obj.departementid=Employee.objects.get(empid__exact= _obj.assignedto).deptcode
 
-                    
+
                 elif departement :
                         _obj.departementid=int(form.cleaned_data['departement'].deptcode)
                         _assign=form.cleaned_data['departement'].deptname
                         _obj.assignedto=None
 
-                      
+
             _obj.canncelleddate=None
             _obj.cancelledby=None
             _obj.closeddate=None
-            _obj.closedby=None  
+            _obj.closedby=None
             _obj.finisheddate=None
-            _obj.finishedby=None   
+            _obj.finishedby=None
             _obj.lasteditdate=datetime.now()
             _obj.save()
             #add to history
@@ -860,29 +870,29 @@ def ProjectTaskEdit(request,projectid,taskid):
         return render(request, 'project/project_task_edit.html', context)
 
 @login_required
-def TaskListExternal(request,task_status=None):   
+def TaskListExternal(request,task_status=None):
     current_url ="ns-project:" + resolve(request.path_info).url_name
     empid = request.session.get('EmpID')
     tasks_list = Task.objects.filter(assignedto = empid)
-     
-    
+
+
     project_id = []
     for data in tasks_list:
         project_id.append(data.projectid)
 
 
-    #no of new task 
+    #no of new task
     new_tasks_count= len(Task.objects.all().filter(Q(status__exact='New')&(
          Q(assignedto = empid)|Q(departementid =  request.session['DeptCode']))
          ).exclude(createdby__exact=empid))
 
 
-    #get all tasks assign to dept from external project 
+    #get all tasks assign to dept from external project
     task_list= Task.objects.all().filter(
          Q(departementid =  request.session['DeptCode'])
          ).exclude(createdby__exact=empid).order_by('-id')
 
- 
+
     if task_status=="all":
          task_list= task_list
 
