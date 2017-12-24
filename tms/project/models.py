@@ -170,6 +170,7 @@ class ApfDeptView(models.Model):
         db_table = 'apf_dept_view'
 
 class Task(models.Model):
+    assignedto = models.ForeignKey('Employee', on_delete=models.SET_NULL, null=True)
     project = models.ForeignKey('Project', on_delete=models.SET_NULL, null=True)
     projectid = models.IntegerField(db_column='ProjectId')  # Field name made lowercase.
     name = models.CharField(db_column='Name', max_length=100)  # Field name made lowercase.
@@ -188,7 +189,7 @@ class Task(models.Model):
     startdate = models.DateTimeField(db_column='StartDate', blank=True, null=True)  # Field name made lowercase.
     enddate = models.DateTimeField(db_column='EndDate', blank=True, null=True)  # Field name made lowercase.
     departementid = models.IntegerField(db_column='DepartementId', blank=True, null=True)  # Field name made lowercase.
-    assignedto = models.IntegerField(db_column='AssignedTo', blank=True, null=True)  # Field name made lowercase.
+   
     assigneddate = models.DateTimeField(db_column='AssignedDate', blank=True, null=True)  # Field name made lowercase.
     progress = models.PositiveSmallIntegerField(blank=True, null=True)
     realstartdate = models.DateTimeField(db_column='RealStartDate', blank=True, null=True)  # Field name made lowercase.

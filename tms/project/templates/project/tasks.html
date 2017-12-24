@@ -139,11 +139,22 @@
                            {% endif %}
                            <td>
 
-                         {% if task.assignedto%}
-                           {{ task.assignedto|truncatewords:5 }}
-
+                       {% if task.assignedto%}
+                           {% for key, value in empDict.items %}
+                               {% if task.assignedto == key %}
+                               {{value|truncatewords:6 }}
+                               {%endif%}
+                           {% endfor %}
+                               
                          {% elif task.departementid%}
-                           {{ task.departementid|truncatechars:5 }}
+                         
+                                {% for key, value in dptDict.items %}
+                               {% if task.departementid == key %}
+                               {{value|truncatewords:6 }}
+                               {%endif%}
+                           {% endfor %}
+
+                           
                          {% endif %}
                                 </td>
                            <td>   <span>  % {{task.progress }}</span>    
