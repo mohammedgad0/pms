@@ -29,7 +29,6 @@ from django.forms.models import modelformset_factory
 
 
 
-
 class BaseSheetFormSet(BaseModelFormSet):
     def clean(self):
         if any(self.errors):
@@ -167,9 +166,9 @@ def ProjectList(request,project_status=None):
     Q(id__in = project_id)
     ).order_by('-id')
 
-    #check fi;ter by status
+    #check filter by status
     if project_status =="all" :
-          project_list=project_list
+         project_list=project_list
     elif project_status is not None :
          project_status = project_status.lower()
          project_list=project_list.filter(status__name__contains=project_status)
@@ -247,6 +246,7 @@ def ProjectEdit(request,pk):
         #messages.add_message(request, messages.ERROR, 'Can not update project.', fail_silently=True, extra_tags='alert')
         #messages.error(request, _("Can not update project."))
         return render(request, 'project/add_project.html', {'form': form,'action_name': _('Edit Project')})
+
 @login_required
 def ProjectDelete(request,pk):
     p= get_object_or_404(Project,pk=pk)
@@ -261,6 +261,8 @@ def ProjectDelete(request,pk):
 
 @login_required
 def ProjectTask(request,pk,task_status=None):
+    empDict={}
+    dptDict={}
     current_url ="ns-project:" + resolve(request.path_info).url_name
     empid = request.session.get('EmpID')
     project_detail= get_object_or_404(Project,pk=pk)
@@ -282,7 +284,6 @@ def ProjectTask(request,pk,task_status=None):
 
     if task_status=="all":
          task_list= task_list
-
     elif task_status=="unclosed":
          task_list = task_list.exclude(status__exact='Closed')
     elif task_status=="assignedtome":
@@ -306,8 +307,22 @@ def ProjectTask(request,pk,task_status=None):
     elif task_status=="assignedtodept":
          task_list= task_list.filter(departementid__exact= request.session['DeptCode'])
 
-
-
+    #get all emp name /  dept name instead empid , deptid
+    for _task in task_list:
+        try :
+            emp_object=Employee.objects.get(empid__exact=_task.assignedto);
+            empDict.update({_task.assignedto: emp_object.empname})
+        except :
+               emp_object=None
+               empDict.update({_task.assignedto: None})
+        if  emp_object==None :      
+            try :
+                dpt_object=Department.objects.get(deptcode__exact=_task.departementid);
+                dptDict.update({_task.departementid: dpt_object.deptname})
+            except :
+                   dptDict.update({_task.assignedto: None})
+       
+     
     paginator = Paginator(task_list, 5) # Show 5 contacts per page
     page = request.GET.get('page')
     try:
@@ -330,16 +345,10 @@ def ProjectTask(request,pk,task_status=None):
 #                 data.departementid=Department.objects.get(deptcode__exact = data.departementid).deptname
 #           except :
 #                data.departementid=data.departementid
-
-
     #task_list =data
-
-
-    context = {'tasks':_plist,'project_detail':project_detail,'project_list':project_list,'current_url':current_url}
+    
+    context = {'tasks':_plist,'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'empDict':empDict,'dptDict':dptDict}
     return render(request, 'project/tasks.html', context)
-
-
-
 
 @login_required
 def ProjectTaskDetail(request,projectid,taskid):
