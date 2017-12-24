@@ -56,8 +56,10 @@
                            <li  id="task-cancel"> <a href="#" data-url="{% url 'ns-project:update-cancel-task' task.id %}" class="btn btn-app update-task-cancel "><i class="fa fa-ban fa-2x paction text-danger" title="{{_('Cancel Task')}}"></i></a> </li> 
                       {% endif %}
                         {% load user_group %}
-                        {% if request.user|has_group:"ismanager" %}
+         
+                        {% if request.user|has_group:"ismanager"  and  task.createdby|slugify  == request.session.EmpID %}
                      		 {% if  task.status != "Closed" %}
+                            
                            <li  id="task-assignto">  <a href="#" data-url="{% url 'ns-project:update-assignto-task' task.id %}" class="btn btn-app update-task-assignto"> <i class="fa fa-hand-o-right fa-2x paction text-primary" title="{{_('Assign To')}}"></i>  </a> </li>
                            <li  id="task-close">  <a href="#" data-url="{% url 'ns-project:update-close-task' task.id %}" class="btn btn-app update-task-close"> <i class="fa fa-power-off  fa-2x paction text-danger" title="{{_('Close Task')}}"></i></a> </li>
                    			 {% else %}
@@ -128,11 +130,17 @@
          </ul>
         </div>
       </fieldset>
+      
+          {% if  request.META.HTTP_REFERER ==  request.build_absolute_uri or request.META.HTTP_REFERER == None   %}     
+               <a href="{% url 'ns-project:project-task' project_detail.id  %}" >  <button type="button" class="btn btn-primary">{{ _('Back')}}</button></a>
+                {%else%}
+                 <a href="{{request.META.HTTP_REFERER}}" >  <button type="button" class="btn btn-primary"><i class="fa fa-angle-double-right"></i> {{ _('Back')}}</button></a>
+
+{%endif%}
 
 </div>
           
-           
-             
+  
               </div>
               <!-- start project-detail sidebar -->
               

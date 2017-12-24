@@ -3245,21 +3245,9 @@ function init_echarts() {
             tooltip: {
                 formatter: "{a} <br/>{b} : {c}%"
             },
-            toolbox: {
-                show: true,
-                feature: {
-                    restore: {
-                        show: true,
-                        title: "Restore"
-                    },
-                    saveAsImage: {
-                        show: true,
-                        title: "Save Image"
-                    }
-                }
-            },
+       
             series: [{
-                name: 'Performance',
+                name: 'الاداء',
                 type: 'gauge',
                 center: ['50%', '50%'],
                 startAngle: 140,
@@ -3272,10 +3260,10 @@ function init_echarts() {
                     show: true,
                     lineStyle: {
                         color: [
-                            [0.2, 'lightgreen'],
+                            [0.2, '#ff4500'],
                             [0.4, 'orange'],
                             [0.8, 'skyblue'],
-                            [1, '#ff4500']
+                            [1, 'lightgreen']
                         ],
                         width: 30
                     }
@@ -3294,14 +3282,14 @@ function init_echarts() {
                     show: true,
                     formatter: function(v) {
                         switch (v + '') {
-                            case '10':
-                                return 'a';
-                            case '30':
-                                return 'b';
-                            case '60':
-                                return 'c';
                             case '90':
-                                return 'd';
+                                return 'ممتاز';
+                            case '60':
+                                return 'جيد جدا';
+                            case '30':
+                                return 'جيد';
+                            case '10':
+                                return 'مقبول';
                             default:
                                 return '';
                         }
@@ -3347,8 +3335,8 @@ function init_echarts() {
                     }
                 },
                 data: [{
-                    value: 50,
-                    name: 'Performance'
+                    value: 80,
+                    name: 'الأداء'
                 }]
             }]
         });
@@ -3372,7 +3360,7 @@ function init_echarts() {
             legend: {
                 x: 220,
                 y: 40,
-                data: ['Intent', 'Pre-order', 'Deal']
+                data: ['Intent', 'مهام مغلقة', 'مهام مفتوحة']
             },
             toolbox: {
                 show: true,
@@ -3401,13 +3389,13 @@ function init_echarts() {
             xAxis: [{
                 type: 'category',
                 boundaryGap: false,
-                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                data: [ '12-12-2017', '16-12-2017', '20-12-2017', '24-12-2017', '28-12-2017']
             }],
             yAxis: [{
                 type: 'value'
             }],
             series: [{
-                name: 'Deal',
+                name: 'مهام مفتوحة',
                 type: 'line',
                 smooth: true,
                 itemStyle: {
@@ -3417,9 +3405,9 @@ function init_echarts() {
                         }
                     }
                 },
-                data: [10, 12, 21, 54, 260, 830, 710]
+                data: [50, 28, 19, 12, 0]
             }, {
-                name: 'Pre-order',
+                name: 'مهام مغلقة',
                 type: 'line',
                 smooth: true,
                 itemStyle: {
@@ -3429,20 +3417,8 @@ function init_echarts() {
                         }
                     }
                 },
-                data: [30, 182, 434, 791, 390, 30, 10]
-            }, {
-                name: 'Intent',
-                type: 'line',
-                smooth: true,
-                itemStyle: {
-                    normal: {
-                        areaStyle: {
-                            type: 'default'
-                        }
-                    }
-                },
-                data: [1320, 1132, 601, 234, 120, 90, 20]
-            }]
+                data: [0, 15  , 22, 33, 50]
+            },  ]
         });
 
     }

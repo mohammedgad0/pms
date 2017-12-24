@@ -1,0 +1,308 @@
+{% extends "project/base_site.html" %}
+{% load i18n %}
+{% block title %} Dashboard 1 {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <!-- top tiles -->
+    <div class="row tile_count">
+      <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-briefcase"></i>  كل المشاريع </span>
+        <div class="count">20</div>
+        <span class="count_bottom"><i class="green">4% </i> منذ اخر اسبوع</span>
+      </div>
+      <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-clock-o"></i> مشاريع مفتوحة</span>
+        <div class="count">05</div>
+        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> منذ اخر اسبوع</span>
+      </div>
+      <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-clock-o"></i> مشاريع منجزة</span>
+        <div class="count green">15</div>
+        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i>  منذ اخر اسبوع</span>
+      </div>
+      <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-clock-o"></i> كل المهام</span>
+        <div class="count">200</div>
+        <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i>  منذ اخر اسبوع</span>
+      </div>
+      <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-clock-o"></i> مهام مفتوحة</span>
+        <div class="count">50</div>
+        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i>  منذ اخر اسبوع</span>
+      </div>
+      <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-clock-o"></i> مهام منجزة</span>
+        <div class="count green">150</div>
+        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i>   منذ اخر اسبوع</span>
+      </div>
+    </div>
+    <!-- /top tiles -->
+    {{result}}
+    {%for data in result%}
+    {{data}}
+    {%endfor%}
+     <!-- start  row 1 -->
+    <div class="row">
+ <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel tile fixed_height_320">
+          <div class="x_title">
+            <h2>مشاريع مفتوحة</h2>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+          
+          
+<table class="table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>أسم المشروع</th>
+                    <th>نسبة الانجاز </th>
+                    <th>الإلتزام</th>
+                    <th>عدد المهام</th>
+                    <th>مهام جارى العمل</th>
+                    <th>مهام  منجزة</th>
+                     <th>مهام  معلقة</th>
+                     <th>المهمام المغلقة</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td><a href="#" class="blue" >مشروع Big Date </a></td>
+                    <td class="project_progress">
+                             
+                               
+                              <div class="progress progress_sm">
+                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="75,0" aria-valuenow="72" style="width: 75%;"></div>
+                              </div>
+                              <small>75,0% مكتمل</small>
+                              </td>
+                     <td class="green"> <i class="fa fa-level-up"></i> ملتزم 
+
+                     </td>
+                     <td>100</td>
+                       <td>30</td>
+                         <td>20</td>
+                          <td>30</td>
+                         <td>20</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">2</th>
+                    <td ><a href="#"  class="blue"> مشروع تطوير البوابة الخارجية على بايثون </a></td>
+                   <td class="project_progress">
+                             
+                               
+                              <div class="progress progress_sm">
+                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50,0" aria-valuenow="72" style="width: 50%;"></div>
+                              </div>
+                              <small>50,0% مكتمل</small>
+                              </td>
+                     <td class="green"> <i class="fa fa-level-up"></i> ملتزم</td>
+                        <td>160</td>
+                       <td>40</td>
+                         <td>40</td>
+                          <td>40</td>
+                           <td>40</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">3</th>
+                    <td> <a href="#"  class="blue">  مشروع تطوير البوابة  الداخلية </a></td>
+                     <td class="project_progress">
+                             
+                               
+                              <div class="progress progress_sm">
+                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="40,0" aria-valuenow="72" style="width: 40%;"></div>
+                              </div>
+                              <small>40,0% مكتمل</small>
+                              </td>
+                     <td class="red"> <i class="fa fa-level-down"></i> متأخر</td>
+                        <td>200</td>
+                       <td>40</td>
+                         <td>60</td>
+                            <td>60</td>
+                               <td>60</td>
+                  </tr>
+                    <tr>
+                    <th scope="row">4</th>
+                    <td> <a href="#"  class="blue">  مشروع بوابة  خدمات الموظفين </a> </td>
+                    <td class="project_progress">
+                             
+                               
+                              <div class="progress progress_sm">
+                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="35,0" aria-valuenow="72" style="width: 35%;"></div>
+                              </div>
+                              <small>35,0% مكتمل</small>
+                              </td>
+                    <td class="red"> <i class="fa fa-level-down"></i> متأخر</td>
+                       <td>120</td>
+                       <td>35</td>
+                         <td>25</td>
+                           <td>25</td>
+                             <td>25</td>
+                  </tr>
+                    <tr>
+                    <th scope="row">5</th>
+                    <td> <a href="#"  class="blue">  مشروع أدارة المهام </a></td>
+                    <td class="project_progress">
+                             
+                               
+                              <div class="progress progress_sm">
+                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="20,0" aria-valuenow="72" style="width: 75%;"></div>
+                              </div>
+                              <small>20,0% مكتمل</small>
+                              </td>
+                    <td>@twitter</td>
+                  </tr>
+                    <tr>
+                    <th scope="row">6</th>
+                    <td> <a href="#"  class="blue">  مشروع البوابة الاحصائية </a></td>
+                     <td class="project_progress">
+                             
+                               
+                              <div class="progress progress_sm">
+                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="15,0" aria-valuenow="72" style="width: 75%;"></div>
+                              </div>
+                              <small>15,0% مكتمل</small>
+                              </td>
+                    <td>@twitter</td>
+                  </tr>
+                </tbody>
+              </table>
+          </div>
+        </div>
+      </div>
+
+
+     
+     </div> <!-- end  row 1 -->
+     
+    <div class="row">
+
+      <div class="col-md-4 col-sm-4 col-xs-12">
+        <div class="x_panel tile fixed_height_320">
+          <div class="x_title">
+            <h2>مؤشر الاداء</h2>
+            
+             
+           
+          
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+           <div id="echart_gauge" style="height:250px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-8 col-sm-4 col-xs-12">
+        <div class="x_panel tile fixed_height_320 overflow_hidden">
+          <div class="x_title">
+            <h2>المهام  حسب الإدارة</h2>
+          
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            <table class="" style="width:100%">
+              <tr>
+                <th style="width:37%;">
+                
+                </th>
+                <th>
+                  <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                    <p class="">الإدارة</p>
+                  </div>
+                  <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                    <p class="">الإنجاز</p>
+                  </div>
+                </th>
+              </tr>
+              <tr>
+                <td>
+                  <canvas class="canvasDoughnut" height="140" width="140" style="margin: 15px 10px 10px 0"></canvas>
+                </td>
+                <td>
+                  <table class="tile_info">
+                    <tr>
+                      <td>
+                        <p><i class="fa fa-square blue"></i>مهام داخلية </p>
+                      </td>
+                      <td>30%</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p><i class="fa fa-square green"></i>إدارة المشاريع </p>
+                      </td>
+                      <td>10%</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p><i class="fa fa-square purple"></i>إدارة الحاسب الآلى </p>
+                      </td>
+                      <td>20%</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p><i class="fa fa-square aero"></i>أدارة الإعلام </p>
+                      </td>
+                      <td>15%</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p><i class="fa fa-square red"></i>أدارة خدمة العملاء </p>
+                      </td>
+                      <td>30%</td>
+                    </tr>
+             
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+</div>
+
+     
+
+ 
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <!-- Chart.js -->
+  <script src="/static/vendors/Chart.js/dist/Chart.min.js"></script>
+  <!-- gauge.js -->
+  <script src="/static/vendors/gauge.js/dist/gauge.min.js"></script>
+  <!-- Skycons -->
+  <script src="/static/vendors/skycons/skycons.js"></script>
+  <!-- Flot -->
+  <script src="/static/vendors/Flot/jquery.flot.js"></script>
+  <script src="/static/vendors/Flot/jquery.flot.pie.js"></script>
+  <script src="/static/vendors/Flot/jquery.flot.time.js"></script>
+  <script src="/static/vendors/Flot/jquery.flot.stack.js"></script>
+  <script src="/static/vendors/Flot/jquery.flot.resize.js"></script>
+  <!-- Flot plugins -->
+  <script src="/static/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+  <script src="/static/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+  <script src="/static/vendors/flot.curvedlines/curvedLines.js"></script>
+  <!-- DateJS -->
+  <script src="/static/vendors/DateJS/build/date.js"></script>
+  <!-- JQVMap -->
+  <script src="/static/vendors/jqvmap/dist/jquery.vmap.js"></script>
+  <script src="/static/vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+  <script src="/static/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+  
+  
+    <!-- ECharts -->
+  <script src="/static/vendors/echarts/dist/echarts.min.js"></script>
+  <script src="/static/vendors/echarts/map/js/world.js"></script>
+ 
+
+{% endblock javascripts %}

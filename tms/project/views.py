@@ -191,7 +191,7 @@ def ProjectList(request,project_status=None):
                 projectProgress = round(allTakProgress/len(task_list), 2)
             aDict.update({project.id: projectProgress})
 
-    paginator = Paginator(project_list, 20) # Show 5 contacts per page
+    paginator = Paginator(project_list, 10) # Show 5 contacts per page
     page = request.GET.get('page')
     try:
         _plist = paginator.page(page)
@@ -339,26 +339,18 @@ def ProjectTask(request,pk,task_status=None):
     return render(request, 'project/tasks.html', context)
 
 
-class ProjectMembersListView(ListView):
 
-    model = ProjectMembers
-    paginate_by=3
-    def get_context_data(self, **kwargs):
-        context = super(ProjectMembersListView, self).get_context_data(**kwargs)
-
-        return context
 
 @login_required
 def ProjectTaskDetail(request,projectid,taskid):
     assignToEmp=None
     assignToDept=None
 
-    createdBy=request.session.get('EmpID', '1056821208')
+    createdBy=request.session['EmpID']
     project_list= Project.objects.all().filter(createdby__exact=createdBy).exclude(status=4).order_by('-id')
     current_url ="ns-project:project-task"
     project_detail= get_object_or_404(Project,pk=projectid)
     task_detail= get_object_or_404(Task,projectid__exact= projectid,pk=taskid)
-    projectmembers= ProjectMembers.objects.all().order_by('-id')
     createdby=get_object_or_404(Employee,empid__exact=task_detail.createdby);
     try:
         assignToEmp=Employee.objects.get(empid__exact=task_detail.assignedto);
@@ -388,7 +380,6 @@ def ProjectTaskDetail(request,projectid,taskid):
                'project_list':project_list,
                'current_url':current_url,
                'task':task_detail,
-               'projectmembers':projectmembers,
                'assignToEmp':assignToEmp,'assignToDept':assignToDept,
                'createdby':createdby,
                'finishedby':finishedby,
@@ -444,6 +435,7 @@ def updateTaskFinish(request,pk):
         if form.is_valid():
             _obj.ftime=form.cleaned_data['ftime']
             _obj.status="Done"
+            _obj.progress=100
             _obj.finisheddate=datetime.now()
             _obj.finishedby=request.session.get('EmpID', '1056821208')
             _obj.lasteditdate=datetime.now()
@@ -652,6 +644,7 @@ def AddTask(request,project_id):
             # form.save()
             project_obj = form.save(commit=False)
             project_obj.projectid = project_id
+            project_obj.project = get_object_or_404(Project,pk=project_id)
             project_obj.status = 'New'
             project_obj.createdby = request.session.get('EmpID')
             project_obj.lasteditdate = datetime.now()
@@ -788,6 +781,34 @@ def updateTaskAssignto(request,pk,save=None):
     form.fields["employee"].queryset = Employee.objects.filter(deptcode = request.session['DeptCode'])
     context = {'form': form,'pk':pk,'save':save,'errors':errors}
     data['html_form'] = render_to_string('project/task/update_assignto_task.html',context,request=request)
+    return JsonResponse(data)
+
+@login_required
+def updateTaskProgress(request,pk):
+    data = dict()
+    errors = []
+    _task =  get_object_or_404(Task,pk=pk)
+    # create a form instance and populate it with data from the request:
+    form = TaskProgressForm(request.POST or None, instance=_task)
+    if form.is_valid():
+        _task.progress= form.cleaned_data['progress']
+#             if _task.progress==100 :
+#                 _task.status="Done"
+        _task.lasteditdate=datetime.now()
+        _task.save()
+           #add to history
+        update_change_reason(_task, _("Task Progress chenged by ")+request.session['EmpName']+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['note'])
+        data['form_is_valid'] = True
+        data['message'] = _('Progress Updated successfully for Task number'+ pk)
+        data['html_form'] = render_to_string('project/task/update_progress_task.html',request=request)
+        return JsonResponse(data)
+    else:
+        data['form_is_valid'] = False
+        data['errors'] = errors.append(form.errors)
+
+    # if a GET (or any other method) we'll create a blank form
+    context = {'form': form,'pk':pk,'errors':errors}
+    data['html_form'] = render_to_string('project/task/update_progress_task.html',context,request=request)
     return JsonResponse(data)
 
 @login_required
@@ -934,3 +955,7 @@ def TaskListExternal(request,task_status=None):
 
     context = {'tasks':_plist,'current_url':current_url,'new_tasks_count':new_tasks_count}
     return render(request, 'project/tasks_from_external_dept.html', context)
+
+def DashboardManager(request):
+    context = {}
+    return render(request, 'project/dashboard_manager.html', context)

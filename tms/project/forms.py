@@ -222,6 +222,33 @@ class TaskCloseForm(forms.Form):
        widget=forms.DateInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Closed on Date'),'required': False}))
        reason = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Please enter a reason to Close "), 'size': '40','required': True}),required=True, max_length=500, error_messages={'required': _('Reason')})
 
+class TaskProgressForm(ModelForm):
+      progress = forms.IntegerField(validators=[ MaxValueValidator(100, message="Progress Over 100"),MinValueValidator(0, message="Progress less 0")],min_value=0, max_value=100)
+      note = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':'Notes', 'size': '40','required': False}), required=False,error_messages={'required': 'notes'})
+
+      class Meta:
+        model = Task
+        fields = ['progress']
+        widgets = {
+            'progress': forms.NumberInput(attrs={'class': 'form-control','placeholder':_('Progress'),'required': False,'min': 0, 'max': 100 })
+
+        }
+        labels = {
+            'progress': _('Task Progress'),
+
+        }
+        error_messages = {
+
+            'progress': {
+                    'MaxValueValidator': _("The Task's Pogress is over rang 100."),
+                    'MinValueValidator': _("Task's name is less than 0."),
+             },
+    
+
+        }
+
+
+
 class TaskCancelForm(forms.Form):
        reason = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Reason"),'placeholder':_("Please enter a reason to cancel"), 'size': '40','required': 'True'}),required=True, max_length=500, error_messages={'required': 'note'})
 

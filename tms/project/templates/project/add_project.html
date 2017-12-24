@@ -87,9 +87,13 @@
                 <div class="form-group">
                  <div class="ln_solid"></div>
                   <div class="col-md-12 col-sm-12 col-xs-12 col-md-offset-3">
-                    <a href="{% url 'ns-project:project-list' %}" >  <button type="button" class="btn btn-primary">{{ _('Back')}}</button></a>
+                    {% if  request.META.HTTP_REFERER ==  request.build_absolute_uri or request.META.HTTP_REFERER == None   %}
+                    <a href="{% url 'ns-project:project-list' %}" >  <button type="button" class="btn btn-primary"> <i class="fa fa-angle-double-right"></i> {{ _('Back')}}</button></a>
+                   {%else%}
+                   <a href="{{request.META.HTTP_REFERER}}" >  <button type="button" class="btn btn-primary"> <i class="fa fa-angle-double-right"></i> {{ _('Back')}}</button></a>
+                   {% endif %}
                     <!--  <button class="btn btn-primary" type="reset">{{_('Reset')}}</button>-->
-                 <button type="submit" class="btn btn-success">{{_('Submit')}}</button>
+                 <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> {{_('Submit')}}</button>
                   </div>
                 </div>
 

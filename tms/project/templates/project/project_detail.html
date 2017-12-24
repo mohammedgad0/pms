@@ -32,8 +32,13 @@
 
               <h2> {{project_detail.name}}  </h2>
               {% load user_group %}
-                 {% if request.user|has_group:"ismanager" %}
-                  <a href="{% url 'ns-project:add-project' %}" style="float:left" >  <button type="button" class="btn btn-primary btn-md"> <i class="fa fa-plus"></i>  {% trans "Ad Project" %}</button></a>
+            
+                 {% if request.user|has_group:"ismanager"  and   project_detail.createdby == request.session.EmpID %}
+                <a href="{% url 'ns-project:project-delete' project_detail.id %}" style="float:left" >  <button type="button" class="btn btn-danger btn-md"> <i class="fa fa-trash-o"></i>  {% trans "Delete" %}</button></a>
+                 <a href="{% url 'ns-project:project-edit'  project_detail.id %}" style="float:left" >  <button type="button" class="btn btn-info btn-md"> <i class="fa fa-pencil"></i>  {% trans "Edit" %}</button></a>
+
+
+
                   {% endif %}
                <a href="{% url 'ns-project:project-list' %}"  style="float:left" >  <button type="button" class="btn btn-primary btn-md"> <i class="fa fa-th-list"></i>  {% trans "Projects List" %}</button></a>
 
@@ -67,8 +72,8 @@
                 </ul>
 
                 <br />
-
-             <div id="mainb" style="height:350px;"></div>
+                <div id="echart_line" style="height:350px;"></div>
+             <!-- <div id="mainb" style="height:350px;"></div> -->
                 <div>
 
                   <h4>{{ _('Recent Activity') }} </h4>
@@ -117,7 +122,7 @@
                     <div class="clearfix"></div>
                   </div>
                   <div class="panel-body">
-                    <h3 class="green"><i class="fa fa-paint-brush"></i> {{project_detail.name}} </h3>
+                    <h3 class="green"><i class="fa fa-folder-open"></i> {{project_detail.name}} </h3>
 
                     <p>{{project_detail.desc}} </p>
                     <br />
@@ -147,6 +152,8 @@
                       </li>
                     </ul>
                     <br />
+
+
 
 
                   </div>
