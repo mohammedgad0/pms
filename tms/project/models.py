@@ -6,17 +6,15 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Department(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
-    deptname = models.CharField(db_column='DeptName', max_length=200, blank=True, null=True)  # Field name made lowercase.
+    deptname = models.CharField(db_column='DeptName', max_length=200, blank=True, null=True, unique=True)  # Field name made lowercase.
     managerid = models.CharField(db_column='ManagerId', max_length=45, blank=True, null=True)  # Field name made lowercase.
-    deptcode = models.IntegerField(db_column='DeptCode', blank=True, null=True)  # Field name made lowercase.
-
+    deptcode = models.IntegerField(db_column='DeptCode', unique=True, blank=True, null=True)  # Field name made lowercase.
     class Meta:
         managed = False
         db_table = 'department'
 
 class Employee(models.Model):
-    id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
-    empid = models.CharField(db_column='EmpId', max_length=45, blank=True, null=True)  # Field name made lowercase.
+    empid = models.IntegerField(db_column='EmpId', unique=True)  # Field name made lowercase.
     empname = models.CharField(db_column='EmpName', max_length=255, blank=True, null=True)  # Field name made lowercase.
     deptcode = models.CharField(db_column='DeptCode', max_length=45, blank=True, null=True)  # Field name made lowercase.
     deptname = models.CharField(db_column='DeptName', max_length=200, blank=True, null=True)  # Field name made lowercase.
@@ -170,7 +168,9 @@ class ApfDeptView(models.Model):
         db_table = 'apf_dept_view'
 
 class Task(models.Model):
-    assignedto = models.ForeignKey('Employee', on_delete=models.SET_NULL, null=True)
+    assignedto = models.ForeignKey('Employee',db_column='assignedto',to_field='empid', on_delete=models.SET_NULL, null=True)
+    departementid = models.ForeignKey('Department',db_column='departementid', to_field='deptcode',on_delete=models.SET_NULL, null=True) 
+
     project = models.ForeignKey('Project', on_delete=models.SET_NULL, null=True)
     projectid = models.IntegerField(db_column='ProjectId')  # Field name made lowercase.
     name = models.CharField(db_column='Name', max_length=100)  # Field name made lowercase.
@@ -188,7 +188,6 @@ class Task(models.Model):
     status = models.CharField(db_column='Status',max_length=10,choices=TASK_STATUS, blank=False, null=False)  # Field name made lowercase.
     startdate = models.DateTimeField(db_column='StartDate', blank=True, null=True)  # Field name made lowercase.
     enddate = models.DateTimeField(db_column='EndDate', blank=True, null=True)  # Field name made lowercase.
-    departementid = models.IntegerField(db_column='DepartementId', blank=True, null=True)  # Field name made lowercase.
    
     assigneddate = models.DateTimeField(db_column='AssignedDate', blank=True, null=True)  # Field name made lowercase.
     progress = models.PositiveSmallIntegerField(blank=True, null=True)

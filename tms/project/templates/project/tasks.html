@@ -139,23 +139,11 @@
                            {% endif %}
                            <td>
 
-                       {% if task.assignedto%}
-                           {% for key, value in empDict.items %}
-                               {% if task.assignedto == key %}
-                               {{value|truncatewords:6 }}
-                               {%endif%}
-                           {% endfor %}
-                               
-                         {% elif task.departementid%}
-                         
-                                {% for key, value in dptDict.items %}
-                               {% if task.departementid == key %}
-                               {{value|truncatewords:6 }}
-                               {%endif%}
-                           {% endfor %}
-
-                           
-                         {% endif %}
+                       {% if task.assignedto.empname%}
+                       {{task.assignedto.empname|truncatewords:6}}        
+                       {% elif task.departement.deptname %}
+                       {{task.departement.deptname|truncatewords:6}} 
+                      {% endif %}
                                 </td>
                            <td>   <span>  % {{task.progress }}</span>    
                           <!--  {{ task.startdate|timesince:task.enddate }} -->

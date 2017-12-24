@@ -307,20 +307,20 @@ def ProjectTask(request,pk,task_status=None):
     elif task_status=="assignedtodept":
          task_list= task_list.filter(departementid__exact= request.session['DeptCode'])
 
-    #get all emp name /  dept name instead empid , deptid
-    for _task in task_list:
-        try :
-            emp_object=Employee.objects.get(empid__exact=_task.assignedto);
-            empDict.update({_task.assignedto: emp_object.empname})
-        except :
-               emp_object=None
-               empDict.update({_task.assignedto: None})
-        if  emp_object==None :      
-            try :
-                dpt_object=Department.objects.get(deptcode__exact=_task.departementid);
-                dptDict.update({_task.departementid: dpt_object.deptname})
-            except :
-                   dptDict.update({_task.assignedto: None})
+#     #get all emp name /  dept name instead empid , deptid
+#     for _task in task_list:
+#         try :
+#             emp_object=Employee.objects.get(empid__exact=_task.assignedto);
+#             empDict.update({_task.assignedto: emp_object.empname})
+#         except :
+#                emp_object=None
+#                empDict.update({_task.assignedto: None})
+#         if  emp_object==None :      
+#             try :
+#                 dpt_object=Department.objects.get(deptcode__exact=_task.departementid);
+#                 dptDict.update({_task.departementid: dpt_object.deptname})
+#             except :
+#                    dptDict.update({_task.assignedto: None})
        
      
     paginator = Paginator(task_list, 5) # Show 5 contacts per page
@@ -743,21 +743,23 @@ def updateTaskAssignto(request,pk,save=None):
 
 
         if form.is_valid():
-            if save !="False" :
+            #id save == true then save form dta
+            if save !="False" : 
 
-                if  employee :
-                    _obj.assignedto=int(form.cleaned_data['employee'].empid)
-                    _assign=form.cleaned_data['employee'].empname
-                    _obj.departementid=Employee.objects.get(empid__exact= _obj.assignedto).deptcode
+#                 if  employee :
+#                     #int(form.cleaned_data['employee'].empid)
+#                   
+#                     _obj.assignedto.empid= get_object_or_404(Employee,empid__exact=int(form.cleaned_data['employee'].empid))
+#                     _assign=form.cleaned_data['employee'].empname
+# 
+# 
+#                 elif departement :
+#                         _obj.departementid=get_object_or_404(Department,deptcode__exact= int(form.cleaned_data['departement'].deptcode))
+#                         _assign=form.cleaned_data['departement'].deptname
+#                         _obj.assignedto=None
 
 
-                elif departement :
-                        _obj.departementid=int(form.cleaned_data['departement'].deptcode)
-                        _assign=form.cleaned_data['departement'].deptname
-                        _obj.assignedto=None
-
-
-            _obj.canncelleddate=None
+             _obj.canncelleddate=None
             _obj.cancelledby=None
             _obj.closeddate=None
             _obj.closedby=None
