@@ -115,7 +115,7 @@ class AddTaskForm(ModelForm):
         model = Task
         fields = ['name','desc','assigntype',
         'employee',
-        'departementid','startdate','enddate']
+        'departement','startdate','enddate']
         widgets = {
             'name':TextInput(attrs={'class': 'form-control','placeholder':_('Task Name'),'required': True}),
             'desc': Textarea(attrs={'class':'form-control','placeholder':_('Task Details'),'required': True}),

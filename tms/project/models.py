@@ -169,10 +169,9 @@ class ApfDeptView(models.Model):
 
 class Task(models.Model):
     assignedto = models.ForeignKey('Employee',db_column='assignedto',to_field='empid', on_delete=models.SET_NULL, null=True)
-    departementid = models.ForeignKey('Department',db_column='departementid', to_field='deptcode',on_delete=models.SET_NULL, null=True) 
-
-    project = models.ForeignKey('Project', on_delete=models.SET_NULL, null=True)
-    projectid = models.IntegerField(db_column='ProjectId')  # Field name made lowercase.
+    departement = models.ForeignKey('Department',db_column='departementid', to_field='deptcode',on_delete=models.SET_NULL, null=True) 
+    project = models.ForeignKey('Project',db_column='projectid', to_field='id', on_delete=models.SET_NULL, null=True)
+    
     name = models.CharField(db_column='Name', max_length=100)  # Field name made lowercase.
     desc = models.CharField(db_column='Desc', max_length=2500)  # Field name made lowercase.
 

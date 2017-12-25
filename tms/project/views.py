@@ -26,6 +26,7 @@ from idlelib.debugobj import _object_browser
 from .timesheet import *
 from _datetime import date
 from django.forms.models import modelformset_factory
+from unittest.case import expectedFailure
 
 
 
@@ -138,20 +139,18 @@ def ProjectList(request,project_status=None):
     emp_data  = get_object_or_404(Employee, empid = EmpID)
     dept_data = get_object_or_404(Department, deptcode = request.session.get('DeptCode'))
 
-    tasks_list = Task.objects.filter(assignedto = EmpID)
-    # Q(assignedto = EmpID)|
-    # Q(departementid = request.session.get('DeptCode'))
-    # )
+    tasks_list = Task.objects.filter(assignedto__empid = EmpID)
+
     if EmpID == dept_data.managerid:
         tasks_list = Task.objects.filter(
-        Q(assignedto = EmpID)|
-        Q(departementid = request.session.get('DeptCode'))
+        Q(assignedto__empid__exact = EmpID)|
+        Q(departement__deptcode__exact  = request.session.get('DeptCode'))
         )
     if project_status =="department":
          tasks_list = Task.objects.filter(
-         Q(departementid = request.session.get('DeptCode'))
-
+         Q(departement__deptcode__exact = request.session.get('DeptCode'))
          )
+         
     all_project = Project.objects.all()
 
     project_id = []
@@ -159,7 +158,11 @@ def ProjectList(request,project_status=None):
     allTakProgress = 0
     projectProgress=0
     for data in tasks_list:
-        project_id.append(data.projectid)
+        try :
+         project_id.append(data.project.id)
+        except:
+            pass
+         
 
     project_list= Project.objects.all().filter(
     Q( createdby__exact=EmpID)|
@@ -175,11 +178,11 @@ def ProjectList(request,project_status=None):
     if project_status =="department":
         project_list= Project.objects.filter(
         ~Q( createdby__exact=EmpID)&
-        Q(id__in = project_id)
+        Q(id__in = tasks_list)
         )
 
     for project in project_list:
-        task_list = Task.objects.all().filter(projectid= project.id)
+        task_list = Task.objects.all().filter(project__id= project.id)
         allTakProgress = 0
         for data in task_list:
             if data.progress is not None:
@@ -204,17 +207,18 @@ def ProjectList(request,project_status=None):
     context = {'project_list':_plist , 'aDict':aDict,'tasks_list':tasks_list,"project_id":project_id}
     return render(request, 'project/projects.html', context)
 
+
 @login_required
 def ProjectDetail(request,pk):
     project_detail= get_object_or_404(Project,pk=pk)
     EmpID=request.session.get('EmpID')
-    tasks_list = Task.objects.filter(projectid__exact = pk)
+    tasks_list = Task.objects.filter(project__exact = pk)
 
     allTakProgress = 0
     projectProgress=0
     project_id = []
     for data in tasks_list:
-        project_id.append(data.projectid)
+        project_id.append(data.project.id)
         allTakProgress=allTakProgress+data.progress
     if len(tasks_list)==0:
         projectProgress=0
@@ -226,7 +230,7 @@ def ProjectDetail(request,pk):
     Q(id__in = project_id)
     ).exclude(status=4).order_by('-id')
 
-    history=Task.history.filter(projectid=pk)[:10:1]
+    history=Task.history.filter(project=pk)[:10:1]
     current_url ="ns-project:" + resolve(request.path_info).url_name
     context={'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'projectProgress':projectProgress,
     'taskprogress':allTakProgress,'tasks_list':tasks_list,'history':history}
@@ -266,10 +270,13 @@ def ProjectTask(request,pk,task_status=None):
     current_url ="ns-project:" + resolve(request.path_info).url_name
     empid = request.session.get('EmpID')
     project_detail= get_object_or_404(Project,pk=pk)
-    tasks_list = Task.objects.filter(assignedto = empid)
+    tasks_list = Task.objects.filter(assignedto__empid = empid)
     project_id = []
     for data in tasks_list:
-        project_id.append(data.projectid)
+        try:
+            project_id.append(data.project.id)
+        except:
+            pass
 
     project_list= Project.objects.all().filter(
     Q(createdby__exact=empid)|
@@ -277,9 +284,9 @@ def ProjectTask(request,pk,task_status=None):
     ).exclude(status=4).order_by('-id')
 
     task_list= Task.objects.all().filter(
-         Q(projectid__exact=pk)&
+         Q(project__id__exact=pk)&
          Q(createdby__exact=empid)|
-         Q(assignedto = empid,projectid__exact=pk)
+         Q(assignedto__empid__exact = empid,project__id__exact=pk)
          ).order_by('-id')
 
     if task_status=="all":
@@ -305,7 +312,7 @@ def ProjectTask(request,pk,task_status=None):
     elif task_status=="delayed":
          task_list= task_list.filter(enddate__lt = datetime.today())
     elif task_status=="assignedtodept":
-         task_list= task_list.filter(departementid__exact= request.session['DeptCode'])
+         task_list= task_list.filter(departement__exact= request.session['DeptCode'])
     
      
     paginator = Paginator(task_list, 5) # Show 5 contacts per page
@@ -319,18 +326,6 @@ def ProjectTask(request,pk,task_status=None):
         # If page is out of range (e.g. 9999), deliver last page of results.
         _plist = paginator.page(paginator.num_pages)
 
-    #relace empid with empname
-#     for data in _plist:
-#
-#           try:
-#                 data.assignedto=Employee.objects.get(empid=data.assignedto).empname
-#           except :
-#                 data.assignedto=data.assignedto
-#           try:
-#                 data.departementid=Department.objects.get(deptcode__exact = data.departementid).deptname
-#           except :
-#                data.departementid=data.departementid
-    #task_list =data
     
     context = {'tasks':_plist,'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'empDict':empDict,'dptDict':dptDict}
     return render(request, 'project/tasks.html', context)
@@ -344,7 +339,7 @@ def ProjectTaskDetail(request,projectid,taskid):
     project_list= Project.objects.all().filter(createdby__exact=createdBy).exclude(status=4).order_by('-id')
     current_url ="ns-project:project-task"
     project_detail= get_object_or_404(Project,pk=projectid)
-    task_detail= get_object_or_404(Task,projectid__exact= projectid,pk=taskid)
+    task_detail= get_object_or_404(Task,project_id__exact= projectid,pk=taskid)
     createdby=get_object_or_404(Employee,empid__exact=task_detail.createdby);
     try:
         assignToEmp=Employee.objects.get(empid__exact=task_detail.assignedto);
@@ -352,7 +347,7 @@ def ProjectTaskDetail(request,projectid,taskid):
         assignToEmp=None
 
     try:
-       assignToDept=Department.objects.get(deptcode__exact=task_detail.departementid);
+       assignToDept=Department.objects.get(deptcode__exact=task_detail.departement.deptcode);
     except:
        assignToDept = None
 
@@ -610,7 +605,10 @@ def ProjectTeam(request,project_id):
     tasks_list = Task.objects.filter(assignedto = EmpID)
     projectid = []
     for data in tasks_list:
-        projectid.append(data.projectid)
+        try:
+            projectid.append(data.project.id)
+        except:
+            pass
     project_list= Project.objects.all().filter(
     Q(createdby__exact=EmpID)|
     Q(id__in = projectid)
@@ -637,7 +635,6 @@ def AddTask(request,project_id):
         if form.is_valid():
             # form.save()
             project_obj = form.save(commit=False)
-            project_obj.projectid = project_id
             project_obj.project = get_object_or_404(Project,pk=project_id)
             project_obj.status = 'New'
             project_obj.createdby = request.session.get('EmpID')
@@ -648,7 +645,7 @@ def AddTask(request,project_id):
                 project_obj.assignedto = assignto_employee
                 project_obj.assigneddate = datetime.now()
             if assignto_department:
-                project_obj.departementid = assignto_department
+                project_obj.departement = assignto_department
                 project_obj.assigneddate = datetime.now()
             project_obj.save()
             upload_form = upload(request.POST, request.FILES)
@@ -672,6 +669,7 @@ def AddTask(request,project_id):
 
             messages.success(request, _("Task Added"))
             return HttpResponseRedirect(reverse('ns-project:project-task' , kwargs={'pk':project_id} ))
+        
 
             # project_obj.save()
     else:
@@ -733,11 +731,11 @@ def updateTaskAssignto(request,pk,save=None):
                     _emp_obj=Employee.objects.get(empid__exact= int(form.cleaned_data['employee'].empid)) 
                     _obj.assignedto=_emp_obj 
                     _assign=form.cleaned_data['employee'].empname
-                    _obj.departementid=Department.objects.get(deptcode__exact= _emp_obj.deptcode)
+                    _obj.departement=Department.objects.get(deptcode__exact= _emp_obj.deptcode)
 
                  elif departement :
                     _dpt_obj=Department.objects.get(deptcode__exact= int(form.cleaned_data['departement'].deptcode)) 
-                    _obj.departementid=_dpt_obj
+                    _obj.departement=_dpt_obj
                     _assign=form.cleaned_data['departement'].deptname
                     _obj.assignedto=None
                         
@@ -751,7 +749,7 @@ def updateTaskAssignto(request,pk,save=None):
                  _obj.save()
                 #add to history
                  update_change_reason(_obj,_(" by ")+ request.session['EmpName']  +  _(" ,  Assign Task to ")+  str(_assign))
-                 messages.success(request, "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>"+_(" Task has been updated successfully "), fail_silently=True,)
+                 messages.success(request, "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>"+_("Task has been updated successfully to  "+_assign), fail_silently=True,)
 
             data['form_is_valid'] = True
             data['id'] = pk
@@ -893,12 +891,12 @@ def TaskListExternal(request,task_status=None):
         project_id.append(data.projectid)
     #no of new task
     new_tasks_count= len(Task.objects.all().filter(Q(status__exact='New')&(
-         Q(assignedto = empid)|Q(departementid =  request.session['DeptCode']))
+         Q(assignedto = empid)|Q(departement =  request.session['DeptCode']))
          ).exclude(createdby__exact=empid))
 
     #get all tasks assign to dept from external project
     task_list= Task.objects.all().filter(
-         Q(departementid =  request.session['DeptCode'])
+         Q(departement=  request.session['DeptCode'])
          ).exclude(createdby__exact=empid).order_by('-id')
 
 
@@ -926,7 +924,7 @@ def TaskListExternal(request,task_status=None):
     elif task_status=="delayed":
          task_list= task_list.filter(enddate__lt = datetime.today())
     elif task_status=="assignedtodept":
-         task_list= task_list.filter(departementid__exact= request.session['DeptCode'])
+         task_list= task_list.filter(departement__exact= request.session['DeptCode'])
 
 
     paginator = Paginator(task_list, 5) # Show 5 contacts per page
