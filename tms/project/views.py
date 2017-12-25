@@ -895,18 +895,13 @@ def TaskListExternal(request,task_status=None):
     current_url ="ns-project:" + resolve(request.path_info).url_name
     empid = request.session.get('EmpID')
     tasks_list = Task.objects.filter(assignedto = empid)
-
-
     project_id = []
     for data in tasks_list:
         project_id.append(data.projectid)
-
-
     #no of new task
     new_tasks_count= len(Task.objects.all().filter(Q(status__exact='New')&(
          Q(assignedto = empid)|Q(departementid =  request.session['DeptCode']))
          ).exclude(createdby__exact=empid))
-
 
     #get all tasks assign to dept from external project
     task_list= Task.objects.all().filter(

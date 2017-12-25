@@ -113,15 +113,15 @@ WSGI_APPLICATION = 'tms.wsgi.application'
 DATABASES = {
    'default': {
        'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'tms_dev',
-#         'USER': 'sakr',
-#         'PASSWORD': 'Sakr!@#123',
-#         'HOST': '192.168.0.192',   # Or an IP Address that your DB is hosted on
-#         'PORT': '3306',
-        'NAME': 'tms',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
+        'NAME': 'tms_dev',
+        'USER': 'sakr',
+        'PASSWORD': 'Sakr!@#123',
+        'HOST': '192.168.0.192',   # Or an IP Address that your DB is hosted on
+        'PORT': '3306',
+        # 'NAME': 'tms',
+        # 'USER': 'root',
+        # 'PASSWORD': '',
+        # 'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
 
    }
 }
