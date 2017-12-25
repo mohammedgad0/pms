@@ -3401,7 +3401,8 @@ function init_echarts() {
                 itemStyle: {
                     normal: {
                         areaStyle: {
-                            type: 'default'
+                            type: 'default',
+                            	   color: '#337ab7'
                         }
                     }
                 },
@@ -3413,7 +3414,8 @@ function init_echarts() {
                 itemStyle: {
                     normal: {
                         areaStyle: {
-                            type: 'default'
+                            type: 'default',
+                            	 color: '#1ebc9c'
                         }
                     }
                 },

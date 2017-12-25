@@ -11,7 +11,7 @@
       <div class="">
         <div class="page-title">
           <div class="title_left">
-            <h3>Plain Page</h3>
+            <h3></h3>
           </div>
 
           <div class="title_right">
@@ -104,12 +104,11 @@
                            {% endif %}
                            <td>
 
-                         {% if task.assignedto%}
-                           {{ task.assignedto|truncatewords:5 }}
-
-                         {% elif task.departementid%}
-                           {{ task.departementid|truncatechars:5 }}
-                         {% endif %}
+                            {% if task.assignedto.empname%}
+                       {{task.assignedto.empname|truncatewords:6}}        
+                       {% elif task.departement.deptname %}
+                       {{task.departement.deptname|truncatewords:6}} 
+                      {% endif %}
                                 </td>
                            <td>% {{task.progress }}
                           <!--  {{ task.startdate|timesince:task.enddate }} -->
