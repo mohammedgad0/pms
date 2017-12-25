@@ -168,9 +168,9 @@ class ApfDeptView(models.Model):
         db_table = 'apf_dept_view'
 
 class Task(models.Model):
-    assignedto = models.ForeignKey('Employee',db_column='assignedto',to_field='empid', on_delete=models.SET_NULL, null=True)
-    departement = models.ForeignKey('Department',db_column='departementid', to_field='deptcode',on_delete=models.SET_NULL, null=True) 
-    project = models.ForeignKey('Project',db_column='projectid', to_field='id', on_delete=models.SET_NULL, null=True)
+    assignedto = models.ForeignKey('Employee',db_column='assignedto',to_field='empid', on_delete=models.SET_NULL, blank=True, null=True)
+    departement = models.ForeignKey('Department',db_column='departementid', to_field='deptcode',on_delete=models.SET_NULL, blank=True, null=True) 
+    project = models.ForeignKey('Project',db_column='projectid', to_field='id', on_delete=models.SET_NULL,blank=True,  null=True)
     
     name = models.CharField(db_column='Name', max_length=100)  # Field name made lowercase.
     desc = models.CharField(db_column='Desc', max_length=2500)  # Field name made lowercase.

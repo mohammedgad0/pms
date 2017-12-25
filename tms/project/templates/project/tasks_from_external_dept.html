@@ -73,9 +73,9 @@
                      <tbody>
                         {% for task in tasks %}
                         <tr>
-                           <td><a href="{% url 'ns-project:project-task-detail' task.projectid task.id   %}" class=" btn-link">{{task.id }}</a> </td>
+                           <td><a href="{% url 'ns-project:project-task-detail' task.project.id task.id   %}" class=" btn-link">{{task.id }}</a> </td>
                          
-                           <td><a href="{% url 'ns-project:project-task-detail' task.projectid task.id   %}" class=" btn-link" title="{{task.name}}">{{ task.name|truncatechars:20 }}</a></td>
+                           <td><a href="{% url 'ns-project:project-task-detail' task.project.id task.id   %}" class=" btn-link" title="{{task.name}}">{{ task.name|truncatechars:20 }}</a></td>
                          
                            <td><a href="{% url 'ns-project:project-detail' task.project.id   %}" class=" btn-link" title="{{task.project.name}}">{{ task.project.name|truncatechars:20 }}</a></td>
                            <td>{{  task.startdate|date:"Y-m-d" }} </td>
@@ -105,9 +105,9 @@
                            <td>
 
                             {% if task.assignedto.empname%}
-                       {{task.assignedto.empname|truncatewords:6}}        
+                       {{task.assignedto.empname|truncatewords:4}}        
                        {% elif task.departement.deptname %}
-                       {{task.departement.deptname|truncatewords:6}} 
+                       {{task.departement.deptname|truncatewords:4}} 
                       {% endif %}
                                 </td>
                            <td>% {{task.progress }}

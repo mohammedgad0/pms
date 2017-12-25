@@ -103,8 +103,12 @@
     {{ form.desc.errors }}
     {{ form.start.errors}}
     {{ form.end.errors  }}
+      {{ form.assigned_to.errors  }}
+       {{ form.departement.errors  }}
        {{ form.status.errors  }}
       {{ form.progress.errors  }}
+      
+      
     </div>
 </div>
 
@@ -137,7 +141,7 @@
    <ul class="list-unstyled">
                       <li class="clearfix"><div class="basic_info_lable col-md-4 float-right">{{_("project Name")}}</div> <div class="basic_info  col-md-7">{{project_detail.name}} </div>
                       </li>
-                      <li class="clearfix task-ctions"><div class="basic_info_lable  col-md-4 float-right">{{_("Assigned To")}} </div> <div class="basic_info col-md-7" style="position:relative;">  {{form.assignedto}}
+                      <li class="clearfix task-ctions"><div class="basic_info_lable  col-md-4 float-right">{{_("Assigned To")}} </div> <div class="basic_info col-md-7" style="position:relative;">  {{form.assigned_to}}
                          <a href="#" data-url="{% url 'ns-project:update-assignto-task' task.id 'False' %}" class="update-task-assignto" style="    position: absolute;
     top: 0px;
     left: 0px;
@@ -260,10 +264,10 @@ $.ajax({
       $("#modal-task").modal("hide");
 
       if(data.assignedto_empid){
-      $("#id_assignedto").val(data.assignedto_empid );
+      $("#id_assigned_to").val(data.assignedto_empid );
       }
       else if(data.assignedto_depid){
-      $("#id_assignedto").val(data.assignedto_depid );
+      $("#id_assigned_to").val(data.assignedto_depid );
       }
      // location.reload();
     }
