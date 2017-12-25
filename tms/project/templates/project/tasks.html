@@ -141,9 +141,10 @@
 
                        {% if task.assignedto.empname%}
                        {{task.assignedto.empname|truncatewords:6}}        
-                       {% elif task.departement.deptname %}
-                       {{task.departement.deptname|truncatewords:6}} 
+                       {% elif task.departementid.deptname %}
+                       {{task.departementid.deptname|truncatewords:6}} 
                       {% endif %}
+                      
                                 </td>
                            <td>   <span>  % {{task.progress }}</span>    
                           <!--  {{ task.startdate|timesince:task.enddate }} -->

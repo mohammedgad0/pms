@@ -306,22 +306,7 @@ def ProjectTask(request,pk,task_status=None):
          task_list= task_list.filter(enddate__lt = datetime.today())
     elif task_status=="assignedtodept":
          task_list= task_list.filter(departementid__exact= request.session['DeptCode'])
-
-#     #get all emp name /  dept name instead empid , deptid
-#     for _task in task_list:
-#         try :
-#             emp_object=Employee.objects.get(empid__exact=_task.assignedto);
-#             empDict.update({_task.assignedto: emp_object.empname})
-#         except :
-#                emp_object=None
-#                empDict.update({_task.assignedto: None})
-#         if  emp_object==None :      
-#             try :
-#                 dpt_object=Department.objects.get(deptcode__exact=_task.departementid);
-#                 dptDict.update({_task.departementid: dpt_object.deptname})
-#             except :
-#                    dptDict.update({_task.assignedto: None})
-       
+    
      
     paginator = Paginator(task_list, 5) # Show 5 contacts per page
     page = request.GET.get('page')
@@ -722,7 +707,6 @@ def updateTaskAssignto(request,pk,save=None):
     _assign=""
     _obj =  get_object_or_404(Task,pk=pk)
 
-
     if request.method == 'POST':
         form = TaskAssignToForm(request.POST )
         form.fields["employee"].queryset = Employee.objects.filter(deptcode = request.session['DeptCode'])
@@ -745,31 +729,29 @@ def updateTaskAssignto(request,pk,save=None):
         if form.is_valid():
             #id save == true then save form dta
             if save !="False" : 
+                 if  employee :
+                    _emp_obj=Employee.objects.get(empid__exact= int(form.cleaned_data['employee'].empid)) 
+                    _obj.assignedto=_emp_obj 
+                    _assign=form.cleaned_data['employee'].empname
+                    _obj.departementid=Department.objects.get(deptcode__exact= _emp_obj.deptcode)
 
-#                 if  employee :
-#                     #int(form.cleaned_data['employee'].empid)
-#                   
-#                     _obj.assignedto.empid= get_object_or_404(Employee,empid__exact=int(form.cleaned_data['employee'].empid))
-#                     _assign=form.cleaned_data['employee'].empname
-# 
-# 
-#                 elif departement :
-#                         _obj.departementid=get_object_or_404(Department,deptcode__exact= int(form.cleaned_data['departement'].deptcode))
-#                         _assign=form.cleaned_data['departement'].deptname
-#                         _obj.assignedto=None
-
-
-             _obj.canncelleddate=None
-            _obj.cancelledby=None
-            _obj.closeddate=None
-            _obj.closedby=None
-            _obj.finisheddate=None
-            _obj.finishedby=None
-            _obj.lasteditdate=datetime.now()
-            _obj.save()
-            #add to history
-            update_change_reason(_obj,_(" by ")+ request.session['EmpName']  +  _(" ,  Assign Task to ")+  str(_assign))
-            messages.success(request, "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>"+_(" Task has been updated successfully "), fail_silently=True,)
+                 elif departement :
+                    _dpt_obj=Department.objects.get(deptcode__exact= int(form.cleaned_data['departement'].deptcode)) 
+                    _obj.departementid=_dpt_obj
+                    _assign=form.cleaned_data['departement'].deptname
+                    _obj.assignedto=None
+                        
+                 _obj.cancelleddate=None
+                 _obj.cancelledby=None
+                 _obj.closeddate=None
+                 _obj.closedby=None
+                 _obj.finisheddate=None
+                 _obj.finishedby=None
+                 _obj.lasteditdate=datetime.now()
+                 _obj.save()
+                #add to history
+                 update_change_reason(_obj,_(" by ")+ request.session['EmpName']  +  _(" ,  Assign Task to ")+  str(_assign))
+                 messages.success(request, "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>"+_(" Task has been updated successfully "), fail_silently=True,)
 
             data['form_is_valid'] = True
             data['id'] = pk
