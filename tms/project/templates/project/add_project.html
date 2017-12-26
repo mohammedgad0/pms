@@ -1,5 +1,6 @@
 {% extends "project/base_site.html" %}
 {% load i18n %}
+{% load widget_tweaks %}
 {% block title %} {% trans "sheets list" %} {% endblock title %}
 
 {% block stylesheets %}
@@ -66,14 +67,40 @@
                </div>
                
              <div class="form-group">
-              <div class=" col-md-12">
+              <div class="col-md-12">
               {{form.desc.label_tag}}
                {{form.desc}}
                </div>
                </div>
 
+              <div class="form-group">
+              <div class="col-md-12">
+               {{ upload_file.management_form }}
+                         <fieldset>
+                            <legend> {% trans "Attached files " %}</legend>
+                         {% for form in upload_file%}
+                         <div class="item form-group">
+                           <div class="col-md-6">
+                           {{form.id}}
+                           {{form.filename.label_tag}}
+                          {{ form.filename|add_class:"form-control"}}
+                        </div>
+                          <div class="col-md-5">
+                          {{form.filepath.label_tag}}
+                         {{ form.filepath|add_class:"upload"}}
+                       </div>
+                           {# <span class="input-group-btn"><button class="delete btn btn-danger remove-form-row"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button></span> #}
+                         </div>
+                
+                        {% endfor%}
+                          <div class="col-md-12">
+                        <span id="add" class="input-group-btn"><button class="btn btn-success add-form-row"><span class="glyphicon glyphicon-plus" aria-hidden="true" style="margin-left:5px;"></span>{{_('add new file')}}</button></span>
+</div>
+                        </fieldset>
               
-     <div class="form-group text-danger ">
+              </div>
+              </div>
+     <div class="form-group text-danger">
      <div class="col-md-3"></div><div class="col-md-9 col-sm-12 col-xs-12">
     {{ form.name.errors }}
     {{ form.desc.errors }}
@@ -148,6 +175,54 @@
   }, function(start, end, label) {
     
   });
+  
+  
+//Register the click event handlers
+$("#add").click(function (e) {
+   e.preventDefault();
+   return addForm(this, "form");
+});
+
+function addForm(btn, prefix) {
+    var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+    // You can only submit a maximum of 10 todo items
+    if (formCount < 10) {
+        // Clone a form (without event handlers) from the first form
+        var row = $(".item:first").clone(false).get(0);
+        // Insert it after the last form
+        $(row).removeAttr('id').hide().insertAfter(".item:last").slideDown(300);
+
+        // Remove the bits we don't want in the new row/form
+        // e.g. error messages
+        $(".errorlist", row).remove();
+        $(row).children().removeClass("error");
+
+        // Relabel or rename all the relevant bits
+        $(row).children().children().each(function () {
+            updateElementIndex(this, prefix, formCount);
+            $(this).val("");
+        });
+
+        // Add an event handler for the delete item/form link
+        $(row).find(".delete").click(function () {
+            return deleteForm(this, prefix);
+        });
+        // Update the total form count
+        $("#id_" + prefix + "-TOTAL_FORMS").val(formCount + 1);
+    } // End if
+    else {
+        alert("Sorry, you can only enter a maximum of ten items.");
+    }
+    return false;
+}
+function updateElementIndex(el, prefix, ndx) {
+    var id_regex = new RegExp('(' + prefix + '-\\d+)');
+    var replacement = prefix + '-' + ndx;
+    if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex, replacement));
+    if (el.id) el.id = el.id.replace(id_regex, replacement);
+    if (el.name) el.name = el.name.replace(id_regex, replacement);
+}  
+  
   </script>
   
 {% endblock javascripts %}

@@ -107,6 +107,10 @@ def gentella_html(request):
     return HttpResponse(template.render(context, request))
 
 def AddProject(request):
+     # upload file form
+    upload = modelformset_factory(Media,form=UploadFile,extra = 1)
+    FormSet = upload(queryset=Media.objects.none())
+    
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -123,6 +127,17 @@ def AddProject(request):
             project_obj.createddate= datetime.now()
             #save to database
             project_obj.save()
+             #uploading files
+            upload_form = upload(request.POST, request.FILES)
+            if upload_form.is_valid():
+                obj_file = upload_form.save(commit=False)
+                for obj in obj_file:
+                    obj.projectid = project_obj.id
+                    if obj.filepath is not None or obj.filepath != "" :
+                         obj.save()
+            else:
+                data = {'is_valid': False}
+                return JsonResponse(data)
             # redirect to a new URL:
             messages.success(request, _("Project has created successfully"))
             return HttpResponseRedirect(reverse('ns-project:project-list'))
@@ -131,7 +146,7 @@ def AddProject(request):
     else:
         form = ProjectForm()
 
-    return render(request, 'project/add_project.html', {'form': form,'action_name': _('Ad Project')})
+    return render(request, 'project/add_project.html', {'form': form,'upload_file':FormSet,'action_name': _('Ad Project')})
 
 @login_required
 def ProjectList(request,project_status=None):
@@ -237,29 +252,55 @@ def ProjectDetail(request,pk):
 
 @login_required
 def ProjectEdit(request,pk):
+    # upload file form
+    upload = modelformset_factory(Media,form=UploadFile,extra = 1)
+    FormSet = upload(queryset=Media.objects.filter(projectid__exact=pk))
+    
     instance = get_object_or_404(Project,pk=pk)
     form = ProjectForm(request.POST or None, instance=instance)
     if form.is_valid():
-       instance=form.save()
-       instance.save()
-       messages.success(request, _("Project has updated successfully"), fail_silently=True,)
-       return HttpResponseRedirect(reverse('ns-project:project-list'))
+        instance=form.save()
+        instance.save()
+         #uploading files
+        upload_form = upload(request.POST, request.FILES)
+        if upload_form.is_valid():
+            obj_file = upload_form.save(commit=False)
+            for obj in obj_file:
+                obj.projectid = instance.id
+                if obj.filepath is not None:
+                    obj.save()
+        else:
+            data = {'is_valid': False}
+                
+        messages.success(request, _("Project has updated successfully"), fail_silently=True,)
+        return HttpResponseRedirect(reverse('ns-project:project-list'))
     else:
         # Set the messages level back to default.
         #messages.add_message(request, messages.ERROR, 'Can not update project.', fail_silently=True, extra_tags='alert')
         #messages.error(request, _("Can not update project."))
-        return render(request, 'project/add_project.html', {'form': form,'action_name': _('Edit Project')})
+        pass
+    return render(request, 'project/add_project.html', {'form': form,'upload_file':FormSet,'action_name': _('Edit Project')})
 
 @login_required
 def ProjectDelete(request,pk):
+    import os
     p= get_object_or_404(Project,pk=pk)
     emp_obj=Employee.objects.get(empid__exact=p.createdby)
+    #get all attached files 
+    attached_files= Media.objects.filter(projectid__exact=p.id)
     if request.method == 'POST':
-          Project.objects.filter(id=p.id).delete()
-          messages.success(request, _("Project has deleted successfully"), fail_silently=True,)
-          return HttpResponseRedirect(reverse('ns-project:project-list'))
+        #remove files from directory 
+        for attached in attached_files :
+            os.remove(os.path.join(settings.BASE_DIR, 'media/')+str(attached.filepath))
+          
+         #delete attached files related to project and tasks
+        Media.objects.filter(projectid__exact=p.id).delete()
+         #delete project object and related tasks 
+        Project.objects.filter(id=p.id).delete()
+        messages.success(request, _("Project has deleted successfully"), fail_silently=True,)
+        return HttpResponseRedirect(reverse('ns-project:project-list'))
     else:
-          context={'p':p,'emp_obj':emp_obj}
+          context={'p':p,'emp_obj':emp_obj,'attached_files':attached_files}
           return render(request, 'project/project_delete.html',context)
 
 @login_required
