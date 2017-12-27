@@ -34,7 +34,7 @@ class Project(models.Model):
     start = models.DateField(db_column='Start')  # Field name made lowercase.
     end = models.DateField(db_column='End')
     teamname = models.CharField(db_column='TeamName', max_length=100, blank=True, null=True)  # Field name made lowercase.
-    desc = models.CharField(db_column='Desc', max_length=250)  # Field name made lowercase.
+    desc = models.CharField(db_column='Desc', max_length=1500)  # Field name made lowercase.
     createdby = models.CharField(db_column='CreatedBy', max_length=20, blank=True, null=True)  # Field name made lowercase.
     createddate = models.DateTimeField(db_column='CreatedDate', blank=True, null=True)  # Field name made lowercase.
     departementid = models.IntegerField(db_column='DepartementId', blank=True, null=True)  # Field name made lowercase.
@@ -275,8 +275,8 @@ class VStatisticstaskdata(models.Model):
 
 class Media(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
-    projectid = models.IntegerField(blank=True, null=True)
-    taskid = models.IntegerField(blank=True, null=True)
+    project = models.ForeignKey('Project',db_column='projectid',to_field='id', on_delete=models.SET_NULL, blank=True, null=True)
+    task = models.ForeignKey('Task',db_column='taskid',to_field='id', on_delete=models.SET_NULL, blank=True, null=True)
     filename = models.CharField(blank=True,null=True, max_length=100)
     filepath = models.FileField(_('Files Upload'),upload_to='documents/',blank=True, null=True)
     class Meta:

@@ -188,7 +188,7 @@ function addForm(btn, prefix) {
     // You can only submit a maximum of 10 todo items
     if (formCount < 10) {
         // Clone a form (without event handlers) from the first form
-        var row = $(".item:first").clone(false).get(0);
+        var row = $(".item:last").clone(false).get(0);
         // Insert it after the last form
         $(row).removeAttr('id').hide().insertAfter(".item:last").slideDown(300);
 

@@ -1,5 +1,6 @@
 {% extends "project/base_site.html" %}
 {% load i18n %}
+{% load widget_tweaks %}
 {% block title %} {% trans "Project Details" %} {% endblock title %}
 
 {% block sidebar_class %}menu_fixed{% endblock sidebar_class %}
@@ -80,18 +81,20 @@
 <fieldset class="fieldset_normal">
         <legend>{{ _('Attachment')}}</legend>
 
-         <ul class="list-unstyled project_files">
-                      <li><a href=""><i class="fa fa-file-word-o"></i> Functional-requirements.docx</a>
-                      </li>
-                      <li><a href=""><i class="fa fa-file-pdf-o"></i> UAT.pdf</a>
-                      </li>
-                      <li><a href=""><i class="fa fa-mail-forward"></i> Email-from-flatbal.mln</a>
-                      </li>
-                      <li><a href=""><i class="fa fa-picture-o"></i> Logo.png</a>
-                      </li>
-                      <li><a href=""><i class="fa fa-file-word-o"></i> Contract-10_12_2014.docx</a>
-                      </li>
-                    </ul>
+ {% for form in upload_file%}
+                         <div class="item form-group">
+                           <div class="col-md-6">
+                           {{form.id}}
+                           {{form.filename.label_tag}}
+                          {{ form.filename|add_class:"form-control"}}
+                        </div>
+                          <div class="col-md-5">
+                          {{form.filepath.label_tag}}
+                         {{ form.filepath|add_class:"upload"}}
+                       </div>
+                           {# <span class="input-group-btn"><button class="delete btn btn-danger remove-form-row"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button></span> #}
+                         </div>
+                        {% endfor%}
 
       </fieldset>
 

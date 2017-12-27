@@ -69,14 +69,11 @@
                           <br>
                           <h5><strong>{{_('Attachments')}}</strong></h5>
                                <ul class="list-unstyled project_files">
-                          {% for attach in attached_files%}
-                          <li>
-                         <a href="{{MEDIA_URL}}{{attach.filepath}}" style="text-decoration: underline;"> <span style="margin-left:5px;">{{attach.filename}} </span> {{attach.filepath}} </a>
-                         
+                        {% for attach in attached_files%}
+                        <li>
+                        <a href="{{MEDIA_URL}}{{attach.filepath}}" style="text-decoration: underline;"> <span style="margin-left:5px;">{{attach.filename}} </span> {{attach.filepath}} </a>
                         {# name, ext = os.path.splitext('file.txt')  #}
-                        
-                     
-                          {%endfor%}
+                        {%endfor%}
                      
                          <!--  
                             <li><a href=""><i class="fa fa-file-pdf-o"></i> UAT.pdf</a>

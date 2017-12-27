@@ -132,7 +132,7 @@ def AddProject(request):
             if upload_form.is_valid():
                 obj_file = upload_form.save(commit=False)
                 for obj in obj_file:
-                    obj.projectid = project_obj.id
+                    obj.project = project_obj
                     if obj.filepath is not None or obj.filepath != "" :
                          obj.save()
             else:
@@ -227,6 +227,8 @@ def ProjectDetail(request,pk):
     project_detail= get_object_or_404(Project,pk=pk)
     EmpID=request.session.get('EmpID')
     tasks_list = Task.objects.filter(project__exact = pk)
+    #get all attached files 
+    attached_files= Media.objects.filter(project__id__exact=pk)
 
     allTakProgress = 0
     projectProgress=0
@@ -247,14 +249,14 @@ def ProjectDetail(request,pk):
     history=Task.history.filter(project=pk)[:10:1]
     current_url ="ns-project:" + resolve(request.path_info).url_name
     context={'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'projectProgress':projectProgress,
-    'taskprogress':allTakProgress,'tasks_list':tasks_list,'history':history}
+    'taskprogress':allTakProgress,'tasks_list':tasks_list,'history':history,'attached_files':attached_files}
     return render(request, 'project/project_detail.html', context)
 
 @login_required
 def ProjectEdit(request,pk):
     # upload file form
     upload = modelformset_factory(Media,form=UploadFile,extra = 1)
-    FormSet = upload(queryset=Media.objects.filter(projectid__exact=pk))
+    FormSet = upload(queryset=Media.objects.filter(project_id__exact=pk).exclude(Q(filepath__exact=None)| Q(filepath__exact='')))
     
     instance = get_object_or_404(Project,pk=pk)
     form = ProjectForm(request.POST or None, instance=instance)
@@ -266,7 +268,7 @@ def ProjectEdit(request,pk):
         if upload_form.is_valid():
             obj_file = upload_form.save(commit=False)
             for obj in obj_file:
-                obj.projectid = instance.id
+                obj.project = instance
                 if obj.filepath is not None:
                     obj.save()
         else:
@@ -666,7 +668,7 @@ def AddTask(request,project_id):
     _deptcode = request.session['DeptCode']
     # upload_file = UploadFile
     upload = modelformset_factory(Media,form=UploadFile,extra = 1)
-    FormSet = upload(queryset=Media.objects.filter(taskid = 0))
+    FormSet = upload(queryset=Media.objects.none())
     form = AddTaskForm()
     # form.assignedto.queryset = Employee.objects.filter(deptcode = _deptcode)
     form.fields["employee"].queryset = Employee.objects.filter(deptcode = _deptcode)
@@ -676,27 +678,27 @@ def AddTask(request,project_id):
         form = AddTaskForm(request.POST)
         if form.is_valid():
             # form.save()
-            project_obj = form.save(commit=False)
-            project_obj.project = get_object_or_404(Project,pk=project_id)
-            project_obj.status = 'New'
-            project_obj.createdby = request.session.get('EmpID')
-            project_obj.lasteditdate = datetime.now()
-            project_obj.createddate = datetime.now()
-            project_obj.progress = 0
+            Task_obj = form.save(commit=False)
+            Task_obj.project = get_object_or_404(Project,pk=project_id)
+            Task_obj.status = 'New'
+            Task_obj.createdby = request.session.get('EmpID')
+            Task_obj.lasteditdate = datetime.now()
+            Task_obj.createddate = datetime.now()
+            Task_obj.progress = 0
             if assignto_employee:
-                project_obj.assignedto =get_object_or_404(Employee,empid_exact=assignto_employee)  
-                project_obj.assigneddate = datetime.now()
+                Task_obj.assignedto =get_object_or_404(Employee,empid_exact=assignto_employee)  
+                Task_obj.assigneddate = datetime.now()
             if assignto_department:
-                project_obj.departement = get_object_or_404(Department,deptcode_exact=assignto_department)  
-                project_obj.assigneddate = datetime.now()
-            project_obj.save()
+                Task_obj.departement = get_object_or_404(Department,deptcode_exact=assignto_department)  
+                Task_obj.assigneddate = datetime.now()
+            Task_obj.save()
             #uploading files
             upload_form = upload(request.POST, request.FILES)
             if upload_form.is_valid():
                 obj_file = upload_form.save(commit=False)
                 for obj in obj_file:
-                    obj.projectid = project_id
-                    obj.taskid = project_obj.id
+                    obj.project =  Task_obj.project
+                    obj.task = Task_obj
                     obj.save()
             else:
                 data = {'is_valid': False}
@@ -704,12 +706,12 @@ def AddTask(request,project_id):
             #update history message
             if assignto_employee:
                 assigntodata = get_object_or_404(Employee , empid = assignto_employee )
-                update_change_reason(project_obj, _("Add new Task By ") + _empname + " " + _("And Assign to") + " " + assigntodata.empname)
+                update_change_reason(Task_obj, _("Add new Task By ") + _empname + " " + _("And Assign to") + " " + assigntodata.empname)
             elif assignto_department:
                 assigntodata = get_object_or_404(Department , deptcode__exact = assignto_department )
-                update_change_reason(project_obj, _("Add new Task By ") + _empname + " " +_("And Assign to") + " " + assigntodata.deptname)
+                update_change_reason(Task_obj, _("Add new Task By ") + _empname + " " +_("And Assign to") + " " + assigntodata.deptname)
             else:
-                update_change_reason(project_obj, _("Add new Task By ")+ _empname)
+                update_change_reason(Task_obj, _("Add new Task By ")+ _empname)
             #info message
             messages.success(request, _("Task Added"))
             return HttpResponseRedirect(reverse('ns-project:project-task' , kwargs={'pk':project_id} ))
@@ -850,6 +852,11 @@ def ProjectTaskEdit(request,projectid,taskid):
     project_detail= get_object_or_404(Project,pk=projectid)
     task_detail= get_object_or_404(Task,pk=taskid)
     form = EditTaskForm(request.POST or None, instance=task_detail)
+    
+    # upload file form
+    upload = modelformset_factory(Media,form=UploadFile,extra = 1)
+    FormSet = upload(queryset=Media.objects.filter(project_id__exact=projectid,task__id__exact=taskid).exclude(Q(filepath__exact=None)| Q(filepath__exact='')))
+    
     try:
         form.fields["assigned_to"].initial=task_detail.assignedto.empid
     except:
@@ -917,14 +924,11 @@ def ProjectTaskEdit(request,projectid,taskid):
             instance.departement= Department.objects.get(deptcode__exact= int(form.cleaned_data['assigned_to']))
         except:
             instance.departement=None
-    
-        
         
         instance.lasteditdate=datetime.now()
         instance.lasteditby=request.session['EmpID']
-
-
         instance.save()
+     
         messages.success(request, _(" Task has been updated successfully "), fail_silently=True,)
         #add to history
         update_change_reason(instance, _("Edit Task successfully by")+" : "+  str( employee.empname)+ ( ",    <i class=\"fa fa-comment\"></i>  "+ form.cleaned_data['note']  if form.cleaned_data['note'] else " "))
@@ -935,6 +939,7 @@ def ProjectTaskEdit(request,projectid,taskid):
                'current_url':current_url,
                'task':task_detail,
                'form':form,
+               'upload_file':FormSet,
                 'assignTo':assignTo,
                 'createdby':employee,
                 'finishedby':finishedby,
