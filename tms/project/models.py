@@ -34,7 +34,7 @@ class Project(models.Model):
     start = models.DateField(db_column='Start')  # Field name made lowercase.
     end = models.DateField(db_column='End')
     teamname = models.CharField(db_column='TeamName', max_length=100, blank=True, null=True)  # Field name made lowercase.
-    desc = models.CharField(db_column='Desc', max_length=250)  # Field name made lowercase.
+    desc = models.CharField(db_column='Desc', max_length=1500)  # Field name made lowercase.
     createdby = models.CharField(db_column='CreatedBy', max_length=20, blank=True, null=True)  # Field name made lowercase.
     createddate = models.DateTimeField(db_column='CreatedDate', blank=True, null=True)  # Field name made lowercase.
     departementid = models.IntegerField(db_column='DepartementId', blank=True, null=True)  # Field name made lowercase.
@@ -168,11 +168,10 @@ class ApfDeptView(models.Model):
         db_table = 'apf_dept_view'
 
 class Task(models.Model):
-    assignedto = models.ForeignKey('Employee',db_column='assignedto',to_field='empid', on_delete=models.SET_NULL, null=True)
-    departementid = models.ForeignKey('Department',db_column='departementid', to_field='deptcode',on_delete=models.SET_NULL, null=True) 
-
-    project = models.ForeignKey('Project', on_delete=models.SET_NULL, null=True)
-    projectid = models.IntegerField(db_column='ProjectId')  # Field name made lowercase.
+    assignedto = models.ForeignKey('Employee',db_column='assignedto',to_field='empid', on_delete=models.SET_NULL, blank=True, null=True)
+    departement = models.ForeignKey('Department',db_column='departementid', to_field='deptcode',on_delete=models.SET_NULL, blank=True, null=True) 
+    project = models.ForeignKey('Project',db_column='projectid', to_field='id', on_delete=models.CASCADE,blank=True,  null=True)
+    
     name = models.CharField(db_column='Name', max_length=100)  # Field name made lowercase.
     desc = models.CharField(db_column='Desc', max_length=2500)  # Field name made lowercase.
 
@@ -276,8 +275,8 @@ class VStatisticstaskdata(models.Model):
 
 class Media(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
-    projectid = models.IntegerField(blank=True, null=True)
-    taskid = models.IntegerField(blank=True, null=True)
+    project = models.ForeignKey('Project',db_column='projectid',to_field='id', on_delete=models.SET_NULL, blank=True, null=True)
+    task = models.ForeignKey('Task',db_column='taskid',to_field='id', on_delete=models.SET_NULL, blank=True, null=True)
     filename = models.CharField(blank=True,null=True, max_length=100)
     filepath = models.FileField(_('Files Upload'),upload_to='documents/',blank=True, null=True)
     class Meta:

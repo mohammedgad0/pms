@@ -150,15 +150,16 @@
         <legend>{{_("Basci Info")}}</legend>
    
    <ul class="list-unstyled">
-                      <li class="clearfix"><div class="basic_info_lable col-md-4 float-right">{{_("project Name")}}</div> <div class="basic_info  col-md-7">{{project_detail.name}}</div>
+                      <li class="clearfix"><div class="basic_info_lable col-md-4 float-right">{{_("project Name")}}</div> <div class="basic_info  col-md-7">{{task.project.name}}</div>
                       </li>
-                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Assigned To")}}</div> <div class="basic_info col-md-7">    
-                                                                                                                                                                {% if assignToEmp.empname  %}
+                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Assigned To")}}</div> <div class="basic_info col-md-7"> 
+                      {% if task.assignedto.empname  %}
+                      {{task.assignedto.empname}}
+                      {% elif task.departement.deptname  %}
+                      {{task.departement.deptname}}
+                      {% endif %}
                                     
-                                                                                                                                                       {{ assignToEmp.empname}}
-                                                                                                                                                             {% elif  assignToDept.deptname %}
-                                                                                                                                                             {{ assignToDept.deptname }}
-                                                                                                                                                             {% endif %}
+                                                                                                                                                     
                                                                                                                                                              </div>
                       </li>
                       <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Task Status")}}</div><div class="basic_info col-md-7">  {% trans task.status %} </div>
@@ -171,7 +172,7 @@
                       </li>
                          <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Finished Date")}}</div><div class="basic_info col-md-7">  {{ task.finisheddate|date:"d M Y"  }} </div>
                       </li>
-                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Mailto To")}}</div> <div class="basic_info col-md-7">{{ assignToEmp.email|urlizetrunc:25 }}</div>
+                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Mailto To")}}</div> <div class="basic_info col-md-7">{{ task.assignedto.email|urlizetrunc:25 }}</div>
                       </li>
                     </ul>
 
@@ -189,8 +190,8 @@
                       </li>
                       <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Closed By")}}</div> <div class="basic_info col-md-7 float-right">  {{closedby.empname}}</div>
                       </li>
-                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Cancelled Reason")}}</div> <div class="basic_info  col-md-7 float-right"> {{task.mailto}}</div>
-                      </li>
+                     <!--  <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Cancelled Reason")}}</div> <div class="basic_info  col-md-7 float-right"> </div>
+                      </li> -->
                       <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Last Edited")}}</div> <div class="basic_info col-md-7 float-right"> {{  task.lasteditdate|date:"d M Y ,  h:i a" }}</div>
                       </li>
                     </ul>

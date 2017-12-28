@@ -34,12 +34,9 @@
               {% load user_group %}
             
                  {% if request.user|has_group:"ismanager"  and   project_detail.createdby == request.session.EmpID %}
-                <a href="{% url 'ns-project:project-delete' project_detail.id %}" style="float:left" >  <button type="button" class="btn btn-danger btn-md"> <i class="fa fa-trash-o"></i>  {% trans "Delete" %}</button></a>
+                 <a href="{% url 'ns-project:project-delete' project_detail.id %}" style="float:left" >  <button type="button" class="btn btn-danger btn-md"> <i class="fa fa-trash-o"></i>  {% trans "Delete" %}</button></a>
                  <a href="{% url 'ns-project:project-edit'  project_detail.id %}" style="float:left" >  <button type="button" class="btn btn-info btn-md"> <i class="fa fa-pencil"></i>  {% trans "Edit" %}</button></a>
-
-
-
-                  {% endif %}
+                 {% endif %}
                <a href="{% url 'ns-project:project-list' %}"  style="float:left" >  <button type="button" class="btn btn-primary btn-md"> <i class="fa fa-th-list"></i>  {% trans "Projects List" %}</button></a>
 
                  <div class="clearfix"></div>
@@ -53,7 +50,7 @@
                   <li style="width:22%;">
                     <span class="name"> {% trans "Duration" %} </span>
 
-                    <span class="value text-success" > {{ project_detail.start|timesince:project_detail.end  }} </span>
+                    <span class="value text-success" > {{ project_detail.start|timesince:project_detail.end }} </span>
                   </li>
                   <li class="hidden-phone" style="width:25%;">
                     <span class="name"> {% trans "Remaining Time" %} </span>
@@ -150,16 +147,11 @@
                     <br />
                     <h5>{{_('Attachments')}}</h5>
                     <ul class="list-unstyled project_files">
-                      <li><a href=""><i class="fa fa-file-word-o"></i> Functional-requirements.docx</a>
-                      </li>
-                      <li><a href=""><i class="fa fa-file-pdf-o"></i> UAT.pdf</a>
-                      </li>
-                      <li><a href=""><i class="fa fa-mail-forward"></i> Email-from-flatbal.mln</a>
-                      </li>
-                      <li><a href=""><i class="fa fa-picture-o"></i> Logo.png</a>
-                      </li>
-                      <li><a href=""><i class="fa fa-file-word-o"></i> Contract-10_12_2014.docx</a>
-                      </li>
+                       {% for attach in attached_files%}
+                        <li>
+                        <a href="{{MEDIA_URL}}{{attach.filepath}}" style="text-decoration: underline;"> <span style="margin-left:5px;">{{attach.filename}} </span> {{attach.filepath}} </a>
+                        {# name, ext = os.path.splitext('file.txt')  #}
+                        {%endfor%}
                     </ul>
                     <br />
 

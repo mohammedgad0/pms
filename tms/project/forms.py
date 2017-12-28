@@ -108,14 +108,14 @@ class DepartmentList(ModelChoiceField):
 class AddTaskForm(ModelForm):
     CHOICES = (('1', _('employee'),), ('2', _('Department'),))
     employee = EmployeeList(queryset=Employee.objects.all(),to_field_name="empid", empty_label="(Nothing)",required=False,widget=forms.Select(attrs={'class': 'chosen form-control','disabled':'disabled'} ))
-    department = DepartmentList(queryset=Department.objects.all(),to_field_name="deptcode", empty_label="(Nothing)",required=False,widget=forms.Select(attrs={'class': 'chosen form-control','disabled':'disabled'} ))
+    department_list = DepartmentList(queryset=Department.objects.all(),to_field_name="deptcode", empty_label="(Nothing)",required=False,widget=forms.Select(attrs={'class': 'chosen form-control','disabled':'disabled'} ))
     assigntype = forms.ChoiceField(label=_('Assignto'),required=False,widget=forms.RadioSelect(attrs={'class':'form-check-input-task'}), choices=CHOICES)
 
     class Meta:
         model = Task
         fields = ['name','desc','assigntype',
         'employee',
-        'departementid','startdate','enddate']
+        'department_list','startdate','enddate']
         widgets = {
             'name':TextInput(attrs={'class': 'form-control','placeholder':_('Task Name'),'required': True}),
             'desc': Textarea(attrs={'class':'form-control','placeholder':_('Task Details'),'required': True}),
@@ -159,13 +159,14 @@ class EditTaskForm(ModelForm):
 
     CHOICES = (('1', _('employee'),), ('2', _('Department'),))
     createdby = EmployeeList(queryset=Employee.objects.all(),to_field_name="empid", empty_label="(Nothing)",required=False,widget=forms.Select(attrs={'class': 'chosen form-control'} ))
-    department = DepartmentList(queryset=Department.objects.all(),to_field_name="deptcode", empty_label="(Nothing)",required=False,widget=forms.Select(attrs={'class': 'chosen form-control','disabled':'disabled'} ))
+    department_list = DepartmentList(queryset=Department.objects.all(),to_field_name="deptcode", empty_label="(Nothing)",required=False,widget=forms.Select(attrs={'class': 'chosen form-control','disabled':'disabled'} ))
     assigntype = forms.ChoiceField(label=_('Assignto'),required=False,widget=forms.RadioSelect(attrs={'class':'form-check-input-task'}), choices=CHOICES)
     note = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Note"),'placeholder':_("Note"), 'rows':'3','size': '40','required': 'True'}),required=False, max_length=250, error_messages={'required': 'note'})
     progress = forms.IntegerField(validators=[ MaxValueValidator(100, message="Progress Over 100"),MinValueValidator(0, message="Progress less 0")],min_value=0, max_value=100)
+    assigned_to=forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control','placeholder':_('Responsible'),'required': False,}),required=False)
     class Meta:
         model = Task
-        fields = ['name','desc','startdate','enddate','finisheddate','assigntype','department','status','assignedto','progress']
+        fields = ['name','desc','startdate','enddate','finisheddate','assigntype','departement','status','assignedto','progress']
         widgets = {
             'name':TextInput(attrs={'class': 'form-control','placeholder':_('Task Name'),'required': True}),
             'desc': Textarea(attrs={'class':'form-control','placeholder':_('Task Details'),'required': True}),
@@ -220,7 +221,7 @@ class TaskFinishForm(forms.Form):
 class TaskCloseForm(forms.Form):
        ctime = forms.DateField(label=_("Closed on"),required=False,
        widget=forms.DateInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Closed on Date'),'required': False}))
-       reason = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Please enter a reason to Close "), 'size': '40','required': True}),required=True, max_length=500, error_messages={'required': _('Reason')})
+       reason = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Please enter a reason to Close "), 'size': '40','required': True}),required=True, max_length=500, error_messages={'required': _('Reason'),'label':_("Reason"),},)
 
 class TaskProgressForm(ModelForm):
       progress = forms.IntegerField(validators=[ MaxValueValidator(100, message="Progress Over 100"),MinValueValidator(0, message="Progress less 0")],min_value=0, max_value=100)
