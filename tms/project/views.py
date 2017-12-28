@@ -299,7 +299,7 @@ def ProjectDetail(request,pk):
     EmpID=request.session.get('EmpID')
     tasks_list = Task.objects.filter(project__exact = pk)
     #get all attached files 
-    attached_files= Media.objects.filter(project__id__exact=pk)
+    attached_files= Media.objects.filter(project__id__exact=pk, task__id__exact=None)
 
     allTakProgress = 0
     projectProgress=0
@@ -925,7 +925,7 @@ def ProjectTaskEdit(request,projectid,taskid):
     form = EditTaskForm(request.POST or None, instance=task_detail)
     
     # upload file form
-    upload = modelformset_factory(Media,form=UploadFile,extra = 1)
+    upload = modelformset_factory(Media,form=UploadFile,extra = 1,can_delete=True)
     FormSet = upload(queryset=Media.objects.filter(project_id__exact=projectid,task__id__exact=taskid).exclude(Q(filepath__exact=None)| Q(filepath__exact='')))
     
     try:
@@ -1006,10 +1006,10 @@ def ProjectTaskEdit(request,projectid,taskid):
             for obj in obj_file:
                 obj.project = instance.project
                 obj.task=instance
-                if obj.filepath is not None:
+                if obj.filepath is not None or obj.filepath !="":
                     obj.save()
                 else:
-                     Media.objects.filter(task__id__exact=instance.id).delete()
+                   obj.delete()
         else:
             data = {'is_valid': False}
         messages.success(request, _(" Task has been updated successfully "), fail_silently=True,)
@@ -1098,3 +1098,20 @@ def TaskListExternal(request,task_status=None):
 def DashboardManager(request):
     context = {}
     return render(request, 'project/dashboard_manager.html', context)
+
+#download attached file from media             
+def Download(request,file_name):
+    from wsgiref.util import FileWrapper
+    import mimetypes
+    import os
+    import django.utils.encoding
+    
+    file_path = settings.MEDIA_ROOT +'/'+ file_name
+    file_wrapper = FileWrapper(open(file_path,'rb'))
+    file_mimetype = mimetypes.guess_type(file_path)
+    response = HttpResponse(file_wrapper, content_type=file_mimetype )
+    response['X-Sendfile'] = file_path
+    response['Content-Length'] = os.stat(file_path).st_size
+    response['Content-Disposition'] = 'attachment; filename=%s' %file_name
+    return response
+

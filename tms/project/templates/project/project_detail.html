@@ -149,7 +149,9 @@
                     <ul class="list-unstyled project_files">
                        {% for attach in attached_files%}
                         <li>
-                        <a href="{{MEDIA_URL}}{{attach.filepath}}" style="text-decoration: underline;"> <span style="margin-left:5px;">{{attach.filename}} </span> {{attach.filepath}} </a>
+                        {% if attach.filepath  %}
+                        <a href="{% url 'ns-project:download' attach.filepath %}" style="text-decoration: underline;"> <span style="margin-left:5px;">{{attach.filename}} </span> {{attach.filepath}} </a>
+                        {% endif %}
                         {# name, ext = os.path.splitext('file.txt')  #}
                         {%endfor%}
                     </ul>

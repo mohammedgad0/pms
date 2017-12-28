@@ -56,6 +56,9 @@ urlpatterns = [
     url(r'^project/(?P<project_id>\d+)/addtask$',views.AddTask, name='add-task'),
     url(r'^project/dashboard_manager$',views.DashboardManager, name='dashboard-manager'),
     url(r'^auth/(?P<email>.*)/(?P<signature>.*)/(?P<time>.*)/$', views.loginfromdrupal, name='loginfromdrupal'),
+    
+
+    url(r'^download/(?P<file_name>.+)$', views.Download, name='download'),
 
 
     url(r'^.*\.html', views.gentella_html, name='gentella'),
