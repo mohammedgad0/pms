@@ -184,9 +184,7 @@ $(document).ready(function(){
   $(".chosen").data("placeholder","Select Frameworks...").chosen();
   $(".chosen").chosen({no_results_text: "Oops, nothing found!"});
   $('.chosen').chosen({allow_single_deselect: true,no_results_text: "لا يوجد نتائج!"});
-  $(function() {
-    $('#myForm').formset();
-})
+
 // Code adapted from http://djangosnippets.org/snippets/1389/
 function updateElementIndex(el, prefix, ndx) {
     var id_regex = new RegExp('(' + prefix + '-\\d+-)');

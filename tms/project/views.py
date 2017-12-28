@@ -4,6 +4,7 @@ from django.http import HttpResponse ,HttpResponseRedirect,Http404 ,HttpResponse
 from .models import *
 from .forms import *
 from tms.ldap import *
+# from django.contrib.auth import login
 from django.contrib.auth.views import *
 from django.utils.translation import ugettext as _
 from django.forms import formset_factory
@@ -13,7 +14,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 from django.core.urlresolvers import reverse
 from django.contrib import messages
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group ,User
 from django.contrib.auth.decorators import permission_required
 from django.views.generic import UpdateView, ListView
 from .filters import SheetFilter
@@ -24,21 +25,101 @@ from django.core.urlresolvers import resolve
 from simple_history.utils import update_change_reason
 from idlelib.debugobj import _object_browser
 from .timesheet import *
-from _datetime import date
+# from _datetime import date
 from django.forms.models import modelformset_factory
 
 
+def loginfromdrupal(request, email,signature,time):
+    from django.contrib.auth import login
+    import getpass
+    import datetime
+    """ Email function """
+    def decrypted(text):
+        from Crypto.Cipher import AES
+        from Crypto.Cipher import DES
+        import base64
+        AES.key_size=128
+        key = "5E712B225B5148E9"
+        iv = "55FE52A86C3ABWED"
+        crypt_object = AES.new(key=key,mode=AES.MODE_CBC,IV=iv)
+        original = text
+        plain = original.replace('-', "/")
+        decoded=base64.b64decode(plain) # your ecrypted and encoded text goes here
+        decrypted=crypt_object.decrypt(decoded)
+        decrypted = decrypted.decode("utf-8")
+        return decrypted
+    """" return mail"""
+    mail =decrypted(email)
+    """ return ip """
+    ip = 1
+    ip = decrypted(signature)
+    """ return time """
+    time = decrypted(time)
 
-class BaseSheetFormSet(BaseModelFormSet):
-    def clean(self):
-        if any(self.errors):
-            return
-        taskdesc = []
-        for form in self.forms:
-            taskdescs = form.cleaned_data['taskdescs']
-            if taskdescs in titles:
-                raise forms.ValidationError("Articles in a set must have distinct titles.")
-            titles.append(title)
+    now = datetime.datetime.now()
+    now_plus_10 = now + datetime.timedelta(minutes = 1)
+    time_now = now.strftime('%H:%M')
+    date_after_minute = now_plus_10.strftime('%H:%M')
+
+    """ Current ip """
+    current_ip = request.META.get('REMOTE_ADDR')
+    """" Get url from"""
+    URL = request.META.get('HTTP_REFERER')
+    referer = None
+    if URL:
+        referer= URL.split("/")[-3]
+    if referer == 'portal.stats.gov.sa':
+        if ip == "192..168.2.84":
+            if time == time_now or time == date_after_minute:
+                username = mail
+                try:
+                    user = User.objects.get(username=username)
+                    #manually set the backend attribute
+                    user.backend = 'django.contrib.auth.backends.ModelBackend'
+                    login(request, user)
+                except User.DoesNotExist:
+                    from django_auth_ldap.backend import LDAPBackend
+                    ldap_backend = LDAPBackend()
+                    ldap_backend.populate_user(username)
+                    # return HttpResponseRedirect(reverse('login'))
+                try:
+                    user = User.objects.get(username=username)
+                    #manually set the backend attribute
+                    user.backend = 'django.contrib.auth.backends.ModelBackend'
+                    login(request, user)
+                except User.DoesNotExist:
+                    return HttpResponseRedirect(reverse('login'))
+                if request.user.is_authenticated():
+                    email = request.user.email
+                    emp = Employee.objects.filter(email= email)
+                # Get all data filtered by user email and set in session
+                    for data in emp:
+                        request.session['EmpID'] = data.empid
+                        request.session['EmpName'] = data.empname
+                        request.session['DeptName'] = data.deptname
+                        request.session['Mobile'] = data.mobile
+                        request.session['DeptCode'] = data.deptcode
+                        request.session['JobTitle'] = data.jobtitle
+                        request.session['IsManager'] = data.ismanager
+                    if emp:
+                        if data.ismanager == 1:
+                            g = Group.objects.get(name='ismanager')
+                            g.user_set.add(request.user.id)
+                        else:
+                            g = Group.objects.get(name='employee')
+                            g.user_set.add(request.user.id)
+                    # if not emp:
+                    #     g = Group.objects.get(name='employee')
+                    #     g.user_set.add(request.user.id)
+                else:
+                    return HttpResponseRedirect(reverse('login'))
+    else:
+        return HttpResponseRedirect(reverse('login'))
+
+    logged = request.COOKIES.get('logged_in_status')
+    context = {'logged':logged, "mail":mail,"ip":ip,"time1":time,"URL":referer}
+    template = loader.get_template('project/index.html')
+    return HttpResponseRedirect(reverse('ns-project:index'))
 
 def myuser(request, *args, **kwargs):
     if request.method == "POST":
@@ -78,16 +159,6 @@ def myuser(request, *args, **kwargs):
 def index(request):
     # Populate User From Ldap Without Login
     from django_auth_ldap.backend import LDAPBackend
-    # ldapClient = ldap.initialize(AUTH_LDAP_SERVER_URI)
-    # ldapClient.set_option(ldap.OPT_REFERRALS, 2000)
-    # ldapClient.page_size = 10
-    # ldapClient.bind(AUTH_LDAP_BIND_DN, AUTH_LDAP_BIND_PASSWORD)
-    # ldapClient.result()
-    # results = ldapClient.search_s("OU=intranet,DC=stats,DC=gov,DC=sa",ldap.SCOPE_SUBTREE)
-    # results.sizelimit = 1500
-    # for result in results:
-    #   result_dn = result[0]
-    #   result_attrs = result[1]
     # ldap_backend = LDAPBackend()
     # ldap_backend.populate_user('aalbatil@stats.gov.sa')
     logged = request.COOKIES.get('logged_in_status')
@@ -315,14 +386,14 @@ def ProjectTask(request,pk,task_status=None):
 #         except :
 #                emp_object=None
 #                empDict.update({_task.assignedto: None})
-#         if  emp_object==None :      
+#         if  emp_object==None :
 #             try :
 #                 dpt_object=Department.objects.get(deptcode__exact=_task.departementid);
 #                 dptDict.update({_task.departementid: dpt_object.deptname})
 #             except :
 #                    dptDict.update({_task.assignedto: None})
-       
-     
+
+
     paginator = Paginator(task_list, 5) # Show 5 contacts per page
     page = request.GET.get('page')
     try:
@@ -346,7 +417,7 @@ def ProjectTask(request,pk,task_status=None):
 #           except :
 #                data.departementid=data.departementid
     #task_list =data
-    
+
     context = {'tasks':_plist,'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'empDict':empDict,'dptDict':dptDict}
     return render(request, 'project/tasks.html', context)
 
@@ -744,15 +815,15 @@ def updateTaskAssignto(request,pk,save=None):
 
         if form.is_valid():
             #id save == true then save form dta
-            if save !="False" : 
+            if save !="False" :
 
 #                 if  employee :
 #                     #int(form.cleaned_data['employee'].empid)
-#                   
+#
 #                     _obj.assignedto.empid= get_object_or_404(Employee,empid__exact=int(form.cleaned_data['employee'].empid))
 #                     _assign=form.cleaned_data['employee'].empname
-# 
-# 
+#
+#
 #                 elif departement :
 #                         _obj.departementid=get_object_or_404(Department,deptcode__exact= int(form.cleaned_data['departement'].deptcode))
 #                         _assign=form.cleaned_data['departement'].deptname
