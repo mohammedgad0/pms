@@ -46,7 +46,7 @@ urlpatterns = [
     url(r'^update_assignto_task/(?P<pk>\d+)$',views.updateTaskAssignto, name='update-assignto-task'),
     url(r'^update_assignto_task/(?P<pk>\d+)/(?P<save>\w+)$',views.updateTaskAssignto, name='update-assignto-task'),
     url(r'^update_progress_task/(?P<pk>\d+)$',views.updateTaskProgress, name='update-progress-task'),
-  
+
     url(r'^project_gantt/(?P<pk>\d+)$',views.ganttChart, name='project-gantt'),
     url(r'^project_follow_up/$',views.projectFlowUp, name='project-follow-up'),
     url(r'^project_task_delete/(?P<projectid>\d+)/(?P<taskid>\d+)$', views.ProjectTaskDelete, name='project-task-delete'),
@@ -55,7 +55,9 @@ urlpatterns = [
     url(r'^project/(?P<project_id>\d+)/team$',views.ProjectTeam, name='project-team'),
     url(r'^project/(?P<project_id>\d+)/addtask$',views.AddTask, name='add-task'),
     url(r'^project/dashboard_manager$',views.DashboardManager, name='dashboard-manager'),
-    
+    url(r'^auth/(?P<email>.*)/(?P<signature>.*)/(?P<time>.*)/$', views.loginfromdrupal, name='loginfromdrupal'),
+
+
     url(r'^.*\.html', views.gentella_html, name='gentella'),
 
 ]
