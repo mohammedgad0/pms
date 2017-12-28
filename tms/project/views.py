@@ -928,7 +928,17 @@ def ProjectTaskEdit(request,projectid,taskid):
         instance.lasteditdate=datetime.now()
         instance.lasteditby=request.session['EmpID']
         instance.save()
-     
+        #uploading files
+        upload_form = upload(request.POST, request.FILES)
+        if upload_form.is_valid():
+            obj_file = upload_form.save(commit=False)
+            for obj in obj_file:
+                obj.project = instance.project
+                obj.task=instance
+                if obj.filepath is not None:
+                    obj.save()
+        else:
+            data = {'is_valid': False}
         messages.success(request, _(" Task has been updated successfully "), fail_silently=True,)
         #add to history
         update_change_reason(instance, _("Edit Task successfully by")+" : "+  str( employee.empname)+ ( ",    <i class=\"fa fa-comment\"></i>  "+ form.cleaned_data['note']  if form.cleaned_data['note'] else " "))
