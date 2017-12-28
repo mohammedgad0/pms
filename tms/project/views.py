@@ -289,7 +289,7 @@ def ProjectDelete(request,pk):
     p= get_object_or_404(Project,pk=pk)
     emp_obj=Employee.objects.get(empid__exact=p.createdby)
     #get all attached files 
-    attached_files= Media.objects.filter(projectid__exact=p.id)
+    attached_files= Media.objects.filter(project__id__exact=p.id)
     if request.method == 'POST':
         #remove files from directory 
         for attached in attached_files :
@@ -937,6 +937,8 @@ def ProjectTaskEdit(request,projectid,taskid):
                 obj.task=instance
                 if obj.filepath is not None:
                     obj.save()
+                else:
+                     Media.objects.filter(task__id__exact=instance.id).delete()
         else:
             data = {'is_valid': False}
         messages.success(request, _(" Task has been updated successfully "), fail_silently=True,)
