@@ -400,7 +400,7 @@ def ProjectTask(request,pk,task_status=None):
          Q(project__id__exact=pk)&
          Q(createdby__exact=empid)|
          Q(assignedto__empid__exact = empid,project__id__exact=pk)
-         ).order_by('-id')
+         ).order_by('startdate')
 
     if task_status=="all":
          task_list= task_list
@@ -426,9 +426,9 @@ def ProjectTask(request,pk,task_status=None):
          task_list= task_list.filter(enddate__lt = datetime.today())
     elif task_status=="assignedtodept":
          task_list= task_list.filter(departement__exact= request.session['DeptCode'])
-    
+ 
      
-    paginator = Paginator(task_list, 5) # Show 5 contacts per page
+    paginator = Paginator(task_list,10) # Show 5 contacts per page
     page = request.GET.get('page')
     try:
         _plist = paginator.page(page)
@@ -670,8 +670,15 @@ def updateTaskPause(request,pk):
 
 @login_required
 def ganttChart(request,pk):
+    project_detail= get_object_or_404(Project,pk=pk)
+    tasks= Task.objects.filter(project__id__exact=pk).order_by('startdate')
+    project_list = Project.objects.all().filter(
+    Q(createdby__exact= request.session.get('EmpID'))|
+    Q(id__in = pk)
+    ).exclude(status=4).order_by('-id')
 
-    context={}
+    current_url ="ns-project:" + resolve(request.path_info).url_name
+    context={'tasks':tasks,'project_detail':project_detail,'project_list':project_list,'current_url':current_url}
     return render(request, 'project/project_ganttchart.html', context)
 
 @login_required
@@ -1114,4 +1121,24 @@ def Download(request,file_name):
     response['Content-Length'] = os.stat(file_path).st_size
     response['Content-Disposition'] = 'attachment; filename=%s' %file_name
     return response
+
+#gante chart
+# def Gantt (request):
+#     import plotly
+#     import plotly.plotly as py
+#     import plotly.figure_factory as ff
+#     plotly.tools.set_credentials_file(username='sakr', api_key='oMxV9JjsHDEsCHqmQgl7')
+#     
+#     df = [dict(Task="Job A", Start='2009-01-01', Finish='2009-02-28'),
+#           dict(Task="Job B", Start='2009-03-05', Finish='2009-04-15'),
+#           dict(Task="Job C", Start='2009-02-20', Finish='2009-05-30')]
+#     
+#     fig = ff.create_gantt(df)
+# #     d=py.plot(fig, filename='gantt-simple-gantt-chart', world_readable=True)
+#     context={'d':fig}
+#     return render(request, 'project/gantt.html', context)
+
+
+
+
 
