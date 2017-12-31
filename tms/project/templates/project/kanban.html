@@ -1,0 +1,129 @@
+
+{% extends "project/base_site.html" %}
+{% load i18n %}
+{% block title %} Plain Page {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+    <div class="right_col" role="main">
+      <div class="">
+       
+      <!-- top menu bar -->
+{% include "project/project_nave.html" %}
+
+
+
+     
+
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+     <div class="x_title">
+
+              <h2>{% trans "Knaban" %}  </h2>
+                 <div class="clearfix"></div>
+              </div>
+             
+                <div class="x_content">
+                          <div class="col-md-12 col-sm-12 col-xs-12">
+
+            
+
+<div class="col-md-2 col-sm-12 col-xs-12">
+<div>New</div>
+{% for task in new_tasks%}
+<div class="tile-stats p-kanban" style="color:#4b5e71;background-color: #e0e2e4;" >
+<div style="padding:10px;" ><span class="badge badge-success" style="margin-left: 5px;">{{task.status}} </span>{{task.name}} </div>
+ <div class="clearfix" style="border-bottom: #e4e4e4 solid 1px;"></div>
+<div style="padding:10px;" ><div class="task_number" style="padding:1px;">{{ task.id}}</div><i class="fa fa-hand-o-left text-default" title="مهام مسندة لى  "></i> {{ task.assignedto.empname}}{{task.assignto.empname}}{{task.departement.name}} </div>
+</div>
+{% endfor %}
+</div>
+
+<div class="col-md-2 col-sm-12 col-xs-12">
+<div>Inprogress</div>
+{% for task in inprogress_tasks%}
+<div class="tile-stats p-kanban" style="color:#4b5e71;background-color: #e0e2e4;" >
+<div style="padding:10px;" ><span class="badge badge-success" style="margin-left: 5px;">{{task.status}} </span>{{task.name}} </div>
+ <div class="clearfix" style="border-bottom: #e4e4e4 solid 1px;"></div>
+<div style="padding:10px;" ><div class="task_number" style="padding:1px;">{{ task.id}}</div><i class="fa fa-hand-o-left text-default" title="مهام مسندة لى  "></i> {{ task.assignedto.empname}}{{task.assignto.empname}}{{task.departement.name}} </div>
+</div>
+
+
+
+{% endfor %}
+</div>
+
+<div class="col-md-2 col-sm-12 col-xs-12">
+<div>Done</div>
+{% for task in inprogress_tasks%}
+<div class="tile-stats" style="color:#4b5e71;background-color: #e0e2e4;" >
+<div style="padding:10px;" ><span class="badge badge-success" style="margin-left: 5px;">{{task.status}} </span>{{task.name}} </div>
+ <div class="clearfix" style="border-bottom: #e4e4e4 solid 1px;"></div>
+<div style="padding:10px;" ><div class="task_number" style="padding:1px;">{{ task.id}}</div><i class="fa fa-hand-o-left text-default" title="مهام مسندة لى  "></i> {{ task.assignedto.empname}}{{task.assignto.empname}}{{task.departement.name}} </div>
+</div>
+{% endfor %}
+</div>
+
+
+<div class="col-md-2 col-sm-12 col-xs-12">
+<div>Hold</div>
+{% for task in inprogress_tasks%}
+<div class="tile-stats" style="color:#4b5e71;background-color: #e0e2e4;" >
+<div style="padding:10px;" ><span class="badge badge-success" style="margin-left: 5px;">{{task.status}} </span>{{task.name}} </div>
+ <div class="clearfix" style="border-bottom: #e4e4e4 solid 1px;"></div>
+<div style="padding:10px;" ><div class="task_number" style="padding:1px;">{{ task.id}}</div><i class="fa fa-hand-o-left text-default" title="مهام مسندة لى  "></i> {{ task.assignedto.empname}}{{task.assignto.empname}}{{task.departement.name}} </div>
+</div>
+{% endfor %}
+</div>
+
+
+<div class="col-md-2 col-sm-12 col-xs-12">
+<div>Cancelled</div>
+{% for task in inprogress_tasks%}
+<div class="tile-stats" style="color:#4b5e71;background-color: #e0e2e4;" >
+<div style="padding:10px;" ><span class="badge badge-success" style="margin-left: 5px;">{{task.status}} </span>{{task.name}} </div>
+ <div class="clearfix" style="border-bottom: #e4e4e4 solid 1px;"></div>
+<div style="padding:10px;" ><div class="task_number" style="padding:1px;">{{ task.id}}</div><i class="fa fa-hand-o-left text-default" title="مهام مسندة لى  "></i> {{ task.assignedto.empname}}{{task.assignto.empname}}{{task.departement.name}} </div>
+</div>
+{% endfor %}
+</div>
+
+
+<div class="col-md-2 col-sm-12 col-xs-12">
+<div>Closed</div>
+{% for task in inprogress_tasks%}
+<div class="tile-stats" style="color:#4b5e71;background-color: #e0e2e4;" >
+<div style="padding:10px;" ><span class="badge badge-success" style="margin-left: 5px;">{{task.status}} </span>{{task.name}} </div>
+ <div class="clearfix" style="border-bottom: #e4e4e4 solid 1px;"></div>
+<div style="padding:10px;" ><div class="task_number" style="padding:1px;">{{ task.id}}</div><i class="fa fa-hand-o-left text-default" title="مهام مسندة لى  "></i> {{ task.assignedto.empname}}{{task.assignto.empname}}{{task.departement.name}} </div>
+</div>
+
+{% endfor %}
+</div>
+
+
+               
+            </div>
+            
+       </div>
+       
+        </div>
+      </div>
+    </div>
+    
+    
+      </div>
+</div>
+
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+  
+  
+{% endblock javascripts %}
+
