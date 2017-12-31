@@ -1128,13 +1128,17 @@ def Kanban (request,pk):
     tasks= Task.objects.filter(project__id__exact=pk).order_by('startdate')
     new_tasks=tasks.filter(status__exact="New")
     inprogress_tasks=tasks.filter(status__exact="Inprogress")
+    done_tasks=tasks.filter(status__exact="Done")
+    hold_tasks=tasks.filter(status__exact="Hold")
+    cancelled_tasks=tasks.filter(status__exact="Cancelled")
+    closed_tasks=tasks.filter(status__exact="Closed")
     project_list = Project.objects.all().filter(
     Q(createdby__exact= request.session.get('EmpID'))|
     Q(id__in = pk)
     ).exclude(status=4).order_by('-id')
     
     current_url ="ns-project:" + resolve(request.path_info).url_name
-    context={'tasks':tasks,'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'new_tasks':new_tasks,'inprogress_tasks':inprogress_tasks}
+    context={'tasks':tasks,'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'new_tasks':new_tasks,'inprogress_tasks':inprogress_tasks,'done_tasks':done_tasks,'hold_tasks':hold_tasks,'cancelled_tasks':cancelled_tasks,'closed_tasks':closed_tasks}
     return render(request, 'project/kanban.html', context)
 
 

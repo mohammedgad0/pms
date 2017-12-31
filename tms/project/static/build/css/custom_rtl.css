@@ -5177,4 +5177,5 @@ legend {
     margin: 0 0px 5px 0;
     min-width: 30px;
 }
-.p-kanban{}
+.p-kanban{ background-color: #ffffff;color:#4b5e71;}
+.task-card{box-shadow: 2px 2px 2px #eee;}
