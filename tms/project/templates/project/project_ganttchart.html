@@ -61,7 +61,7 @@ from pygments import style
         dataTable.addColumn({ type: 'date', id: 'End' });
         dataTable.addRows([
             {% for task in tasks %}
-          [ '{{task.name}}',null,createCustomHTMLContent('{{task.name}}','{{ task.startdate|date:"Y/m/d"  }}','{{ task.enddate|date:"Y/m/d"  }}','{{ task.startdate|timesince:task.enddate }}','{{task.progress}}'),  new Date( {{ task.startdate|date:"Y , m-1 ,d"  }}),new Date({{ task.enddate|date:"Y , m-1 ,d"  }}) ],
+          [ '{{task.name}}',' {{task.progress}}%- {{ task.startdate|date:"Y/m/d"  }}',createCustomHTMLContent('{{task.name}}','{{ task.startdate|date:"Y/m/d"  }}','{{ task.enddate|date:"Y/m/d"  }}','{{ task.startdate|timesince:task.enddate }}','{{task.progress}}'),  new Date( {{ task.startdate|date:"Y , m-1 ,d"  }}),new Date({{ task.enddate|date:"Y , m-1 ,d"  }}) ],
      {% endfor %}
                          ]);
 
@@ -89,6 +89,9 @@ from pygments import style
   
   </body>
 </html>
+
+</div>
+</div>
 {% endblock content %}
 
 {% block javascripts %}

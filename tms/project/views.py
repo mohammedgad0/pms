@@ -1122,21 +1122,20 @@ def Download(request,file_name):
     response['Content-Disposition'] = 'attachment; filename=%s' %file_name
     return response
 
-#gante chart
-# def Gantt (request):
-#     import plotly
-#     import plotly.plotly as py
-#     import plotly.figure_factory as ff
-#     plotly.tools.set_credentials_file(username='sakr', api_key='oMxV9JjsHDEsCHqmQgl7')
-#     
-#     df = [dict(Task="Job A", Start='2009-01-01', Finish='2009-02-28'),
-#           dict(Task="Job B", Start='2009-03-05', Finish='2009-04-15'),
-#           dict(Task="Job C", Start='2009-02-20', Finish='2009-05-30')]
-#     
-#     fig = ff.create_gantt(df)
-# #     d=py.plot(fig, filename='gantt-simple-gantt-chart', world_readable=True)
-#     context={'d':fig}
-#     return render(request, 'project/gantt.html', context)
+#kanban view
+def Kanban (request,pk):
+    project_detail= get_object_or_404(Project,pk=pk)
+    tasks= Task.objects.filter(project__id__exact=pk).order_by('startdate')
+    new_tasks=tasks.filter(status__exact="New")
+    inprogress_tasks=tasks.filter(status__exact="Inprogress")
+    project_list = Project.objects.all().filter(
+    Q(createdby__exact= request.session.get('EmpID'))|
+    Q(id__in = pk)
+    ).exclude(status=4).order_by('-id')
+    
+    current_url ="ns-project:" + resolve(request.path_info).url_name
+    context={'tasks':tasks,'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'new_tasks':new_tasks,'inprogress_tasks':inprogress_tasks}
+    return render(request, 'project/kanban.html', context)
 
 
 

@@ -68,7 +68,8 @@
                            <a href="{% url 'ns-project:add-task' project_detail.id  %}" class="float-left" style="float:left"> <button type="button" class="btn btn-primary btn-md">  <i class="fa fa-plus"></i>  {{ _('Ad Task') }} </button></a>
                        
                         {% endif %}
-                     <a href="{% url 'ns-project:project-gantt' project_detail.id  %}" class="float-left" style="float:left"> <button type="button" class="btn btn-primary btn-md">  <i class="fa fa-calendar"></i>  {{ _('Gantt Chart') }} </button></a>
+                        <a href="{% url 'ns-project:kanban' project_detail.id  %}" class="float-left" style="float:left"> <button type="button" class="btn btn-primary btn-md">  <i class="fa fa-th"></i>  {{ _('Kanban') }} </button></a>                
+                        <a href="{% url 'ns-project:project-gantt' project_detail.id  %}" class="float-left" style="float:left"> <button type="button" class="btn btn-primary btn-md">  <i class="fa fa-calendar"></i>  {{ _('Gantt Chart') }} </button></a>
  </ul>
                      </div>
                      
