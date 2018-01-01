@@ -196,6 +196,8 @@ def AddProject(request):
             project_obj.status=status_obj
             project_obj.createdby=request.session.get('EmpID', '1056821208')
             project_obj.createddate= datetime.now()
+            # if project_obj.end < project_obj.start:
+            #     raise ValidationError(_('Invalid date - end date less than start date'))
             #save to database
             project_obj.save()
              #uploading files
@@ -298,7 +300,7 @@ def ProjectDetail(request,pk):
     project_detail= get_object_or_404(Project,pk=pk)
     EmpID=request.session.get('EmpID')
     tasks_list = Task.objects.filter(project__exact = pk)
-    #get all attached files 
+    #get all attached files
     attached_files= Media.objects.filter(project__id__exact=pk, task__id__exact=None)
 
     allTakProgress = 0
@@ -328,7 +330,7 @@ def ProjectEdit(request,pk):
     # upload file form
     upload = modelformset_factory(Media,form=UploadFile,extra = 1)
     FormSet = upload(queryset=Media.objects.filter(project_id__exact=pk).exclude(Q(filepath__exact=None)| Q(filepath__exact='')))
-    
+
     instance = get_object_or_404(Project,pk=pk)
     form = ProjectForm(request.POST or None, instance=instance)
     if form.is_valid():
@@ -362,13 +364,13 @@ def ProjectDelete(request,pk):
     #get all attached files
     attached_files= Media.objects.filter(project__id__exact=p.id)
     if request.method == 'POST':
-        #remove files from directory 
+        #remove files from directory
         for attached in attached_files :
             os.remove(os.path.join(settings.BASE_DIR, 'media/')+str(attached.filepath))
-          
+
          #delete attached files related to project and tasks
         Media.objects.filter(projectid__exact=p.id).delete()
-         #delete project object and related tasks 
+         #delete project object and related tasks
         Project.objects.filter(id=p.id).delete()
         messages.success(request, _("Project has deleted successfully"), fail_silently=True,)
         return HttpResponseRedirect(reverse('ns-project:project-list'))
@@ -426,8 +428,8 @@ def ProjectTask(request,pk,task_status=None):
          task_list= task_list.filter(enddate__lt = datetime.today())
     elif task_status=="assignedtodept":
          task_list= task_list.filter(departement__exact= request.session['DeptCode'])
- 
-     
+
+
     paginator = Paginator(task_list,10) # Show 5 contacts per page
     page = request.GET.get('page')
     try:
@@ -439,7 +441,7 @@ def ProjectTask(request,pk,task_status=None):
         # If page is out of range (e.g. 9999), deliver last page of results.
         _plist = paginator.page(paginator.num_pages)
 
-    
+
     context = {'tasks':_plist,'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'empDict':empDict,'dptDict':dptDict}
     return render(request, 'project/tasks.html', context)
 
@@ -764,10 +766,10 @@ def AddTask(request,project_id):
             Task_obj.createddate = datetime.now()
             Task_obj.progress = 0
             if assignto_employee:
-                Task_obj.assignedto =get_object_or_404(Employee,empid_exact=assignto_employee)  
+                Task_obj.assignedto =get_object_or_404(Employee,empid_exact=assignto_employee)
                 Task_obj.assigneddate = datetime.now()
             if assignto_department:
-                Task_obj.departement = get_object_or_404(Department,deptcode_exact=assignto_department)  
+                Task_obj.departement = get_object_or_404(Department,deptcode_exact=assignto_department)
                 Task_obj.assigneddate = datetime.now()
             Task_obj.save()
             #uploading files
@@ -797,7 +799,7 @@ def AddTask(request,project_id):
     else:
         data['form_is_valid'] = False
         data['errors'] = errors.append(form.errors)
-        
+
 
     context ={'upload_file':FormSet, 'form':form,'action_name':'Add Task','errors':errors}
     return render (request,'project/add_task.html', context)
@@ -811,7 +813,7 @@ def ProjectTaskDelete(request,projectid,taskid):
               Task.objects.filter(id=task.id).delete()
               messages.success(request, _("Task has been deleted successfully"), fail_silently=True,)
               return HttpResponseRedirect(reverse('ns-project:project-task', kwargs={'pk':project.id} ))
- 
+
     context={'task':task,'project':project,'employee':employee}
     return render(request, 'project/project_task_delete.html', context)
 
@@ -846,19 +848,19 @@ def updateTaskAssignto(request,pk,save=None):
 
         if form.is_valid():
             #id save == true then save form dta
-            if save !="False" : 
+            if save !="False" :
                  if  employee :
-                    _emp_obj=Employee.objects.get(empid__exact= int(form.cleaned_data['employee'].empid)) 
-                    _obj.assignedto=_emp_obj 
+                    _emp_obj=Employee.objects.get(empid__exact= int(form.cleaned_data['employee'].empid))
+                    _obj.assignedto=_emp_obj
                     _assign=form.cleaned_data['employee'].empname
                     _obj.departement=Department.objects.get(deptcode__exact= _emp_obj.deptcode)
 
                  elif departement :
-                    _dpt_obj=Department.objects.get(deptcode__exact= int(form.cleaned_data['departement'].deptcode)) 
+                    _dpt_obj=Department.objects.get(deptcode__exact= int(form.cleaned_data['departement'].deptcode))
                     _obj.departement=_dpt_obj
                     _assign=form.cleaned_data['departement'].deptname
                     _obj.assignedto=None
-                        
+
                  _obj.cancelleddate=None
                  _obj.cancelledby=None
                  _obj.closeddate=None
@@ -930,11 +932,11 @@ def ProjectTaskEdit(request,projectid,taskid):
     project_detail= get_object_or_404(Project,pk=projectid)
     task_detail= get_object_or_404(Task,pk=taskid)
     form = EditTaskForm(request.POST or None, instance=task_detail)
-    
+
     # upload file form
     upload = modelformset_factory(Media,form=UploadFile,extra = 1,can_delete=True)
     FormSet = upload(queryset=Media.objects.filter(project_id__exact=projectid,task__id__exact=taskid).exclude(Q(filepath__exact=None)| Q(filepath__exact='')))
-    
+
     try:
         form.fields["assigned_to"].initial=task_detail.assignedto.empid
     except:
@@ -943,7 +945,7 @@ def ProjectTaskEdit(request,projectid,taskid):
         form.fields["assigned_to"].initial=task_detail.departement.deptcode
     except:
         pass
-    
+
     # for use in futrure
     #form.fields["createdby"].queryset = Employee.objects.filter(deptcode = request.session['DeptCode'])
     #form.fields["createdby"].initial=task_detail.createdby
@@ -991,9 +993,9 @@ def ProjectTaskEdit(request,projectid,taskid):
         if form.cleaned_data['status']=="Closed":
             instance.closeddate=datetime.now()
             instance.closeby=request.session['EmpID']
-        
+
         #check if user select employee or dept or do nothing
-        
+
         try:
             instance.assignedto= Employee.objects.get(empid__exact= int(form.cleaned_data['assigned_to']))
         except:
@@ -1002,7 +1004,7 @@ def ProjectTaskEdit(request,projectid,taskid):
             instance.departement= Department.objects.get(deptcode__exact= int(form.cleaned_data['assigned_to']))
         except:
             instance.departement=None
-        
+
         instance.lasteditdate=datetime.now()
         instance.lasteditby=request.session['EmpID']
         instance.save()
@@ -1106,13 +1108,13 @@ def DashboardManager(request):
     context = {}
     return render(request, 'project/dashboard_manager.html', context)
 
-#download attached file from media             
+#download attached file from media
 def Download(request,file_name):
     from wsgiref.util import FileWrapper
     import mimetypes
     import os
     import django.utils.encoding
-    
+
     file_path = settings.MEDIA_ROOT +'/'+ file_name
     file_wrapper = FileWrapper(open(file_path,'rb'))
     file_mimetype = mimetypes.guess_type(file_path)
@@ -1136,12 +1138,7 @@ def Kanban (request,pk):
     Q(createdby__exact= request.session.get('EmpID'))|
     Q(id__in = pk)
     ).exclude(status=4).order_by('-id')
-    
+
     current_url ="ns-project:" + resolve(request.path_info).url_name
     context={'tasks':tasks,'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'new_tasks':new_tasks,'inprogress_tasks':inprogress_tasks,'done_tasks':done_tasks,'hold_tasks':hold_tasks,'cancelled_tasks':cancelled_tasks,'closed_tasks':closed_tasks}
     return render(request, 'project/kanban.html', context)
-
-
-
-
-

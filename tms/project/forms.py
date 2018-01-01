@@ -54,11 +54,14 @@ class SheetForm(ModelForm):
 class ProjectForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProjectForm, self).__init__(*args, **kwargs)
+
         self.fields['status'].empty_label = None
         self.fields['name'].widget.attrs['maxlength'] =255
+
     class Meta:
         model = Project
         fields = ['name','start','status','end','desc']
+
        # status = models.ForeignKey(ProjectStatus, widget=forms.Select({'class': 'form-control','placeholder':'task'}) )
         widgets = {
             'name':TextInput(attrs={'class': 'form-control','placeholder':_('Project Name'),'required': True}),
@@ -96,7 +99,14 @@ class ProjectForm(ModelForm):
              },
 
         }
-
+    def clean(self):
+        cleaned_data = super().clean()
+        end = cleaned_data.get("end")
+        start = cleaned_data.get("start")
+        #Check end date less than start date
+        if end < start:
+            msg = _("End date is less than start date")
+            self.add_error('end', msg)
 class EmployeeList(ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.empname
@@ -150,7 +160,14 @@ class AddTaskForm(ModelForm):
              },
 
         }
-
+    def clean(self):
+        cleaned_data = super().clean()
+        enddate = cleaned_data.get("enddate")
+        startdate = cleaned_data.get("startdate")
+        #Check end date less than start date
+        if enddate < startdate:
+            msg = _("End date is less than start date")
+            self.add_error('enddate', msg)
 
 class EditTaskForm(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -207,6 +224,14 @@ class EditTaskForm(ModelForm):
              },
 
         }
+    def clean(self):
+        cleaned_data = super().clean()
+        enddate = cleaned_data.get("enddate")
+        startdate = cleaned_data.get("startdate")
+        #Check end date less than start date
+        if enddate < startdate:
+            msg = _("End date is less than start date")
+            self.add_error('enddate', msg)
 
 class TaskStartForm(forms.Form):
        rsd = forms.DateField(label=_("Real Start Date"),
@@ -244,7 +269,7 @@ class TaskProgressForm(ModelForm):
                     'MaxValueValidator': _("The Task's Pogress is over rang 100."),
                     'MinValueValidator': _("Task's name is less than 0."),
              },
-    
+
 
         }
 
