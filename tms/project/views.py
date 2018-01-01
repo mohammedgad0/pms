@@ -1141,14 +1141,18 @@ def Kanban (request,pk):
     return render(request, 'project/kanban.html', context)
 
 #test email
-def senmail() :
+def senmail(request) :
     send_mail(
     'Subject here',
     'Here is the message.',
     'sakr@stats.gov.sa',
     ['sakr@stats.gov.sa'],
     fail_silently=False,
+    
 )
+    context={}
+    return render(request, 'project/plain_page.html', context)
+
 
 
 

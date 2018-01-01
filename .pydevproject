@@ -5,6 +5,8 @@
 <pydev_variables_property name="org.python.pydev.PROJECT_VARIABLE_SUBSTITUTION">
 <key>DJANGO_MANAGE_LOCATION</key>
 <value>tms/manage.py</value>
+<key>DJANGO_SETTINGS_MODULE</key>
+<value>tms/tms/settings</value>
 <key>PY</key>
 <value>36</value>
 </pydev_variables_property>
