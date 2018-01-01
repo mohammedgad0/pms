@@ -446,7 +446,8 @@ def ProjectTask(request,pk,task_status=None):
 def ProjectTaskDetail(request,projectid,taskid):
     assignToEmp=None
     assignToDept=None
-
+    #get all attached files 
+    attached_files= Media.objects.filter(project__id__exact=projectid, task__id__exact=taskid)
     createdBy=request.session['EmpID']
     project_list= Project.objects.all().filter(createdby__exact=createdBy).exclude(status=4).order_by('-id')
     current_url ="ns-project:project-task"
@@ -487,6 +488,7 @@ def ProjectTaskDetail(request,projectid,taskid):
                'cancelledby':cancelledby,
                'closedby':closedby,
                'history':history,
+               'attached_files':attached_files
                }
     return render(request, 'project/project_task_detail.html', context)
 

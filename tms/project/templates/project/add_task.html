@@ -79,18 +79,7 @@
                        </div>
                            {# <span class="input-group-btn"><button class="delete btn btn-danger remove-form-row"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button></span> #}
                          </div>
-                        <!-- <div class="form-group item">
-                          <div class=" col-md-6">
-                            {{form.id}}
-                            {{form.filename.label_tag}}
-                           {{ form.filename|add_class:"form-control"}}
-                          </div>
-                           <div class=" col-md-6">
-                             {{form.filepath.label_tag}}
-                            {{ form.filepath|add_class:"upload"}}
-                           </div>
 
-                        </div> -->
                         {% endfor%}
                         <div class="col-md-12">
                         <span id="add" class="input-group-btn"><button class="btn btn-success add-form-row"><span class="glyphicon glyphicon-plus" aria-hidden="true" style="margin-left:5px;"></span>{{_('add new file')}}</button></span>
@@ -307,18 +296,7 @@ $(".delete").click(function () {
      }
      return false;
  }
- /*
- $(document).on('click', '.add-form-row', function(e){
-     e.preventDefault();
-     cloneMore('.form-row:last', 'form');
-     return false;
- });
- $(document).on('click', '.remove-form-row', function(e){
-     e.preventDefault();
-     deleteForm('form', $(this));
-     return false;
- });
- */
+
 </script>
 
 {% endblock javascripts %}

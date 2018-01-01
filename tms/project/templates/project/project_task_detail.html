@@ -105,7 +105,14 @@
         <legend>{{ _('Attachment')}}</legend>
       
          <ul class="list-unstyled project_files">
-                      <li><a href=""><i class="fa fa-file-word-o"></i> Functional-requirements.docx</a>
+            {% for attach in attached_files%}
+                        <li>
+                        {% if attach.filepath  %}
+                        <a href="{% url 'ns-project:download' attach.filepath %}" style="text-decoration: underline;"> <span style="margin-left:5px;">{{attach.filename}} </span> {{attach.filepath}} </a>
+                        {% endif %}
+                        {# name, ext = os.path.splitext('file.txt')  #}
+                        {%endfor%}
+               <!--<li><a href=""><i class="fa fa-file-word-o"></i> Functional-requirements.docx</a>
                       </li>
                       <li><a href=""><i class="fa fa-file-pdf-o"></i> UAT.pdf</a>
                       </li>
@@ -114,7 +121,7 @@
                       <li><a href=""><i class="fa fa-picture-o"></i> Logo.png</a>
                       </li>
                       <li><a href=""><i class="fa fa-file-word-o"></i> Contract-10_12_2014.docx</a>
-                      </li>
+                      </li> -->
                     </ul>
         
       </fieldset>

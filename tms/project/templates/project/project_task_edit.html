@@ -77,12 +77,11 @@
 
 
 
-<!--  attachmenet -->
- {{ upload_file.management_form }}
-<fieldset class="fieldset_normal">
-        <legend>{{ _('Attachment')}}</legend>
-
- {% for form in upload_file%}
+ <!--  attachmenet -->
+                         {{ upload_file.management_form }}
+                         <fieldset>
+                            <legend> {% trans "Attached files " %}</legend>
+                         {% for form in upload_file%}
                          <div class="item form-group">
                            <div class="col-md-6">
                            {{form.id}}
@@ -95,9 +94,12 @@
                        </div>
                            {# <span class="input-group-btn"><button class="delete btn btn-danger remove-form-row"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button></span> #}
                          </div>
-                        {% endfor%}
 
-      </fieldset>
+                        {% endfor%}
+                        <div class="col-md-12">
+                        <span id="add" class="input-group-btn"><button class="btn btn-success add-form-row"><span class="glyphicon glyphicon-plus" aria-hidden="true" style="margin-left:5px;"></span>{{_('add new file')}}</button></span>
+</div>
+                        </fieldset>
 
 
 
@@ -120,11 +122,10 @@
       <!--  save and return control -->
  <div class="form-group">
   {% if  request.META.HTTP_REFERER ==  request.build_absolute_uri or request.META.HTTP_REFERER == None   %}
-     <a href="{% url 'ns-project:project-task-detail' project_detail.id task.id %}" >  <button type="button" class="btn btn-primary">{{ _('Back')}}</button></a>
-                {%else%}
-                 <a href="{{request.META.HTTP_REFERER}}" >  <button type="button" class="btn btn-primary"><i class="fa fa-angle-double-right"></i> {{ _('Back')}}</button></a>
-
-{%endif%}
+   <a href="{% url 'ns-project:project-task-detail' project_detail.id task.id %}" >  <button type="button" class="btn btn-primary">{{ _('Back')}}</button></a>
+    {%else%}
+     <a href="{{request.META.HTTP_REFERER}}" >  <button type="button" class="btn btn-primary"><i class="fa fa-angle-double-right"></i> {{ _('Back')}}</button></a>
+     {%endif%}
       <button type="submit" class="btn btn-success">    <i class="fa fa-save"></i>  {{_('Save Changes')}}</button>
         </div>
 
@@ -344,6 +345,120 @@ $("#modal-task").on("submit", ".update-assignto-task-form", saveForm);
   }, function(start, end, label) {
 
   });
+//Code adapted from http://djangosnippets.org/snippets/1389/
+function updateElementIndex(el, prefix, ndx) {
+   var id_regex = new RegExp('(' + prefix + '-\\d+-)');
+   var replacement = prefix + '-' + ndx + '-';
+   if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex,
+   replacement));
+   if (el.id) el.id = el.id.replace(id_regex, replacement);
+   if (el.name) el.name = el.name.replace(id_regex, replacement);
+}
+
+function deleteForm(btn, prefix) {
+   var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+   if (formCount > 1) {
+       // Delete the item/form
+       $(btn).parents('.item').remove();
+       var forms = $('.item'); // Get all the forms
+       // Update the total number of forms (1 less than before)
+       $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
+       var i = 0;
+       // Go through the forms and set their indices, names and IDs
+       for (formCount = forms.length; i < formCount; i++) {
+           $(forms.get(i)).children().children().each(function () {
+               if ($(this).attr('type') == 'text') updateElementIndex(this, prefix, i);
+           });
+       }
+   } // End if
+   else {
+       alert("You have to enter at least one todo item!");
+   }
+   return false;
+}
+
+function addForm(btn, prefix) {
+   var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+   // You can only submit a maximum of 10 todo items
+   if (formCount < 10) {
+       // Clone a form (without event handlers) from the first form
+       var row = $(".item:first").clone(false).get(0);
+       // Insert it after the last form
+       $(row).removeAttr('id').hide().insertAfter(".item:last").slideDown(300);
+
+       // Remove the bits we don't want in the new row/form
+       // e.g. error messages
+       $(".errorlist", row).remove();
+       $(row).children().removeClass("error");
+
+       // Relabel or rename all the relevant bits
+       $(row).children().children().each(function () {
+           updateElementIndex(this, prefix, formCount);
+           $(this).val("");
+       });
+
+       // Add an event handler for the delete item/form link
+       $(row).find(".delete").click(function () {
+           return deleteForm(this, prefix);
+       });
+       // Update the total form count
+       $("#id_" + prefix + "-TOTAL_FORMS").val(formCount + 1);
+   } // End if
+   else {
+       alert("Sorry, you can only enter a maximum of ten items.");
+   }
+   return false;
+}
+//Register the click event handlers
+$("#add").click(function () {
+   return addForm(this, "form");
+});
+
+$(".delete").click(function () {
+   return deleteForm(this, "form");
+});
+
+
+function updateElementIndex(el, prefix, ndx) {
+    var id_regex = new RegExp('(' + prefix + '-\\d+)');
+    var replacement = prefix + '-' + ndx;
+    if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex, replacement));
+    if (el.id) el.id = el.id.replace(id_regex, replacement);
+    if (el.name) el.name = el.name.replace(id_regex, replacement);
+}
+function cloneMore(selector, prefix) {
+    var newElement = $(selector).clone(true);
+    var total = $('#id_' + prefix + '-TOTAL_FORMS').val();
+    newElement.find(':input').each(function() {
+        var name = $(this).attr('name').replace('-' + (total-1) + '-', '-' + total + '-');
+        var id = 'id_' + name;
+        $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+    });
+    total++;
+    $('#id_' + prefix + '-TOTAL_FORMS').val(total);
+    $(selector).after(newElement);
+    var conditionRow = $('.form-row:not(:last)');
+    conditionRow.find('.btn.add-form-row')
+    .removeClass('btn-success').addClass('btn-danger')
+    .removeClass('add-form-row').addClass('remove-form-row')
+    .html('<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>');
+    return false;
+}
+function deleteForm(prefix, btn) {
+    var total = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+    if (total > 1){
+        btn.closest('.form-row').remove();
+        var forms = $('.form-row');
+        $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
+        for (var i=0, formCount=forms.length; i<formCount; i++) {
+            $(forms.get(i)).find(':input').each(function() {
+                updateElementIndex(this, prefix, i);
+            });
+        }
+    }
+    return false;
+}
+
   </script>
 
 {% endblock javascripts %}
