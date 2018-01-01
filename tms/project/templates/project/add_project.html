@@ -23,7 +23,7 @@
         <div class="col-md-12">
           <div class="x_panel">
           <div class="x_title">
-              <h3>{{ action_name }}</h3>  
+              <h3>{{ action_name }}</h3>
               <ul class="nav navbar-right panel_toolbox">
 
               </ul>
@@ -46,26 +46,27 @@
                {{form.name}}
                </div>
                </div>
-               
+
                <div class="form-group">
               <div class=" col-md-4">
               {{form.start.label_tag}}
                {{form.start}}
                 <span class="fa fa-calendar-o form-control-feedback left" style="margin-top:25px;" aria-hidden="true"></span>
                </div>
-               
+
                <div class=" col-md-4">
                 {{form.end.label_tag}}
                {{form.end}}
+            
                 <span class="fa fa-calendar-o form-control-feedback left" style="margin-top:25px;" aria-hidden="true"></span>
                </div>
-               
+
                  <div class=" col-md-4">
                 {{form.status.label_tag}}
                {{form.status}}
                </div>
                </div>
-               
+
              <div class="form-group">
               <div class="col-md-12">
               {{form.desc.label_tag}}
@@ -91,13 +92,13 @@
                        </div>
                            {# <span class="input-group-btn"><button class="delete btn btn-danger remove-form-row"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button></span> #}
                          </div>
-                
+
                         {% endfor%}
                           <div class="col-md-12">
                         <span id="add" class="input-group-btn"><button class="btn btn-success add-form-row"><span class="glyphicon glyphicon-plus" aria-hidden="true" style="margin-left:5px;"></span>{{_('add new file')}}</button></span>
 </div>
                         </fieldset>
-              
+
               </div>
               </div>
      <div class="form-group text-danger">
@@ -106,10 +107,10 @@
     {{ form.desc.errors }}
     {{ form.start.errors}}
     {{ form.end.errors  }}
-   
+
     </div>
 </div>
-               
+
 
                 <div class="form-group">
                  <div class="ln_solid"></div>
@@ -127,15 +128,15 @@
 <!--  {{ form.as_p }} -->
 
 
-   
-    
-    
+
+
+
     <!--  {{ form.start.label_tag }} -->
 
-    
 
 
-     
+
+
 </form>
 
 
@@ -146,13 +147,13 @@
       </div>
     </div>
   </div>
-  
-  
+
+
 {% endblock content %}
 
 {% block javascripts %}
   {{ block.super }}
-  
+
     <script>
   $('#single_cal_1').daterangepicker({
       singleDatePicker: true,
@@ -161,9 +162,9 @@
             format: 'YYYY-MM-DD'
         },
   }, function(start, end, label) {
-     
+
   });
-  
+
   $('#single_cal_2').daterangepicker({
       autoUpdateInput: true,
       singleDatePicker: true,
@@ -173,10 +174,10 @@
             language: 'ar-EG',
         },
   }, function(start, end, label) {
-    
+
   });
-  
-  
+
+
 //Register the click event handlers
 $("#add").click(function (e) {
    e.preventDefault();
@@ -221,8 +222,8 @@ function updateElementIndex(el, prefix, ndx) {
     if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex, replacement));
     if (el.id) el.id = el.id.replace(id_regex, replacement);
     if (el.name) el.name = el.name.replace(id_regex, replacement);
-}  
-  
+}
+
   </script>
-  
+
 {% endblock javascripts %}
