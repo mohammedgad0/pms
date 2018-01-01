@@ -60,6 +60,7 @@ urlpatterns = [
     
 
     url(r'^download/(?P<file_name>.+)$', views.Download, name='download'),
+    url(r'^email/$', views.senmail, name='email'),
 
 
     url(r'^.*\.html', views.gentella_html, name='gentella'),

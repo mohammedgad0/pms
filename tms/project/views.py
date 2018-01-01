@@ -25,10 +25,9 @@ from django.core.urlresolvers import resolve
 from simple_history.utils import update_change_reason
 from idlelib.debugobj import _object_browser
 from .timesheet import *
-# from _datetime import date
 from django.forms.models import modelformset_factory
 from unittest.case import expectedFailure
-
+from django.core.mail import send_mail
 
 def loginfromdrupal(request, email,signature,time):
     from django.contrib.auth import login
@@ -369,7 +368,7 @@ def ProjectDelete(request,pk):
             os.remove(os.path.join(settings.BASE_DIR, 'media/')+str(attached.filepath))
 
          #delete attached files related to project and tasks
-        Media.objects.filter(projectid__exact=p.id).delete()
+        Media.objects.filter(project__id__exact=p.id).delete()
          #delete project object and related tasks
         Project.objects.filter(id=p.id).delete()
         messages.success(request, _("Project has deleted successfully"), fail_silently=True,)
@@ -1142,3 +1141,16 @@ def Kanban (request,pk):
     current_url ="ns-project:" + resolve(request.path_info).url_name
     context={'tasks':tasks,'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'new_tasks':new_tasks,'inprogress_tasks':inprogress_tasks,'done_tasks':done_tasks,'hold_tasks':hold_tasks,'cancelled_tasks':cancelled_tasks,'closed_tasks':closed_tasks}
     return render(request, 'project/kanban.html', context)
+
+#test email
+def senmail(request) :
+    send_mail(
+    'Subject here',
+    'Here is the message.',
+    'sakr@stats.gov.sa',
+    ['sakr@stats.gov.sa'],
+    fail_silently=False,
+
+)
+    context={}
+    return render(request, 'project/plain_page.html', context)
