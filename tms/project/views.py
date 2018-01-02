@@ -448,7 +448,7 @@ def ProjectTask(request,pk,task_status=None):
 def ProjectTaskDetail(request,projectid,taskid):
     assignToEmp=None
     assignToDept=None
-    #get all attached files 
+    #get all attached files
     attached_files= Media.objects.filter(project__id__exact=projectid, task__id__exact=taskid)
     createdBy=request.session['EmpID']
     project_list= Project.objects.all().filter(createdby__exact=createdBy).exclude(status=4).order_by('-id')
@@ -1106,7 +1106,10 @@ def TaskListExternal(request,task_status=None):
     return render(request, 'project/tasks_from_external_dept.html', context)
 
 def DashboardManager(request):
-    context = {}
+    from dateutil.relativedelta import relativedelta
+    start_date = datetime.now() - relativedelta(years=1)
+    end_date = datetime.now()
+    context = {"start_date":start_date,"end":end_date}
     return render(request, 'project/dashboard_manager.html', context)
 
 #download attached file from media
