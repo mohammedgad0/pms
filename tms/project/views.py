@@ -846,7 +846,6 @@ def updateTaskAssignto(request,pk,save=None):
              data['assignedto_depid']=departement
              form.fields["employee"].required=False  #make required filed in model false
 
-
         if form.is_valid():
             #id save == true then save form dta
             if save !="False" :
@@ -855,12 +854,16 @@ def updateTaskAssignto(request,pk,save=None):
                     _obj.assignedto=_emp_obj
                     _assign=form.cleaned_data['employee'].empname
                     _obj.departement=Department.objects.get(deptcode__exact= _emp_obj.deptcode)
+                    _receiver=_emp_obj.email
 
                  elif departement :
                     _dpt_obj=Department.objects.get(deptcode__exact= int(form.cleaned_data['departement'].deptcode))
                     _obj.departement=_dpt_obj
                     _assign=form.cleaned_data['departement'].deptname
                     _obj.assignedto=None
+                    #manager
+                    manager_obj=Employee.objects.get(empid__exact= int(_dpt_obj.managerid))
+                    _receiver=manager_obj.email
 
                  _obj.cancelleddate=None
                  _obj.cancelledby=None
@@ -873,7 +876,12 @@ def updateTaskAssignto(request,pk,save=None):
                 #add to history
                  update_change_reason(_obj,_(" by ")+ request.session['EmpName']  +  _(" ,  Assign Task to ")+  str(_assign))
                  messages.success(request, "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>"+_("Task has been updated successfully to  "+_assign), fail_silently=True,)
-
+                 #send email notification
+                 if _receiver is not None :
+                     message=_obj.name+'<br><a href="/project_task_detail/'+str(_obj.project.id)+'/'+str(_obj.id)+'">'+_('Click Here')+'</a>'
+                     subject =_('Task has been asigned to you')
+                     send_mail(subject,message,'sakr@stats.gov.sa',['sakr@stats.gov.sa'],fail_silently=False,html_message=message,)
+                 
             data['form_is_valid'] = True
             data['id'] = pk
             data['message'] = "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>" + _('Task has been assigned successfully for Task number #')+ pk
@@ -1156,6 +1164,6 @@ def senmail(request) :
     ['sakr@stats.gov.sa'],
     fail_silently=False,
 
-)
+    )
     context={}
     return render(request, 'project/plain_page.html', context)
