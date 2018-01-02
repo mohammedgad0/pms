@@ -1119,8 +1119,26 @@ def DashboardManager(request):
     from dateutil.relativedelta import relativedelta
     start_date = datetime.now() - relativedelta(years=1)
     end_date = datetime.now()
-    context = {"start_date":start_date,"end":end_date}
+    
+    pie_tasks=_dept_tasks_statistics(request.session['DeptCode'])
+    
+    context = {"start_date":start_date,"end":end_date,
+               'pie_tasks':pie_tasks,
+               }
     return render(request, 'project/dashboard_manager.html', context)
+
+
+def _dept_tasks_statistics(deptcode):
+    tasks = {}
+    task_list= Task.objects.filter(departement__deptcode__exact=deptcode) 
+    tasks['New']=len(task_list.filter(status__exact='New'))
+    tasks['InProgress']=len(task_list.filter(status__exact='InProgress'))
+    tasks['Done']=len(task_list.filter(status__exact='Done'))
+    tasks['Hold']=len(task_list.filter(status__exact='Hold'))
+    tasks['Canceled']=len(task_list.filter(status__exact='Canceled'))
+    tasks['Closed']=len(task_list.filter(status__exact='Closed'))
+    return tasks
+    
 
 #download attached file from media
 def Download(request,file_name):
