@@ -881,7 +881,7 @@ def updateTaskAssignto(request,pk,save=None):
                      message=_obj.name+'<br><a href="/project_task_detail/'+str(_obj.project.id)+'/'+str(_obj.id)+'">'+_('Click Here')+'</a>'
                      subject =_('Task has been asigned to you')
                      send_mail(subject,message,'sakr@stats.gov.sa',['sakr@stats.gov.sa'],fail_silently=False,html_message=message,)
-                 
+
             data['form_is_valid'] = True
             data['id'] = pk
             data['message'] = "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>" + _('Task has been assigned successfully for Task number #')+ pk
@@ -1115,11 +1115,33 @@ def TaskListExternal(request,task_status=None):
 
 def DashboardManager(request):
     from dateutil.relativedelta import relativedelta
+    from django.db.models import F
+    dept_code = '2322'
     start_date = datetime.now() - relativedelta(years=1)
     end_date = datetime.now()
-    context = {"start_date":start_date,"end":end_date}
-    return render(request, 'project/dashboard_manager.html', context)
+    per_indicator = indicators(dept_code,start_date,end_date)
 
+    context = {"per_indicator":per_indicator}
+    return render(request, 'project/dashboard_manager.html', context)
+def indicators(deptcode,start_date,end_date):
+    from django.db.models import F
+    #all task from now and 12 monthes before
+    all_task = Task.objects.filter(
+    Q(departement = deptcode)&
+    Q(enddate__gte = start_date, startdate__lte = end_date)
+    )
+    all_task_count = Task.objects.filter(
+    Q(departement = deptcode)&
+    Q(enddate__gte = start_date, enddate__lte = end_date)
+    ).count()
+
+    task_done = all_task.filter(
+    Q(status = 'Closed')
+    ).order_by("enddate").filter(enddate__gte = F('finisheddate')).count()
+
+    task_delayed = all_task_count - task_done
+    per_indicator = round(task_done/all_task_count*100)
+    return per_indicator
 #download attached file from media
 def Download(request,file_name):
     from wsgiref.util import FileWrapper

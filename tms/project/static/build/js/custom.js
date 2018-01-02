@@ -3245,7 +3245,7 @@ function init_echarts() {
             tooltip: {
                 formatter: "{a} <br/>{b} : {c}%"
             },
-       
+
             series: [{
                 name: 'الاداء',
                 type: 'gauge',
@@ -3308,7 +3308,7 @@ function init_echarts() {
                     }
                 },
                 pointer: {
-                    length: '80%',
+                    length: '100%',
                     width: 8,
                     color: 'auto'
                 },

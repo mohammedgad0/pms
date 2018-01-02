@@ -42,6 +42,14 @@
       </div>
       {{start_date}}
       {{end}}
+      <br>
+      {{all_task}}
+      <br>
+      {{task_done}}
+      <br>
+      {{task_delayed}}
+      <br>
+      {{indi}}
     </div>
     <!-- /top tiles -->
     {{result}}
@@ -197,7 +205,8 @@
             <div class="clearfix"></div>
           </div>
           <div class="x_content">
-           <div id="echart_gauge" style="height:250px;"></div>
+           {# <div id="echart_gauge" style="height:250px;"></div> #}
+           <div id="chart_div" style="height:250px;"></div>
           </div>
         </div>
       </div>
@@ -305,6 +314,33 @@
     <!-- ECharts -->
   <script src="/static/vendors/echarts/dist/echarts.min.js"></script>
   <script src="/static/vendors/echarts/map/js/world.js"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+google.charts.load('current', {'packages':['gauge']});
+    google.charts.setOnLoadCallback(drawChart);
 
+    function drawChart() {
+
+      var data = google.visualization.arrayToDataTable([
+        ['Label', 'Value'],
+        ['{{_("performance")}}', {{per_indicator}}],
+
+      ]);
+
+      var options = {
+        width: 800, height: 220,
+        redFrom: 90, redTo: 100,
+        yellowFrom:75, yellowTo: 90,
+        minorTicks: 5
+      };
+
+      var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+
+      chart.draw(data, options);
+
+
+    }
+
+</script>
 
 {% endblock javascripts %}
