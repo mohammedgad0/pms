@@ -864,7 +864,7 @@ def updateTaskAssignto(request,pk,save=None):
                     #manager
                     manager_obj=Employee.objects.get(empid__exact= int(_dpt_obj.managerid))
                     _receiver=manager_obj.email
-
+                 _obj.assigneddate=datetime.now()
                  _obj.cancelleddate=None
                  _obj.cancelledby=None
                  _obj.closeddate=None
@@ -878,8 +878,10 @@ def updateTaskAssignto(request,pk,save=None):
                  messages.success(request, "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>"+_("Task has been updated successfully to  "+_assign), fail_silently=True,)
                  #send email notification
                  if _receiver is not None :
-                     message=_obj.name+'<br><a href="/project_task_detail/'+str(_obj.project.id)+'/'+str(_obj.id)+'">'+_('Click Here')+'</a>'
+                     message=_obj.name+'<br><a href="http://'+request.get_host()+'/project/project_task_detail/'+str(_obj.project.id)+'/'+str(_obj.id)+'">'+_('Click Here')+'</a>'
+                     message=message+'<br>'+_(" by ")+request.session['EmpName'] +"<br>" +  _(" Assign Task to ")+  str(_assign)+_(' in ')+str(_obj.assigneddate)
                      subject =_('Task has been asigned to you')
+                     #str(_obj.assignedto.email) to be add in next line 
                      send_mail(subject,message,'sakr@stats.gov.sa',['sakr@stats.gov.sa'],fail_silently=False,html_message=message,)
                  
             data['form_is_valid'] = True
