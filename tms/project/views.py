@@ -864,7 +864,7 @@ def updateTaskAssignto(request,pk,save=None):
                     #manager
                     manager_obj=Employee.objects.get(empid__exact= int(_dpt_obj.managerid))
                     _receiver=manager_obj.email
-
+                 _obj.assigneddate=datetime.now()
                  _obj.cancelleddate=None
                  _obj.cancelledby=None
                  _obj.closeddate=None
@@ -878,8 +878,10 @@ def updateTaskAssignto(request,pk,save=None):
                  messages.success(request, "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>"+_("Task has been updated successfully to  "+_assign), fail_silently=True,)
                  #send email notification
                  if _receiver is not None :
-                     message=_obj.name+'<br><a href="/project_task_detail/'+str(_obj.project.id)+'/'+str(_obj.id)+'">'+_('Click Here')+'</a>'
+                     message=_obj.name+'<br><a href="http://'+request.get_host()+'/project/project_task_detail/'+str(_obj.project.id)+'/'+str(_obj.id)+'">'+_('Click Here')+'</a>'
+                     message=message+'<br>'+_(" by ")+request.session['EmpName'] +"<br>" +  _(" Assign Task to ")+  str(_assign)+_(' in ')+str(_obj.assigneddate)
                      subject =_('Task has been asigned to you')
+                     #str(_obj.assignedto.email) to be add in next line
                      send_mail(subject,message,'sakr@stats.gov.sa',['sakr@stats.gov.sa'],fail_silently=False,html_message=message,)
 
             data['form_is_valid'] = True
@@ -1119,10 +1121,27 @@ def DashboardManager(request):
     dept_code = '2322'
     start_date = datetime.now() - relativedelta(years=1)
     end_date = datetime.now()
-    per_indicator = indicators(dept_code,start_date,end_date)
 
-    context = {"per_indicator":per_indicator}
+    pie_tasks=_dept_tasks_statistics(request.session['DeptCode'])
+    per_indicator = indicators(dept_code,start_date,end_date)
+    context = {"start_date":start_date,"end":end_date,
+               'pie_tasks':pie_tasks,"per_indicator":per_indicator
+               }
     return render(request, 'project/dashboard_manager.html', context)
+
+
+def _dept_tasks_statistics(deptcode):
+    tasks = {}
+    task_list= Task.objects.filter(departement__deptcode__exact=deptcode)
+    tasks['New']=len(task_list.filter(status__exact='New'))
+    tasks['InProgress']=len(task_list.filter(status__exact='InProgress'))
+    tasks['Done']=len(task_list.filter(status__exact='Done'))
+    tasks['Hold']=len(task_list.filter(status__exact='Hold'))
+    tasks['Canceled']=len(task_list.filter(status__exact='Canceled'))
+    tasks['Closed']=len(task_list.filter(status__exact='Closed'))
+    return tasks
+
+
 def indicators(deptcode,start_date,end_date):
     from django.db.models import F
     #all task from now and 12 monthes before

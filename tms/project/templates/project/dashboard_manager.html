@@ -58,7 +58,7 @@
     {%endfor%}
      <!-- start  row 1 -->
     <div class="row">
- <div class="col-md-12 col-sm-12 col-xs-12">
+ <div class="col-md-8 col-sm-12 col-xs-12">
         <div class="x_panel tile fixed_height_320">
           <div class="x_title">
             <h2>مشاريع مفتوحة</h2>
@@ -188,7 +188,18 @@
         </div>
       </div>
 
+ <div class="col-md-4 col-sm-4 col-xs-4"> 
+         <div class="x_panel tile fixed_height_320">
+          <div class="x_title">
+            <h2>مشاريع مفتوحة</h2>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+<div id="piechart" style="width: 500px; height: 250px;"></div>
 
+          </div>
+        </div>
+ </div> 
 
      </div> <!-- end  row 1 -->
 
@@ -343,4 +354,32 @@ google.charts.load('current', {'packages':['gauge']});
 
 </script>
 
+
+<!-- google chart -->
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Hours per Day'],
+          ['{{_("New")}}',     {{ pie_tasks.New}}],
+          ['{{_("InProgress")}}',     {{ pie_tasks.InProgress}}],
+          ['{{_("Done")}}',      {{ pie_tasks.Done}}],
+          ['{{_("Hold")}}',      {{ pie_tasks.Hold}}],
+          ['{{_("Canceled")}}',     {{ pie_tasks.Canceled}}],
+          ['{{_("Closed")}}',     {{ pie_tasks.Closed}}],
+        ]);
+
+        var options = {
+          title: 'My Daily Activities'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+      }
+    </script>
 {% endblock javascripts %}
