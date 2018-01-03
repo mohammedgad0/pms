@@ -11,7 +11,7 @@ from django.forms import formset_factory
 from django.forms import BaseModelFormSet
 from datetime import datetime , timedelta
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import Q
+from django.db.models import Q , Count
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.contrib.auth.models import Group
@@ -28,6 +28,7 @@ from .timesheet import *
 from django.forms.models import modelformset_factory
 from unittest.case import expectedFailure
 from django.core.mail import send_mail
+
 
 def loginfromdrupal(request, email,signature,time):
     from django.contrib.auth import login
@@ -191,9 +192,9 @@ def AddProject(request):
                status_obj= ProjectStatus.objects.get(isdefault=1)
             except :
                status_obj= ProjectStatus.objects.order_by('priority')[0]
-
+            project_obj.departement=get_object_or_404(Department, deptcode = request.session.get('DeptCode'))
             project_obj.status=status_obj
-            project_obj.createdby=request.session.get('EmpID', '1056821208')
+            project_obj.createdby=request.session.get('EmpID')
             project_obj.createddate= datetime.now()
             # if project_obj.end < project_obj.start:
             #     raise ValidationError(_('Invalid date - end date less than start date'))
@@ -328,7 +329,7 @@ def ProjectDetail(request,pk):
 def ProjectEdit(request,pk):
     # upload file form
     upload = modelformset_factory(Media,form=UploadFile,extra = 1)
-    FormSet = upload(queryset=Media.objects.filter(project_id__exact=pk).exclude(Q(filepath__exact=None)| Q(filepath__exact='')))
+    FormSet = upload(queryset=Media.objects.filter(project__id__exact=pk,task__id__exact=None).exclude(Q(filepath__exact=None)| Q(filepath__exact='')))
 
     instance = get_object_or_404(Project,pk=pk)
     form = ProjectForm(request.POST or None, instance=instance)
@@ -1122,24 +1123,39 @@ def DashboardManager(request):
     start_date = datetime.now() - relativedelta(years=1)
     end_date = datetime.now()
 
-    pie_tasks=_dept_tasks_statistics(request.session['DeptCode'])
+    pie_tasks=_dept_tasks_statistics(dept_code,start_date,end_date)
+    open_projects=_dept_open_pojects(dept_code,start_date,end_date)
     per_indicator = indicators(dept_code,start_date,end_date)
     context = {"start_date":start_date,"end":end_date,
-               'pie_tasks':pie_tasks,"per_indicator":per_indicator
+               'pie_tasks':pie_tasks,"per_indicator":per_indicator,'open_projects':open_projects
                }
     return render(request, 'project/dashboard_manager.html', context)
 
 
-def _dept_tasks_statistics(deptcode):
+def _dept_tasks_statistics(deptcode,startdate,enddate):
     tasks = {}
-    task_list= Task.objects.filter(departement__deptcode__exact=deptcode)
-    tasks['New']=len(task_list.filter(status__exact='New'))
-    tasks['InProgress']=len(task_list.filter(status__exact='InProgress'))
-    tasks['Done']=len(task_list.filter(status__exact='Done'))
-    tasks['Hold']=len(task_list.filter(status__exact='Hold'))
-    tasks['Canceled']=len(task_list.filter(status__exact='Canceled'))
-    tasks['Closed']=len(task_list.filter(status__exact='Closed'))
+    task_list= Task.objects.filter(departement__deptcode__exact=deptcode,startdate__gte=startdate,enddate__lte=enddate)
+    tasks['New']=task_list.filter(status__exact='New').count()
+    tasks['InProgress']=task_list.filter(status__exact='InProgress').count()
+    tasks['Done']=task_list.filter(status__exact='Done').count()
+    tasks['Hold']=task_list.filter(status__exact='Hold').count()
+    tasks['Canceled']=task_list.filter(status__exact='Canceled').count()
+    tasks['Closed']=task_list.filter(status__exact='Closed').count()
     return tasks
+
+def _dept_open_pojects(deptcode,startdate,enddate):
+    projectDict={}
+    projectList=[]
+    inprogress = Count('task', distinct=True, filter=Q(task__status__exact="InProgress"))
+    done = Count('task', distinct=True, filter=Q(task__status__exact="Done"))
+    hold = Count('task', distinct=True, filter=Q(status__exact="Hold"))
+    closed = Count('task', distinct=True, filter=Q(status__exact="Closed"))
+    projects= Project.objects.filter(departement__deptcode__exact=deptcode,start__gte=startdate,end__lte=enddate).annotate(num_tasks=Count('task')).annotate(inprogress=inprogress).annotate(done=done).annotate(hold=hold).annotate(closed=closed)
+   
+    for project in projects :
+#         projectDict["taskCount"]=project.filter(task__status__exact="InProgress").count()
+      pass
+    return projects
 
 
 def indicators(deptcode,start_date,end_date):
