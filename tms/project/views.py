@@ -1134,7 +1134,7 @@ def DashboardManager(request):
 
 def _dept_tasks_statistics(deptcode,startdate,enddate):
     tasks = {}
-    task_list= Task.objects.filter(departement__deptcode__exact=deptcode,startdate__gte=startdate,enddate__lte=enddate)
+    task_list= Task.objects.filter(project__departement__deptcode__exact=deptcode,createddate__gte=startdate,createddate__lte=enddate)
     tasks['New']=task_list.filter(status__exact='New').count()
     tasks['InProgress']=task_list.filter(status__exact='InProgress').count()
     tasks['Done']=task_list.filter(status__exact='Done').count()
@@ -1144,18 +1144,31 @@ def _dept_tasks_statistics(deptcode,startdate,enddate):
     return tasks
 
 def _dept_open_pojects(deptcode,startdate,enddate):
-    projectDict={}
+    
     projectList=[]
+    new = Count('task', distinct=True, filter=Q(status__exact="Done"))
     inprogress = Count('task', distinct=True, filter=Q(task__status__exact="InProgress"))
     done = Count('task', distinct=True, filter=Q(task__status__exact="Done"))
     hold = Count('task', distinct=True, filter=Q(status__exact="Hold"))
     closed = Count('task', distinct=True, filter=Q(status__exact="Closed"))
-    projects= Project.objects.filter(departement__deptcode__exact=deptcode,start__gte=startdate,end__lte=enddate).annotate(num_tasks=Count('task')).annotate(inprogress=inprogress).annotate(done=done).annotate(hold=hold).annotate(closed=closed)
-   
+    projects= Project.objects.filter(departement__deptcode__exact=deptcode,start__gte=startdate,end__lte=enddate).annotate(num_tasks=Count('task')).annotate(InProgress=inprogress).annotate(Done=done).annotate(hold=hold).annotate(closed=closed).annotate(new=new)
+    q=projects.query
     for project in projects :
-#         projectDict["taskCount"]=project.filter(task__status__exact="InProgress").count()
-      pass
-    return projects
+        projectDict={}
+        tasks=Task.objects.filter(project__id=project.id)
+        projectDict["detail"]=project
+        if project.end <= datetime.date(datetime.now()) :
+             projectDict["commitment"]=True
+        else:
+             projectDict["commitment"]=False
+        projectDict["All"]=project.num_tasks
+        projectDict["New"]=tasks.filter(status__exact="New").count()
+        projectDict["Done"]=tasks.filter(status__exact="Done").count()
+        projectDict["Closed"]=tasks.filter(status__exact="Closed").count()
+        projectDict["Hold"]=tasks.filter(status__exact="Hold").count()
+        projectDict["InProgress"]=tasks.filter(status__exact="InProgress").count()
+        projectList.append(projectDict)
+    return projectList
 
 
 def indicators(deptcode,start_date,end_date):
