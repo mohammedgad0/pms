@@ -113,7 +113,9 @@
                          <td>{{project.Done}} </td>
                            <td>{{project.Canceled}}</td>
                           <td>{{project.Hold}}</td>
-                         <td>{{project.Closed}}</td>
+                         <td>{{project.Closed}}
+                         <span class="sparkline_area" style="height: 160px;"><canvas width="85" height="15" style="display: inline-block; width: 85px; height: 15px; vertical-align: top;"></canvas></span>
+                         </td>
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -144,10 +146,6 @@
         <div class="x_panel tile fixed_height_320">
           <div class="x_title">
             <h2>مؤشر الاداء</h2>
-
-
-
-
             <div class="clearfix"></div>
           </div>
           <div class="x_content">
