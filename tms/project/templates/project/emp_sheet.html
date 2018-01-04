@@ -140,7 +140,7 @@
       <th>{% trans "Task Deadline" %}</th>
       <th>{% trans "Status submitted" %}</th>
       <th>{% trans "Status task" %}</th>
-      {%if his_manager%}
+      {%if his_manager or have_permission%}
       <th>{% trans "Operations" %}</th>
       {%endif%}
       </tr>
@@ -191,7 +191,7 @@
        {{ data.get_reason_display }}
       {% endif %}
       </td>
-        {%if his_manager%}
+        {%if his_manager or have_permission%}
       <td>
         {%if data.ifsubmitted != '0' %}
         <a href="#" class="btn btn-primary btn-xs disabled">{% trans "Change status submit" %}</a>

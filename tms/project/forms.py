@@ -273,8 +273,6 @@ class TaskProgressForm(ModelForm):
 
         }
 
-
-
 class TaskCancelForm(forms.Form):
        reason = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Reason"),'placeholder':_("Please enter a reason to cancel"), 'size': '40','required': 'True'}),required=True, max_length=500, error_messages={'required': 'note'})
 
@@ -321,3 +319,26 @@ class UploadFile(ModelForm):
     class Meta:
         model = Media
         fields = ['filepath','filename']
+
+class AddDelegation(ModelForm):
+    employee = EmployeeList(queryset=Employee.objects.all(),to_field_name="empid",label=_("Delegation to"), empty_label=_("Nothing"),required=True,widget=forms.Select(attrs={'class': 'chosen form-control'} ))
+    class Meta:
+        model = Delegation
+        fields = ['employee','start','end']
+        widgets = {
+            # 'authorized':TextInput(attrs={'class': 'form-control','placeholder':_('Employee name'),'required': True}),
+            'start':TextInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Start Date'),'required': True}),
+            'end':TextInput(attrs={'class': 'form-control has-feedback-left col-md-6 ','id':'single_cal_2','aria-describedby':'inputSuccess2Status','placeholder':_('End Date'),'required': True}),
+        }
+        labels = {
+            'start':_('start Delegation'),
+            'end':_('End Delegation'),
+        },
+    def clean(self):
+        cleaned_data = super().clean()
+        end = cleaned_data.get("end")
+        start = cleaned_data.get("start")
+        #Check end date less than start date
+        if end < start:
+            msg = _("End date is less than start date")
+            self.add_error('end', msg)

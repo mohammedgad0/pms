@@ -48,7 +48,7 @@ urlpatterns = [
     url(r'^update_progress_task/(?P<pk>\d+)$',views.updateTaskProgress, name='update-progress-task'),
     url(r'^project_gantt/(?P<pk>\d+)$',views.ganttChart, name='project-gantt'),
     url(r'^kanban/(?P<pk>\d+)$',views.Kanban, name='kanban'),
-    
+
     url(r'^project_follow_up/$',views.projectFlowUp, name='project-follow-up'),
     url(r'^project_task_delete/(?P<projectid>\d+)/(?P<taskid>\d+)$', views.ProjectTaskDelete, name='project-task-delete'),
     url(r'^project_task_edit/(?P<projectid>\d+)/(?P<taskid>\d+)$', views.ProjectTaskEdit, name='project-task-edit'),
@@ -57,12 +57,15 @@ urlpatterns = [
     url(r'^project/(?P<project_id>\d+)/addtask$',views.AddTask, name='add-task'),
     url(r'^project/dashboard_manager$',views.DashboardManager, name='dashboard-manager'),
     url(r'^auth/(?P<email>.*)/(?P<signature>.*)/(?P<time>.*)/$', views.loginfromdrupal, name='loginfromdrupal'),
-    
+
 
     url(r'^download/(?P<file_name>.+)$', views.Download, name='download'),
     url(r'^email/$', views.senmail, name='email'),
-
-
+    #delegation page
+    url(r'^add_delegation/$',views.adddelegation, name='add-delegation'),
+    url(r'^delegation/(?P<pk>\d+)/edit/$', views.editdelegation, name='edit-delegation'),
+    url(r'^delegation/$',views.delegation, name='delegation'),
+    url(r'^my_delegation/$',views.mydelegation, name='my-delegation'),
     url(r'^.*\.html', views.gentella_html, name='gentella'),
 
 ]
