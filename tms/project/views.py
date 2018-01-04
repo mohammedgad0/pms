@@ -11,7 +11,7 @@ from django.forms import formset_factory
 from django.forms import BaseModelFormSet
 from datetime import datetime , timedelta
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import Q , Count
+from django.db.models import Q , Count ,Avg
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.contrib.auth.models import Group
@@ -1151,7 +1151,7 @@ def _dept_open_pojects(deptcode,startdate,enddate):
     done = Count('task', distinct=True, filter=Q(task__status__exact="Done"))
     hold = Count('task', distinct=True, filter=Q(status__exact="Hold"))
     closed = Count('task', distinct=True, filter=Q(status__exact="Closed"))
-    projects= Project.objects.filter(departement__deptcode__exact=deptcode,start__gte=startdate,end__lte=enddate).annotate(num_tasks=Count('task')).annotate(InProgress=inprogress).annotate(Done=done).annotate(hold=hold).annotate(closed=closed).annotate(new=new)
+    projects= Project.objects.filter(departement__deptcode__exact=deptcode,status__name__exact="New",start__gte=startdate,end__lte=enddate).annotate(num_tasks=Count('task')).annotate(InProgress=inprogress).annotate(Done=done).annotate(hold=hold).annotate(closed=closed).annotate(new=new)
     q=projects.query
     for project in projects :
         projectDict={}
@@ -1162,9 +1162,11 @@ def _dept_open_pojects(deptcode,startdate,enddate):
         else:
              projectDict["commitment"]=False
         projectDict["All"]=project.num_tasks
+        projectDict["Progress"]=tasks.aggregate(Avg('progress'))
         projectDict["New"]=tasks.filter(status__exact="New").count()
         projectDict["Done"]=tasks.filter(status__exact="Done").count()
         projectDict["Closed"]=tasks.filter(status__exact="Closed").count()
+        projectDict["Canceled"]=tasks.filter(status__exact="Canceled").count()
         projectDict["Hold"]=tasks.filter(status__exact="Hold").count()
         projectDict["InProgress"]=tasks.filter(status__exact="InProgress").count()
         projectList.append(projectDict)
