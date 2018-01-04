@@ -26,6 +26,9 @@ class ForceLangMiddleware:
                 else:
                     g = Group.objects.get(name='employee')
                     g.user_set.add(request.user.id)
+                obj_emp = Delegation.objects.filter(authorized = data.empid , expired="0")
+                if obj_emp:
+                    request.session['have_auth']  = True
 class UserSeesionSet:
     def UserSessions(request):
         if request.user.is_authenticated():

@@ -169,9 +169,9 @@ class ApfDeptView(models.Model):
 
 class Task(models.Model):
     assignedto = models.ForeignKey('Employee',db_column='assignedto',to_field='empid', on_delete=models.SET_NULL, blank=True, null=True)
-    departement = models.ForeignKey('Department',db_column='departementid', to_field='deptcode',on_delete=models.SET_NULL, blank=True, null=True) 
+    departement = models.ForeignKey('Department',db_column='departementid', to_field='deptcode',on_delete=models.SET_NULL, blank=True, null=True)
     project = models.ForeignKey('Project',db_column='projectid', to_field='id', on_delete=models.CASCADE,blank=True,  null=True)
-    
+
     name = models.CharField(db_column='Name', max_length=100)  # Field name made lowercase.
     desc = models.CharField(db_column='Desc', max_length=2500)  # Field name made lowercase.
 
@@ -187,7 +187,7 @@ class Task(models.Model):
     status = models.CharField(db_column='Status',max_length=10,choices=TASK_STATUS, blank=False, null=False)  # Field name made lowercase.
     startdate = models.DateTimeField(db_column='StartDate', blank=True, null=True)  # Field name made lowercase.
     enddate = models.DateTimeField(db_column='EndDate', blank=True, null=True)  # Field name made lowercase.
-   
+
     assigneddate = models.DateTimeField(db_column='AssignedDate', blank=True, null=True)  # Field name made lowercase.
     progress = models.PositiveSmallIntegerField(blank=True, null=True)
     realstartdate = models.DateTimeField(db_column='RealStartDate', blank=True, null=True)  # Field name made lowercase.
@@ -204,7 +204,7 @@ class Task(models.Model):
     createddate = models.DateTimeField(db_column='CreatedDate', blank=True, null=True)  # Field name made lowercase.
     lasteditdate = models.DateTimeField(db_column='LastEditDate', blank=True, null=True)  # Field name made lowercase.
     lasteditby = models.IntegerField(db_column='LastEditBy', blank=True, null=True)  # Field name made lowercase.
-    
+
     history = HistoricalRecords()
     class Meta:
         managed = False
@@ -234,7 +234,7 @@ class TaskStatus(models.Model):
 #     project =  models.ForeignKey(Project, on_delete=models.CASCADE)
 #     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
 #     createddate = models.DateTimeField(db_column='CreatedDate', blank=True, null=True)  # Field name made lowercase.
-# 
+#
 #     class Meta:
 #         managed = False
 #         db_table = 'project_members'
@@ -281,12 +281,26 @@ class Media(models.Model):
     filepath = models.FileField(_('Files Upload'),upload_to='documents/',blank=True, null=True)
     class Meta:
         db_table = 'media'
-        
+
 # Receive the pre_delete signal and delete the file associated with the model instance.
 from django.db.models.signals import pre_delete
 from django.dispatch.dispatcher import receiver
-        
+
 @receiver(pre_delete, sender=Media)
 def Media_delete(sender, instance, **kwargs):
     # Pass false so FileField doesn't save the model.
      instance.delete()
+
+class Delegation(models.Model):
+    id = models.AutoField(db_column='id', primary_key=True)  # Field name made lowercase.
+    managerid = models.ForeignKey('Employee', db_column='ManagerId', to_field='empid',related_name='Emp1',blank=True, null=True)  # Field name made lowercase.
+    deptcode = models.ForeignKey('Department',to_field='deptcode', db_column='DeptCode', max_length=10, blank=True, null=True)  # Field name made lowercase.
+    authorized = models.ForeignKey('Employee',to_field='empid',related_name='Emp2', db_column='Authorized', blank=True, null=True)  # Field name made lowercase.
+    deptauthcode = models.CharField(db_column='DeptAuthCode', max_length=10, blank=True, null=True)  # Field name made lowercase.
+    start = models.DateTimeField(db_column='Start', blank=True, null=True)  # Field name made lowercase.
+    end = models.DateTimeField(db_column='End', blank=True, null=True)  # Field name made lowercase.
+    expired = models.CharField(db_column='Expired', max_length=1, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'delegation'

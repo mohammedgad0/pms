@@ -293,7 +293,6 @@ def ProjectList(request,project_status=None):
     context = {'project_list':_plist , 'aDict':aDict,'tasks_list':tasks_list,"project_id":project_id}
     return render(request, 'project/projects.html', context)
 
-
 @login_required
 def ProjectDetail(request,pk):
     project_detail= get_object_or_404(Project,pk=pk)
@@ -767,7 +766,7 @@ def AddTask(request,project_id):
             Task_obj.createddate = datetime.now()
             Task_obj.progress = 0
             if assignto_employee:
-                Task_obj.assignedto =get_object_or_404(Employee,empid_exact=assignto_employee)
+                Task_obj.assignedto =get_object_or_404(Employee,empid__exact=assignto_employee)
                 Task_obj.assigneddate = datetime.now()
             if assignto_department:
                 Task_obj.departement = get_object_or_404(Department,deptcode_exact=assignto_department)
@@ -1129,7 +1128,6 @@ def DashboardManager(request):
                }
     return render(request, 'project/dashboard_manager.html', context)
 
-
 def _dept_tasks_statistics(deptcode):
     tasks = {}
     task_list= Task.objects.filter(departement__deptcode__exact=deptcode)
@@ -1140,7 +1138,6 @@ def _dept_tasks_statistics(deptcode):
     tasks['Canceled']=len(task_list.filter(status__exact='Canceled'))
     tasks['Closed']=len(task_list.filter(status__exact='Closed'))
     return tasks
-
 
 def indicators(deptcode,start_date,end_date):
     from django.db.models import F
@@ -1208,3 +1205,81 @@ def senmail(request) :
     )
     context={}
     return render(request, 'project/plain_page.html', context)
+
+#Delegation for timesheet#
+@login_required
+def adddelegation(request):
+    form = AddDelegation
+    if request.method=='POST':
+        auth_employee = request.POST.get('employee', False)
+        print ('is Post')
+        form = form(request.POST)
+        if form.is_valid():
+            print ('is valid')
+            obj = form.save(commit = False)
+            obj.authorized = get_object_or_404(Employee,empid__exact=auth_employee)
+            obj.managerid =  get_object_or_404(Employee,empid__exact=request.session.get('EmpID'))
+            obj.deptcode = get_object_or_404(Department,deptcode__exact=obj.managerid.deptcode)
+            aut_data = get_object_or_404(Employee,empid__exact=auth_employee)
+            obj.deptauthcode = aut_data.deptcode
+            obj.expired = '0'
+            obj.save()
+            messages.success(request, _("Add complete"))
+            return HttpResponseRedirect(reverse('ns-project:delegation'))
+    else:
+        form = form
+    context = {"form":form}
+    return render(request, 'project/add_delegation.html', context)
+
+@login_required
+def editdelegation(request,pk):
+    EmpID = request.session.get('EmpID')
+    record = get_object_or_404(Delegation, pk=pk)
+    form = AddDelegation
+    if EmpID == record.managerid.empid:
+        form = form(request.POST or None, instance=record)
+        form.fields["employee"].initial=record.authorized.empid
+        if request.method=='POST':
+            auth_employee = request.POST.get('employee', False)
+            print ('is Post')
+            if form.is_valid():
+                print ('is valid')
+                obj = form.save(commit = False)
+                obj.authorized = get_object_or_404(Employee,empid__exact=auth_employee)
+                obj.managerid =  get_object_or_404(Employee,empid__exact=request.session.get('EmpID'))
+                obj.deptcode = get_object_or_404(Department,deptcode__exact=obj.managerid.deptcode)
+                aut_data = get_object_or_404(Employee,empid__exact=auth_employee)
+                obj.deptauthcode = aut_data.deptcode
+                obj.save()
+                messages.success(request, _("Edit complete"))
+                return HttpResponseRedirect(reverse('ns-project:delegation'))
+        else:
+            form = form
+    else:
+        raise Http404
+
+    context = {"form":form}
+    return render(request, 'project/edit_delegation.html', context)
+
+@login_required
+def delegation(request):
+    if request.user.is_authenticated():
+        EmpID = request.session.get('EmpID',0)
+    all_delegations = Delegation.objects.filter(managerid = EmpID).order_by('expired')
+    count = len(list(all_delegations))
+    if count == 0:
+        messages.info(request, _("No Delegations"))
+    context = {'AllDelegations': all_delegations,'count':count}
+    return render(request, 'project/delegation.html', context)
+    
+@login_required
+def mydelegation(request):
+    if request.user.is_authenticated():
+        EmpID = request.session.get('EmpID',0)
+    all_delegations = Delegation.objects.filter(authorized = EmpID, expired = '0')
+
+    count = len(list(all_delegations))
+    if count == 0:
+        messages.info(request, _("No Delegations"))
+    context = {'AllDelegations': all_delegations,'count':count}
+    return render(request, 'project/my_delegation.html', context)

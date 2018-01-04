@@ -44,19 +44,20 @@ def EmpSheet(request,empid):
     Page For Manager to See Employees Sheets
     '''
     EmpData = get_object_or_404(Employee, empid = empid)
+    EmpID = request.session.get('EmpID')
     deptcode = EmpData.deptcode
     alldept = request.session.get('TreeDept', '0')
-    # referer = 'test'
-    # URL = request.META.get('HTTP_REFERER')
-    # if URL:
-    #     referer= URL.split("/")[-2]
-    # request.session['CanView'] = False
-    # if referer == 'dept':
-    #     request.session['CanView'] = True
+    delegation = Delegation.objects.filter(authorized = EmpID, expired = '0')
+    auth_dept = []
+    for data in delegation:
+        auth_dept.append(data.deptcode.deptcode)
+    have_permission = False
+    if int(deptcode) in auth_dept:
+        have_permission = True
     his_manager = False
     if str(EmpData.managercode) == str(request.session['EmpID']):
         his_manager = True
-    if str(EmpData.managercode) == str(request.session['EmpID']) or deptcode in alldept:
+    if str(EmpData.managercode) == str(request.session['EmpID']) or deptcode in alldept or have_permission:
         sheet_list = Sheet.objects.filter(empid = empid).order_by('ifsubmitted','status')
         start = request.GET.get("q_start")
         end = request.GET.get("q_end")
@@ -67,7 +68,7 @@ def EmpSheet(request,empid):
     else:
         raise Http404
 
-    return render(request, 'project/emp_sheet.html', {'filter': sheet_filter,'EmpData':EmpData,"his_manager":his_manager})
+    return render(request, 'project/emp_sheet.html', {'have_permission':have_permission,'filter': sheet_filter,'EmpData':EmpData,"his_manager":his_manager})
 
 def AllSheets(request):
     AllEmp = VSheetsdata.objects.filter()
@@ -201,17 +202,17 @@ def DeptSheet(request,deptcode):
     dept = Department.objects.filter(deptcode= deptcode)[:1]
     managid = '0'
     sheets = None
-    # referer = ' '
-    # URL = request.META.get('HTTP_REFERER')
-    # if URL:
-    #     referer= URL.split("/")[-2]
-    # request.session['CanView'] = False
-    # if referer == 'all_dept_sheet':
-    #     request.session['CanView'] = True
     alldept = request.session.get('TreeDept', '0')
     for data in dept:
         managid = data.managerid
-    if managid == EmpID or deptcode in alldept:
+    delegation = Delegation.objects.filter(authorized = EmpID, expired = '0')
+    auth_dept = []
+    for data in delegation:
+        auth_dept.append(data.deptcode.deptcode)
+    have_permission = False
+    if int(deptcode) in auth_dept:
+        have_permission = True
+    if managid == EmpID or deptcode in alldept or have_permission:
         # if this user is manager
         AllEmp = "0"
         #count all data
@@ -230,7 +231,8 @@ def DeptSheet(request,deptcode):
         raise Http404
 
     count = len(list(AllEmp))
-    context = {'allemp':AllEmp,"count":count,"total_task":total_task,
+    context = {'allemp':AllEmp,"count":count,"total_task":total_task,"delgation":auth_dept,
+    "have_permission":have_permission,
     "submitted_task":submitted_task,"n_task":not_submitted_task,"emp_count":emp_count}
     if count == 0:
         messages.info(request, _("No data"))

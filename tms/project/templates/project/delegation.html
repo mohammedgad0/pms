@@ -1,0 +1,91 @@
+{% extends "project/base_site.html" %}
+{% load i18n %}
+{% block title %} {% trans "Projects" %} {% endblock title %}
+
+{% block stylesheets %}
+{{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="">
+      <div class="page-title">
+        <div class="title_left">
+          <h3>{% trans "Delegation List" %} </h3>
+        </div>
+        <div class="title_right">
+        </div>
+      </div>
+
+      <div class="clearfix"></div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="x_panel">
+              <div class="x_title">
+              <a href="{% url 'ns-project:add-delegation' %}" >  <button type="button" class="btn btn-primary btn-md"> <i class="fa fa-plus"></i>  {% trans "Add Delegation" %}</button></a>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              {% for message in messages %}
+                <div style="font-size: 16px;" class="alert {{ message.tags }} alert-dismissible" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  {{ message }}
+                </div>
+              {% endfor %}
+              <!-- start project list -->
+              {% if count > 0 %}
+              <table class="table table-striped projects">
+                <thead>
+                  <tr>
+                    <th style="width: 1%">#</th>
+                    <th style="width: 30%">{% trans "Delegation To" %}</th>
+                    <th>{% trans "Start auth Date" %}</th>
+                    <th>{% trans "End auth Date" %}</th>
+                    <th>{% trans "Status" %}</th>
+                    <th>{% trans "Action" %}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for data in AllDelegations %}
+                  <tr>
+                    <td>#</td>
+                    <td>
+                        {{ data.authorized.empname }}
+                    </td>
+                    <td>
+                      {{data.start|date:'d-M-Y' }}
+                    </td>
+                    <td class="project_progress">
+                        {{data.end|date:'d-M-Y'}}
+                    </td>
+                    <td class="project_progress">
+                      {%if data.expired == '0'%}
+                      <button type="button" class="btn btn-success btn-xs">  {% trans "Active" %}</button>
+                      {%else%}
+                      <button type="button" class="btn btn-danger btn-xs">  {% trans "Inactive" %}</button>
+                      {%endif%}
+
+                    </td>
+                    <td>
+                      <a href="/delegation/{{data.id}}/edit" class="btn btn-primary btn-xs">{% trans "Edit" %}</a>
+                    </td>
+                    </tr>
+                  {% endfor %}
+
+          </tbody>
+              </table>
+              <!-- end project list -->
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+{% endblock javascripts %}

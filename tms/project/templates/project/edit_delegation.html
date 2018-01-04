@@ -1,0 +1,116 @@
+{% extends "project/base_site.html" %}
+{% load i18n %}
+
+
+{% block title %} {% trans "Projects" %} {% endblock title %}
+
+{% block stylesheets %}
+{{ block.super }}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.css" />
+  <style>
+.css-form{margin-bottom: 15px}
+  </style>
+{% endblock stylesheets %}
+
+{% block content %}
+{% get_current_language as LANGUAGE_CODE %}
+    <div class="right_col" role="main">
+      <div class="">
+        <div class="clearfix"></div>
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>{% trans "Add Delegation"  %}</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+              <form action="." method="POST">
+                {% csrf_token %}
+                <div class="col-md-12">
+                <div class="css-form col-md-4">
+                {{form.employee.label_tag}}
+                 {{form.employee}}
+                 </div>
+                  </div>
+                 <div class="col-md-12">
+               <div class="css-form col-md-4">
+               {{form.start.label_tag}}
+                {{form.start}}
+                 <span class="fa fa-calendar-o form-control-feedback left" style="margin-top:25px;" aria-hidden="true"></span>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="css-form col-md-4">
+                {{form.end.label_tag}}
+                 {{form.end}}
+                  <span class="fa fa-calendar-o form-control-feedback left" style="margin-top:25px;" aria-hidden="true"></span>
+                 </div>
+
+               </div>
+  <br>
+                 <div class="col-md-12">
+                   <a href="{% url 'ns-project:delegation' %}" >  <button type="button" class="btn btn-primary">{{ _('Back')}}</button></a>
+             <button type="submit" class="btn btn-success"> <i class="fa fa-save"></i>{{_('Submit')}}</button>
+
+           </div>
+           <div class="form-group text-danger">
+           <div class="col-md-3"></div><div class="col-md-9 col-sm-12 col-xs-12">
+          {{ form.employee.errors }}
+          {{ form.start.errors}}
+          {{ form.end.errors  }}
+
+          </div>
+      </div>
+             </div>
+             </div>
+               </div>
+              </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+/*    <script src="/static/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+  <script src="/static/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+  <script src="/static/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+  */
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.jquery.js"></script>
+  <script>
+  $(document).ready(function(){
+     $(".chosen").data("placeholder","Select Frameworks...").chosen();
+     $(".chosen").chosen({no_results_text: "Oops, nothing found!"});
+      $('.chosen').chosen({allow_single_deselect: true,no_results_text: "لا يوجد نتائج!"});
+      $('#single_cal_1').daterangepicker({
+          singleDatePicker: true,
+          singleClasses: "picker_1",
+           locale: {
+                format: 'YYYY-MM-DD'
+            },
+      }, function(start, end, label) {
+
+      });
+
+      $('#single_cal_2').daterangepicker({
+          autoUpdateInput: true,
+          singleDatePicker: true,
+          singleClasses: "picker_1",
+          locale: {
+                format: 'YYYY-MM-DD',
+                language: 'ar-EG',
+            },
+      }, function(start, end, label) {
+   });
+});
+
+</script>
+{% endblock javascripts %}
