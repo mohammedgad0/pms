@@ -66,6 +66,7 @@
                     <th>نسبة الانجاز </th>
                     <th>الإلتزام</th>
                     <th>عدد المهام</th>
+                     <th>جديد </th>
                     <th>مهام جارى العمل</th>
                     <th>مهام  منجزة</th>
                      <th>مهام  معلقة</th>
@@ -73,9 +74,12 @@
                   </tr>
                 </thead>
                 <tbody>
+                
+             
+                  {% for project in open_projects %}
                   <tr>
                     <th scope="row">1</th>
-                    <td><a href="#" class="blue" >مشروع Big Date </a></td>
+                    <td><a href="#" class="blue" >  {{ project.detail.name }}</a></td>
                     <td class="project_progress">
 
 
@@ -84,95 +88,29 @@
                               </div>
                               <small>75,0% مكتمل</small>
                               </td>
-                     <td class="green"> <i class="fa fa-level-up"></i> ملتزم
-
+                     <td > 
+                     {% if commitment == True%}
+                     <div class="commitment-up text-green">
+                     <i class="fa fa-level-up"></i> ملتزم 
+                   </div>
+                     {% else %}
+                         <div class="commitment-down text-danger">
+                    <i class="fa fa-level-down"></i> متأخر
+                       </div>
+                     {%endif%}
                      </td>
-                     <td>100</td>
-                       <td>30</td>
-                         <td>20</td>
-                          <td>30</td>
-                         <td>20</td>
+                     
+                     <td>{{project.All}}</td>
+                       <td>{{project.New}}</td>
+                       <td>{{project.InProgress}}</td>
+                         <td>{{project.Done}}
+                         
+                         
+                         </td>
+                          <td>{{project.Hold}}</td>
+                         <td>{{project.Closed}}</td>
                   </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td ><a href="#"  class="blue"> مشروع تطوير البوابة الخارجية على بايثون </a></td>
-                   <td class="project_progress">
-
-
-                              <div class="progress progress_sm">
-                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50,0" aria-valuenow="72" style="width: 50%;"></div>
-                              </div>
-                              <small>50,0% مكتمل</small>
-                              </td>
-                     <td class="green"> <i class="fa fa-level-up"></i> ملتزم</td>
-                        <td>160</td>
-                       <td>40</td>
-                         <td>40</td>
-                          <td>40</td>
-                           <td>40</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td> <a href="#"  class="blue">  مشروع تطوير البوابة  الداخلية </a></td>
-                     <td class="project_progress">
-
-
-                              <div class="progress progress_sm">
-                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="40,0" aria-valuenow="72" style="width: 40%;"></div>
-                              </div>
-                              <small>40,0% مكتمل</small>
-                              </td>
-                     <td class="red"> <i class="fa fa-level-down"></i> متأخر</td>
-                        <td>200</td>
-                       <td>40</td>
-                         <td>60</td>
-                            <td>60</td>
-                               <td>60</td>
-                  </tr>
-                    <tr>
-                    <th scope="row">4</th>
-                    <td> <a href="#"  class="blue">  مشروع بوابة  خدمات الموظفين </a> </td>
-                    <td class="project_progress">
-
-
-                              <div class="progress progress_sm">
-                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="35,0" aria-valuenow="72" style="width: 35%;"></div>
-                              </div>
-                              <small>35,0% مكتمل</small>
-                              </td>
-                    <td class="red"> <i class="fa fa-level-down"></i> متأخر</td>
-                       <td>120</td>
-                       <td>35</td>
-                         <td>25</td>
-                           <td>25</td>
-                             <td>25</td>
-                  </tr>
-                    <tr>
-                    <th scope="row">5</th>
-                    <td> <a href="#"  class="blue">  مشروع أدارة المهام </a></td>
-                    <td class="project_progress">
-
-
-                              <div class="progress progress_sm">
-                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="20,0" aria-valuenow="72" style="width: 75%;"></div>
-                              </div>
-                              <small>20,0% مكتمل</small>
-                              </td>
-                    <td>@twitter</td>
-                  </tr>
-                    <tr>
-                    <th scope="row">6</th>
-                    <td> <a href="#"  class="blue">  مشروع البوابة الاحصائية </a></td>
-                     <td class="project_progress">
-
-
-                              <div class="progress progress_sm">
-                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="15,0" aria-valuenow="72" style="width: 75%;"></div>
-                              </div>
-                              <small>15,0% مكتمل</small>
-                              </td>
-                    <td>@twitter</td>
-                  </tr>
+                  {% endfor %}
                 </tbody>
               </table>
           </div>
@@ -182,11 +120,11 @@
  <div class="col-md-4 col-sm-4 col-xs-4">
          <div class="x_panel tile fixed_height_320">
           <div class="x_title">
-            <h2>مشاريع مفتوحة</h2>
+            <h2>المهام</h2>
             <div class="clearfix"></div>
           </div>
           <div class="x_content">
-<div id="piechart" style="width: 500px; height: 250px;"></div>
+<div id="piechart" style="height:250px;"></div>
 
           </div>
         </div>
@@ -316,6 +254,8 @@
     <!-- ECharts -->
   <script src="/static/vendors/echarts/dist/echarts.min.js"></script>
   <script src="/static/vendors/echarts/map/js/world.js"></script>
+  
+  <!-- google chart -->
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
 google.charts.load('current', {'packages':['gauge']});
@@ -337,17 +277,13 @@ google.charts.load('current', {'packages':['gauge']});
       };
 
       var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
-
       chart.draw(data, options);
-
-
     }
 
 </script>
 
 
 <!-- google chart -->
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
       google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);
@@ -357,20 +293,30 @@ google.charts.load('current', {'packages':['gauge']});
         var data = google.visualization.arrayToDataTable([
           ['Task', 'Hours per Day'],
           ['{{_("New")}}',     {{ pie_tasks.New}}],
-          ['{{_("InProgress")}}',     {{ pie_tasks.InProgress}}],
+           ['{{_("Hold")}}',      {{ pie_tasks.Hold}}],
+        ['{{_("InProgress")}}',     {{ pie_tasks.InProgress}}],
           ['{{_("Done")}}',      {{ pie_tasks.Done}}],
-          ['{{_("Hold")}}',      {{ pie_tasks.Hold}}],
           ['{{_("Canceled")}}',     {{ pie_tasks.Canceled}}],
           ['{{_("Closed")}}',     {{ pie_tasks.Closed}}],
         ]);
 
         var options = {
-          title: 'My Daily Activities'
+          title: 'المهام حسب الحالة'
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart'));
 
         chart.draw(data, options);
       }
+      
+      //flasher 
+      function blinker() {
+    $('.commitment-down').fadeOut(100);
+    $('.commitment-down').fadeIn(100);
+}
+
+setInterval(blinker, 1000); //Runs every second
     </script>
+    
+    
 {% endblock javascripts %}
