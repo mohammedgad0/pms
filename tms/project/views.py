@@ -455,7 +455,7 @@ def ProjectTaskDetail(request,projectid,taskid):
     current_url ="ns-project:project-task"
     project_detail= get_object_or_404(Project,pk=projectid)
     task_detail= get_object_or_404(Task,project_id__exact= projectid,pk=taskid)
-    createdby=get_object_or_404(Employee,empid__exact=task_detail.createdby);
+    createdby=get_object_or_404(Employee,empid__exact=task_detail.createdby.empid);
     try:
         assignToEmp=Employee.objects.get(empid__exact=task_detail.assignedto);
     except:
@@ -1133,6 +1133,27 @@ def DashboardManager(request):
                }
     return render(request, 'project/dashboard_manager.html', context)
 
+def DashboardEmployee(request,empid):
+    from dateutil.relativedelta import relativedelta
+    from django.db.models import F
+    dept_code  = request.session['DeptCode']
+    start_date = datetime.now() - relativedelta(years=1)
+    end_date = datetime.now()
+
+    task_employee = emp_task(empid,start_date,end_date)
+
+
+    context = {"task_employee":task_employee,}
+    return render(request, 'project/dashboard_employee.html', context)
+
+def emp_task(empid,start_date,end_date):
+    task_employee = Task.objects.filter(
+    Q(assignedto = empid)&
+    Q(enddate__gte = start_date, startdate__lte = end_date)&
+    ~Q(status ='Closed')&
+    ~Q(status='Cancelled')
+    )
+    return task_employee
 
 def dept_task_indicators(dept_code,start_date,end_date):
     dept_data = get_object_or_404(Department,deptcode=dept_code)
@@ -1178,7 +1199,7 @@ def _dept_open_pojects(deptcode,startdate,enddate):
 #     hold = Count('task', distinct=True, filter=Q(status__exact="Hold"))
 #     closed = Count('task', distinct=True, filter=Q(status__exact="Closed"))
     projects= Project.objects.filter(
-        (Q(departement__deptcode__exact=deptcode) & Q(start__gte=startdate) & Q(start__lte=enddate)) 
+        (Q(departement__deptcode__exact=deptcode) & Q(start__gte=startdate) & Q(start__lte=enddate))
         & ~Q(status__name_ar__exact="done")).annotate(num_tasks=Count('task'))
 
     q=projects.query
@@ -1203,7 +1224,7 @@ def _dept_open_pojects(deptcode,startdate,enddate):
 
 
 def _project_kpi(deptcode,startdate,enddate):
-    projectKPI={}    
+    projectKPI={}
     projects= Project.objects.filter(
         (Q(start__gte=startdate)& Q(start__lte=enddate))&
                                        (Q(departement__deptcode__exact=deptcode)| Q(task__departement__deptcode__exact=deptcode))
@@ -1215,8 +1236,6 @@ def _project_kpi(deptcode,startdate,enddate):
     projectKPI["t_internal"]= projects.filter(  Q(task__departement__deptcode__exact=deptcode)).count()
     projectKPI["t_external"]= projects.filter(  Q(task__departement__deptcode__exact=deptcode)).count()
     return projectKPI
-
-
 
 def indicators(deptcode,start_date,end_date):
     from django.db.models import F
