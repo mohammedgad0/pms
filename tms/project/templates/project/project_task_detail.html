@@ -57,7 +57,7 @@
                       {% endif %}
                         {% load user_group %}
          
-                        {% if request.user|has_group:"ismanager"  and  task.createdby|slugify  == request.session.EmpID %}
+                        {% if request.user|has_group:"ismanager"  and  task.createdby.empid|slugify  == request.session.EmpID %}
                      		 {% if  task.status != "Closed" %}
                             
                            <li  id="task-assignto">  <a href="#" data-url="{% url 'ns-project:update-assignto-task' task.id %}" class="btn btn-app update-task-assignto"> <i class="fa fa-hand-o-right fa-2x paction text-primary" title="{{_('Assign To')}}"></i>  </a> </li>
@@ -189,7 +189,7 @@
         <legend>{{_("Actions")}}</legend>
    
    <ul class="list-unstyled">
-                      <li class="clearfix"><div class="basic_info_lable col-md-4 float-right">{{_("Created By")}}</div> <div class="basic_info  col-md-7 float-right">{{ createdby.empname}}</div>
+                      <li class="clearfix"><div class="basic_info_lable col-md-4 float-right">{{_("Created By")}}</div> <div class="basic_info  col-md-7 float-right">{{ task.createdby.empname}}</div>
                       </li>
                       <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Finished By")}}</div> <div class="basic_info col-md-7 float-right">  {{ finishedby.empname }}</div>
                       </li>

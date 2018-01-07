@@ -144,8 +144,76 @@
      </div> <!-- end  row 1 -->
 
     <div class="row">
+  <div class="col-md-6 col-sm-4 col-xs-12 float-right">
+        <div class="x_panel tile fixed_height_320 overflow_hidden">
+          <div class="x_title">
+            <h2>المهام المفتوحة</h2>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+  <table class="table table-sm table-responsive" id="open-project-list">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>{% trans "Task Name" %}</th>
+                    <th>{% trans "Project Name" %}</th>
+                    <th>{% trans "Progress" %}</th>
+                    <th>{% trans "commitment" %}</th>
+                    <th>{% trans "Status" %}</th>
+                    <th>{% trans "End Date" %}</th>
+                  </tr>
+                </thead>
+                <tbody>
 
-      <div class="col-md-4 col-sm-4 col-xs-12">
+
+                  {% for task in open_tasks %}
+                  
+                  <tr>
+                    <th scope="row">{{task.id}}</th>
+                    <td><a href="{% url 'ns-project:project-task-detail' task.project.id task.id   %}" class="blue" >  {{ task.name }}</a></td>
+                    <td><a href="{% url 'ns-project:project-detail' task.project.id %}" class="blue" >  {{ task.project.name }}</a></td>
+                 
+                    <td class="project_progress">
+                              <div class="progress progress_sm">
+                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="{{ task.progress|floatformat:-2}}" aria-valuenow="72" style="width: {{ task.progress|floatformat:-2}%;"></div>
+                              </div>
+                              <small> {{ task.progress|floatformat:-2}}% مكتمل</small>
+                              </td>
+                    
+                     <td >
+                     {% now "Y-m-d" as current_date %}
+                     {{current_date}}
+                     
+                     {% if task.enddate < current_date and task.status != "Done" %}
+                                             <div class="commitment-down text-danger">
+                    
+                    <i class="fa fa-level-down"></i> متأخر
+
+
+
+                   </div>
+                     {% else %}
+                                      <div class="commitment-up text-green">
+                 
+                                      <i class="fa fa-level-up"></i> ملتزم
+                 
+                 
+                       </div>
+                     {%endif%}
+                     </td>
+
+                     <td>{{task.status}}</td>
+                         <td>{{  task.enddate|date:"Y-m-d" }}</td>
+                         
+                 
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2 col-sm-4 col-xs-12">
         <div class="x_panel tile fixed_height_320">
           <div class="x_title">
             <h2>مؤشر الاداء</h2>

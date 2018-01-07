@@ -455,7 +455,6 @@ def ProjectTaskDetail(request,projectid,taskid):
     current_url ="ns-project:project-task"
     project_detail= get_object_or_404(Project,pk=projectid)
     task_detail= get_object_or_404(Task,project_id__exact= projectid,pk=taskid)
-    createdby=get_object_or_404(Employee,empid__exact=task_detail.createdby);
     try:
         assignToEmp=Employee.objects.get(empid__exact=task_detail.assignedto);
     except:
@@ -485,7 +484,6 @@ def ProjectTaskDetail(request,projectid,taskid):
                'current_url':current_url,
                'task':task_detail,
                'assignToEmp':assignToEmp,'assignToDept':assignToDept,
-               'createdby':createdby,
                'finishedby':finishedby,
                'cancelledby':cancelledby,
                'closedby':closedby,
@@ -853,7 +851,7 @@ def updateTaskAssignto(request,pk,save=None):
                     _emp_obj=Employee.objects.get(empid__exact= int(form.cleaned_data['employee'].empid))
                     _obj.assignedto=_emp_obj
                     _assign=form.cleaned_data['employee'].empname
-                    _obj.departement=Department.objects.get(deptcode__exact= _emp_obj.deptcode)
+                    _obj.departement=get_object_or_404(Department,deptcode__exact= _emp_obj.deptcode) 
                     _receiver=_emp_obj.email
 
                  elif departement :
@@ -1128,8 +1126,10 @@ def DashboardManager(request):
     open_projects=_dept_open_pojects(dept_code,start_date,end_date)
     per_indicator = indicators(dept_code,start_date,end_date)
     project_kpi=_project_kpi(dept_code, start_date, end_date)
+    open_tasks=_open_tasks(dept_code, start_date, end_date)
     context = {"start_date":start_date,"end":end_date,"task_based_department":task_based_department,
                'pie_tasks':pie_tasks,"per_indicator":per_indicator,'open_projects':open_projects,'project_kpi':project_kpi,
+               'open_tasks':open_tasks
                }
     return render(request, 'project/dashboard_manager.html', context)
 
@@ -1212,10 +1212,15 @@ def _project_kpi(deptcode,startdate,enddate):
     projectKPI["p_internal"]= projects.filter(departement__deptcode__exact=deptcode).count()
     projectKPI["p_external"]= projects.filter( Q(task__departement__deptcode__exact=deptcode) & ~Q(departement__deptcode__exact = deptcode)).count()
     projectKPI["t_all"]= projects.filter(  Q(task__departement__deptcode__exact=deptcode)).count()
-    projectKPI["t_internal"]= projects.filter(  Q(task__departement__deptcode__exact=deptcode)).count()
-    projectKPI["t_external"]= projects.filter(  Q(task__departement__deptcode__exact=deptcode)).count()
+    projectKPI["t_internal"]= projects.filter( Q(task__departement__deptcode__exact=deptcode) & Q(task__project__departement__deptcode__exact=deptcode)).count()
+    projectKPI["t_external"]= projects.filter(  Q(task__departement__deptcode__exact=deptcode) & ~Q(task__project__departement__deptcode__exact=deptcode)).count()
     return projectKPI
 
+def _open_tasks(deptcode,startdate,enddate):
+    openTasks= Task.objects.filter(
+      (Q(departement__deptcode__exact= deptcode)) 
+        & ~Q(status__exact="Closed"))
+    return openTasks
 
 
 def indicators(deptcode,start_date,end_date):
