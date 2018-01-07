@@ -85,8 +85,8 @@
 
                   {% for project in open_projects %}
                   <tr>
-                    <th scope="row">{{project.id}}</th>
-                    <td><a href="#" class="blue" >  {{ project.detail.name }}</a></td>
+                    <th scope="row">{{project.detail.id}}</th>
+                    <td><a href="{% url 'ns-project:project-detail' project.detail.id %}" class="blue" >  {{ project.detail.name }}</a></td>
                     <td class="project_progress">
 
 

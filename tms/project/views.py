@@ -762,7 +762,7 @@ def AddTask(request,project_id):
             Task_obj = form.save(commit=False)
             Task_obj.project = get_object_or_404(Project,pk=project_id)
             Task_obj.status = 'New'
-            Task_obj.createdby = request.session.get('EmpID')
+            Task_obj.createdby = get_object_or_404(Employee,empid__exact=request.session.get('EmpID'))
             Task_obj.lasteditdate = datetime.now()
             Task_obj.createddate = datetime.now()
             Task_obj.progress = 0
@@ -1118,7 +1118,7 @@ def TaskListExternal(request,task_status=None):
 def DashboardManager(request):
     from dateutil.relativedelta import relativedelta
     from django.db.models import F
-    dept_code = '2322'
+    dept_code  = request.session['DeptCode']
     start_date = datetime.now() - relativedelta(years=1)
     end_date = datetime.now()    
     def dept_task_indicators(deptcode,startdate,enddate):
@@ -1176,12 +1176,14 @@ def _dept_tasks_statistics(deptcode,startdate,enddate):
 def _dept_open_pojects(deptcode,startdate,enddate):
 
     projectList=[]
-    new = Count('task', distinct=True, filter=Q(status__exact="Done"))
-    inprogress = Count('task', distinct=True, filter=Q(task__status__exact="InProgress"))
-    done = Count('task', distinct=True, filter=Q(task__status__exact="Done"))
-    hold = Count('task', distinct=True, filter=Q(status__exact="Hold"))
-    closed = Count('task', distinct=True, filter=Q(status__exact="Closed"))
-    projects= Project.objects.filter(departement__deptcode__exact=deptcode,start__gte=startdate,end__lte=enddate).annotate(num_tasks=Count('task'))
+#     new = Count('task', distinct=True, filter=Q(status__exact="Done"))
+#     inprogress = Count('task', distinct=True, filter=Q(task__status__exact="InProgress"))
+#     done = Count('task', distinct=True, filter=Q(task__status__exact="Done"))
+#     hold = Count('task', distinct=True, filter=Q(status__exact="Hold"))
+#     closed = Count('task', distinct=True, filter=Q(status__exact="Closed"))
+    projects= Project.objects.filter(
+        (Q(departement__deptcode__exact=deptcode) & Q(start__gte=startdate)) 
+        & ~Q(status__name_ar__exact="done")).annotate(num_tasks=Count('task'))
     q=projects.query
     for project in projects :
         projectDict={}
@@ -1206,7 +1208,7 @@ def _dept_open_pojects(deptcode,startdate,enddate):
 def _project_kpi(deptcode,startdate,enddate):
     projectKPI={}    
     projects= Project.objects.filter(
-        (Q(start__gte=startdate)& Q(end__lte=enddate))&
+        (Q(start__gte=startdate)& Q(start__lte=enddate))&
                                        (Q(departement__deptcode__exact=deptcode)| Q(task__departement__deptcode__exact=deptcode))
                                     )
     projectKPI["p_all"]= projects.count()
