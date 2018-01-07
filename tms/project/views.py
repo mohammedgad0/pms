@@ -1120,11 +1120,20 @@ def DashboardManager(request):
     from django.db.models import F
     dept_code  = request.session['DeptCode']
     start_date = datetime.now() - relativedelta(years=1)
-    end_date = datetime.now()    
-    def dept_task_indicators(deptcode,startdate,enddate):
-        pass
-    import json
-   
+    end_date = datetime.now()
+
+    task_based_department = dept_task_indicators(dept_code,start_date,end_date)
+
+    pie_tasks=_dept_tasks_statistics(dept_code,start_date,end_date)
+    open_projects=_dept_open_pojects(dept_code,start_date,end_date)
+    per_indicator = indicators(dept_code,start_date,end_date)
+    context = {"start_date":start_date,"end":end_date,"task_based_department":task_based_department,
+               'pie_tasks':pie_tasks,"per_indicator":per_indicator,'open_projects':open_projects
+               }
+    return render(request, 'project/dashboard_manager.html', context)
+
+
+def dept_task_indicators(dept_code,start_date,end_date):
     dept_data = get_object_or_404(Department,deptcode=dept_code)
     dept_manager = dept_data.managerid
     dept_internal_task_count = Task.objects.filter(
@@ -1146,21 +1155,7 @@ def DashboardManager(request):
         for name in tasks:
             each_dept_count = tasks.filter(createdby = name.createdby).count()
             TaskDict.update({name.createdby.deptname: each_dept_count})
-    js_data = json.dumps(TaskDict,ensure_ascii=False).encode('utf8')
-    
-    pie_tasks=_dept_tasks_statistics(dept_code,start_date,end_date)
-    open_projects=_dept_open_pojects(dept_code,start_date,end_date)
-    per_indicator = indicators(dept_code,start_date,end_date)
-    project_kpi=_project_kpi(dept_code,start_date,end_date)
-
-    context = {"start_date":start_date,"end":end_date,"dept_task_count":dept_internal_task_count,
-                "dept_external_task":dept_external_task,"TaskDict":TaskDict,"js_data":js_data,
-               'pie_tasks':pie_tasks,"per_indicator":per_indicator,'open_projects':open_projects,
-               'project_kpi':project_kpi,
-
-               }
-    return render(request, 'project/dashboard_manager.html', context)
-
+    return TaskDict
 
 def _dept_tasks_statistics(deptcode,startdate,enddate):
     tasks = {}
@@ -1176,6 +1171,7 @@ def _dept_tasks_statistics(deptcode,startdate,enddate):
 def _dept_open_pojects(deptcode,startdate,enddate):
 
     projectList=[]
+<<<<<<< HEAD
 #     new = Count('task', distinct=True, filter=Q(status__exact="Done"))
 #     inprogress = Count('task', distinct=True, filter=Q(task__status__exact="InProgress"))
 #     done = Count('task', distinct=True, filter=Q(task__status__exact="Done"))
@@ -1184,6 +1180,14 @@ def _dept_open_pojects(deptcode,startdate,enddate):
     projects= Project.objects.filter(
         (Q(departement__deptcode__exact=deptcode) & Q(start__gte=startdate)) 
         & ~Q(status__name_ar__exact="done")).annotate(num_tasks=Count('task'))
+=======
+    new = Count('task', distinct=True, filter=Q(status__exact="Done"))
+    inprogress = Count('task', distinct=True, filter=Q(task__status__exact="InProgress"))
+    done = Count('task', distinct=True, filter=Q(task__status__exact="Done"))
+    hold = Count('task', distinct=True, filter=Q(status__exact="Hold"))
+    closed = Count('task', distinct=True, filter=Q(status__exact="Closed"))
+    projects= Project.objects.filter(departement__deptcode__exact=deptcode,status__name__exact="New",start__gte=startdate,end__lte=enddate).annotate(num_tasks=Count('task')).annotate(InProgress=inprogress).annotate(Done=done).annotate(hold=hold).annotate(closed=closed).annotate(new=new)
+>>>>>>> branch 'master' of https://github.com/sherifsakr/tms.git
     q=projects.query
     for project in projects :
         projectDict={}
@@ -1204,6 +1208,7 @@ def _dept_open_pojects(deptcode,startdate,enddate):
         projectList.append(projectDict)
     return projectList
 
+<<<<<<< HEAD
 
 def _project_kpi(deptcode,startdate,enddate):
     projectKPI={}    
@@ -1220,6 +1225,8 @@ def _project_kpi(deptcode,startdate,enddate):
     return projectKPI
 
 
+=======
+>>>>>>> branch 'master' of https://github.com/sherifsakr/tms.git
 def indicators(deptcode,start_date,end_date):
     from django.db.models import F
     #all task from now and 12 monthes before
@@ -1237,10 +1244,7 @@ def indicators(deptcode,start_date,end_date):
     ).order_by("enddate").filter(enddate__gte = F('finisheddate')).count()
 
     task_delayed = all_task_count - task_done
-    try:
-        per_indicator = round(task_done/all_task_count*100)
-    except:
-        per_indicator=0
+    per_indicator = round(task_done/all_task_count*100)
     return per_indicator
 #download attached file from media
 def Download(request,file_name):
