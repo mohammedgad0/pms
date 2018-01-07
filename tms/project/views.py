@@ -1121,9 +1121,19 @@ def DashboardManager(request):
     dept_code = '2322'
     start_date = datetime.now() - relativedelta(years=1)
     end_date = datetime.now()
-    def dept_task_indicators(deptcode,startdate,enddate):
-        pass
-    import json
+
+    task_based_department = dept_task_indicators(dept_code,start_date,end_date)
+
+    pie_tasks=_dept_tasks_statistics(dept_code,start_date,end_date)
+    open_projects=_dept_open_pojects(dept_code,start_date,end_date)
+    per_indicator = indicators(dept_code,start_date,end_date)
+    context = {"start_date":start_date,"end":end_date,"task_based_department":task_based_department,
+               'pie_tasks':pie_tasks,"per_indicator":per_indicator,'open_projects':open_projects
+               }
+    return render(request, 'project/dashboard_manager.html', context)
+
+
+def dept_task_indicators(dept_code,start_date,end_date):
     dept_data = get_object_or_404(Department,deptcode=dept_code)
     dept_manager = dept_data.managerid
     dept_internal_task_count = Task.objects.filter(
@@ -1145,18 +1155,7 @@ def DashboardManager(request):
         for name in tasks:
             each_dept_count = tasks.filter(createdby = name.createdby).count()
             TaskDict.update({name.createdby.deptname: each_dept_count})
-
-    js_data = json.dumps(TaskDict,ensure_ascii=False).encode('utf8')
-
-    pie_tasks=_dept_tasks_statistics(dept_code,start_date,end_date)
-    open_projects=_dept_open_pojects(dept_code,start_date,end_date)
-    per_indicator = indicators(dept_code,start_date,end_date)
-    context = {"start_date":start_date,"end":end_date,"dept_task_count":dept_internal_task_count,
-                "dept_external_task":dept_external_task,"TaskDict":TaskDict,"js_data":js_data,
-               'pie_tasks':pie_tasks,"per_indicator":per_indicator,'open_projects':open_projects
-               }
-    return render(request, 'project/dashboard_manager.html', context)
-
+    return TaskDict
 
 def _dept_tasks_statistics(deptcode,startdate,enddate):
     tasks = {}
