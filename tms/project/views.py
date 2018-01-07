@@ -14,7 +14,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q , Count ,Avg
 from django.core.urlresolvers import reverse
 from django.contrib import messages
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import User,Group
 from django.contrib.auth.decorators import permission_required
 from django.views.generic import UpdateView, ListView
 from .filters import SheetFilter
@@ -313,12 +313,9 @@ def ProjectDetail(request,pk):
     else :
         projectProgress=round(allTakProgress/len(tasks_list), 2)
 
-    project_list = Project.objects.all().filter(
-    Q(createdby__exact=EmpID)|
-    Q(id__in = project_id)
-    ).exclude(status=4).order_by('-id')
 
     history=Task.history.filter(project=pk)[:10:1]
+    project_list = _get_internal_external_projects( request)
     current_url ="ns-project:" + resolve(request.path_info).url_name
     context={'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'projectProgress':projectProgress,
     'taskprogress':allTakProgress,'tasks_list':tasks_list,'history':history,'attached_files':attached_files}
@@ -392,10 +389,7 @@ def ProjectTask(request,pk,task_status=None):
         except:
             pass
 
-    project_list= Project.objects.all().filter(
-    Q(createdby__exact=empid)|
-    Q(id__in = project_id)
-    ).exclude(status=4).order_by('-id')
+    project_list= _get_internal_external_projects(request)
 
     task_list= Task.objects.all().filter(
          Q(project__id__exact=pk)&
@@ -448,17 +442,17 @@ def ProjectTask(request,pk,task_status=None):
 def ProjectTaskDetail(request,projectid,taskid):
     assignToEmp=None
     assignToDept=None
+    deptcode=request.session['DeptCode']
     #get all attached files
     attached_files= Media.objects.filter(project__id__exact=projectid, task__id__exact=taskid)
-    createdBy=request.session['EmpID']
-    project_list= Project.objects.all().filter(createdby__exact=createdBy).exclude(status=4).order_by('-id')
+    task_detail= get_object_or_404(Task,project_id__exact= projectid,pk=taskid)
+    createdby=get_object_or_404(Employee,empid__exact=task_detail.createdby.empid);
+    project_list=  _get_internal_external_projects(request)
     current_url ="ns-project:project-task"
     project_detail= get_object_or_404(Project,pk=projectid)
-    task_detail= get_object_or_404(Task,project_id__exact= projectid,pk=taskid)
-<<<<<<< HEAD
-=======
-    createdby=get_object_or_404(Employee,empid__exact=task_detail.createdby.empid);
->>>>>>> branch 'master' of https://github.com/sherifsakr/tms.git
+
+    
+
     try:
         assignToEmp=Employee.objects.get(empid__exact=task_detail.assignedto);
     except:
@@ -734,10 +728,8 @@ def ProjectTeam(request,project_id):
             projectid.append(data.project.id)
         except:
             pass
-    project_list= Project.objects.all().filter(
-    Q(createdby__exact=EmpID)|
-    Q(id__in = projectid)
-    ).exclude(status=4).order_by('-id')
+        
+    project_list=   project_list = _get_internal_external_projects( request)
     all_emp = VStatisticstaskdata.objects.filter(projectid = project_id)
     current_url ="ns-project:" + resolve(request.path_info).url_name
     context={'all_emp':all_emp,'project_detail':project_detail,'project_list':project_list,'current_url':current_url}
@@ -1117,6 +1109,7 @@ def TaskListExternal(request,task_status=None):
     context = {'tasks':_plist,'current_url':current_url,'new_tasks_count':new_tasks_count}
     return render(request, 'project/tasks_from_external_dept.html', context)
 
+@login_required
 def DashboardManager(request):
     from dateutil.relativedelta import relativedelta
     from django.db.models import F
@@ -1137,6 +1130,7 @@ def DashboardManager(request):
                }
     return render(request, 'project/dashboard_manager.html', context)
 
+@login_required
 def DashboardEmployee(request,empid):
     from dateutil.relativedelta import relativedelta
     from django.db.models import F
@@ -1232,16 +1226,21 @@ def _project_kpi(deptcode,startdate,enddate):
     projects= Project.objects.filter(
         (Q(start__gte=startdate)& Q(start__lte=enddate))&
                                        (Q(departement__deptcode__exact=deptcode)| Q(task__departement__deptcode__exact=deptcode))
-                                    )
+                                    ).annotate(dcount=Count('departement'))
     projectKPI["p_all"]= projects.count()
     projectKPI["p_internal"]= projects.filter(departement__deptcode__exact=deptcode).count()
     projectKPI["p_external"]= projects.filter( Q(task__departement__deptcode__exact=deptcode) & ~Q(departement__deptcode__exact = deptcode)).count()
-    projectKPI["t_all"]= projects.filter(  Q(task__departement__deptcode__exact=deptcode)).count()
-    projectKPI["t_internal"]= projects.filter( Q(task__departement__deptcode__exact=deptcode) & Q(task__project__departement__deptcode__exact=deptcode)).count()
-    projectKPI["t_external"]= projects.filter(  Q(task__departement__deptcode__exact=deptcode) & ~Q(task__project__departement__deptcode__exact=deptcode)).count()
+  
+    tasks=Task.objects.filter(
+        (Q(startdate__gte=startdate)& Q(startdate__lte=enddate))&
+                                       (Q(departement__deptcode__exact=deptcode)| Q(project__departement__deptcode__exact=deptcode))
+                                    )
+    projectKPI["t_all"]= tasks.count()
+    projectKPI["t_internal"]= tasks.filter( Q(departement__deptcode__exact=deptcode) & Q(project__departement__deptcode__exact=deptcode)).count()
+    projectKPI["t_external"]= tasks.filter(  Q(departement__deptcode__exact=deptcode) & ~Q(project__departement__deptcode__exact=deptcode)).count()
     return projectKPI
 
-<<<<<<< HEAD
+
 def _open_tasks(deptcode,startdate,enddate):
     openTasks= Task.objects.filter(
       (Q(departement__deptcode__exact= deptcode)) 
@@ -1249,8 +1248,6 @@ def _open_tasks(deptcode,startdate,enddate):
     return openTasks
 
 
-=======
->>>>>>> branch 'master' of https://github.com/sherifsakr/tms.git
 def indicators(deptcode,start_date,end_date):
     from django.db.models import F
     #all task from now and 12 monthes before
@@ -1398,3 +1395,15 @@ def mydelegation(request):
         messages.info(request, _("No Delegations"))
     context = {'AllDelegations': all_delegations,'count':count}
     return render(request, 'project/my_delegation.html', context)
+
+def _get_internal_external_projects(request):
+    deptcode = request.session['DeptCode']
+    if request.user.groups.filter(name="ismanager").exists():
+         projects=Project.objects.filter(
+             (Q(task__project__departement__deptcode__exact=deptcode)| Q(task__departement__deptcode__exact=deptcode))
+                                        ).annotate(dcount=Count('task')).order_by('-id')
+    else:
+       projects=Project.objects.filter(
+             ( Q(task__assignedto__empid__exact=request.session['EmpID']))
+                                        ).annotate(dcount=Count('task')).order_by('-id')
+    return projects

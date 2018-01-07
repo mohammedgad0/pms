@@ -97,8 +97,9 @@
                               <small> {{ project.Progress.progress__avg|floatformat:-2}}% مكتمل</small>
                               </td>
                      <td >
-                     {% if commitment == True%}
-                     <div class="commitment-up text-green">
+                      {% now "Y-m-d" as current_date %}
+                     {% if project.enddate|date:"Y-m-d" < current_date  and project.status.name != "done" %}
+                     <div class="commitment-up text-success">
                      <i class="fa fa-level-up"></i> ملتزم
                    </div>
                      {% else %}
@@ -128,10 +129,10 @@
         </div>
       </div>
 
- <div class="col-md-4 col-sm-4 col-xs-4">
+ <div class="col-md-4 col-sm-4 col-xs-12">
          <div class="x_panel tile fixed_height_320">
           <div class="x_title">
-            <h2>المهام</h2>
+            <h2>المهام حسب الحالة</h2>
             <div class="clearfix"></div>
           </div>
           <div class="x_content">
@@ -151,7 +152,7 @@
             <div class="clearfix"></div>
           </div>
           <div class="x_content">
-  <table class="table table-sm table-responsive" id="open-project-list">
+  <table class="table table-sm table-responsive" id="open-tasks">
                 <thead>
                   <tr>
                     <th>#</th>
@@ -167,7 +168,7 @@
 
 
                   {% for task in open_tasks %}
-                  
+                  {% if task is not None and  task.project.id != "" %}
                   <tr>
                     <th scope="row">{{task.id}}</th>
                     <td><a href="{% url 'ns-project:project-task-detail' task.project.id task.id   %}" class="blue" >  {{ task.name }}</a></td>
@@ -182,9 +183,8 @@
                     
                      <td >
                      {% now "Y-m-d" as current_date %}
-                     {{current_date}}
-                     
-                     {% if task.enddate < current_date and task.status != "Done" %}
+
+                     {% if task.enddate|date:"Y-m-d" < current_date and task.status != "Done" %}
                                              <div class="commitment-down text-danger">
                     
                     <i class="fa fa-level-down"></i> متأخر
@@ -193,7 +193,7 @@
 
                    </div>
                      {% else %}
-                                      <div class="commitment-up text-green">
+                                      <div class="commitment-up text-success">
                  
                                       <i class="fa fa-level-up"></i> ملتزم
                  
@@ -207,6 +207,7 @@
                          
                  
                   </tr>
+                  {%endif%}
                   {% endfor %}
                 </tbody>
               </table>
@@ -348,11 +349,13 @@ setInterval(blinker, 1000); //Runs every second
 
   <script type="text/javascript">
 $(document).ready(function() {
-    $('#open-project-list').DataTable( {
-        "scrollY":        "200px",
+    $('#open-project-list ,#open-tasks').DataTable( {
+       "scrollY":        "200px",
         "scrollCollapse": true,
         "paging":         false,
-        "searching" :false
+        "searching" :false,
+         "bLengthChange": false ,
+          "info":     false
     } );
 } );
     </script>
