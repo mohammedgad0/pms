@@ -1127,8 +1127,9 @@ def DashboardManager(request):
     pie_tasks=_dept_tasks_statistics(dept_code,start_date,end_date)
     open_projects=_dept_open_pojects(dept_code,start_date,end_date)
     per_indicator = indicators(dept_code,start_date,end_date)
+    project_kpi=_project_kpi(dept_code, start_date, end_date)
     context = {"start_date":start_date,"end":end_date,"task_based_department":task_based_department,
-               'pie_tasks':pie_tasks,"per_indicator":per_indicator,'open_projects':open_projects
+               'pie_tasks':pie_tasks,"per_indicator":per_indicator,'open_projects':open_projects,'project_kpi':project_kpi,
                }
     return render(request, 'project/dashboard_manager.html', context)
 
@@ -1177,15 +1178,8 @@ def _dept_open_pojects(deptcode,startdate,enddate):
 #     hold = Count('task', distinct=True, filter=Q(status__exact="Hold"))
 #     closed = Count('task', distinct=True, filter=Q(status__exact="Closed"))
     projects= Project.objects.filter(
-        (Q(departement__deptcode__exact=deptcode) & Q(start__gte=startdate)) 
+        (Q(departement__deptcode__exact=deptcode) & Q(start__gte=startdate) & Q(start__lte=enddate)) 
         & ~Q(status__name_ar__exact="done")).annotate(num_tasks=Count('task'))
-
-    new = Count('task', distinct=True, filter=Q(status__exact="Done"))
-    inprogress = Count('task', distinct=True, filter=Q(task__status__exact="InProgress"))
-    done = Count('task', distinct=True, filter=Q(task__status__exact="Done"))
-    hold = Count('task', distinct=True, filter=Q(status__exact="Hold"))
-    closed = Count('task', distinct=True, filter=Q(status__exact="Closed"))
-    projects= Project.objects.filter(departement__deptcode__exact=deptcode,status__name__exact="New",start__gte=startdate,end__lte=enddate).annotate(num_tasks=Count('task')).annotate(InProgress=inprogress).annotate(Done=done).annotate(hold=hold).annotate(closed=closed).annotate(new=new)
 
     q=projects.query
     for project in projects :
@@ -1241,7 +1235,10 @@ def indicators(deptcode,start_date,end_date):
     ).order_by("enddate").filter(enddate__gte = F('finisheddate')).count()
 
     task_delayed = all_task_count - task_done
-    per_indicator = round(task_done/all_task_count*100)
+    try :
+        per_indicator = round(task_done/all_task_count*100)
+    except:
+       per_indicator=0
     return per_indicator
 #download attached file from media
 def Download(request,file_name):
