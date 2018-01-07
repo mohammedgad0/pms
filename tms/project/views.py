@@ -1171,7 +1171,6 @@ def _dept_tasks_statistics(deptcode,startdate,enddate):
 def _dept_open_pojects(deptcode,startdate,enddate):
 
     projectList=[]
-<<<<<<< HEAD
 #     new = Count('task', distinct=True, filter=Q(status__exact="Done"))
 #     inprogress = Count('task', distinct=True, filter=Q(task__status__exact="InProgress"))
 #     done = Count('task', distinct=True, filter=Q(task__status__exact="Done"))
@@ -1180,14 +1179,14 @@ def _dept_open_pojects(deptcode,startdate,enddate):
     projects= Project.objects.filter(
         (Q(departement__deptcode__exact=deptcode) & Q(start__gte=startdate)) 
         & ~Q(status__name_ar__exact="done")).annotate(num_tasks=Count('task'))
-=======
+
     new = Count('task', distinct=True, filter=Q(status__exact="Done"))
     inprogress = Count('task', distinct=True, filter=Q(task__status__exact="InProgress"))
     done = Count('task', distinct=True, filter=Q(task__status__exact="Done"))
     hold = Count('task', distinct=True, filter=Q(status__exact="Hold"))
     closed = Count('task', distinct=True, filter=Q(status__exact="Closed"))
     projects= Project.objects.filter(departement__deptcode__exact=deptcode,status__name__exact="New",start__gte=startdate,end__lte=enddate).annotate(num_tasks=Count('task')).annotate(InProgress=inprogress).annotate(Done=done).annotate(hold=hold).annotate(closed=closed).annotate(new=new)
->>>>>>> branch 'master' of https://github.com/sherifsakr/tms.git
+
     q=projects.query
     for project in projects :
         projectDict={}
@@ -1208,7 +1207,6 @@ def _dept_open_pojects(deptcode,startdate,enddate):
         projectList.append(projectDict)
     return projectList
 
-<<<<<<< HEAD
 
 def _project_kpi(deptcode,startdate,enddate):
     projectKPI={}    
@@ -1225,8 +1223,7 @@ def _project_kpi(deptcode,startdate,enddate):
     return projectKPI
 
 
-=======
->>>>>>> branch 'master' of https://github.com/sherifsakr/tms.git
+
 def indicators(deptcode,start_date,end_date):
     from django.db.models import F
     #all task from now and 12 monthes before
