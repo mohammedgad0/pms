@@ -1121,12 +1121,12 @@ def DashboardManager(request):
     dept_code = '2322'
     start_date = datetime.now() - relativedelta(years=1)
     end_date = datetime.now()
-
+    project_kpi=_project_kpi(dept_code,start_date,end_date)
     pie_tasks=_dept_tasks_statistics(dept_code,start_date,end_date)
     open_projects=_dept_open_pojects(dept_code,start_date,end_date)
     per_indicator = indicators(dept_code,start_date,end_date)
     context = {"start_date":start_date,"end":end_date,
-               'pie_tasks':pie_tasks,"per_indicator":per_indicator,'open_projects':open_projects
+               'pie_tasks':pie_tasks,"per_indicator":per_indicator,'open_projects':open_projects,'project_kpi':project_kpi
                }
     return render(request, 'project/dashboard_manager.html', context)
 
@@ -1150,7 +1150,7 @@ def _dept_open_pojects(deptcode,startdate,enddate):
     done = Count('task', distinct=True, filter=Q(task__status__exact="Done"))
     hold = Count('task', distinct=True, filter=Q(status__exact="Hold"))
     closed = Count('task', distinct=True, filter=Q(status__exact="Closed"))
-    projects= Project.objects.filter(departement__deptcode__exact=deptcode,status__name__exact="New",start__gte=startdate,end__lte=enddate).annotate(num_tasks=Count('task')).annotate(InProgress=inprogress).annotate(Done=done).annotate(hold=hold).annotate(closed=closed).annotate(new=new)
+    projects= Project.objects.filter(departement__deptcode__exact=deptcode,start__gte=startdate,end__lte=enddate).annotate(num_tasks=Count('task'))
     q=projects.query
     for project in projects :
         projectDict={}
@@ -1171,6 +1171,19 @@ def _dept_open_pojects(deptcode,startdate,enddate):
         projectList.append(projectDict)
     return projectList
 
+def _project_kpi(deptcode,startdate,enddate):
+    projectKPI={}    
+    projects= Project.objects.filter(
+        (Q(start__gte=startdate)& Q(end__lte=enddate))&
+                                       (Q(departement__deptcode__exact=deptcode)| Q(task__departement__deptcode__exact=deptcode))
+                                    )
+    projectKPI["p_all"]= projects.count()
+    projectKPI["p_internal"]= projects.filter(departement__deptcode__exact=deptcode).count()
+    projectKPI["p_external"]= projects.filter( Q(task__departement__deptcode__exact=deptcode) & ~Q(departement__deptcode__exact = deptcode)).count()
+    projectKPI["t_all"]= projects.filter(  Q(task__departement__deptcode__exact=deptcode)).count()
+    projectKPI["t_internal"]= projects.filter(  Q(task__departement__deptcode__exact=deptcode)).count()
+    projectKPI["t_external"]= projects.filter(  Q(task__departement__deptcode__exact=deptcode)).count()
+    return projectKPI
 
 def indicators(deptcode,start_date,end_date):
     from django.db.models import F
@@ -1189,7 +1202,10 @@ def indicators(deptcode,start_date,end_date):
     ).order_by("enddate").filter(enddate__gte = F('finisheddate')).count()
 
     task_delayed = all_task_count - task_done
-    per_indicator = round(task_done/all_task_count*100)
+    try:
+        per_indicator = round(task_done/all_task_count*100)
+    except:
+        per_indicator=0
     return per_indicator
 #download attached file from media
 def Download(request,file_name):
