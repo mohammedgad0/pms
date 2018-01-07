@@ -1120,13 +1120,44 @@ def DashboardManager(request):
     from django.db.models import F
     dept_code = '2322'
     start_date = datetime.now() - relativedelta(years=1)
-    end_date = datetime.now()
-    project_kpi=_project_kpi(dept_code,start_date,end_date)
+    end_date = datetime.now()    
+    def dept_task_indicators(deptcode,startdate,enddate):
+        pass
+    import json
+   
+    dept_data = get_object_or_404(Department,deptcode=dept_code)
+    dept_manager = dept_data.managerid
+    dept_internal_task_count = Task.objects.filter(
+    Q(createdby = dept_manager)&
+    Q(enddate__gte = start_date, startdate__lte = end_date)
+    ).count()
+
+    dept_external_task = Task.objects.filter(
+    Q(departement = dept_code)&
+    ~Q(createdby = dept_manager)&
+    Q(enddate__gte = start_date, startdate__lte = end_date)
+    )
+
+    TaskDict = {}
+    TaskDict.update({dept_data.deptname: dept_internal_task_count})
+    for data in dept_external_task:
+        tasks = Task.objects.filter(departement = data.departement, createdby = data.createdby)
+        task_count = tasks.count()
+        for name in tasks:
+            each_dept_count = tasks.filter(createdby = name.createdby).count()
+            TaskDict.update({name.createdby.deptname: each_dept_count})
+    js_data = json.dumps(TaskDict,ensure_ascii=False).encode('utf8')
+    
     pie_tasks=_dept_tasks_statistics(dept_code,start_date,end_date)
     open_projects=_dept_open_pojects(dept_code,start_date,end_date)
     per_indicator = indicators(dept_code,start_date,end_date)
-    context = {"start_date":start_date,"end":end_date,
-               'pie_tasks':pie_tasks,"per_indicator":per_indicator,'open_projects':open_projects,'project_kpi':project_kpi
+    project_kpi=_project_kpi(dept_code,start_date,end_date)
+
+    context = {"start_date":start_date,"end":end_date,"dept_task_count":dept_internal_task_count,
+                "dept_external_task":dept_external_task,"TaskDict":TaskDict,"js_data":js_data,
+               'pie_tasks':pie_tasks,"per_indicator":per_indicator,'open_projects':open_projects,
+               'project_kpi':project_kpi,
+
                }
     return render(request, 'project/dashboard_manager.html', context)
 
@@ -1171,6 +1202,7 @@ def _dept_open_pojects(deptcode,startdate,enddate):
         projectList.append(projectDict)
     return projectList
 
+
 def _project_kpi(deptcode,startdate,enddate):
     projectKPI={}    
     projects= Project.objects.filter(
@@ -1184,6 +1216,7 @@ def _project_kpi(deptcode,startdate,enddate):
     projectKPI["t_internal"]= projects.filter(  Q(task__departement__deptcode__exact=deptcode)).count()
     projectKPI["t_external"]= projects.filter(  Q(task__departement__deptcode__exact=deptcode)).count()
     return projectKPI
+
 
 def indicators(deptcode,start_date,end_date):
     from django.db.models import F

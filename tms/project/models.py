@@ -37,7 +37,7 @@ class Project(models.Model):
     desc = models.CharField(db_column='Desc', max_length=1500)  # Field name made lowercase.
     createdby = models.CharField(db_column='CreatedBy', max_length=20, blank=True, null=True)  # Field name made lowercase.
     createddate = models.DateTimeField(db_column='CreatedDate', blank=True, null=True)  # Field name made lowercase.
-    departement = models.ForeignKey('Department',db_column='DepartementId', to_field='deptcode',on_delete=models.SET_NULL, blank=True, null=True) 
+    departement = models.ForeignKey('Department',db_column='DepartementId', to_field='deptcode',on_delete=models.SET_NULL, blank=True, null=True)
     #statusid = models.IntegerField(db_column='StatusId', blank=True, null=True)  # Field name made lowercase.
     status = models.ForeignKey('ProjectStatus', on_delete=models.SET_NULL, null=True)
     openedby = models.CharField(db_column='OpenedBy', max_length=20, blank=True, null=True)  # Field name made lowercase.
@@ -168,7 +168,7 @@ class ApfDeptView(models.Model):
         db_table = 'apf_dept_view'
 
 class Task(models.Model):
-    assignedto = models.ForeignKey('Employee',db_column='assignedto',to_field='empid', on_delete=models.SET_NULL, blank=True, null=True)
+    assignedto = models.ForeignKey('Employee',db_column='assignedto',to_field='empid',related_name='Emp3', on_delete=models.SET_NULL, blank=True, null=True)
     departement = models.ForeignKey('Department',db_column='departementid', to_field='deptcode',on_delete=models.SET_NULL, blank=True, null=True)
     project = models.ForeignKey('Project',db_column='projectid', to_field='id', on_delete=models.CASCADE,blank=True,  null=True)
 
@@ -200,7 +200,7 @@ class Task(models.Model):
     closeddate = models.DateTimeField(db_column='ClosedDate', blank=True, null=True)  # Field name made lowercase.
     closereson = models.CharField(db_column='CloseReson', max_length=500, blank=True, null=True)  # Field name made lowercase.
     deleted = models.IntegerField(db_column='Deleted', blank=True, null=True)  # Field name made lowercase.
-    createdby = models.IntegerField(db_column='CreatedBy', blank=True, null=True)  # Field name made lowercase.
+    createdby = models.ForeignKey('Employee',to_field='empid',related_name='Emp4',db_column='CreatedBy', blank=True, null=True)  # Field name made lowercase.
     createddate = models.DateTimeField(db_column='CreatedDate', blank=True, null=True)  # Field name made lowercase.
     lasteditdate = models.DateTimeField(db_column='LastEditDate', blank=True, null=True)  # Field name made lowercase.
     lasteditby = models.IntegerField(db_column='LastEditBy', blank=True, null=True)  # Field name made lowercase.
