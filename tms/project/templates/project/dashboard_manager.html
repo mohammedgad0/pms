@@ -80,8 +80,8 @@
                   </tr>
                 </thead>
                 <tbody>
-                
-             
+
+
                   {% for project in open_projects %}
                   <tr>
                     <th scope="row">{{project.id}}</th>
@@ -92,13 +92,13 @@
                               <div class="progress progress_sm">
                                  <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="{{project.Progress.progress__avg}}" aria-valuenow="72" style="width: {{project.Progress.progress__avg}}%;"></div>
                               </div>
-                             
+
                               <small> {{ project.Progress.progress__avg|floatformat:-2}}% مكتمل</small>
                               </td>
-                     <td > 
+                     <td >
                      {% if commitment == True%}
                      <div class="commitment-up text-green">
-                     <i class="fa fa-level-up"></i> ملتزم 
+                     <i class="fa fa-level-up"></i> ملتزم
                    </div>
                      {% else %}
                          <div class="commitment-down text-danger">
@@ -106,7 +106,7 @@
                        </div>
                      {%endif%}
                      </td>
-                     
+
                      <td>{{project.All}}</td>
                        <td>{{project.New}}</td>
                        <td>{{project.InProgress}}</td>
@@ -159,65 +159,15 @@
         <div class="x_panel tile fixed_height_320 overflow_hidden">
           <div class="x_title">
             <h2>المهام  حسب الإدارة</h2>
-
+{{dept_task_count}}
+<br>
+{% for key, value in TaskDict.items %}
+{%if key.deptname is None%}{{key}}{%endif%}{{key.deptname}} <br>  {{value}}<br>
+{%endfor%}
             <div class="clearfix"></div>
           </div>
           <div class="x_content">
-            <table class="" style="width:100%">
-              <tr>
-                <th style="width:37%;">
-
-                </th>
-                <th>
-                  <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                    <p class="">الإدارة</p>
-                  </div>
-                  <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
-                    <p class="">الإنجاز</p>
-                  </div>
-                </th>
-              </tr>
-              <tr>
-                <td>
-                  <canvas class="canvasDoughnut" height="140" width="140" style="margin: 15px 10px 10px 0"></canvas>
-                </td>
-                <td>
-                  <table class="tile_info">
-                    <tr>
-                      <td>
-                        <p><i class="fa fa-square blue"></i>مهام داخلية </p>
-                      </td>
-                      <td>30%</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p><i class="fa fa-square green"></i>إدارة المشاريع </p>
-                      </td>
-                      <td>10%</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p><i class="fa fa-square purple"></i>إدارة الحاسب الآلى </p>
-                      </td>
-                      <td>20%</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p><i class="fa fa-square aero"></i>أدارة الإعلام </p>
-                      </td>
-                      <td>15%</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p><i class="fa fa-square red"></i>أدارة خدمة العملاء </p>
-                      </td>
-                      <td>30%</td>
-                    </tr>
-
-                  </table>
-                </td>
-              </tr>
-            </table>
+    <div id="donutchart"></div>
           </div>
         </div>
       </div>
@@ -258,7 +208,7 @@
     <!-- ECharts -->
   <script src="/static/vendors/echarts/dist/echarts.min.js"></script>
   <script src="/static/vendors/echarts/map/js/world.js"></script>
-  
+
   <!-- google chart -->
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
@@ -312,8 +262,8 @@ google.charts.load('current', {'packages':['gauge']});
 
         chart.draw(data, options);
       }
-      
-      //flasher 
+
+      //flasher
       function blinker() {
     $('.commitment-down').fadeOut(100);
     $('.commitment-down').fadeIn(100);
@@ -328,8 +278,8 @@ setInterval(blinker, 1000); //Runs every second
   <script src="/static/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
   <script src="/static/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
   <script src="/static/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
-  
- 
+
+
   <script type="text/javascript">
 $(document).ready(function() {
     $('#open-project-list').DataTable( {
@@ -340,7 +290,7 @@ $(document).ready(function() {
     } );
 } );
     </script>
-    
+
         <!-- jQuery Sparklines -->
   <script src="/static/vendors/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
       <script>
@@ -356,5 +306,34 @@ $(document).ready(function() {
                                 spotRadius: 2.5,
                                 width: 85
                             });
-                            </script>  
+
+// piecharts departments
+var js_dict = {
+    {% for k, v in TaskDict.items %}
+    "{{ k }}": "{{ v }}"{% if not forloop.last %},{% endif %}
+    {% endfor %}
+}
+console.log({{js_dict}});
+google.charts.load("current", {packages:["corechart"]});
+google.charts.setOnLoadCallback(drawChart);
+function drawChart() {
+  var data = google.visualization.arrayToDataTable([
+    ['Task', 'Hours per Day'],
+    ['js_dict.k',     11],
+    ['Eat',      2],
+    ['Commute',  2],
+    ['Watch TV', 2],
+    ['Sleep',    7]
+  ]);
+
+  var options = {
+    title: '{{_("Tasks based on Departments")}}',
+    pieHole: 0.4,
+  };
+
+  var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+  chart.draw(data, options);
+}
+
+                            </script>
 {% endblock javascripts %}
