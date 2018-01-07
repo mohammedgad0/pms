@@ -56,6 +56,7 @@ urlpatterns = [
     url(r'^project/(?P<project_id>\d+)/team$',views.ProjectTeam, name='project-team'),
     url(r'^project/(?P<project_id>\d+)/addtask$',views.AddTask, name='add-task'),
     url(r'^project/dashboard_manager$',views.DashboardManager, name='dashboard-manager'),
+    url(r'^project/dashboard_employee/(?P<empid>\d+)/$',views.DashboardEmployee, name='dashboard-employee'),
     url(r'^auth/(?P<email>.*)/(?P<signature>.*)/(?P<time>.*)/$', views.loginfromdrupal, name='loginfromdrupal'),
 
 
