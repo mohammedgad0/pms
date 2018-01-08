@@ -1408,5 +1408,5 @@ def _get_internal_external_projects(request):
 
 def Profile(request,empid):
     employee= get_object_or_404(Employee,empid__exact=empid)
-    context = {'empid':request.session['EmpId']}
-    return render(request, 'project/dashboard-employee.html', context)
+    context = {'employee':employee}
+    return render(request, 'project/dashboard_employee.html', context)

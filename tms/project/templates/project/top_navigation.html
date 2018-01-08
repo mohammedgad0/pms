@@ -25,7 +25,7 @@
             </a>
           </li>
      <li><a href="javascript:;">{{ _('Help') }}  </a></li> -->
-       {#  <li><a href="{% url 'profile' profile.empid %}"><i class="fa fa-sign-out pull-right"></i>{{ _('Profile')}} </a></li>  #}
+          <li><a href="{% url 'ns-project:profile' request.session.EmpID %}"><i class="fa fa-sign-out pull-right"></i>{{ _('Profile')}} </a></li>  
           <li><a href="{% url 'logout'%}"><i class="fa fa-sign-out pull-right"></i>{{ _('Log Out')}} </a></li>
         </ul>
       </li>
