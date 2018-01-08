@@ -12,35 +12,36 @@
 {% block content %}
 <div class="right_col" role="main">
    <!-- top tiles -->
+  
    <div class="row tile_count" style="margin-bottom: 0px;">
       <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
          <span class="count_top"><i class="fa fa-briefcase"></i>  كل المشاريع </span>
-         <div class="count">{{project_kpi.p_all|stringformat:"02d"}}</div>
+         <div class="count">{{kpi.p_all|stringformat:"02d"}}</div>
          <!-- <span class="count_bottom"><i class="green">4% </i> منذ اخر اسبوع</span>-->
       </div>
       <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
          <span class="count_top"><i class="fa fa-clock-o"></i> مشاريع داخلية</span>
-         <div class="count">{{project_kpi.p_internal|stringformat:"02d"}}</div>
+         <div class="count">{{kpi.p_internal|stringformat:"02d"}}</div>
          <!--   <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> منذ اخر اسبوع</span>-->
       </div>
       <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
          <span class="count_top"><i class="fa fa-clock-o"></i> مشاريع خارجية</span>
-         <div class="count">{{project_kpi.p_external|stringformat:"02d"}}</div>
+         <div class="count">{{kpi.p_external|stringformat:"02d"}}</div>
          <!--   <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i>  منذ اخر اسبوع</span>-->
       </div>
       <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
          <span class="count_top"><i class="fa fa-clock-o"></i> كل المهام</span>
-         <div class="count">{{project_kpi.t_all|stringformat:"02d"}}</div>
+         <div class="count">{{kpi.t_all|stringformat:"02d"}}</div>
          <!-- <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i>  منذ اخر اسبوع</span> -->
       </div>
       <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
          <span class="count_top"><i class="fa fa-clock-o"></i> مهام داخلية</span>
-         <div class="count">{{project_kpi.t_internal|stringformat:"02d"}}</div>
+         <div class="count">{{kpi.t_internal|stringformat:"02d"}}</div>
          <!--  <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i>  منذ اخر اسبوع</span> -->
       </div>
       <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
          <span class="count_top"><i class="fa fa-clock-o"></i> مهام مسندة</span>
-         <div class="count">{{project_kpi.t_external|stringformat:"02d"}}</div>
+         <div class="count">{{kpi.t_external|stringformat:"02d"}}</div>
          <!--  <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i>   منذ اخر اسبوع</span> -->
       </div>
    </div>
