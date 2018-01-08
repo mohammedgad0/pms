@@ -126,19 +126,19 @@
                 <div class="profile_img">
                   <div id="crop-avatar">
                     <!-- Current avatar -->
-                    <img class="img-responsive avatar-view" src="/static/images/picture.jpg"  style="margin: 0 auto;" alt="Avatar" title="Change the avatar">
+                    <img class="img-responsive avatar-view" src="/static/images/profile.png"  style="margin: 0 auto; height:220px;" alt="Avatar" title="Change the avatar">
                   </div>
                 </div>
-                <h3>Samuel Doe</h3>
+                <h3>{{employee.empname}}</h3>
                 <ul class="list-unstyled user_data">
-                  <li><i class="fa fa-map-marker user-profile-icon"></i> San Francisco, California, USA
+                  <li><i class="fa fa-map-marker user-profile-icon"></i> {{employee.deptname}}
                   </li>
                   <li>
-                    <i class="fa fa-briefcase user-profile-icon"></i> Software Engineer
+                    <i class="fa fa-briefcase user-profile-icon"></i> {{employee.jobtitle}}
                   </li>
                   <li class="m-top-xs">
                     <i class="fa fa-external-link user-profile-icon"></i>
-                    <a href="http://www.kimlabs.com/profile/" target="_blank">www.kimlabs.com</a>
+                    <a href="mailto:{{employee.email}}" target="_blank">{{employee.email}}</a>
                   </li>
                 </ul>
               </div>
@@ -146,7 +146,7 @@
          </div>
       </div>
       <!--  pichart -->
-       <div class="col-md-4 col-sm-4 col-xs-4 left">
+       <div class="col-md-3 col-sm-12 col-xs-12 left">
          <div class="x_panel tile fixed_height_320">
             <div class="x_title">
                <h2>{% trans "Tasks by status" %}</h2>
