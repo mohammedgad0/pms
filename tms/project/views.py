@@ -1236,7 +1236,7 @@ def _project_kpi(deptcode,startdate,enddate):
                                        (Q(departement__deptcode__exact=deptcode)| Q(project__departement__deptcode__exact=deptcode))
                                     )
     projectKPI["t_all"]= tasks.count()
-    projectKPI["t_internal"]= tasks.filter( Q(departement__deptcode__exact=deptcode) & Q(project__departement__deptcode__exact=deptcode)).count()
+    projectKPI["t_internal"]= tasks.filter(  Q(project__departement__deptcode__exact=deptcode)).count()
     projectKPI["t_external"]= tasks.filter(  Q(departement__deptcode__exact=deptcode) & ~Q(project__departement__deptcode__exact=deptcode)).count()
     return projectKPI
 
@@ -1253,15 +1253,12 @@ def indicators(deptcode,start_date,end_date):
     #all task from now and 12 monthes before
     all_task = Task.objects.filter(
     Q(departement__deptcode = deptcode)&
-    Q(enddate__gte = start_date, startdate__lte = end_date)
+    Q(startdate__gte = start_date, startdate__lte = end_date)
     )
-    all_task_count = Task.objects.filter(
-    Q(departement__deptcode = deptcode)&
-    Q(enddate__gte = start_date, enddate__lte = end_date)
-    ).count()
+    all_task_count = all_task.count()
 
     task_done = all_task.filter(
-    Q(status = 'Closed')
+    Q(status__exact = 'Closed')
     ).order_by("enddate").filter(enddate__gte = F('finisheddate')).count()
 
     task_delayed = all_task_count - task_done
