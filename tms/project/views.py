@@ -1252,13 +1252,13 @@ def indicators(deptcode,start_date,end_date):
     from django.db.models import F
     #all task from now and 12 monthes before
     all_task = Task.objects.filter(
-    Q(departement__deptcode = deptcode)&
+    (Q(project__departement__deptcode = deptcode) | Q(departement__deptcode = deptcode))&
     Q(startdate__gte = start_date, startdate__lte = end_date)
     )
     all_task_count = all_task.count()
 
     task_done = all_task.filter(
-    Q(status__exact = 'Closed')
+   ( Q(status__exact = 'Closed') | Q(status__exact = 'Done'))
     ).order_by("enddate").filter(enddate__gte = F('finisheddate')).count()
 
     task_delayed = all_task_count - task_done
