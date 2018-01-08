@@ -1138,8 +1138,9 @@ def DashboardEmployee(request,empid):
     end_date = datetime.now()
     employee= get_object_or_404(Employee,empid__exact=empid)
     task_employee = emp_task(empid,start_date,end_date)
-    kpi= _project_kpi_employee(get_object_or_404(Employee,empid__exact=empid),start_date,end_date)
-    context = {"task_employee":task_employee,'employee':employee,'kpi':kpi}
+    kpi= _project_kpi_employee(employee,start_date,end_date)
+    pie_tasks=_employee_tasks_statistics(employee,start_date,end_date)
+    context = {"task_employee":task_employee,'employee':employee,'kpi':kpi,'pie_tasks':pie_tasks}
     return render(request, 'project/dashboard_employee.html', context)
 
 def emp_task(empid,start_date,end_date):
@@ -1421,3 +1422,14 @@ def _project_kpi_employee(employee,startdate,enddate):
     projectKPI["t_internal"]= tasks.filter(  Q(project__departement__deptcode__exact=employee.deptcode)).count()
     projectKPI["t_external"]= tasks.filter(   ~Q(project__departement__deptcode__exact=employee.deptcode)).count()
     return projectKPI
+
+def _employee_tasks_statistics(employee,startdate,enddate):
+    tasks = {}
+    task_list= Task.objects.filter(assignedto__deptcode__exact=employee.deptcode,startdate__gte=startdate,startdate__lte=enddate)
+    tasks['New']=task_list.filter(status__exact='New').count()
+    tasks['InProgress']=task_list.filter(status__exact='InProgress').count()
+    tasks['Done']=task_list.filter(status__exact='Done').count()
+    tasks['Hold']=task_list.filter(status__exact='Hold').count()
+    tasks['Canceled']=task_list.filter(status__exact='Canceled').count()
+    tasks['Closed']=task_list.filter(status__exact='Closed').count()
+    return tasks
