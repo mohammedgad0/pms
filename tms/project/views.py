@@ -1403,7 +1403,6 @@ def _get_internal_external_projects(request):
     return projects
 
 
-
 def _project_kpi_employee(employee,startdate,enddate):
     projectKPI={}
     projects= Project.objects.filter(
@@ -1416,7 +1415,7 @@ def _project_kpi_employee(employee,startdate,enddate):
   
     tasks=Task.objects.filter(
         (Q(startdate__gte=startdate)& Q(startdate__lte=enddate))&
-                                       (Q(task__assignedto__empid__exact=employee.empid))
+                                       (Q(assignedto__empid__exact=employee.empid))
                                     )
     projectKPI["t_all"]= tasks.count()
     projectKPI["t_internal"]= tasks.filter(  Q(project__departement__deptcode__exact=employee.deptcode)).count()
