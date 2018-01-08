@@ -1198,7 +1198,7 @@ def _dept_open_pojects(deptcode,startdate,enddate):
 #     closed = Count('task', distinct=True, filter=Q(status__exact="Closed"))
     projects= Project.objects.filter(
         (Q(departement__deptcode__exact=deptcode) & Q(start__gte=startdate) & Q(start__lte=enddate))
-        & ~Q(status__name_ar__exact="done")).annotate(num_tasks=Count('task'))
+        & ~Q(status__name__exact="Closed")).annotate(num_tasks=Count('task'))
 
     q=projects.query
     for project in projects :
@@ -1243,7 +1243,7 @@ def _project_kpi(deptcode,startdate,enddate):
 
 def _open_tasks(deptcode,startdate,enddate):
     openTasks= Task.objects.filter(
-      (Q(departement__deptcode__exact= deptcode)) 
+      (Q(departement__deptcode__exact= deptcode) | Q(project__departement__deptcode__exact= deptcode)) 
         & ~Q(status__exact="Closed"))
     return openTasks
 
@@ -1252,11 +1252,11 @@ def indicators(deptcode,start_date,end_date):
     from django.db.models import F
     #all task from now and 12 monthes before
     all_task = Task.objects.filter(
-    Q(departement = deptcode)&
+    Q(departement__deptcode = deptcode)&
     Q(enddate__gte = start_date, startdate__lte = end_date)
     )
     all_task_count = Task.objects.filter(
-    Q(departement = deptcode)&
+    Q(departement__deptcode = deptcode)&
     Q(enddate__gte = start_date, enddate__lte = end_date)
     ).count()
 
