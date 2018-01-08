@@ -1403,7 +1403,22 @@ def _get_internal_external_projects(request):
     return projects
 
 
-def Profile(request,empid):
-    employee= get_object_or_404(Employee,empid__exact=empid)
-    context = {'employee':employee}
-    return render(request, 'project/dashboard_employee.html', context)
+
+def _project_kpi_employee(employee,startdate,enddate):
+    projectKPI={}
+    projects= Project.objects.filter(
+        (Q(start__gte=startdate)& Q(start__lte=enddate))&
+                                       ( Q(task__assignedto__empid__exact=employee.empid))
+                                    ).annotate(dcount=Count('task'))
+    projectKPI["p_all"]= projects.count()
+    projectKPI["p_internal"]= projects.filter(departement__deptcode__exact=employee.deptcode).count()
+    projectKPI["p_external"]= projects.filter(  ~Q(departement__deptcode__exact = employee.deptcode)).count()
+  
+    tasks=Task.objects.filter(
+        (Q(startdate__gte=startdate)& Q(startdate__lte=enddate))&
+                                       (Q(task__assignedto__empid__exact=employee.empid))
+                                    )
+    projectKPI["t_all"]= tasks.count()
+    projectKPI["t_internal"]= tasks.filter(  Q(project__departement__deptcode__exact=employee.deptcode)).count()
+    projectKPI["t_external"]= tasks.filter(   ~Q(project__departement__deptcode__exact=employee.deptcode)).count()
+    return projectKPI
