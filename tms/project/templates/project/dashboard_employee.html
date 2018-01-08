@@ -15,34 +15,34 @@
   
    <div class="row tile_count" style="margin-bottom: 0px;">
       <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-         <span class="count_top"><i class="fa fa-briefcase"></i>  كل المشاريع </span>
+         <span class="count_top"><i class="fa fa-briefcase"></i>  {% trans "All Projects" %} </span>
          <div class="count">{{kpi.p_all|stringformat:"02d"}}</div>
-         <!-- <span class="count_bottom"><i class="green">4% </i> منذ اخر اسبوع</span>-->
+         <!-- <span class="count_bottom"><i class="green">4% </i> Ù…Ù†Ø° Ø§Ø®Ø± Ø§Ø³Ø¨ÙˆØ¹</span>-->
       </div>
       <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-         <span class="count_top"><i class="fa fa-clock-o"></i> مشاريع داخلية</span>
+         <span class="count_top"><i class="fa fa-clock-o"></i>  {% trans "Internal Projects" %} </span>
          <div class="count">{{kpi.p_internal|stringformat:"02d"}}</div>
-         <!--   <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> منذ اخر اسبوع</span>-->
+         <!--   <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> Ù…Ù†Ø° Ø§Ø®Ø± Ø§Ø³Ø¨ÙˆØ¹</span>-->
       </div>
       <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-         <span class="count_top"><i class="fa fa-clock-o"></i> مشاريع خارجية</span>
+         <span class="count_top"><i class="fa fa-clock-o"></i>  {% trans "External Projects" %}</span>
          <div class="count">{{kpi.p_external|stringformat:"02d"}}</div>
-         <!--   <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i>  منذ اخر اسبوع</span>-->
+         <!--   <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i>  Ù…Ù†Ø° Ø§Ø®Ø± Ø§Ø³Ø¨ÙˆØ¹</span>-->
       </div>
       <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-         <span class="count_top"><i class="fa fa-clock-o"></i> كل المهام</span>
+         <span class="count_top"><i class="fa fa-clock-o"></i> {% trans "All Tasks" %}</span>
          <div class="count">{{kpi.t_all|stringformat:"02d"}}</div>
-         <!-- <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i>  منذ اخر اسبوع</span> -->
+         <!-- <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i>  Ù…Ù†Ø° Ø§Ø®Ø± Ø§Ø³Ø¨ÙˆØ¹</span> -->
       </div>
       <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-         <span class="count_top"><i class="fa fa-clock-o"></i> مهام داخلية</span>
+         <span class="count_top"><i class="fa fa-clock-o"></i>  {% trans "Internal Tasks" %}</span>
          <div class="count">{{kpi.t_internal|stringformat:"02d"}}</div>
-         <!--  <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i>  منذ اخر اسبوع</span> -->
+         <!--  <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i>  Ù…Ù†Ø° Ø§Ø®Ø± Ø§Ø³Ø¨ÙˆØ¹</span> -->
       </div>
       <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-         <span class="count_top"><i class="fa fa-clock-o"></i> مهام مسندة</span>
+         <span class="count_top"><i class="fa fa-clock-o"></i> {% trans "External Tasks" %}</span>
          <div class="count">{{kpi.t_external|stringformat:"02d"}}</div>
-         <!--  <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i>   منذ اخر اسبوع</span> -->
+         <!--  <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i>   Ù…Ù†Ø° Ø§Ø®Ø± Ø§Ø³Ø¨ÙˆØ¹</span> -->
       </div>
    </div>
    <!-- /top tiles -->
@@ -121,11 +121,11 @@
       <div class="col-md-4 col-sm-4 col-xs-4">
          <div class="x_panel tile fixed_height_320">
             <div class="x_title">
-               <h2>المهام</h2>
+               <h2>Ø§Ù„Ù…Ù‡Ø§Ù…</h2>
                <div class="clearfix"></div>
             </div>
             <div class="x_content">
-               <div id="piechart" style="height:250px;"></div>
+               <div id="piecharta" style="height:250px;"></div>
             </div>
          </div>
       </div>
@@ -133,11 +133,11 @@
        <div class="col-md-4 col-sm-4 col-xs-4 left">
          <div class="x_panel tile fixed_height_320">
             <div class="x_title">
-               <h2>المهام</h2>
+               <h2>{% trans "Tasks by status" %}</h2>
                <div class="clearfix"></div>
             </div>
             <div class="x_content">
-               <div id="piechart" style="height:250px;"></div>
+              <div id="piechart" style="height:250px;"></div>
             </div>
          </div>
       </div>
@@ -169,7 +169,7 @@
      ]);
 
      var options = {
-       title: 'المهام حسب الحالة'
+       title: '{% trans "Task by status"%}'
      };
 
      var chart = new google.visualization.PieChart(document.getElementById('piechart'));
@@ -195,7 +195,8 @@
    $(document).ready(function() {
        $('#open-project-list').DataTable( {
            "paging": false,
-           "searching" :false
+           "searching" :false,
+           "info":     false
        } );
    } );
 
@@ -217,5 +218,5 @@
    });
 
 
-</script>
+   
 {% endblock javascripts %}
