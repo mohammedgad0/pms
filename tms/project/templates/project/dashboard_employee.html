@@ -12,7 +12,7 @@
 {% block content %}
 <div class="right_col" role="main">
    <!-- top tiles -->
-  
+
    <div class="row tile_count" style="margin-bottom: 0px;">
       <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
          <span class="count_top"><i class="fa fa-briefcase"></i>  {% trans "All Projects" %} </span>
@@ -52,7 +52,7 @@
    {%endfor%}
    <!-- start  row 1 -->
    <div class="row">
-      <div class="col-md-8 col-sm-12 col-xs-12">
+      <div class="col-md-9 col-sm-12 col-xs-12">
          <div class="x_panel tile">
             <div class="x_title">
                <h2>{{_('Tasks Open')}}</h2>
@@ -74,7 +74,7 @@
                         </tr>
                      </thead>
                      <tbody>
-                
+
                         {% for task in task_employee %}
                         <tr>
                            <th scope="row">{{task.id}}</th>
@@ -118,14 +118,30 @@
             </div>
          </div>
       </div>
-      <div class="col-md-4 col-sm-4 col-xs-4">
-         <div class="x_panel tile fixed_height_320">
-            <div class="x_title">
-               <h2>Ø§Ù„Ù…Ù‡Ø§Ù…</h2>
-               <div class="clearfix"></div>
-            </div>
+      <div class="col-md-3 col-sm-12 col-xs-12">
+         <div class="x_panel tile ">
+
             <div class="x_content">
-               <div id="piecharta" style="height:250px;"></div>
+              <div class="text-center col-md-12 col-sm-12 col-xs-12 profile_left">
+                <div class="profile_img">
+                  <div id="crop-avatar">
+                    <!-- Current avatar -->
+                    <img class="img-responsive avatar-view" src="/static/images/picture.jpg"  style="margin: 0 auto;" alt="Avatar" title="Change the avatar">
+                  </div>
+                </div>
+                <h3>Samuel Doe</h3>
+                <ul class="list-unstyled user_data">
+                  <li><i class="fa fa-map-marker user-profile-icon"></i> San Francisco, California, USA
+                  </li>
+                  <li>
+                    <i class="fa fa-briefcase user-profile-icon"></i> Software Engineer
+                  </li>
+                  <li class="m-top-xs">
+                    <i class="fa fa-external-link user-profile-icon"></i>
+                    <a href="http://www.kimlabs.com/profile/" target="_blank">www.kimlabs.com</a>
+                  </li>
+                </ul>
+              </div>
             </div>
          </div>
       </div>
@@ -141,7 +157,7 @@
             </div>
          </div>
       </div>
-      
+
    </div>
    <!-- end  row 1 -->
 </div>
@@ -218,5 +234,5 @@
    });
 
 
-   
+
 {% endblock javascripts %}
