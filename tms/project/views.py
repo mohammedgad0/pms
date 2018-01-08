@@ -748,8 +748,8 @@ def AddTask(request,project_id):
     # form.assignedto.queryset = Employee.objects.filter(deptcode = _deptcode)
     form.fields["employee"].queryset = Employee.objects.filter(deptcode = _deptcode)
     if request.method=='POST':
-        assignto_employee = request.POST.get('employee', False)
-        assignto_department = request.POST.get('department', False)
+        assignto_employee =  employee=request.POST.get('employee')
+        assignto_department =  employee=request.POST.get('department_list') 
         form = AddTaskForm(request.POST)
         if form.is_valid():
             # form.save()
@@ -764,7 +764,7 @@ def AddTask(request,project_id):
                 Task_obj.assignedto =get_object_or_404(Employee,empid__exact=assignto_employee)
                 Task_obj.assigneddate = datetime.now()
             if assignto_department:
-                Task_obj.departement = get_object_or_404(Department,deptcode_exact=assignto_department)
+                Task_obj.departement = get_object_or_404(Department,deptcode__exact=assignto_department)
                 Task_obj.assigneddate = datetime.now()
             Task_obj.save()
             #uploading files
@@ -801,9 +801,9 @@ def AddTask(request,project_id):
 
 @login_required
 def ProjectTaskDelete(request,projectid,taskid):
-    task= get_object_or_404(Task,createdby__exact= request.session['EmpID'],project__id__exact= projectid,pk=taskid)
+    task= get_object_or_404(Task,createdby__empid__exact= request.session['EmpID'],project__id__exact= projectid,pk=taskid)
     project=get_object_or_404(Project,pk=projectid)
-    employee=get_object_or_404(Employee,empid__exact= task.createdby)
+    employee=get_object_or_404(Employee,empid__exact= task.createdby.empid)
     if request.method == 'POST':
               Task.objects.filter(id=task.id).delete()
               messages.success(request, _("Task has been deleted successfully"), fail_silently=True,)
