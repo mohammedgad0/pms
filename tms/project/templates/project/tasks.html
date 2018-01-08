@@ -9,13 +9,6 @@
 {% get_current_language as LANGUAGE_CODE %}
 <div class="right_col" role="main">
    <div class="">
-
- 
-
-
-
- 
- 
       <!-- top menu bar -->
 {% include "project/project_nave.html" %}
 
@@ -32,18 +25,18 @@
  ><a href="{% url 'ns-project:project-task' project_detail.id 'unclosed' %}" >{{ _('Open Tasks')}} </a></li>
                            {% if request.user|has_group:"ismanager" %}
                            <li role="presentation"  class={% if request.resolver_match.kwargs.task_status == 'assignedtome' %}  {{'active'}} {% else  %} {{'inactive' }} {% endif  %}><a href="{% url 'ns-project:project-task' project_detail.id 'assignedtome' %}">{{ _('Assigned to Me')}} </a></li>
-                         
+
                             <!-- <li role="presentation"  class={% if request.resolver_match.kwargs.task_status == 'assignedtodept' %}  {{'active'}} {% else  %} {{'inactive' }} {% endif  %}><a href="{% url 'ns-project:project-task' project_detail.id 'assignedtodept' %}" >{{ _('Assigned to Departement')}} </a></li> -->
                            {% endif %}
                            <li role="presentation"  class={% if request.resolver_match.kwargs.task_status == 'delayed' %}  {{'active'}} {% else  %} {{'inactive' }} {% endif  %}><a href="{% url 'ns-project:project-task' project_detail.id 'delayed' %}">{{ _('Delayed')}} </a></li>
-                           <li role="presentation" 
+                           <li role="presentation"
                            class="dropdown extra_menue class=
-                           {% if request.resolver_match.kwargs.task_status == 'finishedbyme'  or  request.resolver_match.kwargs.task_status == 'inprogress' or request.resolver_match.kwargs.task_status == 'done'  or request.resolver_match.kwargs.task_status == 'closed' or request.resolver_match.kwargs.task_status == 'cancelled'  or request.resolver_match.kwargs.task_status == 'hold'  or request.resolver_match.kwargs.task_status == 'new'  or request.resolver_match.kwargs.task_status == 'inprogress' %}  
+                           {% if request.resolver_match.kwargs.task_status == 'finishedbyme'  or  request.resolver_match.kwargs.task_status == 'inprogress' or request.resolver_match.kwargs.task_status == 'done'  or request.resolver_match.kwargs.task_status == 'closed' or request.resolver_match.kwargs.task_status == 'cancelled'  or request.resolver_match.kwargs.task_status == 'hold'  or request.resolver_match.kwargs.task_status == 'new'  or request.resolver_match.kwargs.task_status == 'inprogress' %}
                                {{'active'}}
                                 {% else  %}
                                  {{'inactive' }}
                                 {% endif  %}">
-                           
+
                               <a id="drop4" href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
                               {{_('More')}}
                               <span class="caret"></span>
@@ -66,21 +59,21 @@
                         <ul class="nav nav-pills navbar-left" role="tablist" style="margin-top:5px;">
                            <!-- <a href="{% url 'ns-project:add-project' %}" class="float-left" style="float:left" >  <button type="button" class="btn btn-primary btn-md"> <i class="fa fa-th-list"></i>  {% trans "Ad Task" %}</button></a> -->
                            <a href="{% url 'ns-project:add-task' project_detail.id  %}" class="float-left" style="float:left"> <button type="button" class="btn btn-primary btn-md">  <i class="fa fa-plus"></i>  {{ _('Ad Task') }} </button></a>
-                       
+
                         {% endif %}
-                        <a href="{% url 'ns-project:kanban' project_detail.id  %}" class="float-left" style="float:left"> <button type="button" class="btn btn-primary btn-md">  <i class="fa fa-th"></i>  {{ _('Kanban') }} </button></a>                
+                        <a href="{% url 'ns-project:kanban' project_detail.id  %}" class="float-left" style="float:left"> <button type="button" class="btn btn-primary btn-md">  <i class="fa fa-th"></i>  {{ _('Kanban') }} </button></a>
                         <a href="{% url 'ns-project:project-gantt' project_detail.id  %}" class="float-left" style="float:left"> <button type="button" class="btn btn-primary btn-md">  <i class="fa fa-calendar"></i>  {{ _('Gantt Chart') }} </button></a>
  </ul>
                      </div>
-                     
-                     
+
+
                   </nav>
-                  
+
                   <div class="clearfix"></div>
                </div>
                <div class="x_content">
-               
-               
+
+
                   <ul class="messages">
                      {% if messages %}
                      {% for message in messages %}
@@ -143,13 +136,13 @@
                            <td>
 
                        {% if task.assignedto.empname%}
-                       {{task.assignedto.empname|truncatewords:6}}        
+                       {{task.assignedto.empname|truncatewords:6}}
                        {% elif task.departement.deptname %}
-                       {{task.departement.deptname|truncatewords:6}} 
+                       {{task.departement.deptname|truncatewords:6}}
                       {% endif %}
-                      
+
                                 </td>
-                           <td>   <span>  % {{task.progress }}</span>    
+                           <td>   <span>  % {{task.progress }}</span>
                           <!--  {{ task.startdate|timesince:task.enddate }} -->
                            <!-- {{ task.enddate|timeuntil }} -->
 
@@ -175,7 +168,7 @@
                               <i class="fa fa-play fa-2x paction  paction_disable" title="{% trans "Play" %}" id="p_{{task.id}}" ></i>
                               {% else %}
                               <a href="#" data-url="{% url 'ns-project:task-update-start' task.id %}" class="update-task-start" ><i class="fa fa-play fa-2x paction  text-primary" title="{% trans "Play" %}" id="p_{{task.id}}" ></i> </a>
-                           
+
                               {% endif %}
                               <!-- user finish task -->
                               {% if task.finisheddate %}
@@ -302,10 +295,10 @@
    $("#task-table").on("click", ".update-finish-task", loadForm);
    $("#modal-task").on("submit", ".update-finish-task-form", saveForm);
 
-   //progress task 
+   //progress task
    $(".task-ctions").on("click", ".update-task-progress", loadForm);
    $("#modal-task").on("submit", ".update-progress-task-form", saveForm);
- 
+
    //update task close date and staus
    $("#task-table").on("click", ".update-close-task", loadForm);
    $("#modal-task").on("submit", ".update-close-task-form", saveForm);
@@ -321,7 +314,7 @@
      $(".chosen").data("placeholder","Select Frameworks...").chosen();
      $(".chosen").chosen({no_results_text: "Oops, nothing found!"});
      $('.chosen').chosen({allow_single_deselect: true,no_results_text: "لا يوجد نتائج!"});
-     
+
      /*change selected label in more btn filter*/
      $(function(){
     $(".extra_menue ul li a").click(function(){

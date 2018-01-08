@@ -451,7 +451,7 @@ def ProjectTaskDetail(request,projectid,taskid):
     current_url ="ns-project:project-task"
     project_detail= get_object_or_404(Project,pk=projectid)
 
-    
+
 
     try:
         assignToEmp=Employee.objects.get(empid__exact=task_detail.assignedto);
@@ -728,7 +728,7 @@ def ProjectTeam(request,project_id):
             projectid.append(data.project.id)
         except:
             pass
-        
+
     project_list=   project_list = _get_internal_external_projects( request)
     all_emp = VStatisticstaskdata.objects.filter(projectid = project_id)
     current_url ="ns-project:" + resolve(request.path_info).url_name
@@ -847,7 +847,7 @@ def updateTaskAssignto(request,pk,save=None):
                     _emp_obj=Employee.objects.get(empid__exact= int(form.cleaned_data['employee'].empid))
                     _obj.assignedto=_emp_obj
                     _assign=form.cleaned_data['employee'].empname
-                    _obj.departement=get_object_or_404(Department,deptcode__exact= _emp_obj.deptcode) 
+                    _obj.departement=get_object_or_404(Department,deptcode__exact= _emp_obj.deptcode)
                     _receiver=_emp_obj.email
 
                  elif departement :
@@ -1133,23 +1133,19 @@ def DashboardManager(request):
 @login_required
 def DashboardEmployee(request,empid):
     from dateutil.relativedelta import relativedelta
-    from django.db.models import F
     dept_code  = request.session['DeptCode']
     start_date = datetime.now() - relativedelta(years=1)
     end_date = datetime.now()
-
+    employee= get_object_or_404(Employee,empid__exact=empid)
     task_employee = emp_task(empid,start_date,end_date)
-    kpi= _project_kpi_employee(get_object_or_404(Employee,empid__exact=empid),start_date,end_date)
-
-    context = {"task_employee":task_employee,'kpi':kpi}
+    context = {"task_employee":task_employee,'employee':employee}
     return render(request, 'project/dashboard_employee.html', context)
 
 def emp_task(empid,start_date,end_date):
     task_employee = Task.objects.filter(
-    Q(assignedto = empid)&
-    Q(enddate__gte = start_date, startdate__lte = end_date)&
-    ~Q(status ='Closed')&
-    ~Q(status='Cancelled')
+    Q(assignedto__empid__exact = empid)&
+    Q(startdate__gte = start_date, startdate__lte = end_date)&
+    ~Q(status ='Closed')
     )
     return task_employee
 
@@ -1230,7 +1226,7 @@ def _project_kpi(deptcode,startdate,enddate):
     projectKPI["p_all"]= projects.count()
     projectKPI["p_internal"]= projects.filter(departement__deptcode__exact=deptcode).count()
     projectKPI["p_external"]= projects.filter( Q(task__departement__deptcode__exact=deptcode) & ~Q(departement__deptcode__exact = deptcode)).count()
-  
+
     tasks=Task.objects.filter(
         (Q(startdate__gte=startdate)& Q(startdate__lte=enddate))&
                                        (Q(departement__deptcode__exact=deptcode)| Q(project__departement__deptcode__exact=deptcode))
@@ -1243,7 +1239,7 @@ def _project_kpi(deptcode,startdate,enddate):
 
 def _open_tasks(deptcode,startdate,enddate):
     openTasks= Task.objects.filter(
-      (Q(departement__deptcode__exact= deptcode) | Q(project__departement__deptcode__exact= deptcode)) 
+      (Q(departement__deptcode__exact= deptcode) | Q(project__departement__deptcode__exact= deptcode))
         & ~Q(status__exact="Closed"))
     return openTasks
 
@@ -1410,22 +1406,3 @@ def Profile(request,empid):
     employee= get_object_or_404(Employee,empid__exact=empid)
     context = {'employee':employee}
     return render(request, 'project/dashboard_employee.html', context)
-
-def _project_kpi_employee(employee,startdate,enddate):
-    projectKPI={}
-    projects= Project.objects.filter(
-        (Q(start__gte=startdate)& Q(start__lte=enddate))&
-                                       ( Q(task__assignedto__empid__exact=employee.empid))
-                                    ).annotate(dcount=Count('task'))
-    projectKPI["p_all"]= projects.count()
-    projectKPI["p_internal"]= projects.filter(departement__deptcode__exact=employee.deptcode).count()
-    projectKPI["p_external"]= projects.filter(  ~Q(departement__deptcode__exact = employee.deptcode)).count()
-  
-    tasks=Task.objects.filter(
-        (Q(startdate__gte=startdate)& Q(startdate__lte=enddate))&
-                                       (Q(task__assignedto__empid__exact=employee.empid))
-                                    )
-    projectKPI["t_all"]= tasks.count()
-    projectKPI["t_internal"]= tasks.filter(  Q(project__departement__deptcode__exact=employee.deptcode)).count()
-    projectKPI["t_external"]= tasks.filter(   ~Q(project__departement__deptcode__exact=employee.deptcode)).count()
-    return projectKPI

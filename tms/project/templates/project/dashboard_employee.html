@@ -68,19 +68,28 @@
                            <th> {{_('Project Name')}}  </th>
                            <th> {{_('Start Date')}} </th>
                            <th> {{_('End Date')}} </th>
+                           <th> {{_('Progress')}} </th>
                            <th> {{_('Status')}} </th>
 
                         </tr>
                      </thead>
                      <tbody>
+                
                         {% for task in task_employee %}
                         <tr>
                            <th scope="row">{{task.id}}</th>
                            {# <td>{{task.name}}</td> #}
-                           <td><a href="{% url 'ns-project:project-task-detail' task.project.id task.id %}" class="blue" >  {{ task.name }}</a></td>
-                           <td><a href="{% url 'ns-project:project-detail' task.project.id %}" class="blue" >  {{ task.project.name }}</a></td>
+                           <td><a href="{%if task.project.id%}{% url 'ns-project:project-task-detail' task.project.id task.id %} {%endif%}" class="blue" >  {{ task.name }}</a></td>
+                           <td><a href="{%if task.project.id%}{% url 'ns-project:project-detail' task.project.id %}{%endif%}" class="blue" >  {{ task.project.name }}</a></td>
                            <td>{{task.startdate|date:'d-M-Y'}}</td>
                            <td>{{task.enddate|date:'d-M-Y'}}</td>
+                           <td class="project_progress">
+                              <div class="progress progress_sm">
+                              <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="{{task.progress}}"></div>
+                              </div>
+                              <small>{{task.progress}}% {% trans "Complete" %}</small>
+
+                           </td>
                            <td>
                              {% if task.status == 'Closed' %}
                              <span class="btn btn-dark btn-xs"> {{task.get_status_display }}</span>
