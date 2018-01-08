@@ -1138,7 +1138,8 @@ def DashboardEmployee(request,empid):
     end_date = datetime.now()
     employee= get_object_or_404(Employee,empid__exact=empid)
     task_employee = emp_task(empid,start_date,end_date)
-    context = {"task_employee":task_employee,'employee':employee}
+    kpi= _project_kpi_employee(get_object_or_404(Employee,empid__exact=empid),start_date,end_date)
+    context = {"task_employee":task_employee,'employee':employee,'kpi':kpi}
     return render(request, 'project/dashboard_employee.html', context)
 
 def emp_task(empid,start_date,end_date):
