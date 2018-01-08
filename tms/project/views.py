@@ -1404,3 +1404,9 @@ def _get_internal_external_projects(request):
              ( Q(task__assignedto__empid__exact=request.session['EmpID']))
                                         ).annotate(dcount=Count('task')).order_by('-id')
     return projects
+
+
+def Profile(request,empid):
+    employee= get_object_or_404(Employee,empid__exact=empid)
+    context = {'empid':request.session['EmpId']}
+    return render(request, 'project/dashboard-employee.html', context)

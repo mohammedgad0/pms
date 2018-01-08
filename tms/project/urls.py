@@ -62,6 +62,8 @@ urlpatterns = [
 
     url(r'^download/(?P<file_name>.+)$', views.Download, name='download'),
     url(r'^email/$', views.senmail, name='email'),
+    url(r'^profile/(?P<empid>\w+)', views.Profile, name='profile'),
+    
     #delegation page
     url(r'^add_delegation/$',views.adddelegation, name='add-delegation'),
     url(r'^delegation/(?P<pk>\d+)/edit/$', views.editdelegation, name='edit-delegation'),
