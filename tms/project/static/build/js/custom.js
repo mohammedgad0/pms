@@ -5099,16 +5099,16 @@ $(document).ready(function() {
     init_autocomplete();
 
 });
-//custom by mohammed gad
+//custom by mohammed gad 
 $.datepicker.setDefaults($.datepicker.regional["ar"]);
 $(document).ready(function(){
 
 $('#id_assigntype_0').change(function(){
   $('#id_employee').prop("disabled", false).trigger("chosen:updated");
-  $('#id_department').prop("disabled", true).trigger("chosen:updated");
+  $('#id_department_list').prop("disabled", true).trigger("chosen:updated");
 });
 $('#id_assigntype_1').change(function(){
-  $('#id_department').prop("disabled", false).trigger("chosen:updated");
+  $('#id_department_list').prop("disabled", false).trigger("chosen:updated");
   $('#id_employee').prop("disabled", true).trigger("chosen:updated");
 });
 
