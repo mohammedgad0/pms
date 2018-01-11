@@ -359,7 +359,7 @@ def ProjectDelete(request,pk):
     p= get_object_or_404(Project,pk=pk)
     emp_obj=Employee.objects.get(empid__exact=p.createdby)
     #get all attached files
-    attached_files= Media.objects.filter(project__id__exact=p.id ).exclude(task__filepath__exact=None)
+    attached_files= Media.objects.filter(project__id__exact=p.id )
     if request.method == 'POST':
         #remove files from directory
         for attached in attached_files :

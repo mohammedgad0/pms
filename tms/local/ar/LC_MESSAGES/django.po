@@ -1097,7 +1097,7 @@ msgstr "صفحة"
 #: .\project\templates\project\project_ganttchart.html:26
 #: .\project\templates\project\tasks.html:65
 msgid "Gantt Chart"
-msgstr ""
+msgstr "مخطط جانت"
 
 #: .\project\templates\project\project_nave.html:11
 msgid "Completed"
@@ -1436,7 +1436,7 @@ msgstr "إضافة مهمة"
 
 #: .\project\templates\project\tasks.html:64
 msgid "Kanban"
-msgstr ""
+msgstr "كانبان"
 
 #: .\project\templates\project\tasks.html:99
 #: .\project\templates\project\tasks_from_external_dept.html:65
