@@ -421,7 +421,7 @@ def ProjectTask(request,pk,task_status=None):
     elif task_status=="hold":
          task_list= task_list.filter(status__exact='Hold')
     elif task_status=="delayed":
-         task_list= task_list.filter(enddate__lt = datetime.today())
+         task_list= task_list.filter(enddate__lt = datetime.now())
     elif task_status=="assignedtodept":
          task_list= task_list.filter(departement__exact= request.session['DeptCode'])
 
