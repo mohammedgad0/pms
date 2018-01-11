@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-11 09:55+0300\n"
+"POT-Creation-Date: 2018-01-11 10:49+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -151,7 +151,6 @@ msgstr "حالة المهمة"
 
 #: .\project\forms.py:67 .\project\forms.py:74
 #: .\project\templates\project\dashboard_employee.html:68
-#: .\project\templates\project\dashboard_manager.html:166
 #: .\project\templates\project\project_followup.html:99
 #: .\project\templates\project\projects.html:78
 msgid "Project Name"
@@ -273,7 +272,6 @@ msgstr "إسناد الى"
 #: .\project\forms.py:130 .\project\forms.py:137 .\project\forms.py:188
 #: .\project\forms.py:199
 #: .\project\templates\project\dashboard_employee.html:67
-#: .\project\templates\project\dashboard_manager.html:165
 #: .\project\templates\project\project_followup.html:98
 #: .\project\templates\project\tasks.html:92
 #: .\project\templates\project\tasks_from_external_dept.html:57
@@ -799,7 +797,6 @@ msgstr "نوع المهمة"
 msgid "Complete"
 msgstr "مكتمل"
 
-#: .\project\templates\project\dashboard_employee.html:188
 #: .\project\templates\project\dashboard_employee.html:152
 #: .\project\templates\project\dashboard_manager.html:141
 msgid "Tasks by status"
@@ -810,7 +807,13 @@ msgstr "المهام حسب الحالة"
 msgid "Canceled"
 msgstr "ملغى"
 
+#: .\project\templates\project\dashboard_manager.html:165
+msgid "Task"
+msgstr "المهمة"
 
+#: .\project\templates\project\dashboard_manager.html:166
+msgid "Project"
+msgstr "المشروع"
 
 #: .\project\templates\project\dashboard_manager.html:295
 msgid "performance"
@@ -1526,30 +1529,35 @@ msgid "Update start date for task by"
 msgstr "تم تحديث وقت بدء المهمة"
 
 #: .\project\views.py:516
-#, python-format
-msgid "Start Date Updated successfully for Task number"
-msgstr "تم تعديل تاريخ بدأ المهمة   بنجاح"
-
-
+#, fuzzy
+#| msgid " Close Date Updated successfully "
+msgid "Start Date Updated successfully"
+msgstr "تم تعديل تاريخ إغلاق المهمه بنجاح"
 
 #: .\project\views.py:550
 msgid "Finished"
 msgstr "منجزة"
 
 #: .\project\views.py:551
-msgid " Finish Date Updated successfully for Task number"
-msgstr "تم تحديث وقت انهاء المهمة"
+#, fuzzy
+#| msgid " Close Date Updated successfully "
+msgid " Finish Date Updated successfully"
+msgstr "تم تعديل تاريخ إغلاق المهمه بنجاح"
 
 #: .\project\views.py:570 .\project\views.py:607
 msgid "Enter a reason ."
 msgstr "الرجاء إدخال السبب"
 
 #: .\project\views.py:584
-msgid "Close Task by "
+#, fuzzy
+#| msgid "Close Task by "
+msgid "Close Task by"
 msgstr "إغلاق المهمه"
 
 #: .\project\views.py:589
-msgid " Close Date Updated successfully "
+#, fuzzy
+#| msgid " Close Date Updated successfully "
+msgid " Close Date Updated successfully"
 msgstr "تم تعديل تاريخ إغلاق المهمه بنجاح"
 
 #: .\project\views.py:620
@@ -1565,7 +1573,9 @@ msgid "Enter a note ."
 msgstr "الرجاء إدخال السبب"
 
 #: .\project\views.py:654
-msgid "Task Pause by "
+#, fuzzy
+#| msgid "Task Pause by "
+msgid "Task Pause by"
 msgstr "ايقاف بواسطة"
 
 #: .\project\views.py:659
@@ -1573,7 +1583,9 @@ msgid "Task has been continuous successfully"
 msgstr "تم تعديل حالة المهمه بنجاح"
 
 #: .\project\views.py:785 .\project\views.py:788 .\project\views.py:790
-msgid "Add new Task By "
+#, fuzzy
+#| msgid "Add new Task By "
+msgid "Add new Task By"
 msgstr "إضافة مهمة جديدة بواسطة"
 
 #: .\project\views.py:785 .\project\views.py:788
@@ -1596,21 +1608,13 @@ msgstr "أختر نوع الإسناد"
 msgid " by "
 msgstr "بواسطة"
 
-#: .\project\views.py:872
-msgid " ,  Assign Task to "
+#: .\project\views.py:872 .\project\views.py:873 .\project\views.py:877
+msgid "Assign Task to"
 msgstr "إسناد الى"
-
-#: .\project\views.py:873
-msgid "Task has been updated successfully to"
-msgstr "تم تعديل المهمة بنجاح"
 
 #: .\project\views.py:876
 msgid "Click Here"
 msgstr ""
-
-#: .\project\views.py:877
-msgid "Assign Task to"
-msgstr "إسناد الى"
 
 #: .\project\views.py:877
 msgid " in "
@@ -1621,8 +1625,10 @@ msgid "Task has been asigned to you"
 msgstr "تم إسناد مهمة إليك"
 
 #: .\project\views.py:884
-msgid "Task has been assigned successfully for Task number #"
-msgstr "تم تعديل تاريخ بدأ المهمه بنجاح"
+#, fuzzy
+#| msgid "Task has been cancelled successfully"
+msgid "Task has been assigned successfully"
+msgstr "تم تعديل تاريخ إلغاء المهمه بنجاح"
 
 #: .\project\views.py:919
 msgid "Task Progress chenged by "
@@ -1659,3 +1665,18 @@ msgstr "Arabic"
 #: .\tms\urls.py:13
 msgid "Task Management System cp"
 msgstr "لوحة تحكم نظام إدارة المهام"
+
+#~ msgid "Start Date Updated successfully for Task number"
+#~ msgstr "تم تعديل تاريخ بدأ المهمة   بنجاح"
+
+#~ msgid " Finish Date Updated successfully for Task number"
+#~ msgstr "تم تحديث وقت انهاء المهمة"
+
+#~ msgid " ,  Assign Task to "
+#~ msgstr "إسناد الى"
+
+#~ msgid "Task has been updated successfully to"
+#~ msgstr "تم تعديل المهمة بنجاح"
+
+#~ msgid "Task has been assigned successfully for Task number #"
+#~ msgstr "تم تعديل تاريخ بدأ المهمه بنجاح"
