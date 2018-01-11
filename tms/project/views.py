@@ -364,7 +364,6 @@ def ProjectDelete(request,pk):
         #remove files from directory
         for attached in attached_files :
             os.remove(os.path.join(settings.BASE_DIR, 'media/')+str(attached.filepath))
-
          #delete attached files related to project and tasks
         try:
              Media.objects.filter(project__id__exact=p.id).delete()
