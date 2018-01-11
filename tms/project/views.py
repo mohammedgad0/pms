@@ -188,12 +188,13 @@ def AddProject(request):
         form = ProjectForm(request.POST)
         if form.is_valid():
             project_obj= form.save(commit=False)
-            try:
-               status_obj= ProjectStatus.objects.get(isdefault=1)
-            except :
-               status_obj= ProjectStatus.objects.order_by('priority')[0]
+            #default project status
+#             try:
+#                status_obj= ProjectStatus.objects.get(isdefault=1)
+#             except :
+#                status_obj= ProjectStatus.objects.order_by('priority')[0]
             project_obj.departement=get_object_or_404(Department, deptcode = request.session.get('DeptCode'))
-            project_obj.status=status_obj
+            project_obj.status=project_obj.status
             project_obj.createdby=request.session.get('EmpID')
             project_obj.createddate= datetime.now()
             # if project_obj.end < project_obj.start:
@@ -206,7 +207,7 @@ def AddProject(request):
                 obj_file = upload_form.save(commit=False)
                 for obj in obj_file:
                     obj.project = project_obj
-                    if obj.filepath is not None or obj.filepath != "" :
+                    if obj.filepath :
                          obj.save()
             else:
                 data = {'is_valid': False}
@@ -358,14 +359,17 @@ def ProjectDelete(request,pk):
     p= get_object_or_404(Project,pk=pk)
     emp_obj=Employee.objects.get(empid__exact=p.createdby)
     #get all attached files
-    attached_files= Media.objects.filter(project__id__exact=p.id)
+    attached_files= Media.objects.filter(project__id__exact=p.id ).exclude(task__filepath__exact=None)
     if request.method == 'POST':
         #remove files from directory
         for attached in attached_files :
             os.remove(os.path.join(settings.BASE_DIR, 'media/')+str(attached.filepath))
 
          #delete attached files related to project and tasks
-        Media.objects.filter(project__id__exact=p.id).delete()
+        try:
+             Media.objects.filter(project__id__exact=p.id).delete()
+        except:
+            pass
          #delete project object and related tasks
         Project.objects.filter(id=p.id).delete()
         messages.success(request, _("Project has deleted successfully"), fail_silently=True,)
