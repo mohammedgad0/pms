@@ -112,22 +112,22 @@
                     <td>{{task.empname }}</td>
                     <td id="status_{{task.id}}">
                       {% if task.status == 'Closed' %}
-                      <span class="btn btn-dark btn-xs"> {{task.status }}</span>
+                      <span class="btn btn-dark btn-xs">{%  trans task.status %}</span>
                       {% endif %}
                        {% if task.status == 'Cancelled' %}
-                      <span  class="btn btn-danger btn-xs"> {{task.status }}</span>
+                      <span  class="btn btn-danger btn-xs"> {%  trans task.status %}</span>
                       {% endif %}
                        {% if task.status == 'Hold' %}
-                      <button type="button" class="btn btn-danger btn-xs"> {{task.status }}</button>
+                      <button type="button" class="btn btn-danger btn-xs"> {%  trans task.status %}</button>
                       {% endif %}
                        {% if task.status == 'Done' %}
-                      <button type="button" class="btn btn-success btn-xs"> {{task.status }}</button>
+                      <button type="button" class="btn btn-success btn-xs"> {% trans task.status %}</button>
                       {% endif %}
                        {% if task.status == 'InProgress' %}
-                      <span class="btn btn-warning btn-xs"> {{task.status }}</span>
+                      <span class="btn btn-warning btn-xs"> {%  trans task.status %}</span>
                       {% endif %}
                           {% if task.status == 'New' %}
-                     <span class="btn btn-info btn-xs"> {{task.status }}</span>
+                     <span class="btn btn-info btn-xs"> {% trans task.status %}</span>
 
                       {% endif %}
 

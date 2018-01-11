@@ -691,7 +691,7 @@ def projectFlowUp(request):
         status = request.GET.get('taskstatus')
         if dept:
             task_list=VFollowup.objects.filter(deptcode__exact=dept)
-            task_list=task_list.all().exclude(projectid=None)
+            task_list=task_list.all().exclude(projectid__exact=None)
             form.fields["employee"].queryset = Employee.objects.filter(deptcode = dept)
         if status and dept:
             task_list=task_list.filter(status__exact=status)
