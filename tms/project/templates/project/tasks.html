@@ -109,7 +109,7 @@
                            <td><a href="{% url 'ns-project:project-task-detail' project_detail.id task.id   %}" class=" btn-link">{{task.id }}</a> </td>
                            <td><a href="{% url 'ns-project:project-task-detail' project_detail.id task.id   %}" class=" btn-link" title="{{task.name}}">{{ task.name|truncatechars:20 }}</a></td>
                            <td>{{  task.startdate|date:"Y-m-d" }} </td>
-                           <td>{{  task.enddate|date:"Y-m-d" }} </td>
+                           <td>{{  task.enddate|date:"Y-m-d" }}{{date}} </td>
                            <td id="status_{{task.id}}">
                               {% if task.status == 'Closed' %}
                               <span class="btn btn-dark btn-xs"> {{task.get_status_display }}</span>
