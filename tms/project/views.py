@@ -421,7 +421,9 @@ def ProjectTask(request,pk,task_status=None):
     elif task_status=="hold":
          task_list= task_list.filter(status__exact='Hold')
     elif task_status=="delayed":
-         task_list= task_list.filter(enddate__lt = datetime.today())
+         date = datetime.today().strftime('%Y-%m-%d')
+         task_list= task_list.filter(enddate__lt = date)
+         # task_list= task_list.filter(enddate__lt = datetime.today())
     elif task_status=="assignedtodept":
          task_list= task_list.filter(departement__exact= request.session['DeptCode'])
 
@@ -753,7 +755,7 @@ def AddTask(request,project_id):
     form.fields["employee"].queryset = Employee.objects.filter(deptcode = _deptcode)
     if request.method=='POST':
         assignto_employee =  employee=request.POST.get('employee')
-        assignto_department =  employee=request.POST.get('department_list') 
+        assignto_department =  employee=request.POST.get('department_list')
         form = AddTaskForm(request.POST)
         if form.is_valid():
             # form.save()
@@ -1093,7 +1095,8 @@ def TaskListExternal(request,task_status=None):
     elif task_status=="hold":
          task_list= task_list.filter(status__exact='Hold')
     elif task_status=="delayed":
-         task_list= task_list.filter(enddate__lt = datetime.today())
+         date = datetime.today().strftime('%Y-%m-%d')
+         task_list= task_list.filter(enddate__lt = date)
     elif task_status=="assignedtodept":
          task_list= task_list.filter(departement__deptcode__exact= request.session['DeptCode'])
 
@@ -1417,7 +1420,7 @@ def _project_kpi_employee(employee,startdate,enddate):
     projectKPI["p_all"]= projects.count()
     projectKPI["p_internal"]= projects.filter(departement__deptcode__exact=employee.deptcode).count()
     projectKPI["p_external"]= projects.filter(  ~Q(departement__deptcode__exact = employee.deptcode)).count()
-  
+
     tasks=Task.objects.filter(
         (Q(startdate__gte=startdate)& Q(startdate__lte=enddate))&
                                        (Q(assignedto__empid__exact=employee.empid))
