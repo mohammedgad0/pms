@@ -104,9 +104,10 @@
                 </thead>
                 <tbody>
                   {% for task in tasks %}
+                  {% if  task.projectid %}
                   <tr>
                   <td>{{task.id}}</td>
-                    <td><a href="{% url 'ns-project:project-task-detail' task.projectid task.id %}" class=" btn-link">{{task.taskname }}</a> </td>
+                    <td><a href="{% url 'ns-project:project-task-detail' task.project.id task.id %}" class=" btn-link">{{task.taskname }}</a> </td>
                     <td>{{task.projectname }}</td>
                     <td>{{task.empname }}</td>
                     <td id="status_{{task.id}}">
@@ -134,7 +135,7 @@
 
 
                   </tr>
-
+{% endif%}
                   {% endfor %}
                 </tbody>
               </table>
