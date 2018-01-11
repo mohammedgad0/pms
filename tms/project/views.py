@@ -508,12 +508,12 @@ def updateStartDate(request,pk):
 
             _obj.save()
             #add to history
-            update_change_reason(_obj, _("Update start date for task by ")+request.session['EmpName']+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['notes'])
+            update_change_reason(_obj, _("Update start date for task by")+request.session['EmpName']+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['notes'])
             data['form_is_valid'] = True
             data['id'] = pk
             data['status'] = _('InProgress')
             data['icon'] = "p_%s" %pk
-            data['message'] = _('Start Date Updated successfully for Task number %s ' %pk)
+            data['message'] = _('Start Date Updated successfully')
             data['html_form'] = render_to_string('project/task/update_start_task.html',request=request)
             return JsonResponse(data)
 
@@ -543,12 +543,12 @@ def updateTaskFinish(request,pk):
             _obj.lasteditby=request.session.get('EmpID', '1056821208')
             _obj.save()
              #add to history
-            update_change_reason(_obj, _("Finish Task ")+request.session['EmpName']+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['notes'])
+            update_change_reason(_obj, _("Finish Task")+" "+request.session['EmpName']+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['notes'])
             data['form_is_valid'] = True
             data['icon'] = "f_%s" %pk
             data['id'] = pk
             data['status'] = _('Finished')
-            data['message'] = _(' Finish Date Updated successfully for Task number %s ' %pk)
+            data['message'] = _(' Finish Date Updated successfully' %pk)
             data['html_form'] = render_to_string('project/task/update_finish_task.html',request=request)
             return JsonResponse(data)
 
@@ -581,12 +581,12 @@ def updateTaskClose(request,pk):
             _obj.lasteditdate=datetime.now()
             _obj.save()
                #add to history
-            update_change_reason(_obj, _("Close Task by ")+request.session['EmpName']+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['reason'])
+            update_change_reason(_obj, _("Close Task by")+request.session['EmpName']+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['reason'])
             data['form_is_valid'] = True
             data['id'] = pk
             data['status'] = _('Closed')
             data['icon'] = "c_%s" %pk
-            data['message'] = _(' Close Date Updated successfully for Task number %s ' %pk)
+            data['message'] = _(' Close Date Updated successfully' %pk)
             data['html_form'] = render_to_string('project/task/update_close_task.html',request=request)
             return JsonResponse(data)
         else:
@@ -617,12 +617,12 @@ def updateTaskCancel(request,pk):
             _obj.lasteditdate=datetime.now()
             _obj.save()
                #add to history
-            update_change_reason(_obj, _("Cancel Task by ")+request.session['EmpName']+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['reason'])
+            update_change_reason(_obj, _("Cancel Task by ")+request.session['EmpName']+" ,    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['reason'])
             data['form_is_valid'] = True
             data['id'] = pk
             data['status'] = _('Cancelled')
             data['icon'] = "c_%s" %pk
-            data['message'] = _('Task has been cancelled successfully for Task number #')+ pk
+            data['message'] = _('Task has been cancelled successfully')+ pk
             data['html_form'] = render_to_string('project/task/update_cancel_task.html',request=request)
             return JsonResponse(data)
         else:
@@ -651,12 +651,12 @@ def updateTaskPause(request,pk):
             _obj.lasteditdate=datetime.now()
             _obj.save()
             #add to history
-            update_change_reason(_obj, _("Task Pause by ")+ request.session['EmpName'] +",<i class=\"fa fa-comment\"></i>" + form.cleaned_data['note'])
+            update_change_reason(_obj, _("Task Pause by")+ request.session['EmpName'] +",<i class=\"fa fa-comment\"></i>" + form.cleaned_data['note'])
             data['form_is_valid'] = True
             data['id'] = pk
             data['status'] = _('Hold')
             data['icon'] = "c_%s" %pk
-            data['message'] = _('Task has been continuous successfully for Task number #')+ pk
+            data['message'] = _('Task has been continuous successfully')
             data['html_form'] = render_to_string('project/task/update_pause_task.html',request=request)
             return JsonResponse(data)
         else:
@@ -782,12 +782,12 @@ def AddTask(request,project_id):
             #update history message
             if assignto_employee:
                 assigntodata = get_object_or_404(Employee , empid = assignto_employee )
-                update_change_reason(Task_obj, _("Add new Task By ") + _empname + " " + _("And Assign to") + " " + assigntodata.empname)
+                update_change_reason(Task_obj, _("Add new Task By")+" " + _empname + " " + _("And Assign to") + " " + assigntodata.empname)
             elif assignto_department:
                 assigntodata = get_object_or_404(Department , deptcode__exact = assignto_department )
-                update_change_reason(Task_obj, _("Add new Task By ") + _empname + " " +_("And Assign to") + " " + assigntodata.deptname)
+                update_change_reason(Task_obj, _("Add new Task By") +" " + _empname + " " +_("And Assign to") + " " + assigntodata.deptname)
             else:
-                update_change_reason(Task_obj, _("Add new Task By ")+ _empname)
+                update_change_reason(Task_obj, _("Add new Task By")+" " + _empname)
             #info message
             messages.success(request, _("Task Added"))
             return HttpResponseRedirect(reverse('ns-project:project-task' , kwargs={'pk':project_id} ))
@@ -869,19 +869,19 @@ def updateTaskAssignto(request,pk,save=None):
                  _obj.lasteditdate=datetime.now()
                  _obj.save()
                 #add to history
-                 update_change_reason(_obj,_(" by ")+ request.session['EmpName']  +  _(" ,  Assign Task to ")+  str(_assign))
-                 messages.success(request, "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>"+_("Task has been updated successfully to  "+_assign), fail_silently=True,)
+                 update_change_reason(_obj,_(" by ")+ request.session['EmpName'] +"  ," +  _("Assign Task to")+  str(_assign))
+                 messages.success(request, "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>"+_("Assign Task to")+"  "+_assign, fail_silently=True,)
                  #send email notification
                  if _receiver is not None :
                      message=_obj.name+'<br><a href="http://'+request.get_host()+'/project/project_task_detail/'+str(_obj.project.id)+'/'+str(_obj.id)+'">'+_('Click Here')+'</a>'
-                     message=message+'<br>'+_(" by ")+request.session['EmpName'] +"<br>" +  _(" Assign Task to ")+  str(_assign)+_(' in ')+str(_obj.assigneddate)
+                     message=message+'<br>'+_(" by ")+request.session['EmpName'] +"<br>" +  _("Assign Task to")+  str(_assign)+_(' in ')+str(_obj.assigneddate)
                      subject =_('Task has been asigned to you')
                      #str(_obj.assignedto.email) to be add in next line
                      send_mail(subject,message,'sakr@stats.gov.sa',['sakr@stats.gov.sa'],fail_silently=False,html_message=message,)
 
             data['form_is_valid'] = True
             data['id'] = pk
-            data['message'] = "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>" + _('Task has been assigned successfully for Task number #')+ pk
+            data['message'] = "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>" + _('Task has been assigned successfully')
             data['html_form'] = render_to_string('project/task/update_assignto_task.html',request=request)
             return JsonResponse(data)
         else:

@@ -4,6 +4,12 @@
 
 {% block stylesheets %}
   {{ block.super }}
+  
+  <style>
+  #chart_div > table{
+ margin:auto !important;
+  }
+  </style>
     <link href="/static/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
   <link href="/static/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
   <link href="/static/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
@@ -55,7 +61,7 @@
     {%endfor%}
      <!-- start  row 1 -->
     <div class="row">
- <div class="col-md-8 col-sm-12 col-xs-12">
+ <div class="col-md-9 col-sm-12 col-xs-12">
         <div class="x_panel tile fixed_height_320">
           <div class="x_title">
             <h2>مشاريع مفتوحة</h2>
@@ -85,7 +91,7 @@
 
                   {% for project in open_projects %}
                   <tr>
-                    <th scope="row">{{project.detail.id}}</th>
+                    <td scope="row">{{project.detail.id}}</td>
                     <td><a href="{% url 'ns-project:project-detail' project.detail.id %}" class="blue" >  {{ project.detail.name }}</a></td>
                     <td class="project_progress">
 
@@ -109,13 +115,13 @@
                      {%endif%}
                      </td>
 
-                     <td>{{project.All}}</td>
-                       <td>{{project.New}}</td>
-                       <td>{{project.InProgress}}</td>
-                         <td>{{project.Done}} </td>
-                           <td>{{project.Canceled}}</td>
-                          <td>{{project.Hold}}</td>
-                         <td>{{project.Closed}}
+                     <td><b>{{project.All}}</b></td>
+                       <td><b>{{project.New}}</b></td>
+                       <td><b>{{project.InProgress}}</b></td>
+                         <td><b>{{project.Done}} </b></td>
+                           <td><b>{{project.Canceled}}</b></td>
+                          <td><b>{{project.Hold}}</b></td>
+                         <td><b>{{project.Closed}}</b>
                          
                         <!--  <span class="sparkline_area" style="height: 160px;"><canvas width="85" height="15" style="display: inline-block; width: 85px; height: 15px; vertical-align: top;"></canvas></span> -->
                          
@@ -129,7 +135,7 @@
         </div>
       </div>
 
- <div class="col-md-4 col-sm-4 col-xs-12">
+ <div class="col-md-3 col-sm-12 col-xs-12">
          <div class="x_panel tile fixed_height_320">
           <div class="x_title">
               <h2>{% trans "Tasks by status" %}</h2>
@@ -145,7 +151,7 @@
      </div> <!-- end  row 1 -->
 
     <div class="row">
-  <div class="col-md-6 col-sm-4 col-xs-12 float-right">
+  <div class="col-md-6 col-sm-12 col-xs-12 float-right">
         <div class="x_panel tile fixed_height_320 overflow_hidden">
           <div class="x_title">
             <h2>المهام المفتوحة</h2>
@@ -159,7 +165,7 @@
                     <th>{% trans "Task Name" %}</th>
                     <th>{% trans "Project Name" %}</th>
                     <th>{% trans "Progress" %}</th>
-                    <th>{% trans "commitment" %}</th>
+                    <th>الألتزام</th>
                     <th>{% trans "Status" %}</th>
                     <th>{% trans "End Date" %}</th>
                   </tr>
@@ -170,7 +176,7 @@
                   {% for task in open_tasks %}
                   {% if task is not None and  task.project.id != "" %}
                   <tr>
-                    <th scope="row">{{task.id}}</th>
+                    <td scope="row">{{task.id}}</td>
                     <td><a href="{% url 'ns-project:project-task-detail' task.project.id task.id   %}" class="blue" >  {{ task.name }}</a></td>
                     <td><a href="{% url 'ns-project:project-detail' task.project.id %}" class="blue" >  {{ task.project.name }}</a></td>
                  
@@ -202,7 +208,7 @@
                      {%endif%}
                      </td>
 
-                     <td>{{task.status}}</td>
+                     <td>{% trans task.status %}</td>
                          <td>{{  task.enddate|date:"Y-m-d" }}</td>
                          
                  
@@ -214,7 +220,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-2 col-sm-4 col-xs-12">
+      <div class="col-md-3 col-sm-12 col-xs-12 text-center">
         <div class="x_panel tile fixed_height_320">
           <div class="x_title">
             <h2>مؤشر الاداء</h2>
@@ -227,7 +233,7 @@
         </div>
       </div>
 
-      <div class="col-md-4 col-sm-4 col-xs-12">
+      <div class="col-md-3 col-sm-12 col-xs-12">
         <div class="x_panel tile fixed_height_320 overflow_hidden">
           <div class="x_title">
             <h2>المهام  حسب الإدارة</h2>
