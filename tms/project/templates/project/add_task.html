@@ -131,8 +131,6 @@
                               <button type="submit" class="btn btn-success">{{_('Submit')}}</button>
                            </div>
                         </div>
-                        <!--  {{ form.as_p }} -->
-                        <!--  {{ form.start.label_tag }} -->
 
                      </form>
 
@@ -147,14 +145,10 @@
 {% endblock content %}
 {% block javascripts %}
 {{ block.super }}
-{# JQUERY FILE UPLOAD SCRIPTS #}
-<script src="{% static 'build/js/jquery-file-upload/js/vendor/jquery.ui.widget.js' %}"></script>
-<script src="{% static 'build/js/jquery-file-upload/js/jquery.iframe-transport.js' %}"></script>
-<script src="{% static 'build/js/jquery-file-upload/js/jquery.fileupload.js' %}"></script>
-<script src="{% static 'build/js/jquery.formset.js' %}"></script>
+
 
 {# PHOTOS PAGE SCRIPTS #}
-<script src="{% static 'build/js/basic-upload.js' %}"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.jquery.js"></script>
 <script>
    $('#single_cal_1').daterangepicker({
