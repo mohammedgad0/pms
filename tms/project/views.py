@@ -28,6 +28,7 @@ from .timesheet import *
 from django.forms.models import modelformset_factory
 from unittest.case import expectedFailure
 from django.core.mail import send_mail
+from django.template.context_processors import request
 
 
 def loginfromdrupal(request, email,signature,time):
@@ -533,7 +534,6 @@ def updateStartDate(request,pk):
 def updateTaskFinish(request,pk):
     data = dict()
     errors = []
-
     _obj =  get_object_or_404(Task,pk=pk)
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -543,17 +543,17 @@ def updateTaskFinish(request,pk):
             _obj.status="Done"
             _obj.progress=100
             _obj.finisheddate=datetime.now()
-            _obj.finishedby=request.session.get('EmpID', '1056821208')
+            _obj.finishedby=request.session.get('EmpID')
             _obj.lasteditdate=datetime.now()
-            _obj.lasteditby=request.session.get('EmpID', '1056821208')
+            _obj.lasteditby=request.session.get('EmpID')
             _obj.save()
              #add to history
             update_change_reason(_obj, _("Finish Task")+" "+request.session['EmpName']+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['notes'])
             data['form_is_valid'] = True
-            data['icon'] = "f_%s" %pk
+            data['icon'] = "f_"+pk
             data['id'] = pk
             data['status'] = _('Finished')
-            data['message'] = _(' Finish Date Updated successfully' %pk)
+            data['message'] = _(' Finish Date Updated successfully')
             data['html_form'] = render_to_string('project/task/update_finish_task.html',request=request)
             return JsonResponse(data)
 
@@ -590,8 +590,8 @@ def updateTaskClose(request,pk):
             data['form_is_valid'] = True
             data['id'] = pk
             data['status'] = _('Closed')
-            data['icon'] = "c_%s" %pk
-            data['message'] = _(' Close Date Updated successfully' %pk)
+            data['icon'] = "c_"+pk
+            data['message'] = _(' Close Date Updated successfully')
             data['html_form'] = render_to_string('project/task/update_close_task.html',request=request)
             return JsonResponse(data)
         else:
@@ -1440,3 +1440,9 @@ def _employee_tasks_statistics(employee,startdate,enddate):
     tasks['Canceled']=task_list.filter(status__exact='Canceled').count()
     tasks['Closed']=task_list.filter(status__exact='Closed').count()
     return tasks
+
+def ProjectReport(request):
+    context={}
+    return render(request, 'project/reports/project_report.html', context)
+
+
