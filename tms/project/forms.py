@@ -342,3 +342,11 @@ class AddDelegation(ModelForm):
         if end < start:
             msg = _("End date is less than start date")
             self.add_error('end', msg)
+
+class ReportForm(forms.Form):
+    FAVORITE_COLORS_CHOICES = (('project', 'Project'),('assignedto', 'assignedTo'),('status', 'Status'),)
+    reportType = forms.MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        choices=FAVORITE_COLORS_CHOICES,
+    )

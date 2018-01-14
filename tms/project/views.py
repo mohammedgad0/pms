@@ -1442,7 +1442,30 @@ def _employee_tasks_statistics(employee,startdate,enddate):
     return tasks
 
 def ProjectReport(request):
-    context={}
+    _rtype=None
+
+    _rlist=[]
+     # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        form = ReportForm(request.POST)
+        if form.is_valid():
+            _rtype=form.cleaned_data['reportType']
+            for type in _rtype :
+                Dict={}
+                if type == "project" :
+                    Dict['type']="project"
+                    _rlist.append(Dict)
+                if type == "assignedto" :
+                    Dict['type']="assignedto"
+                    _rlist.append(Dict)
+                if type == "status" :
+                    Dict['type']="status"
+                    _rlist.append(Dict)
+            
+    else:
+         form = ReportForm()
+           
+    context={'form':form,'rtype':_rtype,'rlist':_rlist}
     return render(request, 'project/reports/project_report.html', context)
 
 

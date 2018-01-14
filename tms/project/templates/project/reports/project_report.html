@@ -1,5 +1,6 @@
 {% extends "project/base_site.html" %}
-
+{% load i18n %}
+{% load widget_tweaks %}
 {% block title %} Plain Page {% endblock title %}
 
 {% block stylesheets %}
@@ -11,16 +12,13 @@
       <div class="">
         <div class="page-title">
           <div class="title_left">
-            <h3>Plain Page</h3>
+            <h3>{% trans "Reports" %}</h3>
           </div>
 
           <div class="title_right">
             <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search for...">
-                <span class="input-group-btn">
-                  <button class="btn btn-default" type="button">Go!</button>
-                </span>
+              
               </div>
             </div>
           </div>
@@ -32,26 +30,67 @@
           <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
               <div class="x_title">
-                <h2>Plain Page</h2>
+                <h2>{% trans "Reports" %}</h2>
                 <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                    <ul class="dropdown-menu" role="menu">
-                      <li><a href="#">Settings 1</a>
-                      </li>
-                      <li><a href="#">Settings 2</a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li><a class="close-link"><i class="fa fa-close"></i></a>
-                  </li>
+                              <a href="{{request.META.HTTP_REFERER}}" >  <button type="button" class="btn btn-primary">{{ _('Back')}} <i class="fa fa-angle-double-left"></i> </button></a>
+             
+             
                 </ul>
                 <div class="clearfix"></div>
               </div>
               <div class="x_content">
-                  Add content to the page ...
+              
+                 <div class="col-md-3 col-md-12 col-xs-12">
+                  <!--  report type -->      
+      <fieldset class="fieldset_normal">
+        <legend>{% trans "Report Type" %}</legend>
+        <div class="article-content">   
+        
+         <form action="" method="post" id="ReportForm" class="form-horizontal form-label-left input_mask" novalidate enctype="multipart/form-data">
+                        {% csrf_token %}
+                       
+                        {{form.reportType}}
+                        
+                        <div class="form-group">
+                             <button type="button" class="btn btn-default">{{_('Select All')}}</button>
+                         <button type="submit" class="btn btn-primary"> <i class="fa fa-gears"></i> {{_('Create Report')}} </button>
+                         </div>
+                         
+           </form>
+        
+        </div>
+      </fieldset>
+                 </div>
+                <div class="col-md-9 col-sm-9 col-xs-12">
+                   <fieldset class="fieldset_normal">
+        <legend>{% trans "Report" %}</legend>
+        <div class="article-content">   
+        
+        <!--  report detail  -->
+        {% for  list in rlist %}
+        
+        <!--  project type row -->
+        <div class="col-md-12 col-sm-12 col-xs-12">
+        <!--  title -->
+        <div class="alert alert-info  fade in" >{{ list.type }} </div>
+        <!--  detail -->
+         <div class="col-md-12 col-sm-12 col-xs-12">
+         
+        <!--  chart -->
+       <div class="col-md-6 col-sm-12 col-xs-12"> charts</div>
+        <!--  table -->
+       <div class="col-md-6 col-sm-12 col-xs-12"> {{list.type}} </div>
+        
+         </div>
+        
+        </div>
+        <!--  end project row -->
+        
+        {% endfor %}
+        
+        </div>
+      </fieldset>
+                </div>
               </div>
             </div>
           </div>
