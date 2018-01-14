@@ -344,7 +344,7 @@ class AddDelegation(ModelForm):
             self.add_error('end', msg)
 
 class ReportForm(forms.Form):
-    FAVORITE_COLORS_CHOICES = (('project', 'Project'),('assignedto', 'assignedTo'),('status', 'Status'),)
+    FAVORITE_COLORS_CHOICES = (('project', 'Project'),('assignedto', 'AssignedTo'),('status', 'Status'),)
     reportType = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple,
