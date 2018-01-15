@@ -1,4 +1,6 @@
   {% load i18n %}
+  {% load mathfilters %}
+  
     <!--  chart -->
        <div class="col-md-6 col-sm-12 col-xs-12"> 
        <div id="piechart"></div>
@@ -20,16 +22,50 @@
                       <tbody>
                     
                       {% for object in list.assignedto %}
-                     {{object}}
+                   
                         <tr>
                           <td>{{object.assignedto__empname}}</td>
                           <td>{{object.num_assign}}</td>
-                          <td>{{object.num_assign}}</td>
+                          <td>
+                            
+                          {{object.num_assign|div:list.all|mul:100|floatformat:"0"}}
+                         
+                          </td>
                         </tr>
                      {% endfor%}
+                     
+                     
+                     
                       </tbody>
                     </table>
         
+             <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>{% trans "Departement" %}</th>
+                          <th>{% trans "Task Count" %}</th>
+                          <th>%</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+         {% for object in list.assignto_dept %}
+                   
+                        <tr>
+                          <td>{{object.departement__deptname}}</td>
+                          <td>{{object.num_assign}}</td>
+                          <td>  {{object.num_assign|div:list.all|mul:100|floatformat:"0"}}</td>
+                        </tr>
+                     {% endfor%}
+                     
+                     {% if list.notasigned  %}
+                     <tr>
+                          <td>{% trans "not assigned" %}</td>
+                          <td>{{list.notasigned }}</td>
+                          <td>  {{list.notasigned |div:list.all|mul:100|floatformat:"0"}}</td>
+                        </tr>
+                     {%endif%} 
+                     
         
-        
+          </tbody>
+                    </table>
         </div>

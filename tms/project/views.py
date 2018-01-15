@@ -1485,7 +1485,9 @@ def ProjectReport(request):
                     Dict={}
                     Dict["all"]=tasks.count()
                     Dict['type']="assignedto"
-                    assignedto= tasks.values('assignedto__empname').annotate( num_assign=Count('assignedto'))
+                    assignedto= tasks.values('assignedto__empname').annotate( num_assign=Count('assignedto')).exclude(Q(assignedto__exact=None))
+                    notasigned= tasks.filter(Q(assignedto__exact=None) & Q(departement__exact=None)).count()
+                    assignto_dept= tasks.values('departement__deptname').annotate( num_assign=Count('departement')).exclude(Q(departement__exact=None))
                     _assignedto_list=[]
 #                     for assign in assignedto :
 #                         _assignedto_list["assign_to"]=assign
@@ -1493,7 +1495,8 @@ def ProjectReport(request):
 #                         _assignedto_list["precent"]=assign.num_assign/ Dict["all"]
 #                      
                     Dict["assignedto"]=assignedto
-                  
+                    Dict["notasigned"]=notasigned
+                    Dict["assignto_dept"]=assignto_dept
                     _rlist.append(Dict)
                     
                  #report task status   

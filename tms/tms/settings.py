@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'django_filters',
     'widget_tweaks',
     'simple_history',
+    'mathfilters' ,
 ]
 
 MIDDLEWARE_CLASSES = [
