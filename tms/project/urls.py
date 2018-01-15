@@ -58,6 +58,7 @@ urlpatterns = [
     url(r'^download/(?P<file_name>.+)$', views.Download, name='download'),
     url(r'^email/$', views.senmail, name='email'),
     url(r'^project_report/$', views.ProjectReport, name='project-report'),
+    url(r'^project_report/(?P<selectedDpt>.+)$', views.ProjectReport, name='project-report'),
     #login from drupal
     url(r'^auth/(?P<email>.*)/(?P<signature>.*)/(?P<time>.*)/$', views.loginfromdrupal, name='loginfromdrupal'),
     #delegation page

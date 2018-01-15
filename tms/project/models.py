@@ -149,9 +149,9 @@ class VDeptsheetsdata(models.Model):
 
 class ApfDeptView(models.Model):
     id = models.IntegerField(db_column='Id',primary_key=True)  # Field name made lowercase.
-    dept_code = models.CharField(db_column='DEPT_CODE', max_length=5, blank=True, null=True)  # Field name made lowercase.
+    dept_code = models.CharField(db_column='DEPT_CODE', max_length=5, blank=True, null=True,unique=True)  # Field name made lowercase.
     dept_name = models.CharField(db_column='DEPT_NAME', max_length=100, blank=True, null=True)  # Field name made lowercase.
-    resp_dept_code = models.CharField(db_column='RESP_DEPT_CODE', max_length=5, blank=True, null=True)  # Field name made lowercase.
+   # resp_dept_code = models.CharField(db_column='RESP_DEPT_CODE', max_length=5, blank=True, null=True)  # Field name made lowercase.
     resp_dept_name = models.CharField(db_column='RESP_DEPT_NAME', max_length=100, blank=True, null=True)  # Field name made lowercase.
     manager_title = models.CharField(db_column='MANAGER_TITLE', max_length=100, blank=True, null=True)  # Field name made lowercase.
     manager_ext = models.CharField(db_column='MANAGER_EXT', max_length=100, blank=True, null=True)  # Field name made lowercase.
@@ -162,8 +162,18 @@ class ApfDeptView(models.Model):
     city_code = models.CharField(db_column='CITY_CODE', max_length=20, blank=True, null=True)  # Field name made lowercase.
     branch_name = models.CharField(db_column='BRANCH_NAME', max_length=100, blank=True, null=True)  # Field name made lowercase.
     branch_code = models.IntegerField(db_column='BRANCH_CODE', blank=True, null=True)  # Field name made lowercase.
-    resp_dept_code = models.ForeignKey('self',db_column='resp_dept_code', to_field='dept_code',on_delete=models.SET_NULL, blank=True, null=True,unique=True)
+    resp_dept_code = models.ForeignKey('self',db_column='resp_dept_code', to_field='dept_code',on_delete=models.SET_NULL, blank=True, null=True)
     
+    def get_all_children(self, include_self=True):
+        r = []
+        if include_self:
+            r.append(self)
+        for c in ApfDeptView.objects.filter(resp_dept_code=self):
+            _r = c.get_all_children(include_self=True)
+            if 0 < len(_r):
+                r.extend(_r)
+        return r
+
     class Meta:
         managed = False
         db_table = 'apf_dept_view'
