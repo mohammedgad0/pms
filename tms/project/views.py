@@ -1479,6 +1479,9 @@ def ProjectReport(request):
                     
                     Dict['taskCount'] =tasks.count()
                     Dict['progress']=tasks.aggregate(Avg('progress'))
+                    Dict['internal']=tasks.filter(Q(departement__deptcode__exact=deptcode) | (Q(departement__deptcode__exact=None)) & Q(project__departement__deptcode__exact=deptcode)).count()
+                    Dict['external']=tasks.filter(~Q(departement__deptcode__exact=deptcode)).count()
+                    
                     _rlist.append(Dict)
                 #report task assigned to
                 if type == "assignedto" :

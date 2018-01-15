@@ -3,7 +3,7 @@
   
     <!--  chart -->
        <div class="col-md-6 col-sm-12 col-xs-12"> 
-       <div id="piechart"></div>
+       <div id="piechart-assigned"></div>
        </div>
         <!--  table -->
        <div class="col-md-6 col-sm-12 col-xs-12"> 
@@ -15,7 +15,7 @@
                       <thead>
                         <tr>
                           <th>{% trans "Account" %}</th>
-                          <th>{% trans "Task Count" %}</th>
+                          <th>{% trans "Tasks Count" %}</th>
                           <th>%</th>
                         </tr>
                       </thead>
@@ -42,7 +42,7 @@
                       <thead>
                         <tr>
                           <th>{% trans "Departement" %}</th>
-                          <th>{% trans "Task Count" %}</th>
+                          <th>{% trans "Tasks Count" %}</th>
                           <th>%</th>
                         </tr>
                       </thead>
@@ -68,3 +68,28 @@
           </tbody>
                     </table>
         </div>
+        
+        <!-- google chart -->
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Hours per Day'],
+          {% for object in list.assignto_dept %}
+           ['{{object.departement__deptname}}',     {{object.num_assign|div:list.all|mul:100|floatformat:"0"}}],
+           {% endfor%}
+           ['{{_("not assigned")}}',     {{list.notasigned |div:list.all|mul:100|floatformat:"0"}}],
+        ]);
+
+        var options = {
+          title: ''
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart-assigned'));
+
+        chart.draw(data, options);
+      }
+      </script>

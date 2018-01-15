@@ -1,7 +1,7 @@
   {% load i18n %}
     <!--  chart -->
        <div class="col-md-6 col-sm-12 col-xs-12"> 
-       <div id="piechart"></div>
+       <div id="piechart-status"></div>
        </div>
         <!--  table -->
        <div class="col-md-6 col-sm-12 col-xs-12"> 
@@ -34,3 +34,30 @@
         
         
         </div>
+        
+          <!-- google chart -->
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+        	
+          ['Task', 'Count'],
+          {% for object in list.status %}
+          ['{% trans object.name %}',   {{object.precent|stringformat:"02d"}}],
+          {% endfor%}
+         
+        
+        ]);
+
+        var options = {
+          title: ''
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart-status'));
+
+        chart.draw(data, options);
+      }
+      </script>

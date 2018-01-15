@@ -347,7 +347,7 @@ class ProjectModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.name
 class ReportForm(forms.Form):
-    FAVORITE_COLORS_CHOICES = (('project', 'Project'),('assignedto', 'AssignedTo'),('status', 'Status'),)
+    FAVORITE_COLORS_CHOICES = (('project', _('Project Summary')),('assignedto', _('assignation')),('status', _('Status')),)
     project =ProjectModelChoiceField(queryset=Project.objects.none(),to_field_name="id" ,empty_label="(Select Project)",widget=forms.Select(attrs={'class': 'chosen form-control col-md-8'} ),required=True,error_messages={'required': _('Please Select Project')})
     reportType = forms.MultipleChoiceField( required=False,widget=forms.CheckboxSelectMultiple,choices=FAVORITE_COLORS_CHOICES,
     )
