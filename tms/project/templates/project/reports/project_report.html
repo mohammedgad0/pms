@@ -46,7 +46,7 @@
         
          <form action="" method="post" id="ReportForm" class="form-horizontal form-label-left input_mask" novalidate enctype="multipart/form-data">
                         {% csrf_token %}
-                       
+                        {{form.departement}}
                          {{form.project}}
                          <fieldset class="fieldset_normal">
                           <legend>{% trans "Report Type" %}</legend>

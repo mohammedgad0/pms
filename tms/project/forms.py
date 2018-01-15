@@ -348,6 +348,8 @@ class ProjectModelChoiceField(ModelChoiceField):
         return obj.name
 class ReportForm(forms.Form):
     FAVORITE_COLORS_CHOICES = (('project', _('Project Summary')),('assignedto', _('assignation')),('status', _('Status')),)
+    departement = FollowupModelChoiceField(queryset=Department.objects.none(), to_field_name="deptcode",empty_label=_('Select Departement'),widget=forms.Select(attrs={'class': 'chosen  form-control col-md-3',} ),error_messages={'required': _('Please Sealect Departement')},required=True)
     project =ProjectModelChoiceField(queryset=Project.objects.none(),to_field_name="id" ,empty_label="(Select Project)",widget=forms.Select(attrs={'class': 'chosen form-control col-md-8'} ),required=True,error_messages={'required': _('Please Select Project')})
     reportType = forms.MultipleChoiceField( required=False,widget=forms.CheckboxSelectMultiple,choices=FAVORITE_COLORS_CHOICES,
+   
     )

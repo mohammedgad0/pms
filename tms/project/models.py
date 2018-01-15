@@ -162,7 +162,8 @@ class ApfDeptView(models.Model):
     city_code = models.CharField(db_column='CITY_CODE', max_length=20, blank=True, null=True)  # Field name made lowercase.
     branch_name = models.CharField(db_column='BRANCH_NAME', max_length=100, blank=True, null=True)  # Field name made lowercase.
     branch_code = models.IntegerField(db_column='BRANCH_CODE', blank=True, null=True)  # Field name made lowercase.
-
+    resp_dept_code = models.ForeignKey('self',db_column='resp_dept_code', to_field='dept_code',on_delete=models.SET_NULL, blank=True, null=True,unique=True)
+    
     class Meta:
         managed = False
         db_table = 'apf_dept_view'

@@ -1410,16 +1410,7 @@ def _get_internal_external_projects(request):
                                         ).annotate(dcount=Count('task')).order_by('-id')
     return projects
 
-def _get_int_ext_projects_by_deptcode(request,deptcode):
-    if request.user.groups.filter(name="ismanager").exists():
-         projects=Project.objects.filter(
-             (Q(task__project__departement__deptcode__exact=deptcode)| Q(task__departement__deptcode__exact=deptcode))
-                                        ).annotate(dcount=Count('task')).order_by('-id')
-    else:
-       projects=Project.objects.filter(
-             ( Q(task__assignedto__empid__exact=request.session['EmpID']))
-                                        ).annotate(dcount=Count('task')).order_by('-id')
-    return projects
+
 
 def _project_kpi_employee(employee,startdate,enddate):
     projectKPI={}
@@ -1480,7 +1471,8 @@ def ProjectReport(request):
     _rtype=None
     _rlist=[]
     deptcode = request.session['DeptCode']
-    project_list=_get_int_ext_projects_by_deptcode(request,deptcode)
+    departement_list= ApfDeptView.objects.filter(resp_dept_code__exact="2300")
+    project_list= projects=Project.objects.filter(( Q(departement__deptcode__exact=deptcode))).order_by('-id')
 
     #intiat form
 
@@ -1488,6 +1480,7 @@ def ProjectReport(request):
      # if this is a POST request we need to process the form data
     if request.method == 'POST':
         form = ReportForm(request.POST)
+        form.fields["departement"].queryset =departement_list
         form.fields["project"].queryset =project_list
         if form.is_valid():
             _rtype=form.cleaned_data['reportType']
@@ -1547,6 +1540,7 @@ def ProjectReport(request):
                     _rlist.append(Dict)
 
 
+    form.fields["departement"].queryset =departement_list
     form.fields["project"].queryset =project_list
     context={'form':form,'rtype':_rtype,'rlist':_rlist,'project_list':project_list}
     return render(request, 'project/reports/project_report.html', context)
