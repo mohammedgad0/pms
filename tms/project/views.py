@@ -1123,9 +1123,7 @@ def DashboardManager(request):
     dept_code  = request.session['DeptCode']
     start_date = datetime.now() - relativedelta(years=1)
     end_date = datetime.now()
-
     task_based_department = dept_task_indicators(dept_code,start_date,end_date)
-
     pie_tasks=_dept_tasks_statistics(dept_code,start_date,end_date)
     open_projects=_dept_open_pojects(dept_code,start_date,end_date)
     per_indicator = indicators(dept_code,start_date,end_date)
