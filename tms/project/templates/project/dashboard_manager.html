@@ -4,7 +4,7 @@
 
 {% block stylesheets %}
   {{ block.super }}
-  
+
   <style>
   #chart_div > table{
  margin:auto !important;
@@ -65,6 +65,7 @@
         <div class="x_panel tile fixed_height_320">
           <div class="x_title">
             <h2>مشاريع مفتوحة</h2>
+            {{all_dept}}
             <div class="clearfix"></div>
           </div>
           <div class="x_content">
@@ -122,9 +123,9 @@
                            <td><b>{{project.Canceled}}</b></td>
                           <td><b>{{project.Hold}}</b></td>
                          <td><b>{{project.Closed}}</b>
-                         
+
                         <!--  <span class="sparkline_area" style="height: 160px;"><canvas width="85" height="15" style="display: inline-block; width: 85px; height: 15px; vertical-align: top;"></canvas></span> -->
-                         
+
                          </td>
                   </tr>
                   {% endfor %}
@@ -179,20 +180,20 @@
                     <td scope="row">{{task.id}}</td>
                     <td><a href="{% url 'ns-project:project-task-detail' task.project.id task.id   %}" class="blue" >  {{ task.name }}</a></td>
                     <td><a href="{% url 'ns-project:project-detail' task.project.id %}" class="blue" >  {{ task.project.name }}</a></td>
-                 
+
                     <td class="project_progress">
                               <div class="progress progress_sm">
                                  <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="{{ task.progress|floatformat:-2}}" aria-valuenow="72" style="width: {{ task.progress|floatformat:-2}%;"></div>
                               </div>
                               <small> {{ task.progress|floatformat:-2}}% مكتمل</small>
                               </td>
-                    
+
                      <td >
                      {% now "Y-m-d" as current_date %}
 
                      {% if task.enddate|date:"Y-m-d" < current_date and task.status != "Done" %}
                                              <div class="commitment-down text-danger">
-                    
+
                     <i class="fa fa-level-down"></i> متأخر
 
 
@@ -200,18 +201,18 @@
                    </div>
                      {% else %}
                                       <div class="commitment-up text-success">
-                 
+
                                       <i class="fa fa-level-up"></i> ملتزم
-                 
-                 
+
+
                        </div>
                      {%endif%}
                      </td>
 
                      <td>{% trans task.status %}</td>
                          <td>{{  task.enddate|date:"Y-m-d" }}</td>
-                         
-                 
+
+
                   </tr>
                   {%endif%}
                   {% endfor %}

@@ -1451,37 +1451,62 @@ def _employee_tasks_statistics(employee,startdate,enddate):
     tasks['Closed']=task_list.filter(status__exact='Closed').count()
     return tasks
 
+def _get_tree_dept(deptcode):
+    dept_level_1 = ApfDeptView.objects.filter(resp_dept_code = deptcode)
+    dept_level_2 = []
+    dept_level_3 = []
+    dept_level_4 = []
+    for dept in dept_level_1:
+        dept2 = dept.dept_code
+        # name = dept.dept_name
+        dept_level_2.append(dept2)
+        # dept_level_2.append(name)
+        dept = ApfDeptView.objects.filter(resp_dept_code = dept2)
+        for data in dept:
+            dept3= data.dept_code
+            # name = data.dept_name
+            dept_level_3.append(dept3)
+            # dept_level_3.append(name)
+            dept = ApfDeptView.objects.filter(resp_dept_code = dept3)
+            for data in dept:
+                dept4 = data.dept_code
+                dept_level_4.append(dept4)
+    all_dept =  dept_level_2 + dept_level_3 + dept_level_4
+    all_dept.append(deptcode)
+    return all_dept
+
+
 def ProjectReport(request):
     _rtype=None
     _rlist=[]
     deptcode = request.session['DeptCode']
     project_list=_get_int_ext_projects_by_deptcode(request,deptcode)
-    
+
     #intiat form
-    
+
     form = ReportForm()
      # if this is a POST request we need to process the form data
     if request.method == 'POST':
         form = ReportForm(request.POST)
-        form.fields["project"].queryset =project_list 
+        form.fields["project"].queryset =project_list
         if form.is_valid():
             _rtype=form.cleaned_data['reportType']
             _project=form.cleaned_data['project']
             tasks=Task.objects.filter( Q(project__id__exact=_project.id) & (Q(departement__deptcode__exact=deptcode)| Q(project__departement__deptcode__exact=deptcode))
                                     )
             for type in _rtype :
-                
+
                 #report project
                 if type == "project" :
                     Dict={}
                     Dict['type']="project"
                     Dict['project']=_project
-                    
+
                     Dict['taskCount'] =tasks.count()
                     Dict['progress']=tasks.aggregate(Avg('progress'))
                     Dict['internal']=tasks.filter(Q(departement__deptcode__exact=deptcode) | (Q(departement__deptcode__exact=None)) & Q(project__departement__deptcode__exact=deptcode)).count()
                     Dict['external']=tasks.filter(~Q(departement__deptcode__exact=deptcode)).count()
-                    
+
                     _rlist.append(Dict)
                 #report task assigned to
                 if type == "assignedto" :
@@ -1496,13 +1521,13 @@ def ProjectReport(request):
 #                         _assignedto_list["assign_to"]=assign
 #                         _assignedto_list["num_assign"]=assign.num_assign
 #                         _assignedto_list["precent"]=assign.num_assign/ Dict["all"]
-#                      
+#
                     Dict["assignedto"]=assignedto
                     Dict["notasigned"]=notasigned
                     Dict["assignto_dept"]=assignto_dept
                     _rlist.append(Dict)
-                    
-                 #report task status   
+
+                 #report task status
                 if type == "status" :
                     Dict={}
                     Dict['type']="status"
@@ -1520,10 +1545,8 @@ def ProjectReport(request):
                         status_list.append(statusDict)
                     Dict["status"]=status_list
                     _rlist.append(Dict)
-        
-        
-    form.fields["project"].queryset =project_list   
+
+
+    form.fields["project"].queryset =project_list
     context={'form':form,'rtype':_rtype,'rlist':_rlist,'project_list':project_list}
     return render(request, 'project/reports/project_report.html', context)
-
-
