@@ -1,0 +1,36 @@
+  {% load i18n %}
+    <!--  chart -->
+       <div class="col-md-6 col-sm-12 col-xs-12"> 
+       <div id="piechart"></div>
+       </div>
+        <!--  table -->
+       <div class="col-md-6 col-sm-12 col-xs-12"> 
+       
+        
+        
+        
+        <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>{% trans "Status" %}</th>
+                          <th>{% trans "Tasks Count" %}</th>
+                          <th>%</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      
+                  
+                      {% for object in list.status %}
+                     
+                        <tr>
+                          <td>{{object.name}}</td>
+                          <td>{{object.count}}</td>
+                          <td>{{object.precent|stringformat:"02d"}}</td>
+                        </tr>
+                     {% endfor%}
+                      </tbody>
+                    </table>
+        
+        
+        
+        </div>

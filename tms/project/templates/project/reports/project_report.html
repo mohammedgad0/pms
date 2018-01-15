@@ -8,58 +8,63 @@
 {% endblock stylesheets %}
 
 {% block content %}
+   <!-- google chart -->
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  
     <div class="right_col" role="main">
       <div class="">
-        <div class="page-title">
-          <div class="title_left">
-            <h3>{% trans "Reports" %}</h3>
-          </div>
 
-          <div class="title_right">
-            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-              <div class="input-group">
-              
-              </div>
-            </div>
-          </div>
-        </div>
 
         <div class="clearfix"></div>
 
         <div class="row">
+   
+                        
+                        
           <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
               <div class="x_title">
                 <h2>{% trans "Reports" %}</h2>
+                
+               
                 <ul class="nav navbar-right panel_toolbox">
-                              <a href="{{request.META.HTTP_REFERER}}" >  <button type="button" class="btn btn-primary">{{ _('Back')}} <i class="fa fa-angle-double-left"></i> </button></a>
-             
+                  <a href="{{request.META.HTTP_REFERER}}" >  <button type="button" class="btn btn-primary">{{ _('Back')}} <i class="fa fa-angle-double-left"></i> </button></a>
              
                 </ul>
                 <div class="clearfix"></div>
               </div>
               <div class="x_content">
               
+                   
+ 
+              
                  <div class="col-md-3 col-md-12 col-xs-12">
                   <!--  report type -->      
-      <fieldset class="fieldset_normal">
-        <legend>{% trans "Report Type" %}</legend>
-        <div class="article-content">   
+     
+      
+        <div class="x_panel">
         
          <form action="" method="post" id="ReportForm" class="form-horizontal form-label-left input_mask" novalidate enctype="multipart/form-data">
                         {% csrf_token %}
                        
+                         {{form.project}}
+                         <fieldset class="fieldset_normal">
+                          <legend>{% trans "Report Type" %}</legend>
                         {{form.reportType}}
+                         </fieldset>
                         
                         <div class="form-group">
                              <button type="button" class="btn btn-default">{{_('Select All')}}</button>
-                         <button type="submit" class="btn btn-primary"> <i class="fa fa-gears"></i> {{_('Create Report')}} </button>
+                         <button type="submit" class="btn btn-primary"> <i class="fa fa-gears"></i> {{_('Create')}} </button>
                          </div>
-                         
+                    
+             
+           
+     
            </form>
         
         </div>
-      </fieldset>
+  
                  </div>
                 <div class="col-md-9 col-sm-9 col-xs-12">
                    <fieldset class="fieldset_normal">
@@ -76,18 +81,26 @@
         <!--  detail -->
          <div class="col-md-12 col-sm-12 col-xs-12">
          
-        <!--  chart -->
-       <div class="col-md-6 col-sm-12 col-xs-12"> charts</div>
-        <!--  table -->
-       <div class="col-md-6 col-sm-12 col-xs-12"> {{list.type}} </div>
+         {% if  list.type == "project" %}
+         {% include "project/reports/per_project.html" %}
+        {% endif %}
+        {% if  list.type == "assignedto" %}
+         {% include "project/reports/per_assignedto.html" %}
+        {% endif %}
+        {% if  list.type == "status" %}
+         {% include "project/reports/per_status.html" %}
+        {% endif %}
         
          </div>
         
         </div>
         <!--  end project row -->
         
+        <!-- error message -->
         {% endfor %}
-        
+               <div class="col-md-12 col-sm-12 col-xs-12 form-group text-danger ">
+            {{ form.project.errors }}
+                </div>
         </div>
       </fieldset>
                 </div>
@@ -101,5 +114,6 @@
 
 {% block javascripts %}
   {{ block.super }}
+  
 {% endblock javascripts %}
 

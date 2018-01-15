@@ -1,0 +1,35 @@
+  {% load i18n %}
+    <!--  chart -->
+       <div class="col-md-6 col-sm-12 col-xs-12"> 
+       <div id="piechart"></div>
+       </div>
+        <!--  table -->
+       <div class="col-md-6 col-sm-12 col-xs-12"> 
+       
+        
+       
+        
+        <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>{% trans "Account" %}</th>
+                          <th>{% trans "Task Count" %}</th>
+                          <th>%</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                    
+                      {% for object in list.assignedto %}
+                     {{object}}
+                        <tr>
+                          <td>{{object.assignedto__empname}}</td>
+                          <td>{{object.num_assign}}</td>
+                          <td>{{object.num_assign}}</td>
+                        </tr>
+                     {% endfor%}
+                      </tbody>
+                    </table>
+        
+        
+        
+        </div>

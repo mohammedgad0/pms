@@ -343,10 +343,11 @@ class AddDelegation(ModelForm):
             msg = _("End date is less than start date")
             self.add_error('end', msg)
 
+class ProjectModelChoiceField(ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.name
 class ReportForm(forms.Form):
     FAVORITE_COLORS_CHOICES = (('project', 'Project'),('assignedto', 'AssignedTo'),('status', 'Status'),)
-    reportType = forms.MultipleChoiceField(
-        required=False,
-        widget=forms.CheckboxSelectMultiple,
-        choices=FAVORITE_COLORS_CHOICES,
+    project =ProjectModelChoiceField(queryset=Project.objects.none(),to_field_name="id" ,empty_label="(Select Project)",widget=forms.Select(attrs={'class': 'chosen form-control col-md-8'} ),required=True,error_messages={'required': _('Please Select Project')})
+    reportType = forms.MultipleChoiceField( required=False,widget=forms.CheckboxSelectMultiple,choices=FAVORITE_COLORS_CHOICES,
     )

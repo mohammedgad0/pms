@@ -1,0 +1,58 @@
+  {% load i18n %}
+    <!--  chart -->
+       <div class="col-md-6 col-sm-12 col-xs-12"> 
+       <div id="piechart"></div>
+       </div>
+        <!--  table -->
+       <div class="col-md-6 col-sm-12 col-xs-12"> 
+       
+        
+        
+        
+        <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>{% trans "Project Name" %}</th>
+                          <th>{% trans "Tasks" %}</th>
+                          <th>{% trans "Progress" %}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{{list.project.name}}</td>
+                          <td>{{list.taskCount}}</td>
+                          <td>{{list.progress.progress__avg|floatformat:-2}}</td>
+                        </tr>
+                     
+                      </tbody>
+                    </table>
+        
+        
+        
+        </div>
+        
+        
+
+  <!-- google chart -->
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Hours per Day'],
+          ['{{_("New")}}',    3],
+           ['{{_("Hold")}}',     4],
+        
+        ]);
+
+        var options = {
+          title: ''
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+      }
+      </script>

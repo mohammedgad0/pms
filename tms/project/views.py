@@ -1410,6 +1410,16 @@ def _get_internal_external_projects(request):
                                         ).annotate(dcount=Count('task')).order_by('-id')
     return projects
 
+def _get_int_ext_projects_by_deptcode(request,deptcode):
+    if request.user.groups.filter(name="ismanager").exists():
+         projects=Project.objects.filter(
+             (Q(task__project__departement__deptcode__exact=deptcode)| Q(task__departement__deptcode__exact=deptcode))
+                                        ).annotate(dcount=Count('task')).order_by('-id')
+    else:
+       projects=Project.objects.filter(
+             ( Q(task__assignedto__empid__exact=request.session['EmpID']))
+                                        ).annotate(dcount=Count('task')).order_by('-id')
+    return projects
 
 def _project_kpi_employee(employee,startdate,enddate):
     projectKPI={}
@@ -1443,29 +1453,71 @@ def _employee_tasks_statistics(employee,startdate,enddate):
 
 def ProjectReport(request):
     _rtype=None
-
     _rlist=[]
+    deptcode = request.session['DeptCode']
+    project_list=_get_int_ext_projects_by_deptcode(request,deptcode)
+    
+    #intiat form
+    
+    form = ReportForm()
      # if this is a POST request we need to process the form data
     if request.method == 'POST':
         form = ReportForm(request.POST)
+        form.fields["project"].queryset =project_list 
         if form.is_valid():
             _rtype=form.cleaned_data['reportType']
+            _project=form.cleaned_data['project']
+            tasks=Task.objects.filter( Q(project__id__exact=_project.id) & (Q(departement__deptcode__exact=deptcode)| Q(project__departement__deptcode__exact=deptcode))
+                                    )
             for type in _rtype :
-                Dict={}
+                
+                #report project
                 if type == "project" :
+                    Dict={}
                     Dict['type']="project"
+                    Dict['project']=_project
+                    
+                    Dict['taskCount'] =tasks.count()
+                    Dict['progress']=tasks.aggregate(Avg('progress'))
                     _rlist.append(Dict)
+                #report task assigned to
                 if type == "assignedto" :
+                    Dict={}
+                    Dict["all"]=tasks.count()
                     Dict['type']="assignedto"
+                    assignedto= tasks.values('assignedto__empname').annotate( num_assign=Count('assignedto'))
+                    _assignedto_list=[]
+#                     for assign in assignedto :
+#                         _assignedto_list["assign_to"]=assign
+#                         _assignedto_list["num_assign"]=assign.num_assign
+#                         _assignedto_list["precent"]=assign.num_assign/ Dict["all"]
+#                      
+                    Dict["assignedto"]=assignedto
+                  
                     _rlist.append(Dict)
+                    
+                 #report task status   
                 if type == "status" :
+                    Dict={}
                     Dict['type']="status"
+                    Dict["all"]=tasks.count()
+                    _status_list=['New','Done','Closed','Canceled','Hold','InProgress']
+                    status_list=[]
+                    for status in _status_list:
+                        statusDict={}
+                        statusDict['name']=status
+                        statusDict['count']=tasks.filter(status__exact=status).count()
+                        if Dict["all"] !=0 :
+                            statusDict['precent']=(statusDict['count']/Dict["all"])*100
+                        else :
+                            statusDict['precent']=0
+                        status_list.append(statusDict)
+                    Dict["status"]=status_list
                     _rlist.append(Dict)
-            
-    else:
-         form = ReportForm()
-           
-    context={'form':form,'rtype':_rtype,'rlist':_rlist}
+        
+        
+    form.fields["project"].queryset =project_list   
+    context={'form':form,'rtype':_rtype,'rlist':_rlist,'project_list':project_list}
     return render(request, 'project/reports/project_report.html', context)
 
 
