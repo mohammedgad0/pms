@@ -1465,22 +1465,23 @@ def _get_tree_dept(deptcode):
     return all_dept
 
 
-def ProjectReport(request,selectedDpt=None):
+def ProjectReport(request,selectedDpt):
     _rtype=None
     _rlist=[]
-    deptcode = request.session['DeptCode']
-    departement_list= ApfDeptView.get_all_children(deptcode)
+    selfdeptcode = "2300"
+    deptcode=selfdeptcode
+    departement_list= ApfDeptView.get_all_children(selfdeptcode)
     #chek if user has authticat to see selected deptcode
-    if departement_list :
-        try:
-            for dept in departement_list:
-                if dept.dept_code == selectedDpt :
-                    deptcode = seletedDeptcode
-                
-        except:
-            pass
-    deptcode = selectedDpt
-    project_list= projects=Project.objects.filter(( Q(departement__deptcode__exact=deptcode))).order_by('-id')
+   
+   
+    for dept in departement_list:
+        print("print dept code %$",dept.id)
+        if dept.dept_code == 2322 :
+            deptcode = selectedDpt
+
+
+
+    project_list= Project.objects.filter(( Q(departement__deptcode__exact=str(deptcode)))).order_by('-id')
 
     #intiat form
 
