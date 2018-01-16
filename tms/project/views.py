@@ -1465,23 +1465,24 @@ def _get_tree_dept(deptcode):
     return all_dept
 
 
-def ProjectReport(request,selectedDpt):
+def ProjectReport(request,selectedDpt=None):
     _rtype=None
     _rlist=[]
-    selfdeptcode = "2300"
-    deptcode=selfdeptcode
+    selfdeptcode =  request.session['DeptCode']
+    deptcode=0
     departement_list= ApfDeptView.get_all_children(selfdeptcode)
     #chek if user has authticat to see selected deptcode
-   
-   
-    for dept in departement_list:
-        print("print dept code %$",dept.id)
-        if dept.dept_code == 2322 :
-            deptcode = selectedDpt
+    if len(departement_list) > 1 :
+        departement_list.pop(0)
+    try:
+        for dept in departement_list:
+            if dept.dept_code == selectedDpt :
+                deptcode = selectedDpt
+    except:
+        deptcode=selfdeptcode
 
-
-
-    project_list= Project.objects.filter(( Q(departement__deptcode__exact=str(deptcode)))).order_by('-id')
+ 
+    project_list= Project.objects.filter(( Q(departement__deptcode__exact=deptcode))).order_by('-id')
 
     #intiat form
 
@@ -1548,7 +1549,8 @@ def ProjectReport(request,selectedDpt):
                     Dict["status"]=status_list
                     _rlist.append(Dict)
 
-
+    depObject=  get_object_or_404(ApfDeptView, dept_code__exact= request.session['DeptCode']) 
+    print(depObject)
     form.fields["project"].queryset =project_list
-    context={'form':form,'rtype':_rtype,'rlist':_rlist,'project_list':project_list,'departement_list':departement_list,'selectedDpt':selectedDpt}
+    context={'form':form,'rtype':_rtype,'rlist':_rlist,'project_list':project_list,'departement_list':departement_list,'selectedDpt':selectedDpt,'depObject':depObject}
     return render(request, 'project/reports/project_report.html', context)
