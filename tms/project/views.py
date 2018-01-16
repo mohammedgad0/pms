@@ -1468,9 +1468,8 @@ def _get_tree_dept(deptcode):
 def ProjectReport(request,selectedDpt=None):
     _rtype=None
     _rlist=[]
-    selfdeptcode =  request.session['DeptCode']
-    deptcode=0
-    departement_list= ApfDeptView.get_all_children(selfdeptcode)
+    deptcode= request.session['DeptCode']
+    departement_list= ApfDeptView.get_all_children(deptcode)
     #chek if user has authticat to see selected deptcode
     if len(departement_list) > 1 :
         departement_list.pop(0)
@@ -1479,9 +1478,9 @@ def ProjectReport(request,selectedDpt=None):
             if dept.dept_code == selectedDpt :
                 deptcode = selectedDpt
     except:
-        deptcode=selfdeptcode
+        pass
 
- 
+    print(deptcode)
     project_list= Project.objects.filter(( Q(departement__deptcode__exact=deptcode))).order_by('-id')
 
     #intiat form
@@ -1490,7 +1489,7 @@ def ProjectReport(request,selectedDpt=None):
      # if this is a POST request we need to process the form data
     if request.method == 'POST':
         form = ReportForm(request.POST)
- 
+
         form.fields["project"].queryset =project_list
         if form.is_valid():
             _rtype=form.cleaned_data['reportType']
@@ -1549,7 +1548,7 @@ def ProjectReport(request,selectedDpt=None):
                     Dict["status"]=status_list
                     _rlist.append(Dict)
 
-    depObject=  get_object_or_404(ApfDeptView, dept_code__exact= request.session['DeptCode']) 
+    depObject=  get_object_or_404(ApfDeptView, dept_code__exact= request.session['DeptCode'])
     print(depObject)
     form.fields["project"].queryset =project_list
     context={'form':form,'rtype':_rtype,'rlist':_rlist,'project_list':project_list,'departement_list':departement_list,'selectedDpt':selectedDpt,'depObject':depObject}
