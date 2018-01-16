@@ -51,9 +51,7 @@
                         <div class="form-group">
                  
 					  <select class="form-control chosen" name="dept" id="dept" onchange="window.location.href=this.value" data-placeholder="{% trans "Select Departement" %}">
-                     
-                     					    <option value="{{depObject.dept_code}}" {% if selectedDpt == depObject.dept_code %} selected {%endif%}>{{depObject.dept_name}} </option>
-                     
+                      <option value="{{depObject.dept_code}}" {% if selectedDpt == depObject.dept_code %} selected {%endif%}>{{depObject.dept_name}} </option>
                       {% for dept in departement_list %}
 					    <option value="{{dept.dept_code}}" {% if selectedDpt == dept.dept_code %} selected {%endif%}>{{dept.dept_name}} </option>
                       {%endfor%}
@@ -69,7 +67,7 @@
                          </fieldset>
                         
                         <div class="form-group">
-                             <button type="button" class="btn btn-default">{{_('Select All')}}</button>
+                         <label type="button" class="btn btn-default" ><input type="checkbox" id="checkAll"/> {{_('Select All')}}</label>
                          <button type="submit" class="btn btn-primary"> <i class="fa fa-gears"></i> {{_('Create')}} </button>
                          </div>
                     
@@ -135,6 +133,12 @@
      $(".chosen").data("placeholder","اختر ...").chosen();
      $(".chosen").chosen({no_results_text: "لايوجد بيانات متاحة"}); 
      $('.chosen').chosen({allow_single_deselect: true,no_results_text: "لايوجد بيانات متاحة"});
+  
+     //check all checkbox
+   	 $("#checkAll").change(function () {
+
+   		    $("input:checkbox").prop('checked', $(this).prop("checked"));
+   		});
      </script>
 {% endblock javascripts %}
 
