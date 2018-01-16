@@ -48,10 +48,11 @@
 
                          {% load user_group %}
                  {% if request.user|has_group:"ismanager" %}
-                  <a href="{% url 'ns-project:add-project' %}" style="float:left" >  <button type="button" class="btn btn-primary btn-md"> <i class="fa fa-plus"></i>  {% trans "Ad Project" %}</button></a>
+                  <a href="{% url 'ns-project:add-project' %}" style="float:left" >  <button type="button" class="btn btn-primary  btn-md"> <i class="fa fa-plus"></i>  {% trans "Ad Project" %}</button></a>
+                    <a href="{% url 'ns-project:project-report' %}" style="float:left" >  <button type="button" class="btn btn-default btn-md" style="color:#2e6da4;"> <i class="fa fa-bar-chart"></i>  {% trans "Reports" %}</button></a>
+                
                   {% endif %}
-                  <a href="{% url 'ns-project:project-list' %}" style="float:left" > <button type="button" class="btn btn-primary btn-md">  <i class="fa fa-th-list"></i>  {% trans "Projects List" %} </button></a>
-                 <a href="{% url 'ns-project:project-report' %}" style="float:left" >  <button type="button" class="btn btn-primary btn-md"> <i class="fa fa-bar-chart"></i>  {% trans "Reports" %}</button></a>
+                 <!--  <a href="{% url 'ns-project:project-list' %}" style="float:left" > <button type="button" class="btn btn-primary btn-md">  <i class="fa fa-th-list"></i>  {% trans "Projects List" %} </button></a> -->
                  
                   <div class="clearfix"></div>
                      </div>
@@ -78,12 +79,12 @@
                         <tr>
                            <th style="width: 1%">#</th>
                            <th style="width: 20%"><a href="{% url 'ns-project:project-list' %} ">{% trans "Project Name" %}</a></th>
-                           <th>{% trans "Team Members" %}</th>
+                           <!-- <th>{% trans "Team Members" %}</th> -->
                            <th>{% trans "Start" %}</th>
                            <th>{% trans "End" %}</th>
                            <th>{% trans "Project Progress" %}</th>
                            <th>{% trans "Status" %}</th>
-                           <th style="width: 20%">{% trans "Edit" %}</th>
+                           <th style="width: 20%">{% trans "Actions" %}</th>
                         </tr>
                      </thead>
                      <tbody>
@@ -98,8 +99,8 @@
                               <br />
                               <small>{{_('Created Date')}} {{project.createddate}}</small>
                            </td>
-                           <td>
-                              <ul class="list-inline">
+                         <!--   <td>
+                               <ul class="list-inline">
                                  <li>
                                     <img src="/static/images/user.png" class="avatar" alt="Avatar">
                                  </li>
@@ -113,7 +114,7 @@
                                     <img src="/static/images/user.png" class="avatar" alt="Avatar">
                                  </li>
                               </ul>
-                           </td>
+                           </td>-->
                            <td>
                               {{project.start}}
                            </td>

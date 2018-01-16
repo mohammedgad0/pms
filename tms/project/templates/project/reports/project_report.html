@@ -30,7 +30,7 @@
                 
                
                 <ul class="nav navbar-right panel_toolbox">
-                  <a href="{{request.META.HTTP_REFERER}}" >  <button type="button" class="btn btn-primary">{{ _('Back')}} <i class="fa fa-angle-double-left"></i> </button></a>
+                  <a href="{% url 'ns-project:project-list' %}" >  <button type="button" class="btn btn-primary">{{ _('Back')}} <i class="fa fa-angle-double-left"></i> </button></a>
              
                 </ul>
                 <div class="clearfix"></div>
@@ -49,9 +49,9 @@
          <form action="" method="post" id="ReportForm" class="form-horizontal form-label-left input_mask" novalidate enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="form-group">
-                 
+           
 					  <select class="form-control chosen" name="dept" id="dept" onchange="window.location.href=this.value" data-placeholder="{% trans "Select Departement" %}">
-                      <option value="{{depObject.dept_code}}" {% if selectedDpt == depObject.dept_code %} selected {%endif%}>{{depObject.dept_name}} </option>
+                      <option value="{{depObject.dept_code}}" {% if selectedDpt == depObject.dept_code  or selectedDpt == depObject.dept_code %} selected {%endif%} >{{depObject.dept_name}} </option>
                       {% for dept in departement_list %}
 					    <option value="{{dept.dept_code}}" {% if selectedDpt == dept.dept_code %} selected {%endif%}>{{dept.dept_name}} </option>
                       {%endfor%}
