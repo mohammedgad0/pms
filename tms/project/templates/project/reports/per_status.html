@@ -1,4 +1,9 @@
   {% load i18n %}
+  
+  <div class="panel panel-default">
+  <div class="panel-heading">{% trans list.type %}</div>
+  <div class="panel-body">
+  
     <!--  chart -->
        <div class="col-md-6 col-sm-12 col-xs-12" > 
        <div id="piechart-status" ></div>
@@ -9,7 +14,7 @@
         
         
         
-        <table class="table table-bordered">
+        <table class="table table-bordered table-striped jambo_table">
                       <thead>
                         <tr>
                           <th>{% trans "Status" %}</th>
@@ -33,6 +38,7 @@
         
         
         
+        </div>
         </div>
         
           <!-- google chart -->
