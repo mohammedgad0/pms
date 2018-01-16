@@ -67,7 +67,7 @@
                          </fieldset>
                         
                         <div class="form-group">
-                         <label type="button" class="btn btn-default" ><input type="checkbox" id="checkAll"/> {{_('Select All')}}</label>
+                         <label type="button" class="btn btn-default" ><input type="checkbox" id="checkAll"  /> {{_('Select All')}}</label>
                          <button type="submit" class="btn btn-primary"> <i class="fa fa-gears"></i> {{_('Create')}} </button>
                          </div>
                     
@@ -82,15 +82,15 @@
                 <div class="col-md-9 col-sm-9 col-xs-12">
                    <fieldset class="fieldset_normal">
         <legend>{% trans "Report" %}</legend>
-        <div class="article-content">   
+        <div class="article-content" >   
         
         <!--  report detail  -->
         {% for  list in rlist %}
         
         <!--  project type row -->
-        <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="col-md-12 col-sm-12 col-xs-12" style="overflow:hidden;" >
         <!--  title -->
-        <div class="alert alert-info  fade in" >{{ list.type }} </div>
+        <div class="alert alert-info  fade in" >{% trans list.type %} </div>
         <!--  detail -->
          <div class="col-md-12 col-sm-12 col-xs-12">
          
@@ -137,8 +137,28 @@
      //check all checkbox
    	 $("#checkAll").change(function () {
 
-   		    $("input:checkbox").prop('checked', $(this).prop("checked"));
+   		    $("input.chektype:checkbox").prop('checked', $(this).prop("checked"));
+   			if( sessionStorage.getItem("checkAll")=="checked" )
+   		   	{
+   			 sessionStorage.removeItem("checkAll")
+   		   	}else{
+   		   		
+   		   	 sessionStorage.setItem("checkAll", "checked");
+   		   	}
    		});
+     
+  
+   	// Retrieve
+   	if( sessionStorage.getItem("checkAll")=="checked" )
+   	{
+   	
+   	$("input#checkAll").prop('checked', true)
+	
+   	}
+   	
+
+   	
      </script>
+     
 {% endblock javascripts %}
 
