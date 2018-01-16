@@ -303,7 +303,15 @@ def ProjectDetail(request,pk):
     tasks_list = Task.objects.filter(project__exact = pk)
     #get all attached files
     attached_files= Media.objects.filter(project__id__exact=pk, task__id__exact=None)
-
+    time_chart = {}
+    project_time = []
+    for result in _perdelta(project_detail.start, project_detail.end, timedelta(days=7)):
+        tasks_list = Task.objects.filter(Q(project__exact = pk,startdate__lte = result)&
+        ~Q(status='Closed'))
+        # project_time.append(str(result))
+        date = result.strftime('%Y,%m,%d')
+        time_chart.update({str(date): tasks_list.count()})
+    print (date)
     allTakProgress = 0
     projectProgress=0
     project_id = []
@@ -320,7 +328,8 @@ def ProjectDetail(request,pk):
     project_list = _get_internal_external_projects( request)
     current_url ="ns-project:" + resolve(request.path_info).url_name
     context={'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'projectProgress':projectProgress,
-    'taskprogress':allTakProgress,'tasks_list':tasks_list,'history':history,'attached_files':attached_files}
+    'taskprogress':allTakProgress,'tasks_list':tasks_list,'history':history,'attached_files':attached_files,
+    "time_chart":time_chart}
     return render(request, 'project/project_detail.html', context)
 
 @login_required
@@ -1408,8 +1417,6 @@ def _get_internal_external_projects(request):
                                         ).annotate(dcount=Count('task')).order_by('-id')
     return projects
 
-
-
 def _project_kpi_employee(employee,startdate,enddate):
     projectKPI={}
     projects= Project.objects.filter(
@@ -1464,6 +1471,11 @@ def _get_tree_dept(deptcode):
     all_dept.append(deptcode)
     return all_dept
 
+def _perdelta(start, end, delta):
+    curr = start
+    while curr < end:
+        yield curr
+        curr += delta
 
 def ProjectReport(request,selectedDpt=None):
     _rtype=None
