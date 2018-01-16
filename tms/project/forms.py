@@ -353,6 +353,6 @@ class ReportForm(forms.Form):
     RERPORT_TYPE_CHOICES = (('project', _('Project Summary')),('assignedto', _('assignation')),('status', _('Status')),)
     departement = ApfDeptViewModelChoiceField(queryset=ApfDeptView.objects.none(), to_field_name="dept_code",empty_label=_('Select Departement'),widget=forms.Select(attrs={'class': 'chosen  form-control col-md-3',} ),error_messages={'required': _('Please Sealect Departement')},required=False)
     project =ProjectModelChoiceField(queryset=Project.objects.none(),to_field_name="id" ,empty_label=_('Select Project'),widget=forms.Select(attrs={'class': 'chosen form-control col-md-8'} ),required=True,error_messages={'required': _('Please Select Project')})
-    reportType = forms.MultipleChoiceField( required=True,widget=forms.CheckboxSelectMultiple,choices=RERPORT_TYPE_CHOICES,
+    reportType = forms.MultipleChoiceField( required=True,widget=forms.CheckboxSelectMultiple(attrs={'class': 'chektype'} ),choices=RERPORT_TYPE_CHOICES,
    error_messages={'required': _('Please Select Project Type')}
     )
