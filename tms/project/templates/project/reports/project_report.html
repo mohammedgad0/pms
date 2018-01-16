@@ -89,11 +89,7 @@
         
         <!--  project type row -->
         <div class="col-md-12 col-sm-12 col-xs-12" style="overflow:hidden;" >
-        <!--  title -->
-        <div class="alert alert-info  fade in" >{% trans list.type %} </div>
-        <!--  detail -->
-         <div class="col-md-12 col-sm-12 col-xs-12">
-         
+ 
          {% if  list.type == "project" %}
          {% include "project/reports/per_project.html" %}
         {% endif %}
@@ -103,9 +99,7 @@
         {% if  list.type == "status" %}
          {% include "project/reports/per_status.html" %}
         {% endif %}
-        
-         </div>
-        
+
         </div>
         <!--  end project row -->
         
