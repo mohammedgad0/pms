@@ -32,7 +32,7 @@
 
               <h2> {{project_detail.name}}  </h2>
               {% load user_group %}
-            
+
                  {% if request.user|has_group:"ismanager"  and   project_detail.createdby == request.session.EmpID %}
                  <a href="{% url 'ns-project:project-delete' project_detail.id %}" style="float:left" >  <button type="button" class="btn btn-danger btn-md"> <i class="fa fa-trash-o"></i>  {% trans "Delete" %}</button></a>
                  <a href="{% url 'ns-project:project-edit'  project_detail.id %}" style="float:left" >  <button type="button" class="btn btn-info btn-md"> <i class="fa fa-pencil"></i>  {% trans "Edit" %}</button></a>
@@ -69,7 +69,8 @@
                 </ul>
 
                 <br />
-                <div id="echart_line" style="height:350px;"></div>
+                <div id="chart_div"></div>
+                {# <div id="echart_line" style="height:350px;"></div> #}
              <!-- <div id="mainb" style="height:350px;"></div> -->
                 <div>
 
@@ -110,14 +111,14 @@
 
                       <p class="title">{{ _('Created Date') }} </p>
                    <p >{{project_detail.createddate}}</p>
-                   
+
                         <p class="title">{{ _('Start Date') }} </p>
                    <p >{{project_detail.start}}</p>
-                   
-                   
+
+
                         <p class="title">{{ _('End Date') }} </p>
                    <p >{{project_detail.end}}</p>
-                   
+
                           <p class="title">{{ _('Status') }} </p>
                    <p >{{project_detail.status.name_ar}}</p>
                     </div>
@@ -154,7 +155,50 @@
 {% endblock content %}
 
 {% block javascripts %}
+
   {{ block.super }}
+
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+  <script>
+
+
+  google.charts.load('current', {packages: ['corechart', 'line']});
+  google.charts.setOnLoadCallback(drawBasic);
+
+  function drawBasic() {
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('date', 'X');
+        data.addColumn('number', '{{_('Total tasks')}}');
+
+        data.addRows([
+          {% for k, v in time_chart.items %}
+          [new Date({{ k }}), {{ v }}]{% if not forloop.last %},{% endif %}
+        {% endfor %}
+        ]);
+
+        var options = {
+           height: 300,
+          hAxis: {
+            viewWindow: {
+            min: new Date(2017, 11, 1),
+          },
+            format: 'MMM dd, yyyy',
+            gridlines: {count: 8},
+            title: 'Time'
+          },
+          vAxis: {
+            title: 'Popularity'
+          }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+      }
+
+  </script>
   <!-- ECharts -->
   <script src="/static/vendors/echarts/dist/echarts.min.js"></script>
 {% endblock javascripts %}
