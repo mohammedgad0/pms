@@ -67,5 +67,5 @@ urlpatterns = [
     url(r'^delegation/$',views.delegation, name='delegation'),
     url(r'^my_delegation/$',views.mydelegation, name='my-delegation'),
     url(r'^.*\.html', views.gentella_html, name='gentella'),
-
+   
 ]

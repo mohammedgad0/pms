@@ -12,31 +12,19 @@
       <div class="">
         <div class="page-title">
           <div class="title_left">
-            <h3></h3>
+                           <h3><i class="fa fa-warning text-danger"></i> {{ _('delete project confirmation') }} </h3>
+
           </div>
 
-          <div class="title_right">
-            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-              <div class="input-group">
-             <!--     <input type="text" class="form-control" placeholder="Search for...">
-                <span class="input-group-btn">
-                  <button class="btn btn-default" type="button">Go!</button>
-                </span>-->
-              </div>
-            </div>
-          </div>
+         
         </div>
 
-        <div class="clearfix"></div>
+   
 
         <div class="row">
           <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
-              <div class="x_title">
-                <h3><i class="fa fa-warning text-danger"></i> {{ _('delete project confirmation') }} </h3>
-           
-                <div class="clearfix"></div>
-              </div>
+             
               <div class="x_content">
               
               <div class="col-md-12 col-sm-12 col-xs-12">
@@ -45,7 +33,12 @@
 
                         
                         <div class="panel-body">
-                          <h3 class="green"><i class="fa fa-folder-open"></i> {{p.name}}</h3>
+                        
+                        
+ <fieldset class="fieldset_normal">
+        <legend>  <h2> <i class="fa fa-folder-open"></i>  {{ _('Project Details') }} </h2></legend>
+                        
+                          <h3 class="green"> {{p.name}}</h3>
 
                           <p>{{p.desc}}</p>
                           <br>
@@ -53,7 +46,9 @@
                           <div class="project_detail">
 
                             <p class="title">{{_('Created By')}}</p>
-                            <p>{{emp_obj.empname}}</p>
+                            <p>{{p.createdby.empname}}</p>
+                             <p class="title">{{_('Departement')}}</p>
+                            <p>{{p.departement.deptname}}</p>
                             <p class="title">{{_('Created Date')}}</p>
                             <p>{{p.createddate}}</p>
                             <p class="title">{{ _('Status')}}</p>
@@ -65,28 +60,23 @@
                       {% endif %}
                              </p>
                           </div>
-
-                          <br>
-                          <h5><strong>{{_('Attachments')}}</strong></h5>
-                               <ul class="list-unstyled project_files">
+</fieldset>
+                          
+ <fieldset class="fieldset_normal">
+        <legend>  <h2>  {{_('Attachments')}} </h2></legend>
+                                    <ul class="list-unstyled project_files">
                         {% for attach in attached_files%}
                         <li>
                        <i class="fa fa-paperclip"></i>   <a href="{{MEDIA_URL}}{{attach.filepath}}" style="text-decoration: underline;"> <span style="margin-left:5px;">{{attach.filename}} </span> {{attach.filepath}} </a>
                         {# name, ext = os.path.splitext('file.txt')  #}
                         {%endfor%}
                      
-                         <!--  
-                            <li><a href=""><i class="fa fa-file-pdf-o"></i> UAT.pdf</a>
-                            </li>
-                            <li><a href=""><i class="fa fa-mail-forward"></i> Email-from-flatbal.mln</a>
-                            </li>
-                            <li><a href=""><i class="fa fa-picture-o"></i> Logo.png</a>
-                            </li>
-                            <li><a href=""><i class="fa fa-file-word-o"></i> Contract-10_12_2014.docx</a>
-                            </li>
-                            -->
-                          </ul>
-                          <br>
+                    
+                          </ul> 
+                          </fieldset>
+                         
+                    
+                         
 
                
                         </div>

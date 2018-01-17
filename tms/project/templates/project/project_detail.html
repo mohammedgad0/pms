@@ -73,53 +73,9 @@
                
                 <div>
 
- <fieldset class="fieldset_normal">
-        <legend>  <h2>  <i style="word-wrap: break-word;"><i class="fa fa-clock-o"></i>  {{ _('Recent Activity') }} </h2></legend>
 
-                  <div class="dashboard-widget-content">
 
-                    <ul class="list-unstyled timeline widget">
-
-     
-            {% for h in history%}
-                      <li>
-                        <div class="block">
-                          <div class="block_content">
-                            <h2 class="title">
-                                              <a>{{h.history_change_reason|safe}}</a>
-                                          </h2>
-                            <div class="byline">
-                              <span>{{h.lasteditdate }}</span> by <a>{{h.lasteditby }}</a>
-                            </div>
-                            <p class="excerpt">{{h.name|safe}} 
-                            </p>
-                          </div>
-                        </div>
-                      </li>
-        {% endfor %}
-                      
-                    </ul>
-                  </div>
-               
-         
-         </fieldset>
-         
-         
-         
-         
-         
-         
-                  <!-- user messages -->
-                  <ul class="messages"></ul>
-                  <!-- end of user messages -->
-
-                </div>
-              </div>
-
-              <!-- start project-detail sidebar -->
-              <div class="col-md-4 col-sm-4 col-xs-12">
-
-                <section class="panel">
+  <section class="panel">
 
                   <div class="x_title">
                     <h2> {{ _('Project Description')}} </h2>
@@ -154,7 +110,7 @@
                     </div>
 
                     <br />
-                    <h5>  <b>{{_('Attachments')}}</b></h5>
+                    <h5>  <b>{% trans "Attachments" %}</b></h5>
                     <ul class="list-unstyled project_files">
                        {% for attach in attached_files%}
                         <li>
@@ -171,6 +127,56 @@
                   </div>
 
                 </section>
+                
+                
+                
+                
+ <fieldset class="fieldset_normal">
+        <legend>  <h2>  <i class="fa fa-clock-o"></i>  {{ _('Recent Activity') }} </h2></legend>
+
+                  <div class="dashboard-widget-content">
+
+                    <ul class="list-unstyled timeline widget">
+
+     
+            {% for h in history%}
+                      <li>
+                        <div class="block">
+                          <div class="block_content">
+                            <h2 class="title">
+                               <a style="font-size:12px;">{{h.history_change_reason|safe}}</a>
+                               </h2>
+                            <div class="byline">
+                              <span>{{h.lasteditdate }}</span> by <a>{{h.lasteditby }}</a>
+                            </div>
+                            <p class="excerpt">{{h.name|safe}} 
+                            </p>
+                          </div>
+                        </div>
+                      </li>
+        {% endfor %}
+                      
+                    </ul>
+                  </div>
+               
+         
+         </fieldset>
+         
+
+         
+         
+         
+                  <!-- user messages -->
+                  <ul class="messages"></ul>
+                  <!-- end of user messages -->
+
+                </div>
+              </div>
+
+              <!-- start project-detail sidebar -->
+              <div class="col-md-4 col-sm-4 col-xs-12">
+
+              sssss
 
               </div>
               <!-- end project-detail sidebar -->

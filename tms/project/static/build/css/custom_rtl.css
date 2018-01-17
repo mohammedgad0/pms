@@ -5123,7 +5123,7 @@ background-color:#5cb85c;
 }
 /*normal filedset */
 fieldset{
-    padding: .35em .625em .75em;
+    padding: .35em 1.625em .75em;
     margin: 0 2px;
     border: 1px solid #e6e9ed;
     margin-bottom: 15px;
@@ -5135,7 +5135,7 @@ legend {
     font-size: 14px;
     color: #2a3f54 !important;
     padding: 0px 5px 10px 5px;
-     margin-bottom: 10px;
+     margin-bottom: 0px;
 }
 .basic_info,.basic_info_lable{	
 	padding:5px;

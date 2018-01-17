@@ -369,7 +369,6 @@ def ProjectEdit(request,pk):
 def ProjectDelete(request,pk):
     import os
     p= get_object_or_404(Project,pk=pk)
-    emp_obj=Employee.objects.get(empid__exact=p.createdby)
     #get all attached files
     attached_files= Media.objects.filter(project__id__exact=p.id )
     if request.method == 'POST':
@@ -386,7 +385,7 @@ def ProjectDelete(request,pk):
         messages.success(request, _("Project has deleted successfully"), fail_silently=True,)
         return HttpResponseRedirect(reverse('ns-project:project-list'))
     else:
-          context={'p':p,'emp_obj':emp_obj,'attached_files':attached_files}
+          context={'p':p,'attached_files':attached_files}
           return render(request, 'project/project_delete.html',context)
 
 @login_required
@@ -889,12 +888,14 @@ def updateTaskAssignto(request,pk,save=None):
                  messages.success(request, "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>"+_("Assign Task to")+"  "+_assign, fail_silently=True,)
                  #send email notification
                  if _receiver is not None :
-                     message=_obj.name+'<br><a href="http://'+request.get_host()+'/project/project_task_detail/'+str(_obj.project.id)+'/'+str(_obj.id)+'">'+_('Click Here')+'</a>'
-                     message=message+'<br>'+_(" by ")+request.session['EmpName'] +"<br>" +  _("Assign Task to")+  str(_assign)+_(' in ')+str(_obj.assigneddate)
-                     subject =_('Task has been asigned to you')
-                     #str(_obj.assignedto.email) to be add in next line
-                     send_mail(subject,message,'sakr@stats.gov.sa',['sakr@stats.gov.sa'],fail_silently=False,html_message=message,)
-
+                     try:
+                         message=_obj.name+'<br><a href="http://'+request.get_host()+'/project/project_task_detail/'+str(_obj.project.id)+'/'+str(_obj.id)+'">'+_('Click Here')+'</a>'
+                         message=message+'<br>'+_(" by ")+request.session['EmpName'] +"<br>" +  _("Assign Task to")+  str(_assign)+_(' in ')+str(_obj.assigneddate)
+                         subject =_('Task has been asigned to you')
+                         #str(_obj.assignedto.email) to be add in next line
+                         send_mail(subject,message,'sakr@stats.gov.sa',['sakr@stats.gov.sa'],fail_silently=False,html_message=message,)
+                     except:
+                         pass
             data['form_is_valid'] = True
             data['id'] = pk
             data['message'] = "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>" + _('Task has been assigned successfully')

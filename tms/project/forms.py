@@ -117,9 +117,9 @@ class DepartmentList(ModelChoiceField):
         return obj.deptname
 
 class AddTaskForm(ModelForm):
-    CHOICES = (('1', _('employee'),), ('2', _('Department'),))
-    employee = EmployeeList(queryset=Employee.objects.all(),to_field_name="empid", empty_label="(Nothing)",required=False,widget=forms.Select(attrs={'class': 'chosen form-control','disabled':'disabled'} ))
-    department_list = DepartmentList(queryset=Department.objects.all(),to_field_name="deptcode", empty_label="(Nothing)",required=False,widget=forms.Select(attrs={'class': 'chosen form-control','disabled':'disabled'} ))
+    CHOICES = (('1', _('Employee'),), ('2', _('Department'),))
+    employee = EmployeeList(queryset=Employee.objects.all(),to_field_name="empid",empty_label=_("Select Employee"),required=False,widget=forms.Select(attrs={'class': 'chosen form-control','disabled':'disabled'} ))
+    department_list = DepartmentList(queryset=Department.objects.all(),to_field_name="deptcode",empty_label=_("Select Departement"),required=False,widget=forms.Select(attrs={'class': 'chosen form-control','disabled':'disabled'} ))
     assigntype = forms.ChoiceField(label=_('Assignto'),required=False,widget=forms.RadioSelect(attrs={'class':'form-check-input-task'}), choices=CHOICES)
 
     class Meta:
@@ -138,6 +138,8 @@ class AddTaskForm(ModelForm):
             'name': _('Task Name'),
             'desc':_('Task Description'),
             'assigntype':_('Assignto'),
+            'startdate':_('Start Date'),
+            'enddate':_('End Date'),
         }
         help_texts = {
             'desc': _('write a Description for task .'),
@@ -175,9 +177,9 @@ class EditTaskForm(ModelForm):
         super(EditTaskForm, self).__init__(*args, **kwargs)
         self.fields['name'].widget.attrs['maxlength'] =255
 
-    CHOICES = (('1', _('employee'),), ('2', _('Department'),))
+    CHOICES = (('1', _('Employee'),), ('2', _('Department'),))
     createdby = EmployeeList(queryset=Employee.objects.all(),to_field_name="empid", empty_label="(Nothing)",required=False,widget=forms.Select(attrs={'class': 'chosen form-control'} ))
-    department_list = DepartmentList(queryset=Department.objects.all(),to_field_name="deptcode", empty_label="(Nothing)",required=False,widget=forms.Select(attrs={'class': 'chosen form-control','disabled':'disabled'} ))
+    department_list = DepartmentList(queryset=Department.objects.all(),to_field_name="deptcode", empty_label=_("Select Departement"),required=False,widget=forms.Select(attrs={'class': 'chosen form-control','disabled':'disabled'} ))
     assigntype = forms.ChoiceField(label=_('Assignto'),required=False,widget=forms.RadioSelect(attrs={'class':'form-check-input-task'}), choices=CHOICES)
     note = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Note"),'placeholder':_("Note"), 'rows':'3','size': '40','required': 'True'}),required=False, max_length=250, error_messages={'required': 'note'})
     progress = forms.IntegerField(validators=[ MaxValueValidator(100, message="Progress Over 100"),MinValueValidator(0, message="Progress less 0")],min_value=0, max_value=100)
@@ -290,13 +292,13 @@ class FollowupModelChoiceField(ModelChoiceField):
         return obj.deptname
 
 class TeamForm(forms.Form):
-      employee = TeamModelChoiceField(queryset=Employee.objects.all(), empty_label="(Nothing)",widget=forms.Select(attrs={'class': 'chosen'} ))
+      employee = TeamModelChoiceField(queryset=Employee.objects.all(), empty_label=_("Select Employee"),widget=forms.Select(attrs={'class': 'chosen'} ))
 
 class TaskAssignToForm(forms.Form):
-      CHOICES=CHOICES=[('emp','Employee'),('dept','    Departement')]
-      assigntype =forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect(attrs={'class':''}),initial="emp")
-      employee = TeamModelChoiceField(queryset=Employee.objects.none(),to_field_name="empid" ,empty_label="(Select Employee)",widget=forms.Select(attrs={'class': 'chosen form-control col-md-8'} ),required=True,error_messages={'required': _('Please Sealect Employee')})
-      departement = FollowupModelChoiceField(queryset=Department.objects.all(), to_field_name="deptcode",empty_label=_('Select Departement'),widget=forms.Select(attrs={'class': 'chosen  form-control col-md-3',} ),error_messages={'required': _('Please Sealect Departement')},required=True)
+      CHOICES=CHOICES=[('emp',_('Employee')),('dept',_('Departement'))]
+      assigntype =forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect(attrs={'class':''}),initial="emp",label=_('Assign Type'))
+      employee = TeamModelChoiceField(queryset=Employee.objects.none(),to_field_name="empid" ,empty_label=_("Select Employee"),widget=forms.Select(attrs={'class': 'chosen form-control col-md-8'} ),required=True,error_messages={'required': _('Select Employee')})
+      departement = FollowupModelChoiceField(queryset=Department.objects.all(), to_field_name="deptcode",empty_label=_("Select Departement"),widget=forms.Select(attrs={'class': 'chosen  form-control col-md-3',} ),error_messages={'required': _('Select Departement')},required=True)
 
 class FollowupForm(forms.Form):
       department=[]
