@@ -305,11 +305,13 @@ def ProjectDetail(request,pk):
     attached_files= Media.objects.filter(project__id__exact=pk, task__id__exact=None)
     time_chart = {}
     project_time = []
-    for result in _perdelta(project_detail.start, project_detail.end, timedelta(days=7)):
+    for result in _perdelta(project_detail.start, project_detail.end , timedelta(days=7)):
         tasks_list = Task.objects.filter(Q(project__exact = pk,startdate__lte = result)&
         ~Q(status='Closed'))
         # project_time.append(str(result))
         date = result.strftime('%Y,%m,%d')
+        now_plus_10 = result - timedelta(days = 30)
+        date = now_plus_10.strftime('%Y,%m,%d')
         time_chart.update({str(date): tasks_list.count()})
     #print (date)
     allTakProgress = 0
