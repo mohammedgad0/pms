@@ -30,7 +30,7 @@
           <div class="x_panel">
             <div class="x_title">
 
-              <h2> {{project_detail.name}}  </h2>
+              <h2> <b>{{project_detail.name}} </b> </h2>
               {% load user_group %}
 
                  {% if request.user|has_group:"ismanager"  and   project_detail.createdby == request.session.EmpID %}
@@ -44,7 +44,7 @@
 
             <div class="x_content">
 
-              <div class="col-md-8 col-sm-8 col-xs-12">
+              <div class="col-md-8 col-sm-8 col-xs-12" style="overflow:hidden;">
 
                 <ul class="stats-overview">
                   <li style="width:22%;">
@@ -57,7 +57,7 @@
                      {% now "Ymd" as current_date  %}
                     <span class="value text-success"> {{  project_detail.end|timeuntil }} </span>
                   </li>
-                          <li class="hidden-phone" style="width:25%;">
+                   <li class="hidden-phone" style="width:25%;">
                     <span class="name">{% trans "Number of tasks" %} </span>
                     <span class="value text-success"> {{ tasks_list|length}}</span>
                   </li>
@@ -70,20 +70,48 @@
 
                 <br />
                 <div id="chart_div"></div>
-                {# <div id="echart_line" style="height:350px;"></div> #}
-             <!-- <div id="mainb" style="height:350px;"></div> -->
+               
                 <div>
 
-                  <h4>{{ _('Recent Activity') }} </h4>
-  {% for h in history%}
-       <li style="word-wrap: break-word;"><i class="fa fa-clock-o"></i>  <span class="float-right"> {{h.lasteditdate }}  </span> , <span class="float-right">{{h.history_change_reason|safe}} </span>     </li>
-         {% endfor %}
+ <fieldset class="fieldset_normal">
+        <legend>  <h2>  <i style="word-wrap: break-word;"><i class="fa fa-clock-o"></i>  {{ _('Recent Activity') }} </h2></legend>
+
+                  <div class="dashboard-widget-content">
+
+                    <ul class="list-unstyled timeline widget">
+
+     
+            {% for h in history%}
+                      <li>
+                        <div class="block">
+                          <div class="block_content">
+                            <h2 class="title">
+                                              <a>{{h.history_change_reason|safe}}</a>
+                                          </h2>
+                            <div class="byline">
+                              <span>{{h.lasteditdate }}</span> by <a>{{h.lasteditby }}</a>
+                            </div>
+                            <p class="excerpt">{{h.name|safe}} 
+                            </p>
+                          </div>
+                        </div>
+                      </li>
+        {% endfor %}
+                      
+                    </ul>
+                  </div>
+               
+         
+         </fieldset>
+         
+         
+         
+         
+         
+         
                   <!-- user messages -->
-                  <ul class="messages">
-
-                  </ul>
+                  <ul class="messages"></ul>
                   <!-- end of user messages -->
-
 
                 </div>
               </div>
@@ -106,9 +134,11 @@
                     <div class="project_detail">
 
                       <p class="title">{{ _('Created By')}} </p>
-                      <p> {{ project_detail.createdby }} </p>
+                      <p> {{ project_detail.createdby.empname }} </p>
 
-
+ 						<p class="title">{{ _('Departement')}} </p>
+                      <p> {{ project_detail.departement.deptname }} </p>
+                      
                       <p class="title">{{ _('Created Date') }} </p>
                    <p >{{project_detail.createddate}}</p>
 
@@ -124,19 +154,18 @@
                     </div>
 
                     <br />
-                    <h5>{{_('Attachments')}}</h5>
+                    <h5>  <b>{{_('Attachments')}}</b></h5>
                     <ul class="list-unstyled project_files">
                        {% for attach in attached_files%}
                         <li>
                         {% if attach.filepath  %}
-                        <a href="{% url 'ns-project:download' attach.filepath %}" style="text-decoration: underline;"> <span style="margin-left:5px;">{{attach.filename}} </span> {{attach.filepath}} </a>
+                        <i class="fa fa-paperclip"></i> <a href="{% url 'ns-project:download' attach.filepath %}" style="text-decoration: underline;"> 
+                        <span style="margin-left:5px;">{{attach.filename}} </span> {{attach.filepath}} </a>
                         {% endif %}
                         {# name, ext = os.path.splitext('file.txt')  #}
                         {%endfor%}
                     </ul>
                     <br />
-
-
 
 
                   </div>

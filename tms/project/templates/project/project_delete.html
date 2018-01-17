@@ -18,10 +18,10 @@
           <div class="title_right">
             <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search for...">
+             <!--     <input type="text" class="form-control" placeholder="Search for...">
                 <span class="input-group-btn">
                   <button class="btn btn-default" type="button">Go!</button>
-                </span>
+                </span>-->
               </div>
             </div>
           </div>
@@ -71,7 +71,7 @@
                                <ul class="list-unstyled project_files">
                         {% for attach in attached_files%}
                         <li>
-                        <a href="{{MEDIA_URL}}{{attach.filepath}}" style="text-decoration: underline;"> <span style="margin-left:5px;">{{attach.filename}} </span> {{attach.filepath}} </a>
+                       <i class="fa fa-paperclip"></i>   <a href="{{MEDIA_URL}}{{attach.filepath}}" style="text-decoration: underline;"> <span style="margin-left:5px;">{{attach.filename}} </span> {{attach.filepath}} </a>
                         {# name, ext = os.path.splitext('file.txt')  #}
                         {%endfor%}
                      

@@ -3598,7 +3598,7 @@ ul.project_files li {
 
     .project_detail p.title {
         font-weight: bold;
-        margin-bottom: 0
+        margin-bottom: 5px;
     }
 
 .avatar img {

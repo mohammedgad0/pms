@@ -107,6 +107,7 @@ class ProjectForm(ModelForm):
         if end < start:
             msg = _("End date is less than start date")
             self.add_error('end', msg)
+            
 class EmployeeList(ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.empname
@@ -319,7 +320,11 @@ class UploadFile(ModelForm):
     class Meta:
         model = Media
         fields = ['filepath','filename']
+        labels = {
+            'filename': _('File Name'),
+            'filepath': _('Choose File'),
 
+        }
 class AddDelegation(ModelForm):
     employee = EmployeeList(queryset=Employee.objects.all(),to_field_name="empid",label=_("Delegation to"), empty_label=_("Nothing"),required=True,widget=forms.Select(attrs={'class': 'chosen form-control'} ))
     class Meta:
@@ -354,5 +359,5 @@ class ReportForm(forms.Form):
     departement = ApfDeptViewModelChoiceField(queryset=ApfDeptView.objects.none(), to_field_name="dept_code",empty_label=_('Select Departement'),widget=forms.Select(attrs={'class': 'chosen  form-control col-md-3',} ),error_messages={'required': _('Please Sealect Departement')},required=False)
     project =ProjectModelChoiceField(queryset=Project.objects.none(),to_field_name="id" ,empty_label=_('Select Project'),widget=forms.Select(attrs={'class': 'chosen form-control col-md-8'} ),required=True,error_messages={'required': _('Please Select Project')})
     reportType = forms.MultipleChoiceField( required=True,widget=forms.CheckboxSelectMultiple(attrs={'class': 'chektype'} ),choices=RERPORT_TYPE_CHOICES,
-   error_messages={'required': _('Please Select Project Type')}
+   error_messages={'required': _('Please Select Report Type')}
     )

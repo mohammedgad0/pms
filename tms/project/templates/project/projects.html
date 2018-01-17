@@ -20,9 +20,9 @@
          <div class="title_right">
             <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
                <div class="input-group">
-                  <input type="text" class="form-control" placeholder="{{_('Search for')}}...">
+                 <!--   <input type="text" class="form-control" placeholder="{{_('Search for')}}...">-->
                   <span class="input-group-btn">
-                  <button class="btn btn-default" type="button">{% trans "Go"  %}!</button>
+                 <!--  <button class="btn btn-default" type="button">{% trans "Go"  %}!</button> --> 
                   </span>
                </div>
             </div>
@@ -150,10 +150,10 @@
                            </td>
                            <td>
                               <a href="{% url 'ns-project:project-detail' project.id %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> {% trans "View" %} </a>
-                              {% if request.user|has_group:"ismanager" and  project.createdby == request.session.EmpID %}
+                              {% if request.user|has_group:"ismanager" and  project.createdby.empid == request.session.EmpID %}
                               <a href="{% url 'ns-project:project-edit' project.id %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> {% trans "Edit" %} </a>
                               <a href="{% url 'ns-project:project-delete' project.id %}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> {% trans "Delete" %} </a>
-                              {% elif request.user|has_group:"ismanager" and project.createdby != request.session.EmpID%}
+                              {% elif request.user|has_group:"ismanager" and project.createdby.empid != request.session.EmpID%}
                               <a href="#" class="btn btn-info btn-xs disabled"><i class="fa fa-pencil"></i> {% trans "Edit" %} </a>
                               <a href="#" class="btn btn-danger btn-xs disabled"><i class="fa fa-trash-o"></i> {% trans "Delete" %} </a>
                               {% endif %}

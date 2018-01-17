@@ -196,7 +196,7 @@ def AddProject(request):
 #                status_obj= ProjectStatus.objects.order_by('priority')[0]
             project_obj.departement=get_object_or_404(Department, deptcode = request.session.get('DeptCode'))
             project_obj.status=project_obj.status
-            project_obj.createdby=request.session.get('EmpID')
+            project_obj.createdby=get_object_or_404(Employee, empid = request.session.get('EmpID')) 
             project_obj.createddate= datetime.now()
             # if project_obj.end < project_obj.start:
             #     raise ValidationError(_('Invalid date - end date less than start date'))
@@ -311,7 +311,7 @@ def ProjectDetail(request,pk):
         # project_time.append(str(result))
         date = result.strftime('%Y,%m,%d')
         time_chart.update({str(date): tasks_list.count()})
-    print (date)
+    #print (date)
     allTakProgress = 0
     projectProgress=0
     project_id = []

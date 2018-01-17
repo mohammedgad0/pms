@@ -35,7 +35,9 @@ class Project(models.Model):
     end = models.DateField(db_column='End')
     teamname = models.CharField(db_column='TeamName', max_length=100, blank=True, null=True)  # Field name made lowercase.
     desc = models.CharField(db_column='Desc', max_length=1500)  # Field name made lowercase.
-    createdby = models.CharField(db_column='CreatedBy', max_length=20, blank=True, null=True)  # Field name made lowercase.
+    #createdby = models.CharField(db_column='CreatedBy', max_length=20, blank=True, null=True)  # Field name made lowercase.
+    createdby = models.ForeignKey('Employee',db_column='createdby',to_field='empid',on_delete=models.SET_NULL, blank=True, null=True)
+
     createddate = models.DateTimeField(db_column='CreatedDate', blank=True, null=True)  # Field name made lowercase.
     departement = models.ForeignKey('Department',db_column='DepartementId', to_field='deptcode',on_delete=models.SET_NULL, blank=True, null=True)
     #statusid = models.IntegerField(db_column='StatusId', blank=True, null=True)  # Field name made lowercase.
