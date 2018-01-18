@@ -194,9 +194,11 @@ def AddProject(request):
 #                status_obj= ProjectStatus.objects.get(isdefault=1)
 #             except :
 #                status_obj= ProjectStatus.objects.order_by('priority')[0]
+            empObj=get_object_or_404(Employee, empid = request.session.get('EmpID'))
             project_obj.departement=get_object_or_404(Department, deptcode = request.session.get('DeptCode'))
             project_obj.status=project_obj.status
-            project_obj.createdby=get_object_or_404(Employee, empid = request.session.get('EmpID')) 
+            project_obj.createdby= empObj
+            project_obj.lasteditby=empObj
             project_obj.createddate= datetime.now()
             # if project_obj.end < project_obj.start:
             #     raise ValidationError(_('Invalid date - end date less than start date'))
@@ -326,7 +328,7 @@ def ProjectDetail(request,pk):
         projectProgress=round(allTakProgress/len(tasks_list), 2)
 
 
-    history=Task.history.filter(project=pk)[:10:1]
+    history=Task.history.filter(project=pk)[:5:1]
     project_list = _get_internal_external_projects( request)
     current_url ="ns-project:" + resolve(request.path_info).url_name
     context={'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'projectProgress':projectProgress,
@@ -344,6 +346,7 @@ def ProjectEdit(request,pk):
     form = ProjectForm(request.POST or None, instance=instance)
     if form.is_valid():
         instance=form.save()
+        instance.lasteditby=get_object_or_404(Employee, empid = request.session.get('EmpID'))
         instance.save()
          #uploading files
         upload_form = upload(request.POST, request.FILES)
@@ -769,10 +772,12 @@ def AddTask(request,project_id):
         form = AddTaskForm(request.POST)
         if form.is_valid():
             # form.save()
+            empObj=get_object_or_404(Employee,empid__exact=request.session.get('EmpID'))
             Task_obj = form.save(commit=False)
             Task_obj.project = get_object_or_404(Project,pk=project_id)
             Task_obj.status = 'New'
-            Task_obj.createdby = get_object_or_404(Employee,empid__exact=request.session.get('EmpID'))
+            Task_obj.createdby = empObj
+            Task_obj.lasteditby = empObj
             Task_obj.lasteditdate = datetime.now()
             Task_obj.createddate = datetime.now()
             Task_obj.progress = 0
@@ -993,6 +998,8 @@ def ProjectTaskEdit(request,projectid,taskid):
     if form.is_valid():
         instance=form.save(commit=False)
         instance.status=form.cleaned_data['status']
+        instance.lasteditby=employee
+        instance.lasteditdate=datetime.now()
         #instance.finisheddate=form.cleaned_data['finisheddate']
         #check if status changed to new
         if form.cleaned_data['status'] =="New" or form.cleaned_data['status'] =="Inprogress" :
@@ -1028,8 +1035,6 @@ def ProjectTaskEdit(request,projectid,taskid):
         except:
             instance.departement=None
 
-        instance.lasteditdate=datetime.now()
-        instance.lasteditby=request.session['EmpID']
         instance.save()
         #uploading files
         upload_form = upload(request.POST, request.FILES)

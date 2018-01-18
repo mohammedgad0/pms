@@ -36,7 +36,7 @@ class Project(models.Model):
     teamname = models.CharField(db_column='TeamName', max_length=100, blank=True, null=True)  # Field name made lowercase.
     desc = models.CharField(db_column='Desc', max_length=1500)  # Field name made lowercase.
     #createdby = models.CharField(db_column='CreatedBy', max_length=20, blank=True, null=True)  # Field name made lowercase.
-    createdby = models.ForeignKey('Employee',db_column='createdby',to_field='empid',on_delete=models.SET_NULL, blank=True, null=True)
+    createdby = models.ForeignKey('Employee',db_column='createdby',to_field='empid',related_name='Employee_createdby',on_delete=models.SET_NULL, blank=True, null=True)
 
     createddate = models.DateTimeField(db_column='CreatedDate', blank=True, null=True)  # Field name made lowercase.
     departement = models.ForeignKey('Department',db_column='DepartementId', to_field='deptcode',on_delete=models.SET_NULL, blank=True, null=True)
@@ -49,7 +49,7 @@ class Project(models.Model):
     canceledby = models.CharField(db_column='CanceledBy', max_length=20, blank=True, null=True)  # Field name made lowercase.
     canceleddate = models.DateTimeField(db_column='CanceledDate', blank=True, null=True)  # Field name made lowercase.
     deleted = models.IntegerField(db_column='Deleted', blank=True, null=True)  # Field name made lowercase.
-
+    lasteditby = models.ForeignKey('Employee',db_column='LastEditBy',to_field='empid',related_name='Project_Employee_LastEditBy',on_delete=models.SET_NULL, blank=True, null=True)
     class Meta:
         managed = False
         db_table = 'project'
@@ -216,7 +216,7 @@ class Task(models.Model):
     createdby = models.ForeignKey('Employee',to_field='empid',related_name='Emp4',db_column='CreatedBy', blank=True, null=True)  # Field name made lowercase.
     createddate = models.DateTimeField(db_column='CreatedDate', blank=True, null=True)  # Field name made lowercase.
     lasteditdate = models.DateTimeField(db_column='LastEditDate', blank=True, null=True)  # Field name made lowercase.
-    lasteditby = models.IntegerField(db_column='LastEditBy', blank=True, null=True)  # Field name made lowercase.
+    lasteditby =models.ForeignKey('Employee',to_field='empid',related_name='Task_Employee_LastEditBy',db_column='LastEditBy', blank=True, null=True)
 
     history = HistoricalRecords()
     class Meta:

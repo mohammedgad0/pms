@@ -87,7 +87,44 @@
                     <p>{{project_detail.desc}} </p>
                     <br />
 
-                    <div class="project_detail">
+                  
+                    <h5>  <b>{% trans "Attachments" %}</b></h5>
+                    <ul class="list-unstyled project_files">
+                       {% for attach in attached_files%}
+                        <li>
+                        {% if attach.filepath  %}
+                        <i class="fa fa-paperclip"></i> <a href="{% url 'ns-project:download' attach.filepath %}" style="text-decoration: underline;"> 
+                        <span style="margin-left:5px;">{{attach.filename}} </span> {{attach.filepath}} </a>
+                        {% endif %}
+                        {# name, ext = os.path.splitext('file.txt')  #}
+                        {%endfor%}
+                    </ul>
+                    <br />
+
+
+                  </div>
+
+                </section>
+                
+ 
+         
+                  <!-- user messages -->
+                  <ul class="messages"></ul>
+                  <!-- end of user messages -->
+
+                </div>
+              </div>
+
+              <!-- start project-detail sidebar -->
+              <div class="col-md-4 col-sm-4 col-xs-12">
+
+    <!--  basic info  -->
+     <fieldset class="fieldset_normal">
+        <legend>  <h2>  <i class="fa fa-clock-o"></i>  {{ _('Basic Info') }} </h2></legend>
+
+                  <div class="dashboard-widget-content">
+
+           <div class="project_detail">
 
                       <p class="title">{{ _('Created By')}} </p>
                       <p> {{ project_detail.createdby.empname }} </p>
@@ -110,27 +147,12 @@
                     </div>
 
                     <br />
-                    <h5>  <b>{% trans "Attachments" %}</b></h5>
-                    <ul class="list-unstyled project_files">
-                       {% for attach in attached_files%}
-                        <li>
-                        {% if attach.filepath  %}
-                        <i class="fa fa-paperclip"></i> <a href="{% url 'ns-project:download' attach.filepath %}" style="text-decoration: underline;"> 
-                        <span style="margin-left:5px;">{{attach.filename}} </span> {{attach.filepath}} </a>
-                        {% endif %}
-                        {# name, ext = os.path.splitext('file.txt')  #}
-                        {%endfor%}
-                    </ul>
-                    <br />
-
-
                   </div>
-
-                </section>
-                
-                
-                
-                
+               
+         
+         </fieldset>
+          
+          <!--  history -->                        
  <fieldset class="fieldset_normal">
         <legend>  <h2>  <i class="fa fa-clock-o"></i>  {{ _('Recent Activity') }} </h2></legend>
 
@@ -147,7 +169,7 @@
                                <a style="font-size:12px;">{{h.history_change_reason|safe}}</a>
                                </h2>
                             <div class="byline">
-                              <span>{{h.lasteditdate }}</span> by <a>{{h.lasteditby }}</a>
+                              <span>{{h.lasteditdate }}</span> by <a>{{h.lasteditby.empname }}</a>
                             </div>
                             <p class="excerpt">{{h.name|safe}} 
                             </p>
@@ -162,21 +184,6 @@
          
          </fieldset>
          
-
-         
-         
-         
-                  <!-- user messages -->
-                  <ul class="messages"></ul>
-                  <!-- end of user messages -->
-
-                </div>
-              </div>
-
-              <!-- start project-detail sidebar -->
-              <div class="col-md-4 col-sm-4 col-xs-12">
-
-              sssss
 
               </div>
               <!-- end project-detail sidebar -->

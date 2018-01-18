@@ -469,7 +469,7 @@ msgid "Project Summary"
 msgstr "ملخص المشروع"
 
 #: .\project\forms.py:360
-msgid "assignation"
+msgid "Assignation"
 msgstr "الإسناد"
 
 #: .\project\forms.py:362
@@ -1212,7 +1212,7 @@ msgstr "المرفقات"
 
 #: .\project\templates\project\project_task_detail.html:157
 #: .\project\templates\project\project_task_edit.html:144
-msgid "Basci Info"
+msgid "Basic Info"
 msgstr "المعلومات الأساسية"
 
 #: .\project\templates\project\project_task_detail.html:160
