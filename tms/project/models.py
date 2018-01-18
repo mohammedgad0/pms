@@ -50,6 +50,7 @@ class Project(models.Model):
     canceleddate = models.DateTimeField(db_column='CanceledDate', blank=True, null=True)  # Field name made lowercase.
     deleted = models.IntegerField(db_column='Deleted', blank=True, null=True)  # Field name made lowercase.
     lasteditby = models.ForeignKey('Employee',db_column='LastEditBy',to_field='empid',related_name='Project_Employee_LastEditBy',on_delete=models.SET_NULL, blank=True, null=True)
+    delegationto = models.ForeignKey('Employee',db_column='DelegationTo',to_field='empid',related_name='Project_Employee_DelegationTo',on_delete=models.SET_NULL, blank=True, null=True)
     class Meta:
         managed = False
         db_table = 'project'

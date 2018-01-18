@@ -10,6 +10,10 @@ from django.forms import ModelChoiceField
 from django.core.exceptions import ValidationError
 
 
+class TeamModelChoiceField(ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.empname
+    
 class BootstrapAuthenticationForm(AuthenticationForm):
     """Authentication form which uses boostrap CSS."""
     username = forms.CharField(max_length=254,
@@ -57,10 +61,17 @@ class ProjectForm(ModelForm):
 
         self.fields['status'].empty_label = None
         self.fields['name'].widget.attrs['maxlength'] =255
+     #fields   
+    delegationto = TeamModelChoiceField(queryset=Employee.objects.all(),to_field_name="empid" ,
+                     empty_label=_("Select Employee"),
+                     widget=forms.Select(attrs={'class': 'chosen form-control col-md-3'} ),
+                     label=_("Delegation To"),
+                     required=False,help_text="تفويض إدارة المشروع الى موظف آخر",
+                     )
 
     class Meta:
         model = Project
-        fields = ['name','start','status','end','desc']
+        fields = ['name','start','status','end','desc','delegationto']
 
        # status = models.ForeignKey(ProjectStatus, widget=forms.Select({'class': 'form-control','placeholder':'task'}) )
         widgets = {
@@ -68,7 +79,7 @@ class ProjectForm(ModelForm):
             'start':TextInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Start Date'),'required': True}),
             'end':TextInput(attrs={'class': 'form-control has-feedback-left col-md-6 ','id':'single_cal_2','aria-describedby':'inputSuccess2Status','placeholder':_('End Date'),'required': True}),
             'desc': Textarea(attrs={'class':'form-control','placeholder':_('Project Details'),'required': True}),
-            'status':forms.Select(attrs={'class': 'form-control','placeholder':_('Select Status')})
+            'status':forms.Select(attrs={'class': 'form-control','placeholder':_('Select Status')}),
         }
         labels = {
             'name': _('Project Name'),
@@ -282,9 +293,7 @@ class TaskCancelForm(forms.Form):
 class TaskPauseForm(forms.Form):
        note = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Note"),'placeholder':_("Note"), 'size': '40','required': 'True'}),required=True, max_length=500, error_messages={'required': 'note'})
 
-class TeamModelChoiceField(ModelChoiceField):
-    def label_from_instance(self, obj):
-        return obj.empname
+
 
 class FollowupModelChoiceField(ModelChoiceField):
 
