@@ -513,7 +513,7 @@ def ProjectTaskDetail(request,projectid,taskid):
 def updateStartDate(request,pk):
     data = dict()
     errors = []
-
+    empObj=get_object_or_404(Employee, empid = request.session.get('EmpID'))
     _obj =  get_object_or_404(Task,pk=pk)
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -523,7 +523,7 @@ def updateStartDate(request,pk):
             _obj.realstartby=request.session.get('EmpID', '1056821208')
             _obj.status="InProgress"
             _obj.lasteditdate=datetime.now()
-            _obj.lasteditby=request.session.get('EmpID', '1056821208')
+            _obj.lasteditby=empObj
 
             _obj.save()
             #add to history
@@ -547,6 +547,7 @@ def updateStartDate(request,pk):
 def updateTaskFinish(request,pk):
     data = dict()
     errors = []
+    empObj=get_object_or_404(Employee, empid = request.session.get('EmpID'))
     _obj =  get_object_or_404(Task,pk=pk)
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -558,7 +559,7 @@ def updateTaskFinish(request,pk):
             _obj.finisheddate=datetime.now()
             _obj.finishedby=request.session.get('EmpID')
             _obj.lasteditdate=datetime.now()
-            _obj.lasteditby=request.session.get('EmpID')
+            _obj.lasteditby=empObj
             _obj.save()
              #add to history
             update_change_reason(_obj, _("Finish Task")+" "+request.session['EmpName']+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['notes'])
@@ -581,6 +582,7 @@ def updateTaskFinish(request,pk):
 def updateTaskClose(request,pk):
     data = dict()
     errors = []
+    empObj=get_object_or_404(Employee, empid = request.session.get('EmpID'))
 
     if 'reason' in request.POST:
         reason = request.POST['reason']
@@ -597,6 +599,7 @@ def updateTaskClose(request,pk):
             _obj.closedby= request.session.get('EmpID', '1056821208')
             _obj.closeddate=datetime.now()
             _obj.lasteditdate=datetime.now()
+            _obj.lasteditby=empObj
             _obj.save()
                #add to history
             update_change_reason(_obj, _("Close Task by")+request.session['EmpName']+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['reason'])
@@ -619,6 +622,8 @@ def updateTaskClose(request,pk):
 def updateTaskCancel(request,pk):
     data = dict()
     errors = []
+    empObj=get_object_or_404(Employee, empid = request.session.get('EmpID'))
+
     if 'reason' in request.POST:
         reason = request.POST['reason']
         if not reason:
@@ -633,6 +638,7 @@ def updateTaskCancel(request,pk):
             _obj.cancelledby= request.session.get('EmpID', '1056821208')
             _obj.canceleddate=datetime.now()
             _obj.lasteditdate=datetime.now()
+            _obj.lasteditby=empObj
             _obj.save()
                #add to history
             update_change_reason(_obj, _("Cancel Task by ")+request.session['EmpName']+" ,    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['reason'])
@@ -655,6 +661,8 @@ def updateTaskCancel(request,pk):
 def updateTaskPause(request,pk):
     data = dict()
     errors = []
+    empObj=get_object_or_404(Employee, empid = request.session.get('EmpID'))
+
     if 'note' in request.POST:
         note = request.POST['note']
         if not note:
@@ -667,6 +675,7 @@ def updateTaskPause(request,pk):
         if form.is_valid():
             _obj.status="Hold"
             _obj.lasteditdate=datetime.now()
+            _obj.lasteditby=empObj
             _obj.save()
             #add to history
             update_change_reason(_obj, _("Task Pause by")+ request.session['EmpName'] +",<i class=\"fa fa-comment\"></i>" + form.cleaned_data['note'])
@@ -837,6 +846,7 @@ def ProjectTaskDelete(request,projectid,taskid):
 def updateTaskAssignto(request,pk,save=None):
     data = dict()
     errors = []
+    empObj=get_object_or_404(Employee, empid = request.session.get('EmpID'))
     assigntype="emp"
     employee=None
     departement=None
@@ -887,6 +897,7 @@ def updateTaskAssignto(request,pk,save=None):
                  _obj.finisheddate=None
                  _obj.finishedby=None
                  _obj.lasteditdate=datetime.now()
+                 _obj.lasteditby=empObj
                  _obj.save()
                 #add to history
                  update_change_reason(_obj,_(" by ")+ request.session['EmpName'] +"  ," +  _("Assign Task to")+  str(_assign))
@@ -928,6 +939,7 @@ def updateTaskAssignto(request,pk,save=None):
 def updateTaskProgress(request,pk):
     data = dict()
     errors = []
+    empObj=get_object_or_404(Employee, empid = request.session.get('EmpID'))
     _task =  get_object_or_404(Task,pk=pk)
     # create a form instance and populate it with data from the request:
     form = TaskProgressForm(request.POST or None, instance=_task)
@@ -936,6 +948,7 @@ def updateTaskProgress(request,pk):
 #             if _task.progress==100 :
 #                 _task.status="Done"
         _task.lasteditdate=datetime.now()
+        _task.lasteditby=empObj
         _task.save()
            #add to history
         update_change_reason(_task, _("Task Progress chenged by ")+request.session['EmpName']+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['note'])
@@ -1430,7 +1443,7 @@ def _project_kpi_employee(employee,startdate,enddate):
     projects= Project.objects.filter(
         (Q(start__gte=startdate)& Q(start__lte=enddate))&
                                        ( Q(task__assignedto__empid__exact=employee.empid))
-                                    ).annotate(dcount=Count('task'))
+                                    )
     projectKPI["p_all"]= projects.count()
     projectKPI["p_internal"]= projects.filter(departement__deptcode__exact=employee.deptcode).count()
     projectKPI["p_external"]= projects.filter(  ~Q(departement__deptcode__exact = employee.deptcode)).count()
@@ -1446,7 +1459,7 @@ def _project_kpi_employee(employee,startdate,enddate):
 
 def _employee_tasks_statistics(employee,startdate,enddate):
     tasks = {}
-    task_list= Task.objects.filter(assignedto__deptcode__exact=employee.deptcode,startdate__gte=startdate,startdate__lte=enddate)
+    task_list= Task.objects.filter(assignedto__empid__exact=employee.empid,startdate__gte=startdate,startdate__lte=enddate)
     tasks['New']=task_list.filter(status__exact='New').count()
     tasks['InProgress']=task_list.filter(status__exact='InProgress').count()
     tasks['Done']=task_list.filter(status__exact='Done').count()
