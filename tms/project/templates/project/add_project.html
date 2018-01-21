@@ -4,6 +4,8 @@
 {% block title %} {% trans "sheets list" %} {% endblock title %}
 
 {% block stylesheets %}
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.css" />
+
 {{ block.super }}
 {% endblock stylesheets %}
 
@@ -101,17 +103,17 @@
 
               </div>
               </div>
-              
+              {% if project.createdby.empid == request.session.EmpID %}
                    <div class="form-group">
               <div class="col-md-12 col-sm-12 col-xs-12 ">
-              {{form.delegationto.label_tag}}
+               {{form.delegationto.label_tag}}
                {{form.delegationto}}
                <br>
                 {{form.delegationto.help_text}}
                
                </div>
                </div>
-               
+               {% endif %}
      <div class="form-group text-danger">
      <div class="col-md-3"></div><div class="col-md-9 col-sm-12 col-xs-12">
     {{ form.name.errors }}
@@ -164,6 +166,7 @@
 
 {% block javascripts %}
   {{ block.super }}
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.jquery.js"></script>
 
     <script>
   $('#single_cal_1').daterangepicker({
@@ -234,6 +237,15 @@ function updateElementIndex(el, prefix, ndx) {
     if (el.id) el.id = el.id.replace(id_regex, replacement);
     if (el.name) el.name = el.name.replace(id_regex, replacement);
 }
+
+
+//choosen list
+
+     $(".chosen").data("placeholder","Select Frameworks...").chosen();
+     $(".chosen").chosen({no_results_text: "Oops, nothing found!"});
+      $('.chosen').chosen({allow_single_deselect: true,no_results_text: "Ù„Ø§ ÙŠÙˆØ¬Ø¯ Ù†ØªØ§Ø¦Ø¬!"});
+
+
 
   </script>
 

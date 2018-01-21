@@ -44,6 +44,8 @@
                            <li role="presentation"><a href="{% url 'ns-project:project-list' 'done' %}">{{ _('Done Projects')}} </a></li>
                            <li role="presentation"><a href="{% url 'ns-project:project-list' 'hold' %}">{{ _('Hold Projects')}} </a></li>
                            <li role="presentation"><a href="{% url 'ns-project:project-list' 'department' %}">{{ _('Project From another department')}} </a></li>
+                           <li role="presentation"><a href="{% url 'ns-project:project-list' 'delegations' %}">{{ _('Delegations')}} </a></li>
+                     
                         </ul>
 
                          {% load user_group %}
@@ -150,10 +152,14 @@
                            </td>
                            <td>
                               <a href="{% url 'ns-project:project-detail' project.id %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> {% trans "View" %} </a>
-                              {% if request.user|has_group:"ismanager" and  project.createdby.empid == request.session.EmpID %}
+                              {% if project.createdby.empid == request.session.EmpID or project.delegationto.empid == request.session.EmpID %}
                               <a href="{% url 'ns-project:project-edit' project.id %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> {% trans "Edit" %} </a>
-                              <a href="{% url 'ns-project:project-delete' project.id %}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> {% trans "Delete" %} </a>
-                              {% elif request.user|has_group:"ismanager" and project.createdby.empid != request.session.EmpID%}
+	                               {% if project.createdby.empid == request.session.EmpID %}
+                                  <a href="{% url 'ns-project:project-delete' project.id %}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> {% trans "Delete" %} </a>
+                            	  {%else %} 
+                              <a href="#" class="btn btn-danger btn-xs disabled"><i class="fa fa-trash-o"></i> {% trans "Delete" %} </a>
+                            	  {% endif %}                     
+                              {% elif   project.createdby.empid != request.session.EmpID%}
                               <a href="#" class="btn btn-info btn-xs disabled"><i class="fa fa-pencil"></i> {% trans "Edit" %} </a>
                               <a href="#" class="btn btn-danger btn-xs disabled"><i class="fa fa-trash-o"></i> {% trans "Delete" %} </a>
                               {% endif %}

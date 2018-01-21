@@ -130,7 +130,7 @@
                       <p> {{ project_detail.createdby.empname }} </p>
 
  						<p class="title">{{ _('Departement')}} </p>
-                      <p> {{ project_detail.departement.deptname }} </p>
+                   <p> {{ project_detail.departement.deptname }} </p>
                       
                       <p class="title">{{ _('Created Date') }} </p>
                    <p >{{project_detail.createddate}}</p>
@@ -144,6 +144,11 @@
 
                           <p class="title">{{ _('Status') }} </p>
                    <p >{{project_detail.status.name_ar}}</p>
+                   
+                   {% if project_detail.delegationto is not None %}
+                        <p class="title">{{ _('Delegation to') }} </p>
+                   <p >{{project_detail.delegationto.empname}}</p>
+                   {%endif%}
                     </div>
 
                     <br />

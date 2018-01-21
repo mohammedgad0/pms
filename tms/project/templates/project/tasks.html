@@ -54,7 +54,7 @@
                               </ul>
                            </li>
                         </ul>
-                        {% if request.user|has_group:"ismanager" %}
+                        {% if request.user|has_group:"ismanager" or  request.session.EmpID == project_detail.delegationto.empid  %}
                         <ul class="nav nav-pills navbar-left" role="tablist" style="margin-top:5px;">
                            <!-- <a href="{% url 'ns-project:add-project' %}" class="float-left" style="float:left" >  <button type="button" class="btn btn-primary btn-md"> <i class="fa fa-th-list"></i>  {% trans "Ad Task" %}</button></a> -->
                            <a href="{% url 'ns-project:add-task' project_detail.id  %}" class="float-left" style="float:left"> <button type="button" class="btn btn-primary btn-md">  <i class="fa fa-plus"></i>  {{ _('Ad Task') }} </button></a>

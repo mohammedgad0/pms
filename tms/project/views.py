@@ -235,7 +235,8 @@ def ProjectList(request,project_status=None):
     if EmpID == dept_data.managerid:
         tasks_list = Task.objects.filter(
         Q(assignedto__empid__exact = EmpID)|
-        Q(departement__deptcode__exact  = request.session.get('DeptCode'))
+        Q(departement__deptcode__exact  = request.session.get('DeptCode'))|
+         Q(project__departement__deptcode__exact  = request.session.get('DeptCode'))
         )
     if project_status =="department":
          tasks_list = Task.objects.filter(
@@ -256,21 +257,25 @@ def ProjectList(request,project_status=None):
 
 
     project_list= Project.objects.all().filter(
-    Q( createdby__exact=EmpID)|
+    Q( createdby__exact=EmpID)| Q( delegationto__exact=EmpID)|
     Q(id__in = project_id)
     ).order_by('-id')
 
-    #check filter by status
+    #project  filter by status 
     if project_status =="all" :
          project_list=project_list
+    elif  project_status =="delegations":
+         project_list= Project.objects.filter(Q( delegationto__exact=EmpID))  
+    
+    elif project_status =="department":
+        project_list= Project.objects.filter(
+        ~Q( departement__exact= request.session.get('DeptCode'))&
+        Q(id__in = tasks_list)
+        )       
     elif project_status is not None :
          project_status = project_status.lower()
          project_list=project_list.filter(status__name__contains=project_status)
-    if project_status =="department":
-        project_list= Project.objects.filter(
-        ~Q( createdby__exact=EmpID)&
-        Q(id__in = tasks_list)
-        )
+    
 
     for project in project_list:
         task_list = Task.objects.all().filter(project__id= project.id)
@@ -338,11 +343,15 @@ def ProjectDetail(request,pk):
 
 @login_required
 def ProjectEdit(request,pk):
+    from django.core.exceptions import ObjectDoesNotExist
     # upload file form
     upload = modelformset_factory(Media,form=UploadFile,extra = 1)
     FormSet = upload(queryset=Media.objects.filter(project__id__exact=pk,task__id__exact=None).exclude(Q(filepath__exact=None)| Q(filepath__exact='')))
-
-    instance = get_object_or_404(Project,pk=pk)
+    try:
+        instance = Project.objects.filter( Q (id__exact=pk) & (Q(createdby__exact=request.session['EmpID']) | Q(delegationto__exact=request.session['EmpID']) )).get()
+    except ObjectDoesNotExist:
+        raise Http404("No Project matches the given query.")
+       
     form = ProjectForm(request.POST or None, instance=instance)
     if form.is_valid():
         instance=form.save()
@@ -366,7 +375,7 @@ def ProjectEdit(request,pk):
         #messages.add_message(request, messages.ERROR, 'Can not update project.', fail_silently=True, extra_tags='alert')
         #messages.error(request, _("Can not update project."))
         pass
-    return render(request, 'project/add_project.html', {'form': form,'upload_file':FormSet,'action_name': _('Edit Project')})
+    return render(request, 'project/add_project.html', {'form': form,'upload_file':FormSet,'action_name': _('Edit Project'),'project':instance})
 
 @login_required
 def ProjectDelete(request,pk):
@@ -495,7 +504,7 @@ def ProjectTaskDetail(request,projectid,taskid):
     except:
         closedby = None
 
-    history=Task.history.filter(id=taskid)[:10:1]
+    history=Task.history.filter(id__exact=taskid , project__exact=projectid)[:10:1]
     context = {'project_detail':project_detail,
                'project_list':project_list,
                'current_url':current_url,
@@ -1430,11 +1439,11 @@ def _get_internal_external_projects(request):
     deptcode = request.session['DeptCode']
     if request.user.groups.filter(name="ismanager").exists():
          projects=Project.objects.filter(
-             (Q(task__project__departement__deptcode__exact=deptcode)| Q(task__departement__deptcode__exact=deptcode))
+             (Q(task__project__departement__deptcode__exact=deptcode)| Q(task__departement__deptcode__exact=deptcode)|   Q( delegationto__exact=request.session['EmpID']))
                                         ).annotate(dcount=Count('task')).order_by('-id')
     else:
        projects=Project.objects.filter(
-             ( Q(task__assignedto__empid__exact=request.session['EmpID']))
+             ( Q(task__assignedto__empid__exact=request.session['EmpID']) |  Q( delegationto__exact=request.session['EmpID']) )
                                         ).annotate(dcount=Count('task')).order_by('-id')
     return projects
 
