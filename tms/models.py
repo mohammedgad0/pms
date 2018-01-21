@@ -162,6 +162,105 @@ class AuthUserUserPermissions(models.Model):
         unique_together = (('user_id', 'permission_id'),)
 
 
+class CalendariumEvent(models.Model):
+    start = models.DateTimeField()
+    end = models.DateTimeField()
+    creation_date = models.DateTimeField()
+    description = models.TextField()
+    end_recurring_period = models.DateTimeField(blank=True, null=True)
+    title = models.CharField(max_length=256)
+    category_id = models.IntegerField(blank=True, null=True)
+    created_by_id = models.IntegerField(blank=True, null=True)
+    image_id = models.IntegerField(blank=True, null=True)
+    rule_id = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'calendarium_event'
+
+
+class CalendariumEventcategory(models.Model):
+    name = models.CharField(max_length=256)
+    slug = models.CharField(max_length=256)
+    color = models.CharField(max_length=6)
+    parent_id = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'calendarium_eventcategory'
+
+
+class CalendariumEventrelation(models.Model):
+    object_id = models.IntegerField()
+    relation_type = models.CharField(max_length=32, blank=True, null=True)
+    content_type_id = models.IntegerField()
+    event_id = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'calendarium_eventrelation'
+
+
+class CalendariumOccurrence(models.Model):
+    start = models.DateTimeField()
+    end = models.DateTimeField()
+    creation_date = models.DateTimeField()
+    description = models.TextField()
+    original_start = models.DateTimeField()
+    original_end = models.DateTimeField()
+    cancelled = models.IntegerField()
+    title = models.CharField(max_length=256)
+    created_by_id = models.IntegerField(blank=True, null=True)
+    event_id = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'calendarium_occurrence'
+
+
+class CalendariumRule(models.Model):
+    name = models.CharField(max_length=32)
+    description = models.TextField()
+    frequency = models.CharField(max_length=10)
+    params = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'calendarium_rule'
+
+
+class Contractor(models.Model):
+    empname = models.CharField(db_column='EmpName', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    sexcode = models.CharField(db_column='SexCode', max_length=6, blank=True, null=True)  # Field name made lowercase.
+    empid = models.CharField(db_column='EmpId', max_length=45, blank=True, null=True)  # Field name made lowercase.
+    jobtitle = models.CharField(db_column='JobTitle', max_length=200, blank=True, null=True)  # Field name made lowercase.
+    deptcode = models.CharField(db_column='DeptCode', max_length=45, blank=True, null=True)  # Field name made lowercase.
+    deptname = models.CharField(db_column='DeptName', max_length=200, blank=True, null=True)  # Field name made lowercase.
+    ismanager = models.IntegerField(db_column='IsManager')  # Field name made lowercase.
+    ext = models.IntegerField(db_column='Ext')  # Field name made lowercase.
+    mobile = models.CharField(db_column='Mobile', max_length=45, blank=True, null=True)  # Field name made lowercase.
+    email = models.CharField(db_column='Email', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    managercode = models.IntegerField(db_column='ManagerCode')  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'contractor'
+
+
+class Delegation(models.Model):
+    managerid = models.CharField(db_column='ManagerId', max_length=50, blank=True, null=True)  # Field name made lowercase.
+    deptcode = models.CharField(db_column='DeptCode', max_length=10, blank=True, null=True)  # Field name made lowercase.
+    authorized = models.CharField(db_column='Authorized', max_length=50, blank=True, null=True)  # Field name made lowercase.
+    deptauthcode = models.CharField(db_column='DeptAuthCode', max_length=10, blank=True, null=True)  # Field name made lowercase.
+    start = models.DateTimeField(db_column='Start', blank=True, null=True)  # Field name made lowercase.
+    end = models.DateTimeField(db_column='End', blank=True, null=True)  # Field name made lowercase.
+    expired = models.CharField(db_column='Expired', max_length=1, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'delegation'
+
+
 class Department(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
     deptname = models.CharField(db_column='DeptName', max_length=200, blank=True, null=True)  # Field name made lowercase.
@@ -217,6 +316,39 @@ class DjangoSession(models.Model):
         db_table = 'django_session'
 
 
+class EasyThumbnailsSource(models.Model):
+    storage_hash = models.CharField(max_length=40)
+    name = models.CharField(max_length=255)
+    modified = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'easy_thumbnails_source'
+        unique_together = (('storage_hash', 'name'),)
+
+
+class EasyThumbnailsThumbnail(models.Model):
+    storage_hash = models.CharField(max_length=40)
+    name = models.CharField(max_length=255)
+    modified = models.DateTimeField()
+    source_id = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'easy_thumbnails_thumbnail'
+        unique_together = (('storage_hash', 'name', 'source_id'),)
+
+
+class EasyThumbnailsThumbnaildimensions(models.Model):
+    thumbnail_id = models.IntegerField(unique=True)
+    width = models.IntegerField(blank=True, null=True)
+    height = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'easy_thumbnails_thumbnaildimensions'
+
+
 class Employee(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
     empid = models.CharField(db_column='EmpId', max_length=45, blank=True, null=True)  # Field name made lowercase.
@@ -235,10 +367,107 @@ class Employee(models.Model):
         db_table = 'employee'
 
 
+class FilerClipboard(models.Model):
+    user_id = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'filer_clipboard'
+
+
+class FilerClipboarditem(models.Model):
+    clipboard_id = models.IntegerField()
+    file_id = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'filer_clipboarditem'
+
+
+class FilerFile(models.Model):
+    file = models.CharField(max_length=255, blank=True, null=True)
+    field_file_size = models.IntegerField(db_column='_file_size', blank=True, null=True)  # Field renamed because it started with '_'.
+    sha1 = models.CharField(max_length=40)
+    has_all_mandatory_data = models.IntegerField()
+    original_filename = models.CharField(max_length=255, blank=True, null=True)
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    uploaded_at = models.DateTimeField()
+    modified_at = models.DateTimeField()
+    is_public = models.IntegerField()
+    folder_id = models.IntegerField(blank=True, null=True)
+    owner_id = models.IntegerField(blank=True, null=True)
+    polymorphic_ctype_id = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'filer_file'
+
+
+class FilerFolder(models.Model):
+    name = models.CharField(max_length=255)
+    uploaded_at = models.DateTimeField()
+    created_at = models.DateTimeField()
+    modified_at = models.DateTimeField()
+    lft = models.IntegerField()
+    rght = models.IntegerField()
+    tree_id = models.IntegerField()
+    level = models.IntegerField()
+    owner_id = models.IntegerField(blank=True, null=True)
+    parent_id = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'filer_folder'
+        unique_together = (('parent_id', 'name'),)
+
+
+class FilerFolderpermission(models.Model):
+    type = models.SmallIntegerField()
+    everybody = models.IntegerField()
+    can_edit = models.SmallIntegerField(blank=True, null=True)
+    can_read = models.SmallIntegerField(blank=True, null=True)
+    can_add_children = models.SmallIntegerField(blank=True, null=True)
+    folder_id = models.IntegerField(blank=True, null=True)
+    group_id = models.IntegerField(blank=True, null=True)
+    user_id = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'filer_folderpermission'
+
+
+class FilerImage(models.Model):
+    file_ptr_id = models.IntegerField(primary_key=True)
+    field_height = models.IntegerField(db_column='_height', blank=True, null=True)  # Field renamed because it started with '_'.
+    field_width = models.IntegerField(db_column='_width', blank=True, null=True)  # Field renamed because it started with '_'.
+    date_taken = models.DateTimeField(blank=True, null=True)
+    default_alt_text = models.CharField(max_length=255, blank=True, null=True)
+    default_caption = models.CharField(max_length=255, blank=True, null=True)
+    author = models.CharField(max_length=255, blank=True, null=True)
+    must_always_publish_author_credit = models.IntegerField()
+    must_always_publish_copyright = models.IntegerField()
+    subject_location = models.CharField(max_length=64)
+
+    class Meta:
+        managed = False
+        db_table = 'filer_image'
+
+
+class FilerThumbnailoption(models.Model):
+    name = models.CharField(max_length=100)
+    width = models.IntegerField()
+    height = models.IntegerField()
+    crop = models.IntegerField()
+    upscale = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'filer_thumbnailoption'
+
+
 class Media(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
-    projectid = models.IntegerField(blank=True, null=True)
-    taskid = models.IntegerField(blank=True, null=True)
     filename = models.CharField(max_length=100, blank=True, null=True)
     filepath = models.CharField(max_length=100, blank=True, null=True)
 
@@ -264,7 +493,7 @@ class Project(models.Model):
     start = models.DateField(db_column='Start', blank=True, null=True)  # Field name made lowercase.
     end = models.DateField(blank=True, null=True)
     teamname = models.CharField(db_column='TeamName', max_length=100, blank=True, null=True)  # Field name made lowercase.
-    desc = models.CharField(db_column='Desc', max_length=250, blank=True, null=True)  # Field name made lowercase.
+    desc = models.CharField(db_column='Desc', max_length=1500, blank=True, null=True)  # Field name made lowercase.
     createdby = models.CharField(db_column='CreatedBy', max_length=20, blank=True, null=True)  # Field name made lowercase.
     createddate = models.DateTimeField(db_column='CreatedDate', blank=True, null=True)  # Field name made lowercase.
     departementid = models.IntegerField(db_column='DepartementId', blank=True, null=True)  # Field name made lowercase.
@@ -276,6 +505,8 @@ class Project(models.Model):
     canceledby = models.CharField(db_column='CanceledBy', max_length=20, blank=True, null=True)  # Field name made lowercase.
     canceleddate = models.DateTimeField(db_column='CanceledDate', blank=True, null=True)  # Field name made lowercase.
     deleted = models.IntegerField(db_column='Deleted', blank=True, null=True)  # Field name made lowercase.
+    lasteditby = models.CharField(db_column='LastEditBy', max_length=20, blank=True, null=True)  # Field name made lowercase.
+    delegationto = models.CharField(db_column='DelegationTo', max_length=20, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -284,12 +515,11 @@ class Project(models.Model):
 
 class ProjectHistoricaltask(models.Model):
     id = models.IntegerField()
-    projectid = models.IntegerField(db_column='ProjectId')  # Field name made lowercase.
+    assignedto_id = models.IntegerField(db_column='AssignedTo_id', blank=True, null=True)  # Field name made lowercase.
     name = models.CharField(db_column='Name', max_length=100)  # Field name made lowercase.
     desc = models.CharField(db_column='Desc', max_length=2500)  # Field name made lowercase.
     startdate = models.DateTimeField(db_column='StartDate', blank=True, null=True)  # Field name made lowercase.
     enddate = models.DateTimeField(db_column='EndDate', blank=True, null=True)  # Field name made lowercase.
-    departementid = models.IntegerField(db_column='DepartementId', blank=True, null=True)  # Field name made lowercase.
     assignedto = models.IntegerField(db_column='AssignedTo', blank=True, null=True)  # Field name made lowercase.
     status = models.CharField(db_column='Status', max_length=10)  # Field name made lowercase.
     assigneddate = models.DateTimeField(db_column='AssignedDate', blank=True, null=True)  # Field name made lowercase.
@@ -343,6 +573,7 @@ class Sheet(models.Model):
     taskdesc = models.CharField(db_column='TaskDesc', max_length=255, blank=True, null=True)  # Field name made lowercase.
     tasktype = models.CharField(db_column='TaskType', max_length=45, blank=True, null=True)  # Field name made lowercase.
     duration = models.IntegerField(db_column='Duration', blank=True, null=True)  # Field name made lowercase.
+    durationhoure = models.IntegerField(db_column='DurationHoure', blank=True, null=True)  # Field name made lowercase.
     taskdate = models.DateField(db_column='TaskDate', blank=True, null=True)  # Field name made lowercase.
     createddate = models.DateTimeField(db_column='CreatedDate', blank=True, null=True)  # Field name made lowercase.
     editedate = models.DateTimeField(db_column='EditeDate', blank=True, null=True)  # Field name made lowercase.
@@ -359,7 +590,7 @@ class Sheet(models.Model):
 
 
 class Task(models.Model):
-    project_id = models.IntegerField(db_column='Project_id')  # Field name made lowercase.
+    project_id = models.IntegerField(db_column='Project_id', blank=True, null=True)  # Field name made lowercase.
     projectid = models.IntegerField(db_column='ProjectId')  # Field name made lowercase.
     name = models.CharField(db_column='Name', max_length=100)  # Field name made lowercase.
     desc = models.CharField(db_column='Desc', max_length=2500)  # Field name made lowercase.
@@ -367,6 +598,7 @@ class Task(models.Model):
     startdate = models.DateTimeField(db_column='StartDate', blank=True, null=True)  # Field name made lowercase.
     enddate = models.DateTimeField(db_column='EndDate', blank=True, null=True)  # Field name made lowercase.
     departementid = models.IntegerField(db_column='DepartementId', blank=True, null=True)  # Field name made lowercase.
+    assignedto_id = models.IntegerField(db_column='AssignedTo_id', blank=True, null=True)  # Field name made lowercase.
     assignedto = models.IntegerField(db_column='AssignedTo', blank=True, null=True)  # Field name made lowercase.
     assigneddate = models.DateTimeField(db_column='AssignedDate', blank=True, null=True)  # Field name made lowercase.
     progress = models.SmallIntegerField(blank=True, null=True)
@@ -385,6 +617,7 @@ class Task(models.Model):
     createddate = models.DateTimeField(db_column='CreatedDate', blank=True, null=True)  # Field name made lowercase.
     lasteditdate = models.DateTimeField(db_column='LastEditDate', blank=True, null=True)  # Field name made lowercase.
     lasteditby = models.IntegerField(db_column='LastEditBy', blank=True, null=True)  # Field name made lowercase.
+    taskcol = models.CharField(max_length=45, blank=True, null=True)
 
     class Meta:
         managed = False

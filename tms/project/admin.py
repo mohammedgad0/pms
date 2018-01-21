@@ -13,10 +13,16 @@ from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponseRedirect
 
 
-
+@admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
     model = Project
     fk_name = "id"
+
+@admin.register(ProjectStatus)
+class ProjectStatusAdmin(admin.ModelAdmin):
+    model = ProjectStatus
+    fk_name = "id"
+
 
 @admin.register(Media)
 class MediaAdmin(admin.ModelAdmin):
@@ -38,4 +44,18 @@ class SheetAdmin(admin.ModelAdmin):
 class SheetAdmin(admin.ModelAdmin):
     model = Task
 
-admin.site.register(Project,ProjectAdmin)
+
+@admin.register(Contractor)
+class ContractorAdmin(admin.ModelAdmin):
+    model = Contractor
+    fk_name = "id"
+    fields = ( 'empname', 'sexcode', 'empid', 'jobtitle', 'deptcode', 'deptname', 'mobile', 'email','ismanager','managercode','ext')
+    list_display =( 'empname', 'empid', 'jobtitle', 'deptcode', 'deptname',  'email','ismanager','managercode','ext')
+  #  filter_vertical=('deptcode','sexcode')
+    list_filter=('ismanager',)
+    list_max_show_all=200
+    list_per_page=100
+    ordering = ['-ismanager','empname']
+    search_fields = ['empname', 'sexcode', 'empid', 'jobtitle', 'deptcode', 'deptname', 'mobile', 'email']
+   # autocomplete_fields=['empname']  #autocomplete_fields is a list of ForeignKey and/or ManyToManyField fields
+    show_full_result_count=True
