@@ -103,9 +103,10 @@
 
               </div>
               </div>
-              {% if project.createdby.empid == request.session.EmpID %}
+              {% load user_group %}
+              
                    <div class="form-group">
-              <div class="col-md-12 col-sm-12 col-xs-12 ">
+              <div class="col-md-6 col-sm-12 col-xs-12 ">
                {{form.delegationto.label_tag}}
                {{form.delegationto}}
                <br>
@@ -113,7 +114,7 @@
                
                </div>
                </div>
-               {% endif %}
+              
      <div class="form-group text-danger">
      <div class="col-md-3"></div><div class="col-md-9 col-sm-12 col-xs-12">
     {{ form.name.errors }}

@@ -29,7 +29,7 @@ from django.forms.models import modelformset_factory
 from unittest.case import expectedFailure
 from django.core.mail import send_mail
 from django.template.context_processors import request
-
+from django.core.exceptions import ObjectDoesNotExist
 
 def loginfromdrupal(request, email,signature,time):
     from django.contrib.auth import login
@@ -179,6 +179,10 @@ def gentella_html(request):
     return HttpResponse(template.render(context, request))
 
 def AddProject(request):
+    #check if user is manager 
+    if  request.user.groups.filter(name="ismanager").exists() ==False:
+        raise Http404("You do not have permission to add project")
+    
      # upload file form
     upload = modelformset_factory(Media,form=UploadFile,extra = 1)
     FormSet = upload(queryset=Media.objects.none())
@@ -343,16 +347,20 @@ def ProjectDetail(request,pk):
 
 @login_required
 def ProjectEdit(request,pk):
-    from django.core.exceptions import ObjectDoesNotExist
-    # upload file form
-    upload = modelformset_factory(Media,form=UploadFile,extra = 1)
-    FormSet = upload(queryset=Media.objects.filter(project__id__exact=pk,task__id__exact=None).exclude(Q(filepath__exact=None)| Q(filepath__exact='')))
+    #edit permission for createdby or delegationto only 
     try:
         instance = Project.objects.filter( Q (id__exact=pk) & (Q(createdby__exact=request.session['EmpID']) | Q(delegationto__exact=request.session['EmpID']) )).get()
     except ObjectDoesNotExist:
         raise Http404("No Project matches the given query.")
-       
+    # upload file form
+    upload = modelformset_factory(Media,form=UploadFile,extra = 1)
+    FormSet = upload(queryset=Media.objects.filter(project__id__exact=pk,task__id__exact=None).exclude(Q(filepath__exact=None)| Q(filepath__exact=''))) 
+    #project form
     form = ProjectForm(request.POST or None, instance=instance)
+    if request.user.groups.filter(name="ismanager").exists() == False and instance.delegationto.empid == request.session['EmpID']:
+        form.fields["delegationto"].queryset = Employee.objects.filter(empid__exact = instance.delegationto.empid)
+        form.fields["delegationto"].disabled=True
+   
     if form.is_valid():
         instance=form.save()
         instance.lasteditby=get_object_or_404(Employee, empid = request.session.get('EmpID'))
@@ -419,8 +427,7 @@ def ProjectTask(request,pk,task_status=None):
 
     task_list= Task.objects.all().filter(
          Q(project__id__exact=pk)&
-         Q(createdby__exact=empid)|
-         Q(assignedto__empid__exact = empid,project__id__exact=pk)
+        ( Q(assignedto__empid__exact = empid) | Q(createdby__exact=empid) |  Q(project__createdby__empid__exact=empid)  |  Q(project__delegationto__empid__exact=empid))
          ).order_by('startdate')
 
     if task_status=="all":
@@ -1526,7 +1533,6 @@ def ProjectReport(request,selectedDpt=None):
     project_list= Project.objects.filter(( Q(departement__deptcode__exact=deptcode))).order_by('-id')
 
     #intiat form
-
     form = ReportForm()
      # if this is a POST request we need to process the form data
     if request.method == 'POST':
@@ -1545,7 +1551,6 @@ def ProjectReport(request,selectedDpt=None):
                     Dict={}
                     Dict['type']="project"
                     Dict['project']=_project
-
                     Dict['taskCount'] =tasks.count()
                     Dict['progress']=tasks.aggregate(Avg('progress'))
                     Dict['internal']=tasks.filter(Q(departement__deptcode__exact=deptcode) | (Q(departement__deptcode__exact=None)) & Q(project__departement__deptcode__exact=deptcode)).count()
@@ -1561,11 +1566,6 @@ def ProjectReport(request,selectedDpt=None):
                     notasigned= tasks.filter(Q(assignedto__exact=None) & Q(departement__exact=None)).count()
                     assignto_dept= tasks.values('departement__deptname').annotate( num_assign=Count('departement')).exclude(Q(departement__exact=None))
                     _assignedto_list=[]
-#                     for assign in assignedto :
-#                         _assignedto_list["assign_to"]=assign
-#                         _assignedto_list["num_assign"]=assign.num_assign
-#                         _assignedto_list["precent"]=assign.num_assign/ Dict["all"]
-#
                     Dict["assignedto"]=assignedto
                     Dict["notasigned"]=notasigned
                     Dict["assignto_dept"]=assignto_dept
