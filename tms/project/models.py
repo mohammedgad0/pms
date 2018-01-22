@@ -24,6 +24,9 @@ class Employee(models.Model):
     email = models.CharField(db_column='Email', max_length=100, blank=True, null=True)  # Field name made lowercase.
     jobtitle = models.CharField(db_column='JobTitle', max_length=200, blank=True, null=True)  # Field name made lowercase.
     managercode = models.BigIntegerField(db_column='ManagerCode', blank=True, null=True)  # Field name made lowercase.
+    sexcode = models.CharField(db_column='SexCode', max_length=6, blank=True, null=True)  # Field name made lowercase.
+    iscontract = models.IntegerField(db_column='IsContract', blank=True, null=True)  # Field name made lowercase.
+
 
     class Meta:
         managed = False
@@ -331,8 +334,8 @@ class Contractor(models.Model):
     ext = models.IntegerField(db_column='Ext')  # Field name made lowercase.
     mobile = models.CharField(db_column='Mobile', max_length=45, blank=True, null=True)  # Field name made lowercase.
     email = models.CharField(db_column='Email', max_length=100, blank=True, null=True)  # Field name made lowercase.
-    #managercode = models.IntegerField(db_column='ManagerCode')  # Field name made lowercase.
-    managercode = models.ForeignKey('Employee',db_column='managercode',to_field='empid',related_name='contractor_managercode',on_delete=models.SET_NULL, blank=True, null=True)
+    managercode = models.CharField(db_column='ManagerCode',max_length=20, blank=True, null=True)  # Field name made lowercase.
+    #managercode = models.ForeignKey('Employee',db_column='managercode',to_field='empid',related_name='contractor_managercode',on_delete=models.SET_NULL, blank=True, null=True)
     class Meta:
         managed = True
         db_table = 'contractor'

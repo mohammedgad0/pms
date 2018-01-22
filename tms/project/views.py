@@ -132,21 +132,38 @@ def myuser(request, *args, **kwargs):
             # email = None
         if request.user.is_authenticated():
             email = request.user.email
-            emp = Employee.objects.filter(email= email)
+            try:
+                emp_offical = Employee.objects.get(email__exact= email)
+            except:
+                emp_offical=None
+                
+            if emp_offical is not None:
+                emp = emp_offical
+            else :
+                try:
+                    emp_contactor = Contractor.objects.get(email__exact= email)
+                except:
+                     emp_offical=None
+                     
+                if emp_contactor is not None:
+                    emp = emp_contactor
+                else:
+                    print('Update your information i HR')
+                    return login(request, *args, **kwargs)
         # Get all data filtered by user email and set in session
-            for data in emp:
-                request.session['EmpID'] = data.empid
-                request.session['EmpName'] = data.empname
-                request.session['DeptName'] = data.deptname
-                request.session['Mobile'] = data.mobile
-                request.session['DeptCode'] = data.deptcode
-                request.session['JobTitle'] = data.jobtitle
-                request.session['IsManager'] = data.ismanager
-            if emp:
-                if data.ismanager == 1:
+            if emp is not None:
+                    request.session['EmpID'] = emp.empid
+                    request.session['EmpName'] = emp.empname
+                    request.session['DeptName'] = emp.deptname
+                    request.session['Mobile'] = emp.mobile
+                    request.session['DeptCode'] = emp.deptcode
+                    request.session['JobTitle'] = emp.jobtitle
+                    request.session['IsManager'] = emp.ismanager
+                
+            if emp.ismanager == 1:
                     g = Group.objects.get(name='ismanager')
                     g.user_set.add(request.user.id)
-                else:
+            else:
                     g = Group.objects.get(name='employee')
                     g.user_set.add(request.user.id)
             # if not emp:

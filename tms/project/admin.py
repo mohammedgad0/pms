@@ -45,15 +45,15 @@ class SheetAdmin(admin.ModelAdmin):
     model = Task
 
 
-@admin.register(Contractor)
+@admin.register(Employee)
 class ContractorAdmin(admin.ModelAdmin):
-    model = Contractor
+    model = Employee
     fk_name = "id"
-    fields = ( 'empname', 'sexcode', 'empid', 'jobtitle', 'deptcode', 'deptname', 'mobile', 'email','ismanager','managercode','ext')
-    list_display =( 'empname', 'empid', 'jobtitle', 'deptcode', 'deptname',  'email','ismanager','managercode','ext')
+    fields = ( 'empname', 'sexcode', 'empid', 'jobtitle', 'deptcode', 'deptname', 'mobile', 'email','ismanager','managercode','ext','iscontract')
+    list_display =( 'empname', 'empid', 'jobtitle', 'deptcode', 'deptname',  'email','ismanager','managercode','ext','iscontract')
   #  filter_vertical=('deptcode','sexcode')
-    list_filter=('ismanager',)
-    list_max_show_all=200
+    list_filter=('ismanager','iscontract')
+    #list_max_show_all=200
     list_per_page=100
     ordering = ['-ismanager','empname']
     search_fields = ['empname', 'sexcode', 'empid', 'jobtitle', 'deptcode', 'deptname', 'mobile', 'email']
