@@ -129,7 +129,7 @@ def myuser(request, *args, **kwargs):
         emp = None
         if form.is_valid():
           auth_login(request, form.get_user())
-            # email = None
+            # email = None 
         if request.user.is_authenticated():
             email = request.user.email
             try:
