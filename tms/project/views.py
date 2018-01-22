@@ -133,23 +133,10 @@ def myuser(request, *args, **kwargs):
         if request.user.is_authenticated():
             email = request.user.email
             try:
-                emp_offical = Employee.objects.get(email__exact= email)
+                emp = Employee.objects.get(email__exact= email)
             except:
-                emp_offical=None
-                
-            if emp_offical is not None:
-                emp = emp_offical
-            else :
-                try:
-                    emp_contactor = Contractor.objects.get(email__exact= email)
-                except:
-                     emp_offical=None
-                     
-                if emp_contactor is not None:
-                    emp = emp_contactor
-                else:
-                    print('Update your information i HR')
-                    return login(request, *args, **kwargs)
+                emp=None
+  
         # Get all data filtered by user email and set in session
             if emp is not None:
                     request.session['EmpID'] = emp.empid
