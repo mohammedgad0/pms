@@ -135,7 +135,8 @@ def myuser(request, *args, **kwargs):
             try:
                 emp = Employee.objects.get(email__exact= email)
             except:
-                raise Http500("You do not have account in HR")
+                return HttpResponseRedirect(reverse('logout'))
+                #raise Http500("Your account has problem")
   
         # Get all data filtered by user email and set in session
             if emp is not None:
@@ -153,9 +154,6 @@ def myuser(request, *args, **kwargs):
                 else:
                         g = Group.objects.get(name='employee')
                         g.user_set.add(request.user.id)
-            # if not emp:
-            #     g = Group.objects.get(name='employee')
-            #     g.user_set.add(request.user.id)
 
         else:
             return login(request, *args, **kwargs)
@@ -171,7 +169,7 @@ def index(request):
     context = {'logged':logged}
     template = loader.get_template('project/index.html')
     return HttpResponse(template.render(context, request))
-# request.session['idempresa'] = profile.idempresa
+
 
 def gentella_html(request):
     context = {'LANG': request.LANGUAGE_CODE}
