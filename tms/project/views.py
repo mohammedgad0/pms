@@ -135,7 +135,7 @@ def myuser(request, *args, **kwargs):
             try:
                 emp = Employee.objects.get(email__exact= email)
             except:
-                emp=None
+                raise Http500("You do not have account in HR")
   
         # Get all data filtered by user email and set in session
             if emp is not None:
@@ -1186,7 +1186,9 @@ def DashboardManager(request):
     return render(request, 'project/dashboard_manager.html', context)
 
 @login_required
-def DashboardEmployee(request,empid):
+def DashboardEmployee(request,empid=None):
+    if empid is not None or empid != "":
+       empid = request.session['EmpID']
     from dateutil.relativedelta import relativedelta
     dept_code  = request.session['DeptCode']
     start_date = datetime.now() - relativedelta(years=1)

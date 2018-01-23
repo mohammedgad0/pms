@@ -29,7 +29,7 @@ MESSAGE_TAGS = {
 }
 LOGOUT_REDIRECT_URL = 'login'
 
-LOGIN_REDIRECT_URL = '/project/my_sheet'
+LOGIN_REDIRECT_URL = '/project/dashboard_employee'
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
 # Quick-start development settings - unsuitable for production
@@ -39,7 +39,7 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
 SECRET_KEY = '48739c63-3ef3-46be-a6e6-effc30a8f49c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1','192.168.0.192','localhost']
 # Ldap authentication
