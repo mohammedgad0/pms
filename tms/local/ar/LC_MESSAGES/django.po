@@ -1437,7 +1437,7 @@ msgstr "إدارات مفوض عليها"
 #: .\project\templates\project\sidebar.html:60
 #: .\project\templates\project\tasks_from_external_dept.html:35
 msgid "Tasks assigned to departement"
-msgstr "مسندة الى الإدارة"
+msgstr "مهام مسندة الى الإدارة"
 
 #: .\project\templates\project\sidebar.html:62
 msgid "manage all sheets"

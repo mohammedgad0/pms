@@ -41,11 +41,11 @@
         {% endif %}
            <li><a href="{% url 'ns-project:project-list' %}"><i class="fa fa-briefcase"></i> {% trans "Projects" %} <span class="fa"></span></a>  </li>
           <!--   <li><a href="plain_page.html"><i class="fa fa-home"></i> {% trans "Tasks" %} <span class="fa"></span></a>  </li>  -->
-           <li><a href="{% url 'ns-project:my-sheet' %}"><i class="fa fa-list"></i> {% trans "My To Do List" %} <span class="fa"></span></a>  </li>
+          <!--   <li><a href="{% url 'ns-project:my-sheet' %}"><i class="fa fa-list"></i> {% trans "My To Do List" %} <span class="fa"></span></a>  </li>-->
            <li><a href="{% url 'ns-project:project-follow-up' %}"><i class="fa fa-binoculars" aria-hidden="true"></i> {% trans "Follow-up Administration" %} <span class="fa"></span></a>  </li>
 
            {% load user_group %}
-            {% if request.user|has_group:"ismanager" or request.session.have_auth %}
+      <!--        {% if request.user|has_group:"ismanager" or request.session.have_auth %}
            <li><a><i class="fa fa-hand-o-left"></i> {% trans "Delegations" %} <span class="fa fa-chevron-down"></span></a>
          <ul class="nav child_menu">
            {% if request.user|has_group:"ismanager" %}
@@ -53,12 +53,12 @@
            {%endif%}
            <li><a href="{% url 'ns-project:my-delegation'%}">{{_('Department Delegation')}}</a></li>
          </ul>
-
+-->
        </li>
        {%endif%}
            {% if request.user|has_group:"ismanager" %}
            <li><a href="{% url 'ns-project:task-list-external' 'all' %}"><i class="fa fa-code-fork" aria-hidden="true"></i> {% trans "Tasks assigned to departement" %}<span class="badge badge-success" style="position:relative;right:5px;">{{new_tasks_count}}</span><span class="fa"></span></a>  </li>
-
+<!-- 
          <li><a href=" /sheet/{{request.session.DeptCode}}/dept "><i class="fa fa-pencil-square-o"></i> {% trans "manage all sheets" %} <span class="fa"></span></a>  </li>
 
        <li><a><i class="fa fa-file-text-o"></i> {% trans "Reports" %} <span class="fa fa-chevron-down"></span></a>
@@ -67,7 +67,7 @@
           </ul>
         </li>
            {% endif %}
-
+ -->
       </ul>
 
 
