@@ -1998,8 +1998,8 @@ h5.graph_title {
     }
 
 span.right {
-    float: left;
-    font-size: 14px !important
+   float: right;
+    font-size: 14px!important;
 }
 
 .tile_info a {
@@ -2637,12 +2637,13 @@ legend {
     }
 
     .form-control-feedback.right {
-        border-right: 1px solid #ccc;
-        left: 13px
+    border-left: 1px solid #ccc;
+    right: 15px!important;
+    left: auto!important;
     }
 
 .form-control.has-feedback-left {
-    padding-right: 45px
+    padding-right: 50px
 }
 
 .form-control.has-feedback-right {
@@ -4078,7 +4079,7 @@ a.hiddenanchor {
 .login_wrapper {
     left: 0px;
     margin: 0px auto;
-    margin-top: 5%;
+    //margin-top: 5%;
     max-width: 350px;
     position: relative
 }
@@ -4298,7 +4299,7 @@ form:after {
 .login_content form input[type="submit"],
 #content form .submit {
     float: right;
-    margin-right: 38px
+    //margin-right: 38px
 }
 
 .button a {
