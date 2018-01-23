@@ -139,20 +139,20 @@ def myuser(request, *args, **kwargs):
   
         # Get all data filtered by user email and set in session
             if emp is not None:
-                    request.session['EmpID'] = emp.empid
-                    request.session['EmpName'] = emp.empname
-                    request.session['DeptName'] = emp.deptname
-                    request.session['Mobile'] = emp.mobile
-                    request.session['DeptCode'] = emp.deptcode
-                    request.session['JobTitle'] = emp.jobtitle
-                    request.session['IsManager'] = emp.ismanager
+                request.session['EmpID'] = emp.empid
+                request.session['EmpName'] = emp.empname
+                request.session['DeptName'] = emp.deptname
+                request.session['Mobile'] = emp.mobile
+                request.session['DeptCode'] = emp.deptcode
+                request.session['JobTitle'] = emp.jobtitle
+                request.session['IsManager'] = emp.ismanager
                 
-            if emp.ismanager == 1:
-                    g = Group.objects.get(name='ismanager')
-                    g.user_set.add(request.user.id)
-            else:
-                    g = Group.objects.get(name='employee')
-                    g.user_set.add(request.user.id)
+                if emp.ismanager == 1:
+                        g = Group.objects.get(name='ismanager')
+                        g.user_set.add(request.user.id)
+                else:
+                        g = Group.objects.get(name='employee')
+                        g.user_set.add(request.user.id)
             # if not emp:
             #     g = Group.objects.get(name='employee')
             #     g.user_set.add(request.user.id)
