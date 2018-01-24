@@ -11,6 +11,7 @@ urlpatterns = [
 
 
     # The home page
+    url(r'^$', views.Dashboard, name='dashboard'),
     url(r'^$', views.ProjectList, name='index'),
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^add-sheet/$', views.AddSheet, name='add-sheet'),
