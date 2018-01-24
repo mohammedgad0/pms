@@ -46,7 +46,7 @@ class SheetAdmin(admin.ModelAdmin):
 
 
 @admin.register(Employee)
-class ContractorAdmin(admin.ModelAdmin):
+class EmployeeAdmin(admin.ModelAdmin):
     model = Employee
     fk_name = "id"
     fields = ( 'empname', 'sexcode', 'empid', 'jobtitle', 'deptcode', 'deptname', 'mobile', 'email','ismanager','managercode','ext','iscontract')
@@ -58,4 +58,16 @@ class ContractorAdmin(admin.ModelAdmin):
     ordering = ['-ismanager','empname']
     search_fields = ['empname', 'sexcode', 'empid', 'jobtitle', 'deptcode', 'deptname', 'mobile', 'email']
    # autocomplete_fields=['empname']  #autocomplete_fields is a list of ForeignKey and/or ManyToManyField fields
+    show_full_result_count=True
+    
+
+@admin.register(Department)
+class DepartmentAdmin(admin.ModelAdmin):
+    model = Department
+    fk_name = "id"
+    fields = ( 'deptname', 'managerid', 'deptcode')
+    list_display = ( 'deptname', 'managerid', 'deptcode')
+    list_per_page=100
+    ordering = ['-deptcode',]
+    search_fields = ['deptname', 'managerid', 'deptcode']
     show_full_result_count=True

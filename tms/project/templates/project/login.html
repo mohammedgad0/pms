@@ -47,7 +47,7 @@ body {
           <form action="." method="post" class="form-horizontal ">
             {% csrf_token %}
 
-            <h1>نظام ادارة المشاريع </h1> <h4>{{ _('Login Form')}}</h4>
+            <h1>{% trans "PMS" %}</h1> <h4>{{ _('Login Form')}}</h4>
             {% if form.errors %}
             <div class="alert alert-danger">
               <p class="validation-summary-errors">{{ _('Please enter a correct user name and password.') }}</p>
