@@ -1257,9 +1257,9 @@ def _dept_open_pojects(deptcode,startdate,enddate):
 #     inprogress = Count('task', distinct=True, filter=Q(task__status__exact="InProgress"))
 #     done = Count('task', distinct=True, filter=Q(task__status__exact="Done"))
 #     hold = Count('task', distinct=True, filter=Q(status__exact="Hold"))
-#     closed = Count('task', distinct=True, filter=Q(status__exact="Closed"))
+#     closed = Count('task', distinct=True, filter=Q(status__exact="Closed"))& Q(project__createdby=startdate)
     projects= Project.objects.filter(
-        (Q(departement__deptcode__exact=deptcode) & Q(start__gte=startdate) & Q(start__lte=enddate))
+        (Q(departement__deptcode__exact=deptcode)  & Q(start__gte=startdate) & Q(start__lte=enddate))
         & ~Q(status__name__exact="Closed")).annotate(num_tasks=Count('task'))
 
     q=projects.query
