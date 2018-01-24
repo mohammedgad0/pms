@@ -135,8 +135,8 @@ def myuser(request, *args, **kwargs):
             try:
                 emp = Employee.objects.get(email__exact= email)
             except:
-                return HttpResponseRedirect(reverse('logout'))
-                #raise Http500("Your account has problem")
+                #return HttpResponseRedirect(reverse('logout'))
+                raise Http500("Your account has problem")
   
         # Get all data filtered by user email and set in session
             if emp is not None:
@@ -170,6 +170,13 @@ def index(request):
     template = loader.get_template('project/index.html')
     return HttpResponse(template.render(context, request))
 
+#@login_required
+def Dashboard(request):
+    if  request.user.groups.filter(name="ismanager").exists() ==True:
+        return HttpResponseRedirect(reverse('ns-project:dashboard-manager'))
+    else:
+        return HttpResponseRedirect(reverse('ns-project:dashboard-employee'))
+        
 
 def gentella_html(request):
     context = {'LANG': request.LANGUAGE_CODE}
@@ -180,6 +187,7 @@ def gentella_html(request):
     template = loader.get_template('project/' + load_template)
     return HttpResponse(template.render(context, request))
 
+#@login_required
 def AddProject(request):
     #check if user is manager 
     if  request.user.groups.filter(name="ismanager").exists() ==False:
@@ -996,21 +1004,18 @@ def ProjectTaskEdit(request,projectid,taskid):
     upload = modelformset_factory(Media,form=UploadFile,extra = 1,can_delete=True)
     FormSet = upload(queryset=Media.objects.filter(project_id__exact=projectid,task__id__exact=taskid).exclude(Q(filepath__exact=None)| Q(filepath__exact='')))
 
-    try:
-        form.fields["assigned_to"].initial=task_detail.assignedto.empid
-    except:
-        pass
-    try:
-        form.fields["assigned_to"].initial=task_detail.departement.deptcode
-    except:
-        pass
+    if task_detail.assignedto is not None :
+            form.fields["assigned_to"].initial=task_detail.assignedto.empid
+    else :
+           form.fields["assigned_to"].initial=task_detail.departement.deptcode
+    
 
     # for use in futrure
     #form.fields["createdby"].queryset = Employee.objects.filter(deptcode = request.session['DeptCode'])
     #form.fields["createdby"].initial=task_detail.createdby
 
     try:
-        assignTo=empid__exact=task_detail.assignedto.empname;
+        assignTo=task_detail.assignedto.empname;
     except:
         assignTo = None
     try:
@@ -1040,6 +1045,9 @@ def ProjectTaskEdit(request,projectid,taskid):
            instance.cancelledby=None
            instance.finisheddate=None
            instance.finishedby=None
+           
+           instance.assignedto=0000
+           instance.departement=0000
         if form.cleaned_data['status']=="Done":
            instance.closedby=None
            instance.closeddate=None
@@ -1197,7 +1205,7 @@ def DashboardEmployee(request,empid=None):
     pie_tasks=_employee_tasks_statistics(employee,start_date,end_date)
     context = {"task_employee":task_employee,'employee':employee,'kpi':kpi,'pie_tasks':pie_tasks}
     return render(request, 'project/dashboard_employee.html', context)
-
+#@login_required
 def emp_task(empid,start_date,end_date):
     task_employee = Task.objects.filter(
     Q(assignedto__empid__exact = empid)&
@@ -1205,7 +1213,7 @@ def emp_task(empid,start_date,end_date):
     ~Q(status ='Closed')
     )
     return task_employee
-
+#@login_required
 def dept_task_indicators(dept_code,start_date,end_date):
     dept_data = get_object_or_404(Department,deptcode=dept_code)
     dept_manager = dept_data.managerid
@@ -1229,7 +1237,7 @@ def dept_task_indicators(dept_code,start_date,end_date):
             each_dept_count = tasks.filter(createdby = name.createdby).count()
             TaskDict.update({name.createdby.deptname: each_dept_count})
     return TaskDict
-
+#@login_required
 def _dept_tasks_statistics(deptcode,startdate,enddate):
     tasks = {}
     task_list= Task.objects.filter(project__departement__deptcode__exact=deptcode,createddate__gte=startdate,createddate__lte=enddate)
@@ -1241,6 +1249,7 @@ def _dept_tasks_statistics(deptcode,startdate,enddate):
     tasks['Closed']=task_list.filter(status__exact='Closed').count()
     return tasks
 
+#@login_required
 def _dept_open_pojects(deptcode,startdate,enddate):
 
     projectList=[]
@@ -1248,9 +1257,9 @@ def _dept_open_pojects(deptcode,startdate,enddate):
 #     inprogress = Count('task', distinct=True, filter=Q(task__status__exact="InProgress"))
 #     done = Count('task', distinct=True, filter=Q(task__status__exact="Done"))
 #     hold = Count('task', distinct=True, filter=Q(status__exact="Hold"))
-#     closed = Count('task', distinct=True, filter=Q(status__exact="Closed"))
+#     closed = Count('task', distinct=True, filter=Q(status__exact="Closed"))& Q(project__createdby=startdate)
     projects= Project.objects.filter(
-        (Q(departement__deptcode__exact=deptcode) & Q(start__gte=startdate) & Q(start__lte=enddate))
+        (Q(departement__deptcode__exact=deptcode)  & Q(start__gte=startdate) & Q(start__lte=enddate))
         & ~Q(status__name__exact="Closed")).annotate(num_tasks=Count('task'))
 
     q=projects.query
@@ -1273,7 +1282,7 @@ def _dept_open_pojects(deptcode,startdate,enddate):
         projectList.append(projectDict)
     return projectList
 
-
+#@login_required
 def _project_kpi(deptcode,startdate,enddate):
     projectKPI={}
     projects= Project.objects.filter(

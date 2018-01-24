@@ -180,9 +180,19 @@ $(document).ready(function(){
   $(".chosen").data("placeholder","Select Frameworks...").chosen();
   $(".chosen").chosen({no_results_text: "Oops, nothing found!"});
   $('.chosen').chosen({allow_single_deselect: true,no_results_text: "Ù„Ø§ ÙŠÙˆØ¬Ø¯ Ù†ØªØ§Ø¦Ø¬!"});
-  $(function() {
-    $('#myForm').formset();
-})
+
+  // disable /enable droplis
+  
+  $('#id_assigntype_0').change(function(){
+	   $('#id_employee').prop("disabled", false).trigger("chosen:updated");
+  $('#id_department_list').prop("disabled", true).trigger("chosen:updated");
+	});
+  
+  $('#id_assigntype_1').change(function(){
+  $('#id_employee').prop("disabled", true).trigger("chosen:updated");
+  $('#id_department_list').prop("disabled", false).trigger("chosen:updated");
+  	});
+  
 // Code adapted from http://djangosnippets.org/snippets/1389/
 function updateElementIndex(el, prefix, ndx) {
     var id_regex = new RegExp('(' + prefix + '-\\d+-)');

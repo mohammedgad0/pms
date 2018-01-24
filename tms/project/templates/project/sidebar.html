@@ -38,6 +38,8 @@
       <ul class="nav side-menu">
         {% if request.user|has_group:"ismanager" %}
            <li><a href="{% url 'ns-project:dashboard-manager'  %}"><i class="fa fa-home"></i> {% trans "Home" %} <span class="fa"></span></a>  </li>
+        {% else %}
+        <li><a href="{% url 'ns-project:dashboard-employee'  %}"><i class="fa fa-home"></i> {% trans "Home" %} <span class="fa"></span></a>  </li>
         {% endif %}
            <li><a href="{% url 'ns-project:project-list' %}"><i class="fa fa-briefcase"></i> {% trans "Projects" %} <span class="fa"></span></a>  </li>
           <!--   <li><a href="plain_page.html"><i class="fa fa-home"></i> {% trans "Tasks" %} <span class="fa"></span></a>  </li>  -->

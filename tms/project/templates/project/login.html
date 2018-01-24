@@ -14,13 +14,14 @@ body, html {
 body {
    /*background: #092756 !important;
     /* The image used */
-    background-image: url("https://www.zentao.pm/data/source/default/wide/banner-1.jpg") !important;
+    background-image: url("/static/build/images/banner-1.jpg") !important;
     /* Full height */
     height: 100% !important;
     /* Center and scale the image nicely */
     background-position: center !important;
     background-repeat: no-repeat !important;
     background-size: cover !important;
+    background-attachment: fixed !important;
 }
 </style>
 
@@ -38,7 +39,7 @@ body {
     <div class="login_wrapper">
     
 
-      <div class="animate form login_form " style="background-color: #fff;padding:10px;margin-top: 5%;">
+      <div class="animate form login_form " style="background-color: #fff;padding:10px;">
       
         <section class="login_content " >
 
@@ -46,7 +47,7 @@ body {
           <form action="." method="post" class="form-horizontal ">
             {% csrf_token %}
 
-            <h1>نظام ادارة المشاريع </h1> <h4>{{ _('Login Form')}}</h4>
+            <h1>{% trans "PMS" %}</h1> <h4>{{ _('Login Form')}}</h4>
             {% if form.errors %}
             <div class="alert alert-danger">
               <p class="validation-summary-errors">{{ _('Please enter a correct user name and password.') }}</p>

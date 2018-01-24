@@ -61,7 +61,7 @@ class ProjectForm(ModelForm):
 
         self.fields['status'].empty_label = None
         self.fields['name'].widget.attrs['maxlength'] =255
-        self.fields['delegationto'].empty_label = None
+        self.fields['delegationto'].empty_label = _("Select Employee")
      #fields   
     delegationto = TeamModelChoiceField(queryset=Employee.objects.all(),to_field_name="empid" ,
                      empty_label=_("Select Employee"),

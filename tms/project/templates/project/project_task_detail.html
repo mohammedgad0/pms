@@ -53,6 +53,8 @@
                            <li id="task-start">   <a href="#" data-url="{% url 'ns-project:task-update-start' task.id %}" class="btn btn-app update-task-start"  class="btn btn-app" title="{{_('Start Task')}}"> <i class="fa fa-play fa-2x paction text-primary"></i> </a> </li>
                           {% endif %}
                            <li  id="task-finish"> <a href="#" data-url="{% url 'ns-project:update-finish-task' task.id %}" class="btn btn-app update-task-finish"><i class="fa fa-check-square-o fa-2x paction text-primary" title="{{_('Finish Task')}}"></i></a> </li>
+                           <li  id="task-cancel"> <a href="#" data-url="{% url 'ns-project:update-progress-task' task.id %}" class="btn btn-app update-task-progress "><i class="fa fa-clock-o fa-2x paction text-primary" title="{{_('Progress')}}"></i></a> </li> 
+
                            <li  id="task-cancel"> <a href="#" data-url="{% url 'ns-project:update-cancel-task' task.id %}" class="btn btn-app update-task-cancel "><i class="fa fa-ban fa-2x paction text-danger" title="{{_('Cancel Task')}}"></i></a> </li> 
                       {% endif %}
                         {% load user_group %}
@@ -285,6 +287,10 @@ $("#modal-task").on("submit", ".update-finish-task-form", saveForm);
 //close task 
 $(".task-ctions").on("click", ".update-task-close", loadForm);
 $("#modal-task").on("submit", ".update-close-task-form", saveForm);
+
+//progress task
+$(".task-ctions").on("click", ".update-task-progress", loadForm);
+$("#modal-task").on("submit", ".update-progress-task-form", saveForm);
 
 //cancel task 
 $(".task-ctions").on("click", ".update-task-cancel", loadForm);
