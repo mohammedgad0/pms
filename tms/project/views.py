@@ -135,8 +135,8 @@ def myuser(request, *args, **kwargs):
             try:
                 emp = Employee.objects.get(email__exact= email)
             except:
-                return HttpResponseRedirect(reverse('logout'))
-                #raise Http500("Your account has problem")
+                #return HttpResponseRedirect(reverse('logout'))
+                raise Http500("Your account has problem")
   
         # Get all data filtered by user email and set in session
             if emp is not None:
