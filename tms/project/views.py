@@ -1005,13 +1005,9 @@ def ProjectTaskEdit(request,projectid,taskid):
     FormSet = upload(queryset=Media.objects.filter(project_id__exact=projectid,task__id__exact=taskid).exclude(Q(filepath__exact=None)| Q(filepath__exact='')))
 
     if task_detail.assignedto is not None :
-        try:
             form.fields["assigned_to"].initial=task_detail.assignedto.empid
-        except:
-            try:
-               form.fields["assigned_to"].initial=task_detail.departement.deptcode
-            except:
-                pass
+    else :
+           form.fields["assigned_to"].initial=task_detail.departement.deptcode
     
 
     # for use in futrure
@@ -1019,7 +1015,7 @@ def ProjectTaskEdit(request,projectid,taskid):
     #form.fields["createdby"].initial=task_detail.createdby
 
     try:
-        assignTo=empid__exact=task_detail.assignedto.empname;
+        assignTo=task_detail.assignedto.empname;
     except:
         assignTo = None
     try:
@@ -1049,6 +1045,9 @@ def ProjectTaskEdit(request,projectid,taskid):
            instance.cancelledby=None
            instance.finisheddate=None
            instance.finishedby=None
+           
+           instance.assignedto=
+           instance.departement=
         if form.cleaned_data['status']=="Done":
            instance.closedby=None
            instance.closeddate=None
