@@ -39,7 +39,7 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
 SECRET_KEY = '48739c63-3ef3-46be-a6e6-effc30a8f49c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1','192.168.0.192','localhost']
 # Ldap authentication
@@ -116,15 +116,15 @@ WSGI_APPLICATION = 'tms.wsgi.application'
 DATABASES = {
    'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'tms_dev',
-         'USER': 'sakr',
-         'PASSWORD': 'Sakr!@#123',
-         'HOST': '192.168.0.192',   # Or an IP Address that your DB is hosted on
-         'PORT': '3306',
-#         'NAME': 'tms',
-#         'USER': 'root',
-#         'PASSWORD': '',
-#         'HOST': 'localhost',   # Or an IP Address that your DB is hosted on,
+#         'NAME': 'tms_dev',
+#          'USER': 'sakr',
+#          'PASSWORD': 'Sakr!@#123',
+#          'HOST': '192.168.0.192',   # Or an IP Address that your DB is hosted on
+#          'PORT': '3306',
+        'NAME': 'tms',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',   # Or an IP Address that your DB is hosted on,
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         },
