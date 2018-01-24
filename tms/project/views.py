@@ -1004,14 +1004,15 @@ def ProjectTaskEdit(request,projectid,taskid):
     upload = modelformset_factory(Media,form=UploadFile,extra = 1,can_delete=True)
     FormSet = upload(queryset=Media.objects.filter(project_id__exact=projectid,task__id__exact=taskid).exclude(Q(filepath__exact=None)| Q(filepath__exact='')))
 
-    try:
-        form.fields["assigned_to"].initial=task_detail.assignedto.empid
-    except:
-        pass
-    try:
-        form.fields["assigned_to"].initial=task_detail.departement.deptcode
-    except:
-        pass
+    if task_detail.assignedto is not None :
+        try:
+            form.fields["assigned_to"].initial=task_detail.assignedto.empid
+        except:
+            try:
+               form.fields["assigned_to"].initial=task_detail.departement.deptcode
+            except:
+                pass
+    
 
     # for use in futrure
     #form.fields["createdby"].queryset = Employee.objects.filter(deptcode = request.session['DeptCode'])

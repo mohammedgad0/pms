@@ -177,7 +177,7 @@
                              <i class="fa fa-clock-o fa-2x paction  paction_disable" title="{% trans "Progress" %}"></i>
                               <i class="fa fa-check-square-o fa-2x paction  paction_disable" title="{% trans "Finish" %}"></i>
                               {% else %}
-                             <a href="#" data-url="{% url 'ns-project:update-progress-task' task.id %}" class="update-finish-task" ><i class="fa fa-clock-o fa-2x paction  text-primary" title="{% trans "Progress" %}" id="f_{{task.id}}"></i> </a>
+                             <a href="#" data-url="{% url 'ns-project:update-progress-task' task.id %}" class="update-progress-task" ><i class="fa fa-clock-o fa-2x paction  text-primary" title="{% trans "Progress" %}" id="f_{{task.id}}"></i> </a>
                               <a href="#" data-url="{% url 'ns-project:update-finish-task' task.id %}" class="update-finish-task" ><i class="fa fa-check-square-o fa-2x paction  text-primary" title="{% trans "Finish" %}" id="f_{{task.id}}"></i> </a>
                               {% endif %}
                               {% if request.user|has_group:"ismanager"  or task.project.delegationto.empid == request.session.EmpID %}
