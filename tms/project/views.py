@@ -288,7 +288,7 @@ def ProjectList(request,project_status=None):
         )       
     elif project_status is not None :
          project_status = project_status.lower()
-         project_list=project_list.filter(status__name__contains=project_status)
+         project_list=project_list.filter(status__name__exact=project_status)
     
 
     for project in project_list:
