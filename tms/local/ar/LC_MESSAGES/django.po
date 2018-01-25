@@ -1138,7 +1138,7 @@ msgstr "عدد  المهام"
 
 #: .\project\templates\project\project_followup.html:31
 msgid "Follow-up Administration"
-msgstr "تقارير المتابعة"
+msgstr "إدارة المتابعة"
 
 #: .\project\templates\project\project_followup.html:73
 msgid "Search"
@@ -1455,7 +1455,7 @@ msgstr "سجل مهامى"
 
 #: .\project\templates\project\sidebar.html:48
 msgid "Follow-up Reports"
-msgstr ""
+msgstr "تقارير المتابعة"
 
 #: .\project\templates\project\sidebar.html:55
 msgid "Manage Delegation"
