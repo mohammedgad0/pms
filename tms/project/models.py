@@ -187,9 +187,9 @@ class ApfDeptView(models.Model):
 class Task(models.Model):
     assignedto = models.ForeignKey('Employee',db_column='assignedto',to_field='empid',related_name='Emp3', on_delete=models.SET_NULL, blank=True, null=True)
     departement = models.ForeignKey('Department',db_column='departementid', to_field='deptcode',on_delete=models.SET_NULL, blank=True, null=True)
-    project = models.ForeignKey('Project',db_column='projectid', to_field='id', on_delete=models.CASCADE,blank=True,  null=True)
+    project = models.ForeignKey('Project',db_column='projectid', to_field='id', on_delete=models.SET_NULL,blank=True,  null=True)
 
-    name = models.CharField(db_column='Name', max_length=100)  # Field name made lowercase.
+    name = models.CharField(db_column='Name', max_length=200)  # Field name made lowercase.
     desc = models.CharField(db_column='Desc', max_length=2500)  # Field name made lowercase.
 
     TASK_STATUS = (
@@ -323,4 +323,4 @@ class Delegation(models.Model):
         db_table = 'delegation'
 
 
-                
+            

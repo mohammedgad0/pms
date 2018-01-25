@@ -408,15 +408,20 @@ def ProjectDelete(request,pk):
     attached_files= Media.objects.filter(project__id__exact=p.id )
     if request.method == 'POST':
         #remove files from directory
-        for attached in attached_files :
-            os.remove(os.path.join(settings.BASE_DIR, 'media/')+str(attached.filepath))
-         #delete attached files related to project and tasks
         try:
-             Media.objects.filter(project__id__exact=p.id).delete()
+            for attached in attached_files :
+                os.remove(os.path.join(settings.BASE_DIR, 'media/')+str(attached.filepath))
+             #delete attached files related to project and tasks
+            try:
+                 Media.objects.filter(project__id__exact=p.id).delete()
+            except:
+                pass
         except:
             pass
          #delete project object and related tasks
-        Project.objects.filter(id=p.id).delete()
+        Task.objects.filter(project__id__exact=p.id).delete()
+        Task.history.filter(project__id=p.id).delete()
+        Project.objects.get(id__exact=p.id).delete()
         messages.success(request, _("Project has deleted successfully"), fail_silently=True,)
         return HttpResponseRedirect(reverse('ns-project:project-list'))
     else:
@@ -854,12 +859,23 @@ def AddTask(request,project_id):
         data['errors'] = errors.append(form.errors)
 
 
-    context ={'upload_file':FormSet, 'form':form,'action_name':'Add Task','errors':errors}
+    context ={'upload_file':FormSet, 'form':form,'errors':errors}
     return render (request,'project/add_task.html', context)
 
 @login_required
 def ProjectTaskDelete(request,projectid,taskid):
-    task= get_object_or_404(Task,createdby__empid__exact= request.session['EmpID'],project__id__exact= projectid,pk=taskid)
+    try:
+       task=Task.objects.get(  Q(project__id__exact= projectid ) & 
+                               (Q( createdby__empid__exact= request.session['EmpID']) | 
+                               Q(project__createdby__empid__exact= request.session['EmpID'])|
+                               Q(project__delegationto__empid__exact= request.session['EmpID']) )
+                               )
+    except:
+         raise Http404
+        
+           
+   # task= get_object_or_404(Task,createdby__empid__exact= request.session['EmpID'],project__id__exact= projectid,pk=taskid)
+    
     project=get_object_or_404(Project,pk=projectid)
     employee=get_object_or_404(Employee,empid__exact= task.createdby.empid)
     if request.method == 'POST':

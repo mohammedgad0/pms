@@ -107,7 +107,7 @@
                         {% for task in tasks %}
                         <tr>
                            <td><a href="{% url 'ns-project:project-task-detail' project_detail.id task.id   %}" class=" btn-link">{{task.id }}</a> </td>
-                           <td><a href="{% url 'ns-project:project-task-detail' project_detail.id task.id   %}" class=" btn-link" title="{{task.name}}">{{ task.name|truncatechars:20 }}</a></td>
+                           <td><a href="{% url 'ns-project:project-task-detail' project_detail.id task.id   %}" class=" btn-link" title="{{task.name}}">{{ task.name|truncatechars:60 }}</a></td>
                            <td>{{  task.startdate|date:"Y-m-d" }} </td>
                            <td>{{  task.enddate|date:"Y-m-d" }}{{date}} </td>
                            <td id="status_{{task.id}}">
@@ -173,14 +173,17 @@
                                  {% endif %}
                               {% endif %}
                               <!-- user finish task -->
-                              {% if task.finisheddate %}
+                              {% if task.status == "Done"  or task.status == "Cancelled" or   task.status == "New"  %}
                              <i class="fa fa-clock-o fa-2x paction  paction_disable" title="{% trans "Progress" %}"></i>
                               <i class="fa fa-check-square-o fa-2x paction  paction_disable" title="{% trans "Finish" %}"></i>
+                               <i class="fa fa-ban fa-2x paction  paction_disable" title="{% trans "Cancel" %}"></i>
                               {% else %}
                              <a href="#" data-url="{% url 'ns-project:update-progress-task' task.id %}" class="update-progress-task" ><i class="fa fa-clock-o fa-2x paction  text-primary" title="{% trans "Progress" %}" id="f_{{task.id}}"></i> </a>
                               <a href="#" data-url="{% url 'ns-project:update-finish-task' task.id %}" class="update-finish-task" ><i class="fa fa-check-square-o fa-2x paction  text-primary" title="{% trans "Finish" %}" id="f_{{task.id}}"></i> </a>
+                              <a href="#" data-url="{% url 'ns-project:update-cancel-task' task.id %}" class="update-cancel-task" ><i class="fa fa-ban fa-2x paction  text-primary" title="{% trans "Finish" %}" id="f_{{task.id}}"></i> </a>
+                            
                               {% endif %}
-                              {% if request.user|has_group:"ismanager"  or task.project.delegationto.empid == request.session.EmpID %}
+                              {% if task.project.createdby.empid == request.session.EmpID  or task.project.delegationto.empid == request.session.EmpID %}
                               <!-- manager close task -->
                               <a href="#" data-url="{% url 'ns-project:update-assignto-task' task.id %}" class="update-assignto-task" ><i class="fa fa-hand-o-right fa-2x paction text-primary" title="{% trans "Assign" %} "></i></a>
                               {% if task.closeddate %}
@@ -190,6 +193,8 @@
                               {% endif %}
                               <!-- manager edit task -->
                               <a href="{% url 'ns-project:project-task-edit' project_detail.id task.id %}" ><i class="fa fa-edit fa-2x paction  text-primary" title="{% trans "Edit" %}"></i>  </a>
+                              <a href="{% url 'ns-project:project-task-delete' project_detail.id task.id %}" ><i class="fa fa-trash fa-2x paction  text-primary" title="{% trans "Delete" %}"></i>  </a>
+                                                      
                               {% endif %}
                            </td>
                         </tr>
@@ -300,6 +305,11 @@
    $("#task-table").on("click", ".update-finish-task", loadForm);
    $("#modal-task").on("submit", ".update-finish-task-form", saveForm);
 
+   //update cancel task
+   $("#task-table").on("click", ".update-cancel-task", loadForm);
+   $("#modal-task").on("submit", ".update-cancel-task-form", saveForm);
+
+   
    //progress task
    $("#task-table").on("click", ".update-progress-task", loadForm);
    $("#modal-task").on("submit", ".update-progress-task-form", saveForm);

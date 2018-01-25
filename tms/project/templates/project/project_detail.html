@@ -34,8 +34,10 @@
               {% load user_group %}
                <a href="{% url 'ns-project:project-list' %}"  style="float:left" >  <button type="button" class="btn btn-primary btn-md"> <i class="fa fa-th-list"></i>  {% trans "Projects List" %}</button></a>
 
-                 {% if request.user|has_group:"ismanager"  and   project_detail.createdby.empid == request.session.EmpID %}
+                 {% if  project_detail.createdby.empid == request.session.EmpID  %}
                  <a href="{% url 'ns-project:project-delete' project_detail.id %}" style="float:left" >  <button type="button" class="btn btn-danger btn-md"> <i class="fa fa-trash-o"></i>  {% trans "Delete" %}</button></a>
+                {% endif %}
+                {% if  project_detail.createdby.empid == request.session.EmpID  or project_detail.delegationto.empid == request.session.EmpID %}
                  <a href="{% url 'ns-project:project-edit'  project_detail.id %}" style="float:left" >  <button type="button" class="btn btn-info btn-md"> <i class="fa fa-pencil"></i>  {% trans "Edit" %}</button></a>
                  {% endif %}
 
@@ -176,7 +178,7 @@
                             <div class="byline">
                               <span>{{h.lasteditdate }}</span> by <a>{{h.lasteditby.empname }}</a>
                             </div>
-                            <p class="excerpt">{{h.name|safe}} 
+                            <p class="excerpt" style="word-break: break-all;">{{h.name|safe}} 
                             </p>
                           </div>
                         </div>

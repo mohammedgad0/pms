@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-25 10:03+0300\n"
+"POT-Creation-Date: 2018-01-25 13:38+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -78,7 +78,7 @@ msgstr "نوع المهمة"
 #: .\project\templates\project\edit-sheet.html:41
 #: .\project\templates\project\edit_s_sheet.html:41
 #: .\project\templates\project\edit_sheet.html:41
-#: .\project\templates\project\project_detail.html:51
+#: .\project\templates\project\project_detail.html:53
 #: .\project\templates\project\project_ganttchart.html:80
 #: .\project\templates\project\submit_sheet.html:41
 #: .\project\templates\project\update_sheet.html:116
@@ -163,13 +163,14 @@ msgstr "تفويض الى"
 #: .\project\templates\project\project_followup.html:99
 #: .\project\templates\project\projects.html:83
 #: .\project\templates\project\reports\per_project.html:21
+#: .\project\views.py:970
 msgid "Project Name"
 msgstr "أسم المشروع"
 
 #: .\project\forms.py:80 .\project\forms.py:88 .\project\forms.py:145
 #: .\project\forms.py:153 .\project\forms.py:205 .\project\forms.py:347
 #: .\project\templates\project\dashboard_employee.html:69
-#: .\project\templates\project\project_detail.html:138
+#: .\project\templates\project\project_detail.html:140
 #: .\project\templates\project\project_task_detail.html:178
 #: .\project\templates\project\project_task_edit.html:171
 #: .\project\templates\project\tasks.html:92
@@ -182,7 +183,7 @@ msgstr "تاريخ البدأ"
 #: .\project\forms.py:348
 #: .\project\templates\project\dashboard_employee.html:70
 #: .\project\templates\project\dashboard_manager.html:171
-#: .\project\templates\project\project_detail.html:142
+#: .\project\templates\project\project_detail.html:144
 #: .\project\templates\project\project_task_detail.html:180
 #: .\project\templates\project\project_task_edit.html:174
 #: .\project\templates\project\tasks.html:93
@@ -209,7 +210,7 @@ msgstr "اختر الحالة"
 #: .\project\templates\project\delegation.html:46
 #: .\project\templates\project\dept_tasks.html:64
 #: .\project\templates\project\project_delete.html:54
-#: .\project\templates\project\project_detail.html:145
+#: .\project\templates\project\project_detail.html:147
 #: .\project\templates\project\project_followup.html:101
 #: .\project\templates\project\project_task_delete.html:56
 #: .\project\templates\project\project_task_edit.html:167
@@ -222,7 +223,7 @@ msgstr "اختر الحالة"
 msgid "Status"
 msgstr "الحالة"
 
-#: .\project\forms.py:90 .\project\templates\project\project_detail.html:81
+#: .\project\forms.py:90 .\project\templates\project\project_detail.html:83
 msgid "Project Description"
 msgstr "تفاصيل المشروع"
 
@@ -405,7 +406,7 @@ msgstr "يرجى إدخال سبب الإلغاء"
 
 #: .\project\forms.py:308 .\project\forms.py:311
 #: .\project\templates\project\project_delete.html:50
-#: .\project\templates\project\project_detail.html:132
+#: .\project\templates\project\project_detail.html:134
 #: .\project\templates\project\reports\per_assignedto.html:46
 msgid "Departement"
 msgstr "الإدارة"
@@ -425,7 +426,7 @@ msgstr "اختر الحالة"
 #: .\project\forms.py:323 .\project\models.py:198
 #: .\project\templates\project\dashboard_employee.html:181
 #: .\project\templates\project\dashboard_manager.html:325
-#: .\project\views.py:561
+#: .\project\views.py:566
 msgid "InProgress"
 msgstr "جارى العمل"
 
@@ -433,13 +434,13 @@ msgstr "جارى العمل"
 #: .\project\templates\project\dashboard_employee.html:180
 #: .\project\templates\project\dashboard_manager.html:324
 #: .\project\templates\project\kanban.html:76
-#: .\project\templates\project\tasks.html:53 .\project\views.py:712
+#: .\project\templates\project\tasks.html:53 .\project\views.py:717
 msgid "Hold"
 msgstr "متوقف"
 
 #: .\project\forms.py:326 .\project\models.py:201
 #: .\project\templates\project\kanban.html:88
-#: .\project\templates\project\tasks.html:52 .\project\views.py:675
+#: .\project\templates\project\tasks.html:52 .\project\views.py:680
 msgid "Cancelled"
 msgstr "ملغى"
 
@@ -447,7 +448,7 @@ msgstr "ملغى"
 #: .\project\templates\project\dashboard_employee.html:184
 #: .\project\templates\project\dashboard_manager.html:328
 #: .\project\templates\project\kanban.html:100
-#: .\project\templates\project\tasks.html:51 .\project\views.py:636
+#: .\project\templates\project\tasks.html:51 .\project\views.py:641
 msgid "Closed"
 msgstr "مغلق"
 
@@ -459,7 +460,7 @@ msgstr "اسم الملف"
 msgid "Choose File"
 msgstr "رفع الملف"
 
-#: .\project\forms.py:341 .\project\templates\project\project_detail.html:149
+#: .\project\forms.py:341 .\project\templates\project\project_detail.html:151
 msgid "Delegation to"
 msgstr "تفويض الى"
 
@@ -680,6 +681,10 @@ msgstr "اضف ملف جديد"
 msgid "Reset"
 msgstr "إعادة"
 
+#: .\project\templates\project\add_task.html:43
+msgid "Add Task"
+msgstr "إضافة مهمة "
+
 #: .\project\templates\project\all_emp_sheets.html:14
 msgid "Tasks List All"
 msgstr "قائمة جميع المهام"
@@ -759,7 +764,7 @@ msgid "Total employees"
 msgstr "إجمالى عدد الموظفين"
 
 #: .\project\templates\project\all_sheets.html:21
-#: .\project\templates\project\project_detail.html:220
+#: .\project\templates\project\project_detail.html:222
 #: .\project\templates\project\project_team.html:55
 msgid "Total tasks"
 msgstr "إجمالى عدد المهام"
@@ -892,7 +897,7 @@ msgstr "تفويض منتهي"
 #: .\project\templates\project\delegation.html:72
 #: .\project\templates\project\my_tasks.html:122
 #: .\project\templates\project\my_tasks.html:124
-#: .\project\templates\project\project_detail.html:39
+#: .\project\templates\project\project_detail.html:41
 #: .\project\templates\project\project_task_detail.html:72
 #: .\project\templates\project\projects.html:156
 #: .\project\templates\project\projects.html:163
@@ -1065,7 +1070,7 @@ msgid "delete project confirmation"
 msgstr "تأكيد حذف المشروع "
 
 #: .\project\templates\project\project_delete.html:48
-#: .\project\templates\project\project_detail.html:129
+#: .\project\templates\project\project_detail.html:131
 #: .\project\templates\project\project_task_delete.html:52
 #: .\project\templates\project\project_task_detail.html:194
 #: .\project\templates\project\project_task_edit.html:188
@@ -1073,14 +1078,14 @@ msgid "Created By"
 msgstr "أنشأت بواسطة"
 
 #: .\project\templates\project\project_delete.html:52
-#: .\project\templates\project\project_detail.html:135
+#: .\project\templates\project\project_detail.html:137
 #: .\project\templates\project\project_task_delete.html:54
 #: .\project\templates\project\projects.html:102
 msgid "Created Date"
 msgstr "تاريخ الإنشاء"
 
 #: .\project\templates\project\project_delete.html:66
-#: .\project\templates\project\project_detail.html:91
+#: .\project\templates\project\project_detail.html:93
 msgid "Attachments"
 msgstr "المرفقات"
 
@@ -1091,6 +1096,7 @@ msgstr "المرفقات"
 #: .\project\templates\project\projects.html:158
 #: .\project\templates\project\projects.html:160
 #: .\project\templates\project\projects.html:164
+#: .\project\templates\project\tasks.html:193
 msgid "Delete"
 msgstr "حذف"
 
@@ -1101,29 +1107,29 @@ msgstr "حذف"
 msgid "Projects List"
 msgstr "قائمة المشاريع"
 
-#: .\project\templates\project\project_detail.html:56
+#: .\project\templates\project\project_detail.html:58
 msgid "Remaining Time"
 msgstr "الوقت المتبقى"
 
-#: .\project\templates\project\project_detail.html:61
+#: .\project\templates\project\project_detail.html:63
 msgid "Number of tasks"
 msgstr "عدد المهام"
 
-#: .\project\templates\project\project_detail.html:65
+#: .\project\templates\project\project_detail.html:67
 msgid "Completion Rate"
 msgstr "مكتمل"
 
-#: .\project\templates\project\project_detail.html:123
+#: .\project\templates\project\project_detail.html:125
 #: .\project\templates\project\project_task_detail.html:159
 msgid "Basic Info"
 msgstr "المعلومات الأساسية"
 
-#: .\project\templates\project\project_detail.html:162
+#: .\project\templates\project\project_detail.html:164
 #: .\project\templates\project\project_task_detail.html:133
 msgid "Recent Activity"
 msgstr "أخر التحديثات"
 
-#: .\project\templates\project\project_detail.html:237
+#: .\project\templates\project\project_detail.html:239
 #: .\project\templates\project\reports\per_assignedto.html:20
 #: .\project\templates\project\reports\per_assignedto.html:47
 #: .\project\templates\project\reports\per_status.html:21
@@ -1148,7 +1154,7 @@ msgstr "مهام مسندة لى "
 
 #: .\project\templates\project\project_followup.html:177
 #: .\project\templates\project\projects.html:202
-#: .\project\templates\project\tasks.html:226
+#: .\project\templates\project\tasks.html:228
 #: .\project\templates\project\tasks_from_external_dept.html:206
 msgid "Page"
 msgstr "صفحة"
@@ -1194,7 +1200,7 @@ msgstr "لا يمكن الرجوع عن هذا  الإجراء بعد الحذف
 #: .\project\templates\project\project_task_detail.html:55
 #: .\project\templates\project\tasks_from_external_dept.html:144
 #: .\project\templates\project\tasks_from_external_dept.html:157
-#: .\project\views.py:593
+#: .\project\views.py:598
 msgid "Finish Task"
 msgstr "إنهاء"
 
@@ -1607,7 +1613,7 @@ msgstr "تم حفظ المهام بنجاح"
 msgid "Post Done"
 msgstr "تم تغيير الحاله بنجاح"
 
-#: .\project\timesheet.py:383 .\project\views.py:1404
+#: .\project\timesheet.py:383 .\project\views.py:1420
 msgid "Edit complete"
 msgstr "تم التعديل بنجاح"
 
@@ -1627,131 +1633,127 @@ msgstr "تم تحديث المشروع بنجاح"
 msgid "Edit Project"
 msgstr "تعديل المشروع"
 
-#: .\project\views.py:420
+#: .\project\views.py:425
 msgid "Project has deleted successfully"
 msgstr "تم حذف المشروع بنجاح"
 
-#: .\project\views.py:558
+#: .\project\views.py:563
 msgid "Update start date for task by"
 msgstr "تم تحديث وقت بدء المهمة"
 
-#: .\project\views.py:563
+#: .\project\views.py:568
 msgid "Start Date Updated successfully"
 msgstr "تم تعديل تاريخ إغلاق المهمه بنجاح"
 
-#: .\project\views.py:597
+#: .\project\views.py:602
 msgid "Finished"
 msgstr "منجزة"
 
-#: .\project\views.py:598
+#: .\project\views.py:603
 msgid " Finish Date Updated successfully"
 msgstr "تم تعديل تاريخ إغلاق المهمه بنجاح"
 
-#: .\project\views.py:618 .\project\views.py:658
+#: .\project\views.py:623 .\project\views.py:663
 msgid "Enter a reason ."
 msgstr "الرجاء إدخال السبب"
 
-#: .\project\views.py:633
+#: .\project\views.py:638
 msgid "Close Task by"
 msgstr "إغلاق المهمه"
 
-#: .\project\views.py:638
+#: .\project\views.py:643
 msgid " Close Date Updated successfully"
 msgstr "تم تعديل تاريخ إغلاق المهمه بنجاح"
 
-#: .\project\views.py:672
+#: .\project\views.py:677
 msgid "Cancel Task by "
 msgstr "سبب الإلغاء"
 
-#: .\project\views.py:677
+#: .\project\views.py:682
 msgid "Task has been cancelled successfully"
 msgstr "تم تعديل تاريخ إلغاء المهمه بنجاح"
 
-#: .\project\views.py:697
+#: .\project\views.py:702
 msgid "Enter a note ."
 msgstr "الرجاء إدخال السبب"
 
-#: .\project\views.py:709
+#: .\project\views.py:714
 msgid "Task Pause by"
 msgstr "ايقاف بواسطة"
 
-#: .\project\views.py:714
+#: .\project\views.py:719
 msgid "Task has been continuous successfully"
 msgstr "تم تعديل حالة المهمه بنجاح"
 
-#: .\project\views.py:842 .\project\views.py:845 .\project\views.py:847
+#: .\project\views.py:847 .\project\views.py:850 .\project\views.py:852
 msgid "Add new Task By"
 msgstr "إضافة مهمة جديدة بواسطة"
 
-#: .\project\views.py:842 .\project\views.py:845
+#: .\project\views.py:847 .\project\views.py:850
 msgid "And Assign to"
 msgstr "وتم إسنادها الى"
 
-#: .\project\views.py:849
+#: .\project\views.py:854
 msgid "Task Added"
 msgstr "مهام منجزة"
 
-#: .\project\views.py:867
+#: .\project\views.py:883
 msgid "Task has been deleted successfully"
 msgstr "تم حذف المهمة بنجاح"
 
-#: .\project\views.py:890
+#: .\project\views.py:906
 msgid "Enter select assigntype"
 msgstr "أختر نوع الإسناد"
 
-#: .\project\views.py:943
+#: .\project\views.py:959
 msgid " by "
 msgstr "بواسطة"
 
-#: .\project\views.py:943 .\project\views.py:944 .\project\views.py:956
+#: .\project\views.py:959 .\project\views.py:960 .\project\views.py:972
 msgid "Assign Task to"
 msgstr "إسناد الى"
 
-#: .\project\views.py:952
+#: .\project\views.py:968
 msgid "Task has been asigned to you in PMS"
 msgstr "تم إسناد مهمة إليك على نظام إدارة المشاريع"
 
-#: .\project\views.py:953
+#: .\project\views.py:969
 msgid "Click Here"
 msgstr ""
 
-#: .\project\views.py:954
-msgid "Project Name : "
-msgstr "أسم المشروع"
-
-#: .\project\views.py:955
+#: .\project\views.py:971
 msgid "by"
 msgstr "بواسطة"
 
-#: .\project\views.py:957
+#: .\project\views.py:973
 msgid "Assigne Date"
 msgstr "تاريخ الإسناد "
 
-#: .\project\views.py:965
+#: .\project\views.py:981
 msgid "Task has been assigned successfully"
 msgstr "تم تعديل تاريخ إلغاء المهمه بنجاح"
 
-#: .\project\views.py:1002
+#: .\project\views.py:1018
 msgid "Task Progress chenged by "
 msgstr "تغيير حالة المهمة بواسطة"
 
-#: .\project\views.py:1004
+#: .\project\views.py:1020
 msgid "Progress Updated successfully for Task number"
 msgstr "تم تعديل نسبة الانجاز بنجاح"
 
-#: .\project\views.py:1090
+#: .\project\views.py:1106
 msgid " Task has been updated successfully "
 msgstr "تم إنشاء المشروع بنجاح"
 
-#: .\project\views.py:1092
+#: .\project\views.py:1108
 msgid "Edit Task successfully by"
 msgstr "تم تعديل المهمه بواسطه"
 
-#: .\project\views.py:1377
+#: .\project\views.py:1393
 msgid "Add complete"
 msgstr "تمت الإضافة بنجاح"
 
-#: .\project\views.py:1421 .\project\views.py:1433
+#: .\project\views.py:1437 .\project\views.py:1449
 msgid "No Delegations"
 msgstr "عفواً, لايوجد تفويضات"
 
@@ -1766,6 +1768,9 @@ msgstr "Arabic"
 #: .\tms\urls.py:13
 msgid "Task Management System cp"
 msgstr "لوحة تحكم نظام إدارة المهام"
+
+#~ msgid "Project Name : "
+#~ msgstr "أسم المشروع"
 
 #~ msgid "Finished on Date"
 #~ msgstr "تاريخ الإنجاز"

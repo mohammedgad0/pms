@@ -79,7 +79,7 @@
                         <tr>
                            <th scope="row">{{task.id}}</th>
                            {# <td>{{task.name}}</td> #}
-                           <td><a href="{%if task.project.id%}{% url 'ns-project:project-task-detail' task.project.id task.id %} {%endif%}" class="blue" >  {{ task.name }}</a></td>
+                           <td><a href="{%if task.project.id%}{% url 'ns-project:project-task-detail' task.project.id task.id %} {%endif%}" class="blue" > {{ task.name|truncatechars:60 }}</a></td>
                            <td><a href="{%if task.project.id%}{% url 'ns-project:project-detail' task.project.id %}{%endif%}" class="blue" >  {{ task.project.name }}</a></td>
                            <td>{{task.startdate|date:'d-M-Y'}}</td>
                            <td>{{task.enddate|date:'d-M-Y'}}</td>
