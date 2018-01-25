@@ -54,14 +54,14 @@
                               </ul>
                            </li>
                         </ul>
-                        {% if request.user|has_group:"ismanager" or  request.session.EmpID == project_detail.delegationto.empid  %}
+                        {% if  request.session.EmpID == project_detail.delegationto.empid or request.user|has_group:"ismanager" and request.session.EmpID == project_detail.createdby.empid   %}
                         <ul class="nav nav-pills navbar-left" role="tablist" style="margin-top:5px;">
                            <!-- <a href="{% url 'ns-project:add-project' %}" class="float-left" style="float:left" >  <button type="button" class="btn btn-primary btn-md"> <i class="fa fa-th-list"></i>  {% trans "Ad Task" %}</button></a> -->
                            <a href="{% url 'ns-project:add-task' project_detail.id  %}" class="float-left" style="float:left"> <button type="button" class="btn btn-primary btn-md">  <i class="fa fa-plus"></i>  {{ _('Ad Task') }} </button></a>
-
-                        {% endif %}
-                        <a href="{% url 'ns-project:kanban' project_detail.id  %}" class="float-left" style="float:left"> <button type="button" class="btn btn-default btn-md" style="color:#2e6da4;">  <i class="fa fa-th"></i>  {{ _('Kanban') }} </button></a>
+  <a href="{% url 'ns-project:kanban' project_detail.id  %}" class="float-left" style="float:left"> <button type="button" class="btn btn-default btn-md" style="color:#2e6da4;">  <i class="fa fa-th"></i>  {{ _('Kanban') }} </button></a>
                         <a href="{% url 'ns-project:project-gantt' project_detail.id  %}" class="float-left" style="float:left"> <button type="button" class="btn btn-default btn-md" style="color:#2e6da4;">  <i class="fa fa-calendar"></i>  {{ _('Gantt Chart') }} </button></a>
+                        {% endif %}
+                      
  </ul>
                      </div>
 
@@ -292,13 +292,16 @@
    $("#task-table").on("click", ".update-task-start", loadForm);
    $("#modal-task").on("submit", ".task-update-start-form", saveForm);
 
+   //pause task
+   $("#task-table").on("click", ".update-task-pause", loadForm);
+   $("#modal-task").on("submit", ".update-pause-task-form", saveForm);
 
    //update task finish date and staus
    $("#task-table").on("click", ".update-finish-task", loadForm);
    $("#modal-task").on("submit", ".update-finish-task-form", saveForm);
 
    //progress task
-   $(".task-ctions").on("click", ".update-task-progress", loadForm);
+   $("#task-table").on("click", ".update-progress-task", loadForm);
    $("#modal-task").on("submit", ".update-progress-task-form", saveForm);
 
    //update task close date and staus

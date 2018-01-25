@@ -198,7 +198,7 @@ class EditTaskForm(ModelForm):
     assigned_to=forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control','placeholder':_('Responsible'),'required': False,}),required=False)
     class Meta:
         model = Task
-        fields = ['name','desc','startdate','enddate','finisheddate','assigntype','departement','status','assignedto','progress']
+        fields = ['name','desc','startdate','enddate','finisheddate','assigntype','status','progress']
         widgets = {
             'name':TextInput(attrs={'class': 'form-control','placeholder':_('Task Name'),'required': True}),
             'desc': Textarea(attrs={'class':'form-control','placeholder':_('Task Details'),'required': True}),
@@ -251,21 +251,21 @@ class EditTaskForm(ModelForm):
 class TaskStartForm(forms.Form):
        rsd = forms.DateField(label=_("Real Start Date"),
        widget=forms.DateInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Real Start Date'),'required': True}))
-       notes = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':'Notes', 'size': '40','required': False}), required=False,error_messages={'required': 'note'})
+       notes = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':'Notes', 'size': '40','required': False}), required=False,error_messages={'required': 'note'},label=_('Note'))
 
 class TaskFinishForm(forms.Form):
        ftime = forms.DateField(label=_("Finished on"),
-       widget=forms.DateInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Finished on Date'),'required': True}))
-       notes = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':'Notes', 'size': '40','required': False}), required=False,error_messages={'required': 'notes'})
+       widget=forms.DateInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Finished Date'),'required': True}))
+       notes = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':'Notes', 'size': '40','required': False}), required=False,error_messages={'required': 'notes'},label=_('Note'))
 
 class TaskCloseForm(forms.Form):
        ctime = forms.DateField(label=_("Closed on"),required=False,
        widget=forms.DateInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Closed on Date'),'required': False}))
-       reason = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Please enter a reason to Close "), 'size': '40','required': True}),required=True, max_length=500, error_messages={'required': _('Reason'),'label':_("Reason"),},)
+       reason = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Please enter a reason to Close "), 'size': '40','required': True}),required=True, max_length=500, error_messages={'required': _('Reason')},label=_("Reason"))
 
 class TaskProgressForm(ModelForm):
-      progress = forms.IntegerField(validators=[ MaxValueValidator(100, message="Progress Over 100"),MinValueValidator(0, message="Progress less 0")],min_value=0, max_value=100)
-      note = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':'Notes', 'size': '40','required': False}), required=False,error_messages={'required': 'notes'})
+      progress = forms.IntegerField(validators=[ MaxValueValidator(100, message="Progress Over 100"),MinValueValidator(0, message="Progress less 0")],min_value=0, max_value=100,label=_('Progress'))
+      note = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':'Notes', 'size': '40','required': False}), required=False,error_messages={'required': 'notes'},label=_('Note'))
 
       class Meta:
         model = Task
@@ -289,10 +289,10 @@ class TaskProgressForm(ModelForm):
         }
 
 class TaskCancelForm(forms.Form):
-       reason = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Reason"),'placeholder':_("Please enter a reason to cancel"), 'size': '40','required': 'True'}),required=True, max_length=500, error_messages={'required': 'note'})
+       reason = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Reason"),'placeholder':_("Please enter a reason to cancel"), 'size': '40','required': 'True'}),required=True, max_length=500, error_messages={'required':  _('Reason')},label=_('Reason'))
 
 class TaskPauseForm(forms.Form):
-       note = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Note"),'placeholder':_("Note"), 'size': '40','required': 'True'}),required=True, max_length=500, error_messages={'required': 'note'})
+       note = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'size': '40','required': 'True'}),required=True, max_length=500, error_messages={'required': 'note'},label=_('Note'))
 
 
 
@@ -307,8 +307,8 @@ class TeamForm(forms.Form):
 class TaskAssignToForm(forms.Form):
       CHOICES=CHOICES=[('emp',_('Employee')),('dept',_('Departement'))]
       assigntype =forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect(attrs={'class':''}),initial="emp",label=_('Assign Type'))
-      employee = TeamModelChoiceField(queryset=Employee.objects.none(),to_field_name="empid" ,empty_label=_("Select Employee"),widget=forms.Select(attrs={'class': 'chosen form-control col-md-8'} ),required=True,error_messages={'required': _('Select Employee')})
-      departement = FollowupModelChoiceField(queryset=Department.objects.all(), to_field_name="deptcode",empty_label=_("Select Departement"),widget=forms.Select(attrs={'class': 'chosen  form-control col-md-3',} ),error_messages={'required': _('Select Departement')},required=True)
+      employee = TeamModelChoiceField(queryset=Employee.objects.none(),to_field_name="empid" ,empty_label=_("Select Employee"),widget=forms.Select(attrs={'class': 'chosen form-control col-md-8'} ),required=True,error_messages={'required': _('Select Employee')},label=_('Employee'))
+      departement = FollowupModelChoiceField(queryset=Department.objects.all(), to_field_name="deptcode",empty_label=_("Select Departement"),widget=forms.Select(attrs={'class': 'chosen  form-control col-md-3',} ),error_messages={'required': _('Select Departement')},required=True,label=_('Departement'))
 
 class FollowupForm(forms.Form):
       department=[]

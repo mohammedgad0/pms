@@ -141,7 +141,7 @@
               <div class="col-md-4 col-sm-4 col-xs-12">
 
         <fieldset class="fieldset_normal">
-        <legend>{{_("Basci Info")}}</legend>
+        <legend>{% trans "Basci Info" %}</legend>
 
    <ul class="list-unstyled">
                       <li class="clearfix"><div class="basic_info_lable col-md-4 float-right">{{_("project Name")}}</div> <div class="basic_info  col-md-7">{{project_detail.name}} </div>
@@ -185,13 +185,13 @@
         <legend>{{_("Actions")}}</legend>
 
    <ul class="list-unstyled">
-                      <li class="clearfix"><div class="basic_info_lable col-md-4 float-right">{{_("Created By")}}</div> <div class="basic_info  col-md-7 float-right">{{ createdby.empname}}</div>
+                      <li class="clearfix"><div class="basic_info_lable col-md-4 float-right">{{_("Created By")}}</div> <div class="basic_info  col-md-7 float-right">{{ task.createdby.empname}}</div>
                       </li>
-                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Finished By")}}</div> <div class="basic_info col-md-7 float-right">  {{ finishedby.empname }}</div>
+                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Finished By")}}</div> <div class="basic_info col-md-7 float-right">  {{ task.finishedby.empname }}</div>
                       </li>
-                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Cancelled By")}}</div><div class="basic_info col-md-7 float-right">  {{cancelledby.empname}}</div>
+                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Cancelled By")}}</div><div class="basic_info col-md-7 float-right">  {{task.cancelledby.empname}}</div>
                       </li>
-                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Closed By")}}</div> <div class="basic_info col-md-7 float-right">  {{closedby.empname}}</div>
+                      <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Closed By")}}</div> <div class="basic_info col-md-7 float-right">  {{task.closedby.empname}}</div>
                       </li>
                       <li class="clearfix"><div class="basic_info_lable  col-md-4 float-right">{{_("Cancelled Reason")}}</div> <div class="basic_info  col-md-7 float-right"> {{task.mailto}}</div>
                       </li>
