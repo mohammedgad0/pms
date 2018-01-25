@@ -903,20 +903,32 @@ def updateTaskAssignto(request,pk,save=None):
             #id save == true then save form dta
             if save !="False" :
                  if  employee :
-                    _emp_obj=Employee.objects.get(empid__exact= int(form.cleaned_data['employee'].empid))
-                    _obj.assignedto=_emp_obj
-                    _assign=form.cleaned_data['employee'].empname
-                    _obj.departement=get_object_or_404(Department,deptcode__exact= _emp_obj.deptcode)
-                    _receiver=_emp_obj.email
+                     try:
+                         _emp_obj=Employee.objects.get(empid__exact= int(form.cleaned_data['employee'].empid))
+                     except:
+                         _emp_obj=None
+                     if _emp_obj is not None:    
+                        _obj.assignedto=_emp_obj
+                        _assign=form.cleaned_data['employee'].empname
+                        _obj.departement=get_object_or_404(Department,deptcode__exact= _emp_obj.deptcode)
+                        _receiver=_emp_obj.email
 
                  elif departement :
-                    _dpt_obj=Department.objects.get(deptcode__exact= int(form.cleaned_data['departement'].deptcode))
-                    _obj.departement=_dpt_obj
-                    _assign=form.cleaned_data['departement'].deptname
-                    _obj.assignedto=None
-                    #manager
-                    manager_obj=Employee.objects.get(empid__exact= int(_dpt_obj.managerid))
-                    _receiver=manager_obj.email
+                     try :
+                         _dpt_obj=Department.objects.get(deptcode__exact= int(form.cleaned_data['departement'].deptcode))
+                     except: 
+                          _dpt_obj=None
+                     if _dpt_obj is not None:     
+                        _obj.departement=_dpt_obj
+                        _assign=form.cleaned_data['departement'].deptname
+                        _obj.assignedto=None
+                        #manager
+                        try:
+                            manager_obj=Employee.objects.get(empid__exact= _dpt_obj.managerid)
+                            _receiver=manager_obj.email
+                        except:
+                            _receiver="sakr@stats.gov.sa"
+                            
                  _obj.assigneddate=datetime.now()
                #  _obj.cancelleddate=None
                #  _obj.cancelledby=None
@@ -931,13 +943,21 @@ def updateTaskAssignto(request,pk,save=None):
                  update_change_reason(_obj,_(" by ")+ request.session['EmpName'] +"  ," +  _("Assign Task to")+  str(_assign))
                  messages.success(request, "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>"+_("Assign Task to")+"  "+_assign, fail_silently=True,)
                  #send email notification
+                 _sender = empObj.email
                  if _receiver is not None :
                      try:
-                         message=_obj.name+'<br><a href="http://'+request.get_host()+'/project/project_task_detail/'+str(_obj.project.id)+'/'+str(_obj.id)+'">'+_('Click Here')+'</a>'
-                         message=message+'<br>'+_(" by ")+request.session['EmpName'] +"<br>" +  _("Assign Task to")+  str(_assign)+_(' in ')+str(_obj.assigneddate)
-                         subject =_('Task has been asigned to you')
+                        
+                         if _sender is  None:
+                            _sender="portal.stats.gov.sa"
+                         subject =_('Task has been asigned to you in PMS')
+                         message='<b>'+_obj.name+'</b>'+'<br><a href="http://'+request.get_host()+'/project/project_task_detail/'+str(_obj.project.id)+'/'+str(_obj.id)+'">'+_('Click Here')+'</a>'+'<br>'
+                         message=message+ "<br>---------------<br> "+_('Project Name')+": "+_obj.project.name
+                         message=message+'<br>'+_("by")+': '+request.session['EmpName'] +"<br>" 
+                         message=message+ _("Assign Task to")+':  '+  str(_assign)+'<br>'
+                         message=message+_('Assigne Date')+': '+str(_obj.assigneddate)+'<br>'
+
                          #str(_obj.assignedto.email) to be add in next line
-                         send_mail(subject,message,'sakr@stats.gov.sa',['sakr@stats.gov.sa'],fail_silently=False,html_message=message,)
+                         send_mail(subject,message,_sender,[_receiver],fail_silently=False,html_message=message,)
                      except:
                          pass
             data['form_is_valid'] = True
