@@ -276,6 +276,7 @@ def ProjectList(request,project_status=None):
     ).order_by('-id')
 
     #project  filter by status 
+    
     if project_status =="all" :
          project_list=project_list
     elif  project_status =="delegations":
@@ -289,7 +290,8 @@ def ProjectList(request,project_status=None):
     elif project_status is not None :
          project_status = project_status.lower()
          project_list=project_list.filter(status__name__exact=project_status)
-    
+    else:
+        project_status="all"
 
     for project in project_list:
         task_list = Task.objects.all().filter(project__id= project.id)
@@ -314,7 +316,7 @@ def ProjectList(request,project_status=None):
         # If page is out of range (e.g. 9999), deliver last page of results.
         _plist = paginator.page(paginator.num_pages)
 
-    context = {'project_list':_plist , 'aDict':aDict,'tasks_list':tasks_list,"project_id":project_id}
+    context = {'project_list':_plist , 'aDict':aDict,'tasks_list':tasks_list,"project_id":project_id,'project_status':project_status}
     return render(request, 'project/projects.html', context)
 
 @login_required
@@ -973,6 +975,8 @@ def updateTaskAssignto(request,pk,save=None):
                          message=message+_('Assigne Date')+': '+str(_obj.assigneddate)+'<br>'
 
                          #str(_obj.assignedto.email) to be add in next line
+                         _sender="sakr@stats.gov.sa"
+                         _receiver="sakr@stats.gov.sa"
                          send_mail(subject,message,_sender,[_receiver],fail_silently=False,html_message=message,)
                      except:
                          pass

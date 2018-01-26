@@ -16,10 +16,11 @@
       <div class="row">
          <div class="col-md-12">
             <div class="x_panel">
-               <div class="x_title" style="background-color: ;" >
-                  <nav class="navbar "  style="background-color: ;">
+             
+                                <nav   role="tablist"  style="background-color:#F5F7FA;padding: 0px 5px 0px;">
+
                      <div class="container-fluid">
-                        <ul class="nav nav-pills navbar-right" role="tablist">
+                        <ul class="nav nav-pills navbar-right custom-nav" role="tablist">
                            <li role="presentation" class={% if request.resolver_match.kwargs.task_status == 'all' or  request.resolver_match.kwargs.task_status == None %}  {{'active'}} {% else  %} {{'inactive' }} {% endif  %}><a href="{% url 'ns-project:project-task' project_detail.id 'all' %}">{{ _('All Project Tasks')}} </a></li>
 <li role="presentation"   class={% if request.resolver_match.kwargs.task_status == 'unclosed' %}  {{'active'}} {% else  %} {{'inactive' }} {% endif  %} >
  <a href="{% url 'ns-project:project-task' project_detail.id 'unclosed' %}" >{{ _('Open Tasks')}} </a></li>
@@ -69,7 +70,7 @@
                   </nav>
 
                   <div class="clearfix"></div>
-               </div>
+             
                <div class="x_content">
 
 

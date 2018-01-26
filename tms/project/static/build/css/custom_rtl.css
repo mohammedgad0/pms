@@ -1571,8 +1571,8 @@ table.jambo_table {
 }
 
     table.jambo_table thead {
-        background: rgba(52, 73, 94, 0.94);
-        color: #ECF0F1
+     background: rgb(237, 237, 237);
+    color: #2a3f54;
     }
 
     table.jambo_table tbody tr:hover td {
@@ -5215,3 +5215,6 @@ legend {
     50% { opacity: 0.0; }
     100% { opacity: 1.0; }
 }
+
+.custom-nav{padding-top: 5px;}
+.custom-nav > li > a{    padding: 5px 10px 10px;}
