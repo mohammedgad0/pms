@@ -192,26 +192,17 @@
                      {% now "Y-m-d" as current_date %}
 
                      {% if task.enddate|date:"Y-m-d" < current_date and task.status != "Done" %}
-                                             <div class="commitment-down text-danger">
-
+                    <div class="commitment-down text-danger">
                     <i class="fa fa-level-down"></i> متأخر
-
-
-
                    </div>
                      {% else %}
-                                      <div class="commitment-up text-success">
-
-                                      <i class="fa fa-level-up"></i> ملتزم
-
-
-                       </div>
-                     {%endif%}
+                   <div class="commitment-up text-success">
+                   <i class="fa fa-level-up"></i> ملتزم
+                   </div>
+                    {%endif%}
                      </td>
-
                      <td>{% trans task.status %}</td>
-                         <td>{{  task.enddate|date:"Y-m-d" }}</td>
-
+                     <td>{{  task.enddate|date:"Y-m-d" }}</td>
 
                   </tr>
                   {%endif%}
@@ -321,8 +312,8 @@ google.charts.load('current', {'packages':['gauge']});
         var data = google.visualization.arrayToDataTable([
           ['Task', 'Hours per Day'],
           ['{{_("New")}}',     {{ pie_tasks.New}}],
-           ['{{_("Hold")}}',      {{ pie_tasks.Hold}}],
-        ['{{_("InProgress")}}',     {{ pie_tasks.InProgress}}],
+          ['{{_("Hold")}}',      {{ pie_tasks.Hold}}],
+          ['{{_("InProgress")}}',     {{ pie_tasks.InProgress}}],
           ['{{_("Done")}}',      {{ pie_tasks.Done}}],
           ['{{_("Canceled")}}',     {{ pie_tasks.Canceled}}],
           ['{{_("Closed")}}',     {{ pie_tasks.Closed}}],

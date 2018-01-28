@@ -176,6 +176,8 @@ def index(request):
 def Dashboard(request):
     if  request.user.groups.filter(name="ismanager").exists() == True:
         return HttpResponseRedirect(reverse('ns-project:dashboard-manager'))
+    elif  request.user.groups.filter(name="projectmanager").exists() == True:
+        return HttpResponseRedirect(reverse('ns-project:dashboard-pm'))
     else:
         return HttpResponseRedirect(reverse('ns-project:dashboard-employee'))
         
@@ -1265,15 +1267,35 @@ def DashboardManager(request):
     end_date = datetime.now()
     task_based_department = dept_task_indicators(dept_code,start_date,end_date)
     pie_tasks=_dept_tasks_statistics(dept_code,start_date,end_date)
-    open_projects=_dept_open_pojects(dept_code,start_date,end_date)
+    open_projects=_dept_open_pojects(request,dept_code,start_date,end_date)
     per_indicator = indicators(dept_code,start_date,end_date)
     project_kpi=_project_kpi(dept_code, start_date, end_date)
-    open_tasks=_open_tasks(dept_code, start_date, end_date)
+    open_tasks=_open_tasks(request,dept_code, start_date, end_date)
     context = {"start_date":start_date,"end":end_date,"task_based_department":task_based_department,
                'pie_tasks':pie_tasks,"per_indicator":per_indicator,'open_projects':open_projects,'project_kpi':project_kpi,
                'open_tasks':open_tasks
                }
     return render(request, 'project/dashboard_manager.html', context)
+
+@login_required
+def DashboardPM(request):
+    from dateutil.relativedelta import relativedelta
+    from django.db.models import F
+    dept_code  = request.session['DeptCode']
+    start_date = datetime.now() - relativedelta(years=1)
+    end_date = datetime.now()
+    task_based_department = dept_task_indicators(dept_code,start_date,end_date)
+    pie_tasks=_dept_tasks_statistics(dept_code,start_date,end_date)
+    open_tasks=_open_tasks(request,dept_code, start_date, end_date)
+    open_projects=_dept_open_pojects(request,dept_code,start_date,end_date)
+    per_indicator = indicators(dept_code,start_date,end_date)
+    project_kpi=_project_kpi(dept_code, start_date, end_date)
+    
+    context = {"start_date":start_date,"end":end_date,"task_based_department":task_based_department,
+               'pie_tasks':pie_tasks,"per_indicator":per_indicator,'open_projects':open_projects,'project_kpi':project_kpi,
+               'open_tasks':open_tasks
+               }
+    return render(request, 'project/dashboard_pm.html', context)
 
 @login_required
 def DashboardEmployee(request,empid=None):
@@ -1328,12 +1350,19 @@ def _dept_tasks_statistics(deptcode,startdate,enddate):
     return tasks
 
 #@login_required
-def _dept_open_pojects(deptcode,startdate,enddate):
-
+def _dept_open_pojects(request,deptcode,startdate,enddate):
+    empid=request.session['EmpID']
     projectList=[]
-    projects= Project.objects.filter(
-        (Q(departement__deptcode__exact=deptcode) | Q(task__departement__deptcode__exact=deptcode) )
-        & ~Q(status__name__exact="Closed")).annotate(num_tasks=Count('task'))
+    if request.user.groups.filter(name__exact='ismanager').exists():
+        projects= Project.objects.filter(
+            (Q(departement__deptcode__exact=deptcode) | Q(task__departement__deptcode__exact=deptcode) )
+            & ~Q(status__name__exact="Closed")).annotate(num_tasks=Count('task'))
+    elif request.user.groups.filter(name__exact='projectmanager').exists():
+         projects= Project.objects.filter(
+            (Q(createdby__exact=empid) | Q(delegationto__exact=empid) )
+            & ~Q(status__name__exact="Closed")).annotate(num_tasks=Count('task'))
+    else:
+         return projectList   
 
     q=projects.query
     for project in projects :
@@ -1373,10 +1402,18 @@ def _project_kpi(deptcode,startdate,enddate):
     return projectKPI
 
 
-def _open_tasks(deptcode,startdate,enddate):
-    openTasks= Task.objects.filter(
-      (Q(departement__deptcode__exact= deptcode) | Q(project__departement__deptcode__exact= deptcode))
-        & ~Q(status__exact="Closed"))
+def _open_tasks(request,deptcode,startdate,enddate):
+    openTasks= None
+    empid= request.session['EmpID']
+    if request.user.groups.filter(name__exact='ismanager').exists():
+        openTasks= Task.objects.filter(
+          (Q(departement__deptcode__exact= deptcode) | Q(project__departement__deptcode__exact= deptcode))
+            & ~Q(status__exact="Closed"))
+    elif request.user.groups.filter(name__exact='projectmanager').exists():
+        openTasks= Task.objects.filter(
+          (Q(createdby__empid__exact = empid) | Q(assignedto__empid__exact= empid))
+            & ~Q(status__exact="Closed"))
+        
     return openTasks
 
 
