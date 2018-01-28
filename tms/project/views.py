@@ -841,6 +841,9 @@ def ProjectTeam(request,project_id):
 @login_required
 @permission_required('project.add_task', raise_exception=True)
 def AddTask(request,project_id):
+    project_detail= get_object_or_404(Project,pk=project_id)
+    current_url ="ns-project:" + resolve(request.path_info).url_name
+    project_list = _get_internal_external_projects( request)
     errors=[]
     data=dict()
     _empname =  request.session['EmpName']
@@ -854,8 +857,25 @@ def AddTask(request,project_id):
     if request.method=='POST':
         assignto_employee =  employee=request.POST.get('employee')
         assignto_department =  employee=request.POST.get('department_list')
+        #check start and end date inside project rang date
+        
         form = AddTaskForm(request.POST)
+        form.full_clean()
+        try:
+            form.full_clean()
+            if  form.cleaned_data['enddate'].date() < project_detail.start:
+                form.errors['enddate'] = form.error_class([_('task end date date is less than project start date')])
+            if  form.cleaned_data['enddate'].date() > project_detail.end:
+                form.errors['enddate'] = form.error_class([_('task end date date is bigger than project end date')])
+            if  form.cleaned_data['startdate'].date() < project_detail.start:
+                form.errors['startdate'] = form.error_class([_('task start date is less than project start date')])
+            if  form.cleaned_data['startdate'].date() > project_detail.end:
+                form.errors['startdate'] = form.error_class([_('task start date is bigger than project end date')])
+        except:
+            pass
+           
         if form.is_valid():
+       
             # form.save()
             empObj=get_object_or_404(Employee,empid__exact=request.session.get('EmpID'))
             Task_obj = form.save(commit=False)
@@ -905,7 +925,7 @@ def AddTask(request,project_id):
         data['errors'] = errors.append(form.errors)
 
 
-    context ={'upload_file':FormSet, 'form':form,'errors':errors}
+    context ={'upload_file':FormSet, 'form':form,'errors':errors,'project_detail':project_detail,'project_list':project_list,'current_url':current_url}
     return render (request,'project/add_task.html', context)
 
 @login_required
@@ -1086,6 +1106,20 @@ def ProjectTaskEdit(request,projectid,taskid):
     elif task_detail.departement is not None :
            form.fields["assigned_to"].initial=task_detail.departement.deptcode
 
+    if request.method=='POST':
+        try:
+            form.full_clean()
+            if  form.cleaned_data['enddate'].date() < project_detail.start:
+                form.errors['enddate'] = form.error_class([_('task end date date is less than project start date')])
+            if  form.cleaned_data['enddate'].date() > project_detail.end:
+                form.errors['enddate'] = form.error_class([_('task end date date is bigger than project end date')])
+            if  form.cleaned_data['startdate'].date() < project_detail.start:
+                form.errors['startdate'] = form.error_class([_('task start date is less than project start date')])
+            if  form.cleaned_data['startdate'].date() > project_detail.end:
+                form.errors['startdate'] = form.error_class([_('task start date is bigger than project end date')])
+        except:
+            pass
+        
     #validate and save
     if form.is_valid():
         instance=form.save(commit=False)
@@ -1383,7 +1417,8 @@ def Download(request,file_name):
 #kanban view
 def Kanban (request,pk):
     project_detail= get_object_or_404(Project,pk=pk)
-
+    current_url ="ns-project:" + resolve(request.path_info).url_name
+    
     if  request.session['EmpID'] == project_detail.createdby.empid :
         tasks= Task.objects.filter(project__id__exact=pk).order_by('startdate')
     elif project_detail.delegationto is not None and  request.session['EmpID'] == project_detail.delegationto.empid :
@@ -1402,7 +1437,7 @@ def Kanban (request,pk):
     Q(id__in = pk)
     ).exclude(status=4).order_by('-id')
 
-    current_url ="ns-project:" + resolve(request.path_info).url_name
+    
     context={'tasks':tasks,'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'new_tasks':new_tasks,'inprogress_tasks':inprogress_tasks,'done_tasks':done_tasks,'hold_tasks':hold_tasks,'cancelled_tasks':cancelled_tasks,'closed_tasks':closed_tasks}
     return render(request, 'project/kanban.html', context)
 
@@ -1499,9 +1534,9 @@ def mydelegation(request):
 
 def _get_internal_external_projects(request):
     deptcode = request.session['DeptCode']
-    if request.user.groups.filter(name="ismanager").exists():
+    if request.user.groups.filter(name__in=['ismanager','projectmanager']).exists():
          projects=Project.objects.filter(
-             (Q(task__project__departement__deptcode__exact=deptcode)| Q(task__departement__deptcode__exact=deptcode)|   Q( delegationto__exact=request.session['EmpID']))
+             (Q(createdby__empid=request.session['EmpID'])| Q( delegationto__exact=request.session['EmpID']) |Q( task__assignedto__empid__exact=request.session['EmpID']))
                                         ).annotate(dcount=Count('task')).order_by('-id')
     else:
        projects=Project.objects.filter(
