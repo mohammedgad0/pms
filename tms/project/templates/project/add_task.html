@@ -40,8 +40,10 @@
          <div class="col-md-12">
             <div class="x_panel">
                <div class="x_title">
-                  <h3>{% trans "Add Task" %}</h3>
+                  <h2>{% trans "Add Task" %}</h2>
                   <ul class="nav navbar-right panel_toolbox">
+                                    <a href="{{request.META.HTTP_REFERER}}" >  <button type="button" class="btn btn-primary">{{ _('Back')}} <i class="fa fa-angle-double-left"></i> </button></a>
+                  
                   </ul>
                   <div class="clearfix"></div>
                </div>
@@ -130,7 +132,7 @@
                         <div class="form-group">
                            <div class="ln_solid"></div>
                            <div class="col-md-12 col-sm-12 col-xs-12 col-md-offset-3">
-                              <a href="{% url 'ns-project:project-list' %}" >  <button type="button" class="btn btn-primary"><i class="fa fa-angle-double-right"></i> {{ _('Back')}}</button></a>
+                              <a href="{{request.META.HTTP_REFERER}}" >  <button type="button" class="btn btn-primary"><i class="fa fa-angle-double-right"></i> {{ _('Back')}}</button></a>
                               <!--  <button class="btn btn-primary" type="reset">{{_('Reset')}}</button>-->
                               <button type="submit" class="btn btn-success">{{_('Submit')}}</button>
                            </div>

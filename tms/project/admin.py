@@ -11,7 +11,10 @@ from django.core import serializers
 
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponseRedirect
+from django.utils.translation import ugettext_lazy as _
 
+admin.site.site_title = _('Project Management System cp')
+admin.site.site_header = _('Project Management System cp')
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):

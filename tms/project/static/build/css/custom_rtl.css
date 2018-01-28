@@ -5146,9 +5146,9 @@ legend {
 .btn.btn-app{
  background-color: #ffffff;
  height:40px;
- padding: 10px 5px;
+ padding: 10px 0px 0px 5px;
  margin: 0 5px 5px 0;
-     min-width: 50px;
+     min-width: 40px;
 }
 .x_title h2 {
     white-space: normal;

@@ -1,6 +1,6 @@
 #email settings
-EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
-#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'   #for development test
+#EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'   #for development test
 EMAIL_HOST='gstat-ex01.stats.gov.sa'
 EMAIL_PORT=25
 EMAIL_HOST_USER=''
@@ -12,3 +12,9 @@ EMAIL_SSL_CERTFILE=None  #specify the path to a PEM-formatted certificate chain 
 EMAIL_SSL_KEYFILE=None #specify the path to a PEM-formatted private key file to use for the SSL 
 FILE_CHARSET='utf-8'
 FILE_UPLOAD_MAX_MEMORY_SIZE=2621440    #(i.e. 2.5 MB).
+
+
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_PORT=587
+EMAIL_HOST_USER='xxsherif82@gmail.com'
+EMAIL_HOST_PASSWORD='ford#1982'

@@ -12,10 +12,10 @@
       <div class="">
         <div class="page-title">
           <div class="title_left">
-                           <h3><i class="fa fa-warning text-danger"></i> {{ _('delete project confirmation') }} </h3>
 
           </div>
-
+   
+          
          
         </div>
 
@@ -24,7 +24,16 @@
         <div class="row">
           <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
+                <div class="x_title">
+              <h2><i class="fa fa-warning text-danger"></i> {{ _('delete project confirmation') }}</h2>
              
+                
+                <ul class="nav navbar-right panel_toolbox">
+                  <a href="{{request.META.HTTP_REFERER}}" >  <button type="button" class="btn btn-primary">{{ _('Back')}} <i class="fa fa-angle-double-left"></i> </button></a>
+             
+                </ul>
+                <div class="clearfix"></div>
+              </div>
               <div class="x_content">
               
               <div class="col-md-12 col-sm-12 col-xs-12">

@@ -32,7 +32,6 @@
 
               <h2> <b>{{project_detail.name}} </b> </h2>
               {% load user_group %}
-               <a href="{% url 'ns-project:project-list' %}"  style="float:left" >  <button type="button" class="btn btn-primary btn-md"> <i class="fa fa-th-list"></i>  {% trans "Projects List" %}</button></a>
 
                  {% if  project_detail.createdby.empid == request.session.EmpID  %}
                  <a href="{% url 'ns-project:project-delete' project_detail.id %}" style="float:left" >  <button type="button" class="btn btn-danger btn-md"> <i class="fa fa-trash-o"></i>  {% trans "Delete" %}</button></a>

@@ -40,6 +40,15 @@
            
          </div>
 
+              {% load user_group %}
+                 {% if request.user|has_group:"ismanager"  or request.user|has_group:"projectmanager" %}
+                   <ul class="nav nav-pills navbar-left custom-nav" role="tablist">
+                  <a href="{% url 'ns-project:add-project' %}" style="float:left" >  <button type="button" class="btn btn-default  btn-md"> <i class="fa fa-plus"></i>  {% trans "Ad Project" %}</button></a>
+                    <a href="{% url 'ns-project:project-report' %}" style="float:left" >  <button type="button" class="btn btn-default btn-md" style="color:#2e6da4;"> <i class="fa fa-bar-chart"></i>  {% trans "Reports" %}</button></a>
+                </ul>
+                  {% endif %}
+
+
       </div>
       <div class="clearfix"></div>
       <div class="row">
@@ -63,13 +72,7 @@
                      
                         </ul>
 
-                         {% load user_group %}
-                 {% if request.user|has_group:"ismanager" %}
-                   <ul class="nav nav-pills navbar-left custom-nav" role="tablist">
-                  <a href="{% url 'ns-project:add-project' %}" style="float:left" >  <button type="button" class="btn btn-default  btn-md"> <i class="fa fa-plus"></i>  {% trans "Ad Project" %}</button></a>
-                    <a href="{% url 'ns-project:project-report' %}" style="float:left" >  <button type="button" class="btn btn-default btn-md" style="color:#2e6da4;"> <i class="fa fa-bar-chart"></i>  {% trans "Reports" %}</button></a>
-                </ul>
-                  {% endif %}
+           
                  <!--  <a href="{% url 'ns-project:project-list' %}" style="float:left" > <button type="button" class="btn btn-primary btn-md">  <i class="fa fa-th-list"></i>  {% trans "Projects List" %} </button></a> -->
                  
                   <div class="clearfix"></div>

@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.contrib.auth.views import logout
 
-admin.site.site_header = _('Task Management System cp')
+admin.site.site_header = _('Project Management System cp')
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

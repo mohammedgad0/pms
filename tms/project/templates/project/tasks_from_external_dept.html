@@ -139,7 +139,7 @@
                      
                      {% if  task.status == "Cancelled" or task.status == "Done" or task.status == "Closed" %}
                           <li id="task-start"> <a href="#"    class="btn btn-app btn_app_custom disabled"><i class="fa fa-play fa-2x paction text-default "></i> </a> </li>
-                                                       <li  id="task-progress"> <a href="#"  class="btn btn-app btn_app_custom disabled"><i class="fa fa-external-link right fa-2x paction text-default" title="{{_('Task Progress')}}"></i></a> </li>
+                                                       <li  id="task-progress"> <a href="#"  class="btn btn-app btn_app_custom disabled"><i class="fa fa-clock-o right fa-2x paction text-default" title="{{_('Task Progress')}}"></i></a> </li>
 
                            <li  id="task-finish"> <a href="#"  class="btn btn-app btn_app_custom disabled"><i class="fa fa-check-square-o fa-2x paction text-default disabled" title="{{_('Finish Task')}}"></i></a> </li>
                            <li  id="task-cancel"> <a href="#"  class="btn btn-app btn_app_custom disabled"><i class="fa fa-ban fa-2x paction text-default" title="{{_('Cancel Task')}}"></i></a> </li>
@@ -160,8 +160,8 @@
                       {% endif %}
                         {% load user_group %}
                        
-                        {% if request.user|has_group:"ismanager" %}
-                     		 {% if  task.status == "Closed" or task.status == "Cancelled" %}
+                        {% if  task.project.delegationto.empid == request.session.EmpID or task.project.createdby.empid == request.session.EmpID  or task.departement.managerid == request.session.EmpID %}
+                     		 {% if  task.status == "Closed"  %}
                    			                                   <li  id="task-assignto">  <a href="#"  class="btn btn-app btn_app_custom disabled"> <i class="fa fa-hand-o-right fa-2x paction text-default" title="{{_('Assign To')}}"></i>  </a> </li>
 
                                 {% else %}

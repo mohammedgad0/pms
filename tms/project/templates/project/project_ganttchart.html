@@ -24,7 +24,11 @@ from pygments import style
      <div class="x_title">
 
               <h2>{% trans "Gantt Chart" %}  </h2>
-                 <div class="clearfix"></div>
+                    <ul class="nav navbar-right panel_toolbox">
+                                    <a href="{{request.META.HTTP_REFERER}}" >  <button type="button" class="btn btn-primary">{{ _('Back')}} <i class="fa fa-angle-double-left"></i> </button></a>
+                  
+                  </ul>
+                  <div class="clearfix"></div>
               </div>
              
                 <div class="x_content">
@@ -40,10 +44,8 @@ from pygments import style
       </div>
     </div>
     
-    <html>
-  <head>
- 
-  
+
+  {% if tasks.count  > 0 %}
   
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
@@ -82,13 +84,9 @@ from pygments import style
     }
 
     </script>
-  </head>
-  <body>
-    
-   <!--    <div id="chart_div" ></div> -->
-  
-  </body>
-</html>
+
+    {%endif%}
+
 
 </div>
 </div>

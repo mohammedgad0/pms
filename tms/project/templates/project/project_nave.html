@@ -1,5 +1,5 @@
 {% load i18n %}
-<ul class="nav nav-pills" role="tablist">
+<ul class="nav nav-pills navbar-right" role="tablist">
       <!-- project name select -->
       <li role="presentation" class="dropdown">
         <a id="drop6" href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false"> {{project_detail.name}} <span class="caret"></span></a>
@@ -17,10 +17,10 @@
       <li role="presentation"><a href="{% url 'ns-project:project-task' project_detail.id %}">{{_('Tasks')}} </a> </li>
 
       {% load user_group %}
-      {% if request.user|has_group:"ismanager" %}
+     {# {% if request.user|has_group:"ismanager" or  request.user|has_group:"projectmanager" %} #}
         <!-- team -->
       <li role="presentation"><a href="{% url 'ns-project:project-team'  project_detail.id %}">{{_('Team Members')}} </a>  </li>
-      {% endif %}
+     {#  {% endif %} #}
        <!-- project over view -->
       <li role="presentation"><a href="{% url 'ns-project:project-detail'  project_detail.id %}">{{_('Project Overview')}} </a>  </li>
                          <!--   <a href="{% url 'ns-project:project-list' %}"  style="float:left" >  <button type="button" class="btn btn-primary btn-md"> <i class="fa fa-th-list"></i>  {% trans "Projects List" %}</button></a> 
@@ -31,6 +31,10 @@
                -->
 
 
+
 </ul>
 
-                       
+     <ul class="nav nav-pills navbar-left custom-nav" role="tablist">
+                    <a href="{% url 'ns-project:project-list' %}"  style="float:left" >  <button type="button" class="btn btn-default btn-md"> <i class="fa fa-th-list"></i>  {% trans "Projects List" %}</button></a>
+     
+     </ul>                   

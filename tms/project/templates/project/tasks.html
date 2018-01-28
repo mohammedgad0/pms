@@ -55,15 +55,18 @@
                               </ul>
                            </li>
                         </ul>
-                        {% if  request.session.EmpID == project_detail.delegationto.empid or request.user|has_group:"ismanager" and request.session.EmpID == project_detail.createdby.empid   %}
-                        <ul class="nav nav-pills navbar-left" role="tablist" style="margin-top:5px;">
-                           <!-- <a href="{% url 'ns-project:add-project' %}" class="float-left" style="float:left" >  <button type="button" class="btn btn-primary btn-md"> <i class="fa fa-th-list"></i>  {% trans "Ad Task" %}</button></a> -->
-                           <a href="{% url 'ns-project:add-task' project_detail.id  %}" class="float-left" style="float:left"> <button type="button" class="btn btn-primary btn-md">  <i class="fa fa-plus"></i>  {{ _('Ad Task') }} </button></a>
-  <a href="{% url 'ns-project:kanban' project_detail.id  %}" class="float-left" style="float:left"> <button type="button" class="btn btn-default btn-md" style="color:#2e6da4;">  <i class="fa fa-th"></i>  {{ _('Kanban') }} </button></a>
-                        <a href="{% url 'ns-project:project-gantt' project_detail.id  %}" class="float-left" style="float:left"> <button type="button" class="btn btn-default btn-md" style="color:#2e6da4;">  <i class="fa fa-calendar"></i>  {{ _('Gantt Chart') }} </button></a>
-                        {% endif %}
+                        {#  request.user|has_group:"ismanager" or  request.user|has_group:"projectmanager" #}
                       
- </ul>
+                        <ul class="nav nav-pills navbar-left" role="tablist" style="margin-top:5px;">
+                     
+                        {% if  request.session.EmpID == project_detail.delegationto.empid  or  request.session.EmpID == project_detail.createdby.empid%}
+                        <a href="{% url 'ns-project:add-task' project_detail.id  %}" class="float-left" style="float:left"> <button type="button" class="btn btn-default btn-md">  <i class="fa fa-plus"></i>  {{ _('Ad Task') }} </button></a>
+                        {% endif %}
+                         <a href="{% url 'ns-project:kanban' project_detail.id  %}" class="float-left" style="float:left"> <button type="button" class="btn btn-default btn-md" style="color:#2e6da4;">  <i class="fa fa-th"></i>  {{ _('Kanban') }} </button></a>
+                        <a href="{% url 'ns-project:project-gantt' project_detail.id  %}" class="float-left" style="float:left"> <button type="button" class="btn btn-default btn-md" style="color:#2e6da4;">  <i class="fa fa-calendar"></i>  {{ _('Gantt Chart') }} </button></a>
+                    
+                      
+                        </ul>
                      </div>
 
 
@@ -165,7 +168,7 @@
                            <td>
                               <!-- user start task  -->
                              {% if  task.status == "Cancelled" or task.status == "Done" or task.status == "Closed" %}
-                              <i class="fa fa-play fa-2x paction  paction_disable" title="{% trans "Play" %}" id="p_{{task.id}}" ></i>
+                              <i class="fa fa-play fa-2x paction  paction_disable" title="{% trans 'Play' %}" id="p_{{task.id}}" ></i>
                               {% else %}
                                  {% if  task.status == "InProgress"    %}
                                  <a href="#" data-url="{% url 'ns-project:update-pause-task' task.id %}" class="update-task-pause" ><i class="fa fa-pause fa-2x paction  text-primary" title="{% trans "pause" %}" id="p_{{task.id}}" ></i> </a>
@@ -174,7 +177,7 @@
                                  {% endif %}
                               {% endif %}
                               <!-- user finish task -->
-                              {% if task.status == "Done"  or task.status == "Cancelled" or   task.status == "New"  %}
+                              {% if task.status == "Done"  or task.status == "Cancelled" or   task.status == "New" or task.status == "Closed" %}
                              <i class="fa fa-clock-o fa-2x paction  paction_disable" title="{% trans "Progress" %}"></i>
                               <i class="fa fa-check-square-o fa-2x paction  paction_disable" title="{% trans "Finish" %}"></i>
                                <i class="fa fa-ban fa-2x paction  paction_disable" title="{% trans "Cancel" %}"></i>

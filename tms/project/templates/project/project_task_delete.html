@@ -50,13 +50,11 @@
                           <div class="project_detail">
 
                             <p class="title">{{_('Created By')}}</p>
-                            <p>{{employee.empname}}</p>
+                            <p>{{task.createdby.empname}}</p>
                             <p class="title">{{_('Created Date')}}</p>
                             <p>{{task.createddate}}</p>
                             <p class="title">{{ _('Status')}}</p>
                             <p>
-
-                           
                            {% trans task.status %}
                              </p>
                           </div>
@@ -70,8 +68,8 @@
            <div class="text-center mtop20">
                             <form  action="" method="post" class="form-horizontal form-label-left input_mask" >
                  {% csrf_token %}
-                <a href="{% url 'ns-project:project-task-detail' project.id task.id %}" >  <button type="button" class="btn btn-primary"> <i class="fa fa-arrow-right"></i>  {{ _('Back')}}</button></a>
-                 <a href="{% url 'ns-project:project-task' project.id %}" >   <button type="button" class="btn btn-primary"><i class="fa fa-list"></i>  {{ _('Task List')}}</button></a>
+                <a href="{% url 'ns-project:project-task-detail' task.project.id task.id %}" >  <button type="button" class="btn btn-primary"> <i class="fa fa-arrow-right"></i>  {{ _('Back')}}</button></a>
+                 <a href="{% url 'ns-project:project-task' task.project.id %}" >   <button type="button" class="btn btn-primary"><i class="fa fa-list"></i>  {{ _('Task List')}}</button></a>
                    <button type="submit" class="btn btn-danger" title="{{_('Can not go back after delete this task ')}}"> <i class="fa fa-trash" title="{{_('Delete')}}"></i> {{_('Delete')}}</button>
                </form>
                           </div>

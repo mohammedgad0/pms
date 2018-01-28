@@ -30,6 +30,8 @@ from unittest.case import expectedFailure
 from django.core.mail import send_mail
 from django.template.context_processors import request
 from django.core.exceptions import ObjectDoesNotExist
+from django.template.loader import render_to_string, get_template
+from django.core.mail import EmailMessage
 
 def loginfromdrupal(request, email,signature,time):
     from django.contrib.auth import login
@@ -187,12 +189,13 @@ def gentella_html(request):
     template = loader.get_template('project/' + load_template)
     return HttpResponse(template.render(context, request))
 
-#@login_required
+@login_required
+@permission_required('project.add_project', raise_exception=True)
 def AddProject(request):
-    #check if user is manager 
-    if  request.user.groups.filter(name="ismanager").exists() ==False:
-        raise Http404("You do not have permission to add project")
-    
+#     #check if user is manager 
+#     if  request.user.groups.filter(name="ismanager").exists() ==False:
+#         raise Http404("You do not have permission to add project")
+#     
      # upload file form
     upload = modelformset_factory(Media,form=UploadFile,extra = 1)
     FormSet = upload(queryset=Media.objects.none())
@@ -333,14 +336,15 @@ def ProjectDetail(request,pk):
     attached_files= Media.objects.filter(project__id__exact=pk, task__id__exact=None)
     time_chart = {}
     project_time = []
+    dt= project_detail.end-project_detail.start
     for result in _perdelta(project_detail.start, project_detail.end , timedelta(days=7)):
-        tasks_list = Task.objects.filter(Q(project__exact = pk,startdate__lte = result)&
+        tasks_graph = Task.objects.filter(Q(project__exact = pk,startdate__lte = result)&
         ~Q(status='Closed'))
         # project_time.append(str(result))
         date = result.strftime('%Y,%m,%d')
         now_plus_10 = result - timedelta(days = 30)
         date = now_plus_10.strftime('%Y,%m,%d')
-        time_chart.update({str(date): tasks_list.count()})
+        time_chart.update({str(date): tasks_graph.count()})
     #print (date)
     allTakProgress = 0
     projectProgress=0
@@ -353,7 +357,7 @@ def ProjectDetail(request,pk):
     else :
         projectProgress=round(allTakProgress/len(tasks_list), 2)
 
-
+    #print (dt.days)
     history=Task.history.filter(project=pk)[:5:1]
     project_list = _get_internal_external_projects( request)
     current_url ="ns-project:" + resolve(request.path_info).url_name
@@ -363,6 +367,7 @@ def ProjectDetail(request,pk):
     return render(request, 'project/project_detail.html', context)
 
 @login_required
+@permission_required('project.change_project', raise_exception=True)
 def ProjectEdit(request,pk):
     #edit permission for createdby or delegationto only 
     try:
@@ -374,9 +379,14 @@ def ProjectEdit(request,pk):
     FormSet = upload(queryset=Media.objects.filter(project__id__exact=pk,task__id__exact=None).exclude(Q(filepath__exact=None)| Q(filepath__exact=''))) 
     #project form
     form = ProjectForm(request.POST or None, instance=instance)
-    if request.user.groups.filter(name="ismanager").exists() == False and instance.delegationto.empid == request.session['EmpID']:
-        form.fields["delegationto"].queryset = Employee.objects.filter(empid__exact = instance.delegationto.empid)
-        form.fields["delegationto"].disabled=True
+    #if user has delegation on project
+    try:
+        if  instance.delegationto.empid == request.session['EmpID']:
+            form.fields["delegationto"].queryset = Employee.objects.filter(empid__exact = instance.delegationto.empid)
+            form.fields["delegationto"].disabled=True
+    except :
+        pass
+                
    
     if form.is_valid():
         instance=form.save()
@@ -403,9 +413,11 @@ def ProjectEdit(request,pk):
     return render(request, 'project/add_project.html', {'form': form,'upload_file':FormSet,'action_name': _('Edit Project'),'project':instance})
 
 @login_required
+@permission_required('project.delete_project', raise_exception=True)
 def ProjectDelete(request,pk):
     import os
-    p= get_object_or_404(Project,pk=pk)
+    #only project creator who can see that page
+    p= get_object_or_404(Project,pk=pk,createdby__empid__exact =request.session['EmpID'])
     #get all attached files
     attached_files= Media.objects.filter(project__id__exact=p.id )
     if request.method == 'POST':
@@ -672,6 +684,7 @@ def updateTaskCancel(request,pk):
             _obj.status="Cancelled"
             _obj.cancelledby= request.session.get('EmpID', '1056821208')
             _obj.canceleddate=datetime.now()
+            _obj.cancellreason=form.cleaned_data['reason']
             _obj.lasteditdate=datetime.now()
             _obj.lasteditby=empObj
             _obj.save()
@@ -683,11 +696,41 @@ def updateTaskCancel(request,pk):
             data['icon'] = "c_%s" %pk
             data['message'] = _('Task has been cancelled successfully')+ pk
             data['html_form'] = render_to_string('project/task/update_cancel_task.html',request=request)
+            #send message
+            _sender=empObj.email
+            _receiver=[]
+            # if project has delegtion
+            if _obj.project.departement.deptcode != _obj.departement.deptcode :
+                
+                if _obj.project.delegationto is not None :
+                    try :
+                        _receiver.append(_obj.project.delegationto.email)
+                    except:
+                        pass
+                else:  
+                      try :
+                          _receiver.append(_obj.project.createdby.email) 
+                      except:
+                         pass
+          #manager
+            try:
+                 manager_obj=Employee.objects.get(empid__exact= _obj.departement.managerid)
+                 _receiver.append(manager_obj.email)
+            except:
+                    pass
+            
+            subject=_("Task Number")+' '+str(_obj.id) +' '+_("has been canceled")
+            context = {'task': _obj,'host':request.get_host(),'receiver':_receiver,'sender':_sender}
+            message = get_template('project/email/cancel_task.html').render(context)
+            _sender="xxsherif82@gmail.com"
+            _receiver="xxsherif82@gmail.com"
+            send_mail(subject,message,_sender,[_receiver],fail_silently=False,html_message=message,)
+
             return JsonResponse(data)
         else:
             data['form_is_valid'] = False
 
-    # if a GET (or any other method) we'll create a blank form
+    # if a GET (or any other method) create a blank form
     context = {'form': TaskCancelForm(),'pk':pk,'errors':errors}
     data['html_form'] = render_to_string('project/task/update_cancel_task.html',context,request=request)
     return JsonResponse(data)
@@ -796,6 +839,7 @@ def ProjectTeam(request,project_id):
     return render(request, 'project/project_team.html', context)
 
 @login_required
+@permission_required('project.add_task', raise_exception=True)
 def AddTask(request,project_id):
     errors=[]
     data=dict()
@@ -865,9 +909,10 @@ def AddTask(request,project_id):
     return render (request,'project/add_task.html', context)
 
 @login_required
+@permission_required('project.delete_task', raise_exception=True)
 def ProjectTaskDelete(request,projectid,taskid):
     try:
-       task=Task.objects.get(  Q(project__id__exact= projectid ) & 
+        task=Task.objects.get(  (Q(id__exact= taskid ) &  Q(project__id__exact= projectid )) & 
                                (Q( createdby__empid__exact= request.session['EmpID']) | 
                                Q(project__createdby__empid__exact= request.session['EmpID'])|
                                Q(project__delegationto__empid__exact= request.session['EmpID']) )
@@ -875,17 +920,14 @@ def ProjectTaskDelete(request,projectid,taskid):
     except:
          raise Http404
         
-           
-   # task= get_object_or_404(Task,createdby__empid__exact= request.session['EmpID'],project__id__exact= projectid,pk=taskid)
-    
-    project=get_object_or_404(Project,pk=projectid)
-    employee=get_object_or_404(Employee,empid__exact= task.createdby.empid)
+ 
     if request.method == 'POST':
-              Task.objects.filter(id=task.id).delete()
+              Task.objects.filter(id__exact=task.id).delete()
+              Task.history.filter(id__exact=task.id).delete()
               messages.success(request, _("Task has been deleted successfully"), fail_silently=True,)
-              return HttpResponseRedirect(reverse('ns-project:project-task', kwargs={'pk':project.id} ))
+              return HttpResponseRedirect(reverse('ns-project:project-task', kwargs={'pk':task.project.id} ))
 
-    context={'task':task,'project':project,'employee':employee}
+    context={'task':task}
     return render(request, 'project/project_task_delete.html', context)
 
 @login_required
@@ -940,13 +982,6 @@ def updateTaskAssignto(request,pk,save=None):
                         _obj.departement=_dpt_obj
                         _assign=form.cleaned_data['departement'].deptname
                         _obj.assignedto=None
-                        #manager
-                        try:
-                            manager_obj=Employee.objects.get(empid__exact= _dpt_obj.managerid)
-                            _receiver=manager_obj.email
-                        except:
-                            _receiver="sakr@stats.gov.sa"
-                            
                  _obj.assigneddate=datetime.now()
                #  _obj.cancelleddate=None
                #  _obj.cancelledby=None
@@ -962,24 +997,24 @@ def updateTaskAssignto(request,pk,save=None):
                  messages.success(request, "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>"+_("Assign Task to")+"  "+_assign, fail_silently=True,)
                  #send email notification
                  _sender = empObj.email
-                 if _receiver is not None :
-                     try:
-                        
-                         if _sender is  None:
-                            _sender="portal.stats.gov.sa"
-                         subject =_('Task has been asigned to you in PMS')
-                         message='<b>'+_obj.name+'</b>'+'<br><a href="http://'+request.get_host()+'/project/project_task_detail/'+str(_obj.project.id)+'/'+str(_obj.id)+'">'+_('Click Here')+'</a>'+'<br>'
-                         message=message+ "<br>---------------<br> "+_('Project Name')+": "+_obj.project.name
-                         message=message+'<br>'+_("by")+': '+request.session['EmpName'] +"<br>" 
-                         message=message+ _("Assign Task to")+':  '+  str(_assign)+'<br>'
-                         message=message+_('Assigne Date')+': '+str(_obj.assigneddate)+'<br>'
+                 if _sender is  None:
+                    _sender="portal.stats.gov.sa"
+                 #manager
+                 try:
+                    manager_obj=Employee.objects.get(empid__exact= _dpt_obj.managerid)
+                    _receiver=manager_obj.email
+                 except:
+                    _receiver="sakr@stats.gov.sa"
+                
+                 
+                 subject =_('Task has been asigned to you in PMS')
+                 context = {'task': _obj,'host':request.get_host()}
+                 message = get_template('project/email/assign_task.html').render(context)
+                 _sender="xxsherif82@gmail.com"
+                 _receiver="xxsherif82@gmail.com"
+                 send_mail(subject,message,_sender,[_receiver],fail_silently=False,html_message=message,)
 
-                         #str(_obj.assignedto.email) to be add in next line
-                         _sender="sakr@stats.gov.sa"
-                         _receiver="sakr@stats.gov.sa"
-                         send_mail(subject,message,_sender,[_receiver],fail_silently=False,html_message=message,)
-                     except:
-                         pass
+                     
             data['form_is_valid'] = True
             data['id'] = pk
             data['message'] = "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>" + _('Task has been assigned successfully')
@@ -1034,6 +1069,7 @@ def updateTaskProgress(request,pk):
     return JsonResponse(data)
 
 @login_required
+@permission_required('project.change_task', raise_exception=True)
 def ProjectTaskEdit(request,projectid,taskid):
     employee=get_object_or_404(Employee,empid__exact=request.session['EmpID']);
     project_list= Project.objects.all().filter(createdby__exact=employee).exclude(status=4).order_by('-id')
@@ -1107,7 +1143,7 @@ def ProjectTaskEdit(request,projectid,taskid):
                    obj.delete()
         else:
             data = {'is_valid': False}
-        messages.success(request, _(" Task has been updated successfully "), fail_silently=True,)
+        messages.success(request, _("Task has been updated successfully"), fail_silently=True,)
         #add to history
         update_change_reason(instance, _("Edit Task successfully by")+" : "+  str( employee.empname)+ ( ",    <i class=\"fa fa-comment\"></i>  "+ form.cleaned_data['note']  if form.cleaned_data['note'] else " "))
         return HttpResponseRedirect(reverse('ns-project:project-task-detail', kwargs={'projectid':projectid,'taskid':taskid}))
@@ -1347,7 +1383,14 @@ def Download(request,file_name):
 #kanban view
 def Kanban (request,pk):
     project_detail= get_object_or_404(Project,pk=pk)
-    tasks= Task.objects.filter(project__id__exact=pk).order_by('startdate')
+
+    if  request.session['EmpID'] == project_detail.createdby.empid :
+        tasks= Task.objects.filter(project__id__exact=pk).order_by('startdate')
+    elif project_detail.delegationto is not None and  request.session['EmpID'] == project_detail.delegationto.empid :
+        tasks= Task.objects.filter(project__id__exact=pk).order_by('startdate')
+    else:
+         tasks= Task.objects.filter(project__id__exact=pk,assignedto__empid__exact=request.session['EmpID']).order_by('startdate')
+    
     new_tasks=tasks.filter(status__exact="New")
     inprogress_tasks=tasks.filter(status__exact="Inprogress")
     done_tasks=tasks.filter(status__exact="Done")
@@ -1520,7 +1563,12 @@ def _perdelta(start, end, delta):
         yield curr
         curr += delta
 
+@login_required
 def ProjectReport(request,selectedDpt=None):
+     #check if user is manager or pm
+#     if  request.user.groups.filter(name__in=["ismanager","projectmanager"]).exists() ==False :
+#         raise Http404("You do not have permission to add project") 
+  
     _rtype=None
     _rlist=[]
     deptcode= request.session['DeptCode']
