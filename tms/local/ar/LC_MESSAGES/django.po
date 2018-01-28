@@ -21,10 +21,8 @@ msgstr ""
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
 #: .\project\admin.py:16 .\project\admin.py:17 .\tms\urls.py:13
-#, fuzzy
-#| msgid "Task Management System cp"
 msgid "Project Management System cp"
-msgstr "لوحة تحكم نظام إدارة المهام"
+msgstr "لوحة تحكم نظام إدارة المشاريع"
 
 #: .\project\forms.py:22
 msgid "User Name"
