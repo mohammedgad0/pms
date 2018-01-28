@@ -1802,11 +1802,11 @@ msgstr "تم تعديل حالة المهمه بنجاح"
 
 #: .\project\views.py:867 .\project\views.py:1113
 msgid "task end date date is less than project start date"
-msgstr "تاريخ الانتهاء اصغر من تاريخ ابدا المشروع
+msgstr "تاريخ الانتهاء اصغر من تاريخ ابدا المشروع"
 
 #: .\project\views.py:869 .\project\views.py:1115
 msgid "task end date date is bigger than project end date"
-msgstr "تاريخ الانتهاء اصغر من تاريخ أكبر المشروع
+msgstr "تاريخ الانتهاء اصغر من تاريخ أكبر المشروع"
 
 #: .\project\views.py:871 .\project\views.py:1117
 msgid "task start date is less than project start date"
