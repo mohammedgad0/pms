@@ -73,7 +73,7 @@
                     <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
 
 					<!-- start user tasks -->
-                      <table class="data table table-striped no-margin">
+                      <table class="data table table-striped no-margin" id="open_tasks">
                         <thead>
                           <tr>
                             <th>#</th>
@@ -146,7 +146,7 @@
                     <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
 
                       <!-- start user projects -->
-                      <table class="data table table-striped no-margin">
+                      <table class="data table table-striped no-margin" id="open_projects">
                         <thead>
                           <tr>
                             <th>#</th>
@@ -217,6 +217,7 @@
                           {% endfor %}
                                </tbody>
                       </table>
+                   
                       <!-- end user projects -->
 
                     </div>
@@ -239,13 +240,15 @@
   <!-- morris.js -->
   <script src="/static/vendors/raphael/raphael.min.js"></script>
   <script src="/static/vendors/morris.js/morris.min.js"></script>
-  
+  <script src="/static/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
    <!-- google chart -->
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> 
   
   
+
+
   <!-- google chart -->
-    <script type="text/javascript">
+ <script type="text/javascript">
       google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);
 
@@ -281,7 +284,6 @@ setInterval(blinker, 1000); //Runs every second
 
 
 </script>
-
 
  <script>
 // piecharts departments
@@ -362,6 +364,20 @@ google.charts.load('current', {'packages':['gauge']});
 
         chart.draw(data, options);
       }
+      
+     
+    </script>
+   <script type="text/javascript"> 
+    $(document).ready(function() {
+    $('#open-projects ,#open-tasks').DataTable( {
+       "scrollY":        "200px",
+        "scrollCollapse": true,
+        "paging":         false,
+        "searching" :false,
+         "bLengthChange": false ,
+          "info":     false
+    } );
+} );
     </script>
     
 {% endblock javascripts %}
