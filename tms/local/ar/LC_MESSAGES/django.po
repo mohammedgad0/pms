@@ -907,11 +907,11 @@ msgstr "الرئيسية"
 
 #: .\project\templates\project\dashboard_pm.html:25
 msgid "Dashboard"
-msgstr ""
+msgstr "اللوحة الرئيسية"
 
 #: .\project\templates\project\dashboard_pm.html:34
 msgid "KPI"
-msgstr ""
+msgstr "المؤشرات"
 
 #: .\project\templates\project\dashboard_pm.html:66
 msgid "Tasks work on"
