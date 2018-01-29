@@ -33,16 +33,11 @@
                   <div class="col-md-6">
                     <h2>{% trans "KPI" %}</h2>
                   </div>
-                  <div class="col-md-6">
-                    <div id="reportrange" class="pull-right" style="margin-top: 5px; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #E6E9ED">
-                      <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-                      <span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>
-                    </div>
-                  </div>
+         
                 </div>
                 <div class="col-md-4">
                 <!-- start of user-activity-graph -->
-                <div id="graph_bar" style="width:100%; height:280px;"></div>
+                <div id="curve_chart" style="width:100%; height:280px;"></div>
                 <!-- end of user-activity-graph -->
                      </div>
                 
@@ -61,7 +56,10 @@
                 <!-- end of user-activity-graph -->
                      </div>
                      
-                          
+             {{summary_over_time}}         
+       
+                     
+                         
                   <div class="clearfix"></div>
                 <div class="" role="tabpanel" data-example-id="togglable-tabs">
                   <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
@@ -69,8 +67,7 @@
                     </li>
                     <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">{% trans "Projects Worked on" %}</a>
                     </li>
-                    <li role="presentation" class=""><a href="#tab_content3" role="tab" id="profile-tab2" data-toggle="tab" aria-expanded="false">{% trans "Recent Activity" %}</a>
-                    </li>
+              
                   </ul>
                   <div id="myTabContent" class="tab-content">
                     <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
@@ -223,77 +220,7 @@
                       <!-- end user projects -->
 
                     </div>
-                    <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
-                      <!-- start recent activity -->
-                      <ul class="messages">
-                        <li>
-                          <img src="/static/images/img.jpg" class="avatar" alt="Avatar">
-                          <div class="message_date">
-                            <h3 class="date text-info">24</h3>
-                            <p class="month">May</p>
-                          </div>
-                          <div class="message_wrapper">
-                            <h4 class="heading">Desmond Davison</h4>
-                            <blockquote class="message">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua butcher retro keffiyeh dreamcatcher synth.</blockquote>
-                            <br />
-                            <p class="url">
-                              <span class="fs1 text-info" aria-hidden="true" data-icon="Ã®Æ’â€¦"></span>
-                              <a href="#"><i class="fa fa-paperclip"></i> User Acceptance Test.doc </a>
-                            </p>
-                          </div>
-                        </li>
-                        <li>
-                          <img src="/static/images/img.jpg" class="avatar" alt="Avatar">
-                          <div class="message_date">
-                            <h3 class="date text-error">21</h3>
-                            <p class="month">May</p>
-                          </div>
-                          <div class="message_wrapper">
-                            <h4 class="heading">Brian Michaels</h4>
-                            <blockquote class="message">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua butcher retro keffiyeh dreamcatcher synth.</blockquote>
-                            <br />
-                            <p class="url">
-                              <span class="fs1" aria-hidden="true" data-icon="Ã®â€ Â²"></span>
-                              <a href="#" data-original-title="">Download</a>
-                            </p>
-                          </div>
-                        </li>
-                        <li>
-                          <img src="/static/images/img.jpg" class="avatar" alt="Avatar">
-                          <div class="message_date">
-                            <h3 class="date text-info">24</h3>
-                            <p class="month">May</p>
-                          </div>
-                          <div class="message_wrapper">
-                            <h4 class="heading">Desmond Davison</h4>
-                            <blockquote class="message">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua butcher retro keffiyeh dreamcatcher synth.</blockquote>
-                            <br />
-                            <p class="url">
-                              <span class="fs1 text-info" aria-hidden="true" data-icon="Ã®Æ’â€¦"></span>
-                              <a href="#"><i class="fa fa-paperclip"></i> User Acceptance Test.doc </a>
-                            </p>
-                          </div>
-                        </li>
-                        <li>
-                          <img src="/static/images/img.jpg" class="avatar" alt="Avatar">
-                          <div class="message_date">
-                            <h3 class="date text-error">21</h3>
-                            <p class="month">May</p>
-                          </div>
-                          <div class="message_wrapper">
-                            <h4 class="heading">Brian Michaels</h4>
-                            <blockquote class="message">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua butcher retro keffiyeh dreamcatcher synth.</blockquote>
-                            <br />
-                            <p class="url">
-                              <span class="fs1" aria-hidden="true" data-icon="Ã®â€ Â²"></span>
-                              <a href="#" data-original-title="">Download</a>
-                            </p>
-                          </div>
-                        </li>
-
-                      </ul>
-                      <!-- end recent activity -->
-                    </div>
+             
                   </div>
                 </div>
               </div>
@@ -355,9 +282,8 @@ setInterval(blinker, 1000); //Runs every second
 
 </script>
 
-      <script>
 
-
+ <script>
 // piecharts departments
 var js_dict = [["key" ,"value"],
 
@@ -382,9 +308,60 @@ function drawChart() {
     fontName: 'neo',
   };
 
-  var chart = new google.visualization.PieChart(document.getElementById('donutchart_dept));
+  var chart = new google.visualization.PieChart(document.getElementById('donutchart_dept'));
   chart.draw(data, options);
 }
+ </script>
+ <script>
+ //performance 
+google.charts.load('current', {'packages':['gauge']});
+    google.charts.setOnLoadCallback(drawChart);
 
-                            </script>
+    function drawChart() {
+
+      var data = google.visualization.arrayToDataTable([
+        ['Label', 'Value'],
+        ['{{_("performance")}}', {{per_indicator}}],
+
+      ]);
+
+      var options = {
+        width: 200, height: 250,
+        redFrom: 90, redTo: 100,
+        yellowFrom:75, yellowTo: 90,
+        minorTicks: 5
+      };
+
+      var chart = new google.visualization.Gauge(document.getElementById('chart_per'));
+      chart.draw(data, options);
+    }
+
+</script>
+
+<script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Year', 'Sales'],
+          {% for s in summary_over_time %}
+          ['{{s.period}}',  {{s.total}}],
+          {%endfor%}
+          
+        
+        ]);
+
+        var options = {
+          title: 'Company Performance',
+          curveType: 'function',
+          legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+    
 {% endblock javascripts %}

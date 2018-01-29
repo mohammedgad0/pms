@@ -1281,6 +1281,10 @@ def DashboardManager(request):
 def DashboardPM(request):
     from dateutil.relativedelta import relativedelta
     from django.db.models import F
+    from django.db.models.functions import Trunc
+    from django.db.models import DateTimeField
+    from django.db.models import Sum
+
     dept_code  = request.session['DeptCode']
     start_date = datetime.now() - relativedelta(years=1)
     end_date = datetime.now()
@@ -1291,9 +1295,25 @@ def DashboardPM(request):
     per_indicator = indicators(dept_code,start_date,end_date)
     project_kpi=_project_kpi(dept_code, start_date, end_date)
     
+    
+    #test 
+    dList=[]
+   
+    qs= Task.objects.filter(createdby__exact=request.session['EmpID'])
+    summary_over_time = qs.annotate(
+            period=Trunc('startdate','month',output_field=DateTimeField(), ),).values('period').annotate(total=Count('status', filter=Q(status__exact="New"))).order_by('period')
+    for  row in summary_over_time :
+         print (row)
+#          vDict={}
+#          vDict['period']=row.period
+#          vDict['open']   = row.exclude(status__exact="Closed").count()
+#          vDict['closed'] = row.filter(status__exact="Closed")
+#          dList.append[vDict]
+       
     context = {"start_date":start_date,"end":end_date,"task_based_department":task_based_department,
                'pie_tasks':pie_tasks,"per_indicator":per_indicator,'open_projects':open_projects,'project_kpi':project_kpi,
-               'open_tasks':open_tasks
+               'open_tasks':open_tasks,
+               'summary_over_time':summary_over_time
                }
     return render(request, 'project/dashboard_pm.html', context)
 
