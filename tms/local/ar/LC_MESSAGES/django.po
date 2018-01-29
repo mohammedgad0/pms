@@ -286,7 +286,7 @@ msgstr "تاريخ الانتهاء اصغر من تاريخ البدأ"
 #: .\project\forms.py:132 .\project\forms.py:192 .\project\forms.py:308
 #: .\project\forms.py:310
 msgid "Employee"
-msgstr "موظف"
+msgstr "الموظف"
 
 #: .\project\forms.py:132 .\project\forms.py:192
 #: .\project\templates\project\all_emp_sheets.html:50
@@ -1552,10 +1552,8 @@ msgid "Task not complete"
 msgstr "المهام غير المنجزة"
 
 #: .\project\templates\project\sidebar.html:7
-#, fuzzy
-#| msgid "Project Name"
 msgid "Project Management"
-msgstr "أسم المشروع"
+msgstr "إدارة المشاريع"
 
 #: .\project\templates\project\sidebar.html:37
 msgid "General"

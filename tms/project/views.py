@@ -1209,12 +1209,12 @@ def TaskListExternal(request,task_status=None):
         except:
             pass
     #no of new task
-    new_tasks_count= len(Task.objects.all().filter(Q(status__exact='New')&(
+    new_tasks_count= Task.objects.filter(Q(status__exact='New')&(
          Q(assignedto__empid__exact = empid)|Q(departement__deptcode__exact =  request.session['DeptCode']))
-         ).exclude(createdby__exact=empid))
+         ).exclude(createdby__exact=empid).count()
 
     #get all tasks assign to dept from external project
-    task_list= Task.objects.all().filter(
+    task_list= Task.objects.filter(
          Q(departement__deptcode__exact=  request.session['DeptCode'])
          ).exclude(createdby__exact=empid).order_by('-id')
 

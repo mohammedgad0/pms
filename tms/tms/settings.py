@@ -80,6 +80,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'project.middleware.ForceLangMiddleware',
     'simple_history.middleware.HistoryRequestMiddleware',
+    'project.middleware.NewTasks',
 
 ]
 ROOT_URLCONF = 'tms.urls'
@@ -117,22 +118,22 @@ DATABASES = {
    'default': {
         'ENGINE': 'django.db.backends.mysql',
         
-        'NAME': 'tms',
-        'USER': 'sakr',
-        'PASSWORD': 'Sakr!@#123',
-        'HOST': '192.168.0.192',   # Or an IP Address that your DB is hosted on
-        'PORT': '3306',
+#         'NAME': 'tms',
+#         'USER': 'sakr',
+#         'PASSWORD': 'Sakr!@#123',
+#         'HOST': '192.168.0.192',   # Or an IP Address that your DB is hosted on
+#         'PORT': '3306',
          
 #         'NAME': 'tms_dev',
 #          'USER': 'sakr',
 #          'PASSWORD': 'Sakr!@#123',
 #          'HOST': '192.168.0.192',   # Or an IP Address that your DB is hosted on
 #          'PORT': '3306',
-         
-#         'NAME': 'tms',
-#         'USER': 'root',
-#         'PASSWORD': '',
-#         'HOST': 'localhost',   # Or an IP Address that your DB is hosted on,
+          
+        'NAME': 'tms',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',   # Or an IP Address that your DB is hosted on,
 
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
