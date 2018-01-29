@@ -389,7 +389,6 @@ def ProjectEdit(request,pk):
     except :
         pass
                 
-   
     if form.is_valid():
         instance=form.save()
         instance.lasteditby=get_object_or_404(Employee, empid = request.session.get('EmpID'))
@@ -404,8 +403,13 @@ def ProjectEdit(request,pk):
                     obj.save()
         else:
             data = {'is_valid': False}
-
         messages.success(request, _("Project has updated successfully"), fail_silently=True,)
+        #send message if delegation change
+#         if form.cleaned_data['delegationto'] is not None :
+#             if instance.delegationto.empid != form.cleaned_data['delegationto'].empid :
+#                 #delegation changed 
+#                 
+                
         return HttpResponseRedirect(reverse('ns-project:project-list'))
     else:
         # Set the messages level back to default.
