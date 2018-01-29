@@ -929,14 +929,10 @@ msgstr "مسندة الى"
 
 #: .\project\templates\project\dashboard_pm.html:86
 #: .\project\templates\project\dashboard_pm.html:164
-#, fuzzy
-#| msgid "Attachment"
 msgid "comittment"
-msgstr "المرفقات"
+msgstr "الالتزام"
 
 #: .\project\templates\project\dashboard_pm.html:157
-#, fuzzy
-#| msgid "Task Number"
 msgid "Tasks Number"
 msgstr "مهمه رقم"
 
