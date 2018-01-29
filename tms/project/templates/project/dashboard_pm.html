@@ -73,7 +73,7 @@
                     <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
 
 					<!-- start user tasks -->
-                      <table class="data table table-striped no-margin" id="open_tasks">
+                      <table class="data table table-striped no-margin" id="open-tasks">
                         <thead>
                           <tr>
                             <th>#</th>
@@ -370,8 +370,6 @@ google.charts.load('current', {'packages':['gauge']});
    <script type="text/javascript"> 
     $(document).ready(function() {
     $('#open-projects ,#open-tasks').DataTable( {
-       "scrollY":        "200px",
-        "scrollCollapse": true,
         "paging":         false,
         "searching" :false,
          "bLengthChange": false ,
