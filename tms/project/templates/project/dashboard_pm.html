@@ -346,14 +346,14 @@ google.charts.load('current', {'packages':['gauge']});
         var data = google.visualization.arrayToDataTable([
           ['Year', 'Sales'],
           {% for s in summary_over_time %}
-          ['{{s.period}}',  {{s.total}}],
+          ['{{s.period|date:"M Y" }}',  {{s.total}}],
           {%endfor%}
           
         
         ]);
 
         var options = {
-          title: 'Company Performance',
+          title: '{% trans "Tasks" %}',
           curveType: 'function',
           legend: { position: 'bottom' }
         };
