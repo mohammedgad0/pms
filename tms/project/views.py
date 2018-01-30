@@ -1306,8 +1306,8 @@ def DashboardPM(request):
     qs= Task.objects.filter(createdby__exact=request.session['EmpID'])
     summary_over_time = qs.annotate(
             period=Trunc('startdate','month',output_field=DateTimeField(), ),).values('period').annotate(total=Count('status', filter=Q(status__exact="New"))).order_by('period')
-    for  row in summary_over_time :
-         print (row)
+#     for  row in summary_over_time :
+#          print (row)
 #          vDict={}
 #          vDict['period']=row.period
 #          vDict['open']   = row.exclude(status__exact="Closed").count()
