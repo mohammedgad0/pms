@@ -8,12 +8,7 @@
 {{ block.super }}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.css" />
 
- <!-- <link href="/static/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
-  <link href="/static/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
-  <link href="/static/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
-  <link href="/static/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
-  <link href="/static/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
-  -->
+
 {% endblock stylesheets %}
 
 {% block content %}
@@ -21,7 +16,17 @@
     <div class="right_col" role="main">
       <div class="">
 
+        <div class="page-title">
+          <div class="title_left">
+            <h3></h3>
+          </div>
 
+          <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+       
+            </div>
+          </div>
+        </div>
         <div class="clearfix"></div>
 
         <div class="row">
@@ -29,29 +34,22 @@
             <div class="x_panel">
               <div class="x_title">
                 <h2>{% trans "Follow-up Administration"  %}</h2>
-                <ul class="nav navbar-right panel_toolbox">
-
-
-                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                </ul>
+               
                 <div class="clearfix"></div>
               </div>
               <div class="x_content">
                 <form method="Get" novalidate>
                 {% csrf_token %}
 
-                    <div class="form-group col-md-3 col-sm-12 col-xs-12">
-
+               <div class="form-group col-md-3 col-sm-12 col-xs-12">
               {{form.departement.label_tag}}
                {{form.departement}}
                </div>
 
-                 <div class="form-group col-md-3 col-sm-12 col-xs-12">
-
+              <div class="form-group col-md-3 col-sm-12 col-xs-12">
               {{form.employee.label_tag}}
                {{form.employee}}
                </div>
-
 
                 <div class="form-group col-md-2 col-sm-12 col-xs-12">
 
@@ -59,17 +57,14 @@
                {{form.taskstatus}}
                </div>
 
-
-
- <div class="form-group col-md-12">
+               <div class="form-group col-md-12">
               <div class="form-group text-danger ">
                 {{ form.departement.errors }}
                 {{ form.employee.errors }}
                 {{ form.taskstatus.errors }}
               </div>
               </div>
-                <div class="form-group col-md-12 col-sm-12 col-xs-12">
-
+              <div class="form-group col-md-12 col-sm-12 col-xs-12">
              <button type="submit" class="btn btn-success"><i class="fa fa-search"></i>     {{_('Search')}}</button>
            <a href="{% url 'ns-project:project-follow-up' %}">  <button type="button" class="btn btn-danger"><i class="fa fa-refresh "></i> {{_('Reset')}}</button></a>
 
@@ -77,15 +72,9 @@
 
                 <div class="form-group col-md-12 col-sm-12 col-xs-12">
                   <div class="ln_solid"></div>
-
-                          <div>  <i class="fa  fa-eye"></i> {% trans "Result Number :" %} <span>{{res}} </span> </div>
-
+               <div>  <i class="fa  fa-eye"></i> {% trans "Result Number :" %} <span>{{res}} </span> </div>
              </div>
-
-               </div>
-
-
-               </form>
+</form>
 
 
 
@@ -140,8 +129,6 @@
                 </tbody>
               </table>
 
-
-
               <!-- end task list -->
 <!--  pager -->
 <div>
@@ -183,36 +170,34 @@
 </div>
 <!-- end pager -->
  {% endif  %}
+
+
+
+               </div>
+
+
+           
+
+
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+   
 {% endblock content %}
 
 {% block javascripts %}
   {{ block.super }}
-/*    <script src="/static/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-  <script src="/static/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-  <script src="/static/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-  */
+
       <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.jquery.js"></script>
   <script>
   $(document).ready(function(){
      $(".chosen").data("placeholder","Select Frameworks...").chosen();
      $(".chosen").chosen({no_results_text: "Oops, nothing found!"});
       $('.chosen').chosen({allow_single_deselect: true,no_results_text: "لا يوجد نتائج!"});
-      ///datatable
-/* $('.followup').DataTable(
-    {
-        "language": {
-            "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Arabic.json"
-        },
-         "filter":   false,
-         "dom": '<"top float-right"fl>rt<"bottom"pi><"clear">'
-    } );
-    */ /*end datatable */
+      
+
 });
 
 </script>

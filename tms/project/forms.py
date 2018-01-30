@@ -315,8 +315,8 @@ class FollowupForm(forms.Form):
       query = VFollowup.objects.all()
       for data in query:
          department.append(data.deptcode)
-      departement = FollowupModelChoiceField(queryset=Department.objects.filter(deptcode__in= department), to_field_name="deptcode",empty_label=_('Select Departement'),widget=forms.Select(attrs={'class': 'chosen chosen form-control col-md-3'} ),error_messages={'required': _('Please Sealect Departement')})
-      employee = TeamModelChoiceField(queryset=Employee.objects.none(),to_field_name="empid" ,empty_label=_("Select Employee"),widget=forms.Select(attrs={'class': 'chosen form-control col-md-3'} ),required=False)
+      departement = FollowupModelChoiceField(queryset=Department.objects.filter(deptcode__in= department), to_field_name="deptcode",empty_label=_('Select Departement'),widget=forms.Select(attrs={'class': 'chosen chosen form-control col-md-3'} ),error_messages={'required': _('Please Sealect Departement')},label=_('Departement'))
+      employee = TeamModelChoiceField(queryset=Employee.objects.none(),to_field_name="empid" ,empty_label=_("Select Employee"),widget=forms.Select(attrs={'class': 'chosen form-control col-md-3'} ),required=False,label=_('Employee'))
       TASK_STATUS = (
         ('', _('Choice action')),
         ('New', _('New')),
