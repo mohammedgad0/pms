@@ -1299,7 +1299,7 @@ h2 {
         float: right;
         display: block;
         text-overflow: ellipsis;
-        overflow: hidden;
+       // overflow: hidden;
         white-space: nowrap
     }
 
@@ -1571,8 +1571,8 @@ table.jambo_table {
 }
 
     table.jambo_table thead {
-        background: rgba(52, 73, 94, 0.94);
-        color: #ECF0F1
+     background: rgb(237, 237, 237);
+    color: #2a3f54;
     }
 
     table.jambo_table tbody tr:hover td {
@@ -1998,8 +1998,8 @@ h5.graph_title {
     }
 
 span.right {
-    float: left;
-    font-size: 14px !important
+   float: right;
+    font-size: 14px!important;
 }
 
 .tile_info a {
@@ -2625,7 +2625,8 @@ legend {
 .form-control-feedback {
     margin-top: 8px;
     height: 23px;
-    color: #bbb;
+   / color: #bbb;
+    color: #2a3f54;
     line-height: 24px;
     font-size: 15px
 }
@@ -2636,12 +2637,13 @@ legend {
     }
 
     .form-control-feedback.right {
-        border-right: 1px solid #ccc;
-        left: 13px
+    border-left: 1px solid #ccc;
+    right: 15px!important;
+    left: auto!important;
     }
 
 .form-control.has-feedback-left {
-    padding-right: 45px
+    padding-right: 50px
 }
 
 .form-control.has-feedback-right {
@@ -3482,7 +3484,7 @@ ul.messages {
     ul.messages li,
     .tasks li {
         border-bottom: 1px dotted #e6e6e6;
-        padding: 8px 0
+        padding: 8px 10px
     }
 
         ul.messages li img.avatar,
@@ -3597,7 +3599,7 @@ ul.project_files li {
 
     .project_detail p.title {
         font-weight: bold;
-        margin-bottom: 0
+        margin-bottom: 5px;
     }
 
 .avatar img {
@@ -4297,7 +4299,7 @@ form:after {
 .login_content form input[type="submit"],
 #content form .submit {
     float: right;
-    margin-right: 38px
+    //margin-right: 38px
 }
 
 .button a {
@@ -5122,7 +5124,7 @@ background-color:#5cb85c;
 }
 /*normal filedset */
 fieldset{
-    padding: .35em .625em .75em;
+    padding: .35em 1.625em .75em;
     margin: 0 2px;
     border: 1px solid #e6e9ed;
     margin-bottom: 15px;
@@ -5134,7 +5136,7 @@ legend {
     font-size: 14px;
     color: #2a3f54 !important;
     padding: 0px 5px 10px 5px;
-     margin-bottom: 10px;
+     margin-bottom: 0px;
 }
 .basic_info,.basic_info_lable{	
 	padding:5px;
@@ -5144,9 +5146,9 @@ legend {
 .btn.btn-app{
  background-color: #ffffff;
  height:40px;
- padding: 10px 5px;
+ padding: 10px 0px 0px 5px;
  margin: 0 5px 5px 0;
-     min-width: 50px;
+     min-width: 40px;
 }
 .x_title h2 {
     white-space: normal;
@@ -5169,10 +5171,50 @@ legend {
 .form-control-feedback-black {
     color: #2a3f54 !important;
 }
-.btn_app_custom {
+.btn.btn_app_custom {
     background-color: #ffffff;
     height: 30px !important;
     padding: 4px 5px !important;
     margin: 0 0px 5px 0;
     min-width: 30px;
 }
+.p-kanban{ background-color: #ffffff;color:#4b5e71;}
+.task-card{box-shadow: 2px 2px 2px #eee;}
+//blik text 
+.blink_me {
+    -webkit-animation-name: blinker;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+
+    -moz-animation-name: blinker;
+    -moz-animation-duration: 1s;
+    -moz-animation-timing-function: linear;
+    -moz-animation-iteration-count: infinite;
+
+    animation-name: blinker;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+@-moz-keyframes blinker {  
+    0% { opacity: 1.0; }
+    50% { opacity: 0.0; }
+    100% { opacity: 1.0; }
+}
+
+@-webkit-keyframes blinker {  
+    0% { opacity: 1.0; }
+    50% { opacity: 0.0; }
+    100% { opacity: 1.0; }
+}
+
+@keyframes blinker {  
+    0% { opacity: 1.0; }
+    50% { opacity: 0.0; }
+    100% { opacity: 1.0; }
+}
+
+.custom-nav{padding-top: 5px;}
+.custom-nav > li > a{    padding: 5px 10px 10px;}

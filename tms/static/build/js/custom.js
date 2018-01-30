@@ -962,55 +962,6 @@ function init_autosize() {
 
 };
 
-/* PARSLEY */
-
-function init_parsley() {
-
-    if (typeof(parsley) === 'undefined') {
-        return;
-    }
-    console.log('init_parsley');
-
-    $ /*.listen*/ ('parsley:field:validate', function() {
-        validateFront();
-    });
-    $('#demo-form .btn').on('click', function() {
-        $('#demo-form').parsley().validate();
-        validateFront();
-    });
-    var validateFront = function() {
-        if (true === $('#demo-form').parsley().isValid()) {
-            $('.bs-callout-info').removeClass('hidden');
-            $('.bs-callout-warning').addClass('hidden');
-        } else {
-            $('.bs-callout-info').addClass('hidden');
-            $('.bs-callout-warning').removeClass('hidden');
-        }
-    };
-
-    $ /*.listen*/ ('parsley:field:validate', function() {
-        validateFront();
-    });
-    $('#demo-form2 .btn').on('click', function() {
-        $('#demo-form2').parsley().validate();
-        validateFront();
-    });
-    var validateFront = function() {
-        if (true === $('#demo-form2').parsley().isValid()) {
-            $('.bs-callout-info').removeClass('hidden');
-            $('.bs-callout-warning').addClass('hidden');
-        } else {
-            $('.bs-callout-info').addClass('hidden');
-            $('.bs-callout-warning').removeClass('hidden');
-        }
-    };
-
-    try {
-        hljs.initHighlightingOnLoad();
-    } catch (err) {}
-
-};
-
 
 /* INPUTS */
 
@@ -3042,7 +2993,7 @@ function init_echarts() {
                 trigger: 'axis'
             },
             legend: {
-                data: ['sales', 'purchases']
+                data: ['مهمام مفتوحة', 'مهمام مغلقة']
             },
             toolbox: {
                 show: false
@@ -3056,7 +3007,7 @@ function init_echarts() {
                 type: 'value'
             }],
             series: [{
-                name: 'sales',
+                name: 'مهمام مغلقة',
                 type: 'bar',
                 data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
                 markPoint: {
@@ -3075,17 +3026,17 @@ function init_echarts() {
                     }]
                 }
             }, {
-                name: 'purchases',
+                name: 'مهمام مفتوحة',
                 type: 'bar',
                 data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
                 markPoint: {
                     data: [{
-                        name: 'sales',
+                        name: 'مهمام مفتوحة',
                         value: 182.2,
                         xAxis: 7,
                         yAxis: 183,
                     }, {
-                        name: 'purchases',
+                        name: 'مهمام مفتوحة',
                         value: 2.3,
                         xAxis: 11,
                         yAxis: 3
@@ -3245,21 +3196,9 @@ function init_echarts() {
             tooltip: {
                 formatter: "{a} <br/>{b} : {c}%"
             },
-            toolbox: {
-                show: true,
-                feature: {
-                    restore: {
-                        show: true,
-                        title: "Restore"
-                    },
-                    saveAsImage: {
-                        show: true,
-                        title: "Save Image"
-                    }
-                }
-            },
+
             series: [{
-                name: 'Performance',
+                name: 'الاداء',
                 type: 'gauge',
                 center: ['50%', '50%'],
                 startAngle: 140,
@@ -3272,10 +3211,10 @@ function init_echarts() {
                     show: true,
                     lineStyle: {
                         color: [
-                            [0.2, 'lightgreen'],
+                            [0.2, '#ff4500'],
                             [0.4, 'orange'],
                             [0.8, 'skyblue'],
-                            [1, '#ff4500']
+                            [1, 'lightgreen']
                         ],
                         width: 30
                     }
@@ -3294,14 +3233,14 @@ function init_echarts() {
                     show: true,
                     formatter: function(v) {
                         switch (v + '') {
-                            case '10':
-                                return 'a';
-                            case '30':
-                                return 'b';
-                            case '60':
-                                return 'c';
                             case '90':
-                                return 'd';
+                                return 'ممتاز';
+                            case '60':
+                                return 'جيد جدا';
+                            case '30':
+                                return 'جيد';
+                            case '10':
+                                return 'مقبول';
                             default:
                                 return '';
                         }
@@ -3320,7 +3259,7 @@ function init_echarts() {
                     }
                 },
                 pointer: {
-                    length: '80%',
+                    length: '100%',
                     width: 8,
                     color: 'auto'
                 },
@@ -3347,8 +3286,8 @@ function init_echarts() {
                     }
                 },
                 data: [{
-                    value: 50,
-                    name: 'Performance'
+                    value: 80,
+                    name: 'الأداء'
                 }]
             }]
         });
@@ -3372,7 +3311,7 @@ function init_echarts() {
             legend: {
                 x: 220,
                 y: 40,
-                data: ['Intent', 'Pre-order', 'Deal']
+                data: ['Intent', 'مهام مغلقة', 'مهام مفتوحة']
             },
             toolbox: {
                 show: true,
@@ -3401,48 +3340,38 @@ function init_echarts() {
             xAxis: [{
                 type: 'category',
                 boundaryGap: false,
-                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                data: [ '12-12-2017', '16-12-2017', '20-12-2017', '24-12-2017', '28-12-2017']
             }],
             yAxis: [{
                 type: 'value'
             }],
             series: [{
-                name: 'Deal',
+                name: 'مهام مفتوحة',
                 type: 'line',
                 smooth: true,
                 itemStyle: {
                     normal: {
                         areaStyle: {
-                            type: 'default'
+                            type: 'default',
+                            	   color: '#337ab7'
                         }
                     }
                 },
-                data: [10, 12, 21, 54, 260, 830, 710]
+                data: [50, 28, 19, 12, 0]
             }, {
-                name: 'Pre-order',
+                name: 'مهام مغلقة',
                 type: 'line',
                 smooth: true,
                 itemStyle: {
                     normal: {
                         areaStyle: {
-                            type: 'default'
+                            type: 'default',
+                            	 color: '#1ebc9c'
                         }
                     }
                 },
-                data: [30, 182, 434, 791, 390, 30, 10]
-            }, {
-                name: 'Intent',
-                type: 'line',
-                smooth: true,
-                itemStyle: {
-                    normal: {
-                        areaStyle: {
-                            type: 'default'
-                        }
-                    }
-                },
-                data: [1320, 1132, 601, 234, 120, 90, 20]
-            }]
+                data: [0, 15  , 22, 33, 50]
+            },  ]
         });
 
     }
@@ -5096,7 +5025,7 @@ $(document).ready(function() {
     init_IonRangeSlider();
     init_ColorPicker();
     init_TagsInput();
-    init_parsley();
+  
     init_daterangepicker();
     init_daterangepicker_right();
     init_daterangepicker_single_call();
@@ -5121,15 +5050,16 @@ $(document).ready(function() {
     init_autocomplete();
 
 });
-//custom by mohammed gad
+//custom by mohammed gad 
 $.datepicker.setDefaults($.datepicker.regional["ar"]);
 $(document).ready(function(){
+
 $('#id_assigntype_0').change(function(){
   $('#id_employee').prop("disabled", false).trigger("chosen:updated");
-  $('#id_department').prop("disabled", true).trigger("chosen:updated");
+  $('#id_department_list').prop("disabled", true).trigger("chosen:updated");
 });
 $('#id_assigntype_1').change(function(){
-  $('#id_department').prop("disabled", false).trigger("chosen:updated");
+  $('#id_department_list').prop("disabled", false).trigger("chosen:updated");
   $('#id_employee').prop("disabled", true).trigger("chosen:updated");
 });
 

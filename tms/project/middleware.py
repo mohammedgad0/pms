@@ -2,7 +2,7 @@ from django.conf import settings
 from django.utils import translation
 from .models import *
 from django.contrib.auth.models import Group
-
+from django.http import HttpResponse ,HttpResponseRedirect,Http404 ,HttpResponseForbidden
 class ForceLangMiddleware:
     def process_request(self, request):
         request.LANG = getattr(settings, 'LANGUAGE_CODE', settings.LANGUAGE_CODE)
@@ -11,26 +11,30 @@ class ForceLangMiddleware:
         if request.user.is_authenticated():
             # if not request.session['EmpID']:
             email = request.user.email
-            emp = Employee.objects.filter(email= email).get()
-            # Get all data filtered by user email and set in session
-            if emp is not None:
-                request.session['EmpID'] = emp.empid
-                request.session['EmpName'] = emp.empname
-                request.session['DeptName'] = emp.deptname
-                request.session['Mobile'] = emp.mobile
-                request.session['DeptCode'] = emp.deptcode
-                request.session['JobTitle'] = emp.jobtitle
-                request.session['IsManager'] = emp.ismanager
+            try:
+                emp = Employee.objects.filter(email= email).get()
+                if emp is not None:
+                    request.session['EmpID'] = emp.empid
+                    request.session['EmpName'] = emp.empname
+                    request.session['DeptName'] = emp.deptname
+                    request.session['Mobile'] = emp.mobile
+                    request.session['DeptCode'] = emp.deptcode
+                    request.session['JobTitle'] = emp.jobtitle
+                    request.session['IsManager'] = emp.ismanager
                 
-                if emp.ismanager == 1:
-                        g = Group.objects.get(name='ismanager')
-                        g.user_set.add(request.user.id)
-                else:
-                        g = Group.objects.get(name='employee')
-                        g.user_set.add(request.user.id)
-                obj_emp = Delegation.objects.filter(authorized = emp.empid , expired="0")
-                if obj_emp:
-                    request.session['have_auth']  = True
+                    if emp.ismanager == 1:
+                            g = Group.objects.get(name='ismanager')
+                            g.user_set.add(request.user.id)
+                    else:
+                            g = Group.objects.get(name='employee')
+                            g.user_set.add(request.user.id)
+                    obj_emp = Delegation.objects.filter(authorized = emp.empid , expired="0")
+                    if obj_emp:
+                        request.session['have_auth']  = True
+            except:
+                 pass
+            # Get all data filtered by user email and set in session
+           
 class UserSeesionSet:
     def UserSessions(request):
         if request.user.is_authenticated():
