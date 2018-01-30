@@ -224,17 +224,19 @@ def AddProject(request):
             #save to database
             project_obj.save()
             #send email if delegation 
-            if form.cleaned_data['delegationto'].empid is not None :
-             
-                _sender= empObj.email
-                _receiver = form.cleaned_data['delegationto'].empid
-                subject=_("Project Number")+' '+str(project_obj.id) +' '+_("has delegated to you")
-                context = {'Project': project_obj,'host':request.get_host(),'receiver':_receiver,'sender':_sender}
-                message = get_template('project/email/cancel_task.html').render(context)
-                _sender="xxsherif82@gmail.com"
-                _receiver="xxsherif82@gmail.com"
-                send_mail(subject,message,_sender,[_receiver],fail_silently=False,html_message=message,)
-            
+            try:
+                if form.cleaned_data['delegationto'].empid is not None :
+                    _sender= empObj.email
+                    _receiver = form.cleaned_data['delegationto'].empid
+                    subject=_("Project Number")+' '+str(project_obj.id) +' '+_("has delegated to you")
+                    context = {'Project': project_obj,'host':request.get_host(),'receiver':_receiver,'sender':_sender}
+                    message = get_template('project/email/cancel_task.html').render(context)
+                    _sender="sakr@stats.gov.sa"
+                    _receiver="sakr@stats.gov.sa"
+                    send_mail(subject,message,_sender,[_receiver],fail_silently=False,html_message=message,)
+            except:
+                pass
+                
              #uploading files
             upload_form = upload(request.POST, request.FILES)
             if upload_form.is_valid():
@@ -1619,7 +1621,7 @@ def _get_internal_external_projects(request):
 
 def _project_kpi_employee(employee,startdate,enddate):
     projectKPI={}
-    projects= Project.objects.filter(  Q(task__assignedto__empid__exact=employee.empid) ).order_by('id')
+    projects= Project.objects.filter(  Q(task__assignedto__empid__exact=employee.empid) ).annotate(Count('task'))
     projectKPI["p_all"]= projects.count()
     projectKPI["p_internal"]= projects.filter(departement__deptcode__exact=employee.deptcode).count()
     projectKPI["p_external"]= projects.filter(  ~Q(departement__deptcode__exact = employee.deptcode)).count()
