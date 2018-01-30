@@ -28,7 +28,7 @@
                       {% for object in list.status %}
                      
                         <tr>
-                          <td>{{object.name}}</td>
+                          <td>{% trans object.name %}</td>
                           <td>{{object.count}}</td>
                           <td>{{object.precent|stringformat:"02d"}}</td>
                         </tr>

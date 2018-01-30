@@ -451,7 +451,7 @@ msgstr "اختر الحالة"
 #: .\project\templates\project\dashboard_pm.html:159
 #: .\project\templates\project\dashboard_pm.html:258 .\project\views.py:582
 msgid "InProgress"
-msgstr "جارى العمل"
+msgstr "قيد التنفيذ"
 
 #: .\project\forms.py:325 .\project\models.py:200
 #: .\project\templates\project\dashboard_employee.html:180
