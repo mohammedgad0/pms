@@ -273,7 +273,6 @@ class VFollowup(models.Model):
 
 class VStatisticstaskdata(models.Model):
     projectid = models.IntegerField(db_column='ProjectId')  # Field name made lowercase.
-    proid = models.IntegerField(db_column='proID')  # Field name made lowercase.
     employeeid = models.CharField(db_column='EmployeeId', max_length=45, blank=True, null=True)  # Field name made lowercase.
     employeename = models.CharField(db_column='EmployeeName', max_length=255, blank=True, null=True)  # Field name made lowercase.
     jobtitle = models.CharField(db_column='JobTitle', max_length=200, blank=True, null=True)  # Field name made lowercase.
