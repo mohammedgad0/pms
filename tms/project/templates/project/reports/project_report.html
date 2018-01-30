@@ -2,54 +2,33 @@
 {% load i18n %}
 {% load widget_tweaks %}
 {% block title %} Plain Page {% endblock title %}
-
 {% block stylesheets %}
   {{ block.super }}
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.css" />
-  
+   <link href="/static/build/css/chosen.css" rel="stylesheet">
 {% endblock stylesheets %}
-
 {% block content %}
    <!-- google chart -->
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  
     <div class="right_col" role="main">
       <div class="">
-
-
         <div class="clearfix"></div>
-
-        <div class="row">
-   
-                        
-                        
+        <div class="row">             
           <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
               <div class="x_title">
                 <h2>{% trans "Reports" %}</h2>
-                
-               
                 <ul class="nav navbar-right panel_toolbox">
                   <a href="{{request.META.HTTP_REFERER}}" >  <button type="button" class="btn btn-primary">{{ _('Back')}} <i class="fa fa-angle-double-left"></i> </button></a>
-             
                 </ul>
                 <div class="clearfix"></div>
               </div>
               <div class="x_content">
-              
-                   
- 
-              
                  <div class="col-md-3 col-md-12 col-xs-12">
                   <!--  report type -->      
-     
-      
         <div class="x_panel">
-        
          <form action="" method="post" id="ReportForm" class="form-horizontal form-label-left input_mask" novalidate enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="form-group">
-           
 					  <select class="form-control chosen" name="dept" id="dept" onchange="window.location.href=this.value" data-placeholder="{% trans "Select Departement" %}">
                       <option value="{{depObject.dept_code}}" {% if selectedDpt == depObject.dept_code  or selectedDpt == depObject.dept_code %} selected {%endif%} >{{depObject.dept_name}} </option>
                       {% for dept in departement_list %}
@@ -57,7 +36,6 @@
                       {%endfor%}
                       </select>
                       </div>
-                    
                        <div class="form-group">
                          {{form.project}}
                          </div>
@@ -65,28 +43,19 @@
                           <legend>{% trans "Report Type" %}</legend>
                         {{form.reportType}}
                          </fieldset>
-                        
                         <div class="form-group">
                          <label type="button" class="btn btn-default" ><input type="checkbox" id="checkAll"  /> {{_('Select All')}}</label>
                          <button type="submit" class="btn btn-primary"> <i class="fa fa-gears"></i> {{_('Create')}} </button>
                          </div>
-                    
-             
-           
-     
            </form>
-        
         </div>
-  
                  </div>
                 <div class="col-md-9 col-sm-9 col-xs-12">
                    <fieldset class="fieldset_normal">
         <legend>{% trans "Report" %}</legend>
         <div class="article-content" >   
-        
         <!--  report detail  -->
         {% for  list in rlist %}
-        
         <!--  project type row -->
         <div class="col-md-12 col-sm-12 col-xs-12" style="overflow:hidden;" >
  
@@ -99,10 +68,8 @@
         {% if  list.type == "status" %}
          {% include "project/reports/per_status.html" %}
         {% endif %}
-
         </div>
         <!--  end project row -->
-        
         <!-- error message -->
         {% endfor %}
                <div class="col-md-12 col-sm-12 col-xs-12 form-group text-danger ">
@@ -127,10 +94,8 @@
      $(".chosen").data("placeholder","اختر ...").chosen();
      $(".chosen").chosen({no_results_text: "لايوجد بيانات متاحة"}); 
      $('.chosen').chosen({allow_single_deselect: true,no_results_text: "لايوجد بيانات متاحة"});
-  
      //check all checkbox
    	 $("#checkAll").change(function () {
-
    		    $("input.chektype:checkbox").prop('checked', $(this).prop("checked"));
    			if( sessionStorage.getItem("checkAll")=="checked" )
    		   	{
@@ -140,19 +105,10 @@
    		   	 sessionStorage.setItem("checkAll", "checked");
    		   	}
    		});
-     
-  
    	// Retrieve
    	if( sessionStorage.getItem("checkAll")=="checked" )
    	{
-   	
    	$("input#checkAll").prop('checked', true)
-	
    	}
-   	
-
-   	
      </script>
-     
 {% endblock javascripts %}
-

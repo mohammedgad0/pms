@@ -117,22 +117,22 @@ DATABASES = {
    'default': {
         'ENGINE': 'django.db.backends.mysql',
         
-#         'NAME': 'tms',
-#         'USER': 'sakr',
-#         'PASSWORD': 'Sakr!@#123',
-#         'HOST': '192.168.0.192',   # Or an IP Address that your DB is hosted on
-#         'PORT': '3306',
+        'NAME': 'tms',
+        'USER': 'sakr',
+        'PASSWORD': 'Sakr!@#123',
+        'HOST': '192.168.0.192',   # Or an IP Address that your DB is hosted on
+        'PORT': '3306',
          
 #         'NAME': 'tms_dev',
 #          'USER': 'sakr',
 #          'PASSWORD': 'Sakr!@#123',
 #          'HOST': '192.168.0.192',   # Or an IP Address that your DB is hosted on
 #          'PORT': '3306',
-         
-        'NAME': 'tms',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',   # Or an IP Address that your DB is hosted on,
+          
+#         'NAME': 'tms',
+#         'USER': 'root',
+#         'PASSWORD': '',
+#         'HOST': 'localhost',   # Or an IP Address that your DB is hosted on,
 
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
@@ -181,8 +181,8 @@ LANGUAGES = [
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
-
-STATIC_ROOT = posixpath.join(*(BASE_DIR.split(os.path.sep) + ['static']))
+#posixpath.join(*(BASE_DIR.split(os.path.sep) + ['static']))
+STATIC_ROOT = posixpath.join(*(BASE_DIR.split(os.path.sep) + ['/static/'])) 
 
 #local pth for language
 LOCALE_PATHS = [
