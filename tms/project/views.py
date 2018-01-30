@@ -135,7 +135,7 @@ def myuser(request, *args, **kwargs):
         if request.user.is_authenticated():
             email = request.user.email
             try:
-                emp = Employee.objects.get(email__exact= email)
+                emp = Employee.objects.filter(email__exact= email).get()
             except:
                 #return HttpResponseRedirect(reverse('logout'))
                 raise Http500("Your account has problem")
