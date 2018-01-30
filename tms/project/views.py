@@ -156,7 +156,7 @@ def myuser(request, *args, **kwargs):
                 else:
                         g = Group.objects.get(name='employee')
                         g.user_set.add(request.user.id)
-
+         
         else:
             return login(request, *args, **kwargs)
     return login(request, *args, **kwargs)

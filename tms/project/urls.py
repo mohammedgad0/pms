@@ -12,7 +12,7 @@ urlpatterns = [
 
     # The home page
     url(r'^dashboard/$', views.Dashboard, name='dashboard'),
-    url(r'^$', views.ProjectList, name='index'),
+    url(r'^$', views.Dashboard, name='dashboard'),
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^add-sheet/$', views.AddSheet, name='add-sheet'),
     url(r'^sheet/(?P<pk>\d+)/edit/$', views.EditSheet, name='edit-sheet'),
