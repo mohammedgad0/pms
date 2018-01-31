@@ -33,7 +33,6 @@ class ForceLangMiddleware:
                         request.session['have_auth']  = True
             except:
                  pass
-            # Get all data filtered by user email and set in session
            
 class UserSeesionSet:
     def UserSessions(request):

@@ -1283,11 +1283,11 @@ def DashboardManager(request):
     dept_code  = request.session['DeptCode']
     start_date = datetime.now() - relativedelta(years=1)
     end_date = datetime.now()
-    task_based_department = dept_task_indicators(dept_code,start_date,end_date)
-    pie_tasks=_dept_tasks_statistics(dept_code,start_date,end_date)
+    task_based_department = dept_task_indicators(request,dept_code,start_date,end_date)
+    pie_tasks=_dept_tasks_statistics(request,dept_code,start_date,end_date)
     open_projects=_dept_open_pojects(request,dept_code,start_date,end_date)
     per_indicator = indicators(dept_code,start_date,end_date)
-    project_kpi=_project_kpi(dept_code, start_date, end_date)
+    project_kpi=_project_kpi(request,dept_code, start_date, end_date)
     open_tasks=_open_tasks(request,dept_code, start_date, end_date)
     context = {"start_date":start_date,"end":end_date,"task_based_department":task_based_department,
                'pie_tasks':pie_tasks,"per_indicator":per_indicator,'open_projects':open_projects,'project_kpi':project_kpi,
@@ -1306,20 +1306,20 @@ def DashboardPM(request):
     dept_code  = request.session['DeptCode']
     start_date = datetime.now() - relativedelta(years=1)
     end_date = datetime.now()
-    task_based_department = dept_task_indicators(dept_code,start_date,end_date)
-    pie_tasks=_dept_tasks_statistics(dept_code,start_date,end_date)
+    task_based_department = dept_task_indicators(request,dept_code,start_date,end_date)
+    pie_tasks=_dept_tasks_statistics(request,dept_code,start_date,end_date)
     open_tasks=_open_tasks(request,dept_code, start_date, end_date)
     open_projects=_dept_open_pojects(request,dept_code,start_date,end_date)
     per_indicator = indicators(dept_code,start_date,end_date)
-    project_kpi=_project_kpi(dept_code, start_date, end_date)
+    project_kpi=_project_kpi(request,dept_code, start_date, end_date)
     
     
     #test 
     dList=[]
    
-    qs= Task.objects.filter(createdby__exact=request.session['EmpID'])
+    qs= Task.objects.filter(Q(createdby__exact=request.session['EmpID']) | Q(project__delegationto__exact=request.session['EmpID']) |Q(assignedto__exact=request.session['EmpID']) )
     summary_over_time = qs.annotate(
-            period=Trunc('startdate','month',output_field=DateTimeField(), ),).values('period').annotate(total=Count('status', filter=Q(status__exact="New"))).order_by('period')
+            period=Trunc('enddate','month',output_field=DateTimeField(), ),).values('period').annotate(total=Count('status')).order_by('period')
 #     for  row in summary_over_time :
 #          print (row)
 #          vDict={}
@@ -1355,35 +1355,54 @@ def emp_task(empid):
     tasks = Task.objects.filter( Q(assignedto__empid__exact = empid) & ~Q(status ='Closed'))
     return tasks
 #@login_required
-def dept_task_indicators(dept_code,start_date,end_date):
-    dept_data = get_object_or_404(Department,deptcode=dept_code)
-    dept_manager = dept_data.managerid
-    dept_internal_task_count = Task.objects.filter(
-    Q(createdby = dept_manager)).count()
+def dept_task_indicators(request,dept_code,start_date,end_date):
+    empid=request.session['EmpID']
+    dept_data = get_object_or_404(Department,deptcode__exact=dept_code)
+    if request.user.groups.filter(name__exact='ismanager').exists():
 
-    dept_external_task = Task.objects.filter(
-    Q(departement = dept_code)&
-    ~Q(createdby = dept_manager)
-    )
+        dept_manager = dept_data.managerid
+        dept_internal_task_count = Task.objects.filter(
+        Q(createdby = dept_manager)).count()
+    
+        dept_external_task = Task.objects.filter(
+        Q(departement__exact = dept_code)&
+        ~Q(createdby__exact = dept_manager)
+        )
+    elif request.user.groups.filter(name__exact='projectmanager').exists():
+        dept_internal_task_count = Task.objects.filter(
+             Q(project__createdby__exact = empid) | Q(project__delegationto__exact = empid) ).count()
+    
+        dept_external_task = Task.objects.filter(
+        Q(assignedto__exact = empid)&
+        ~Q(createdby__exact = empid) &  ~Q(project__departement__exact = dept_code)
+        )
+            
 
     TaskDict = {}
     TaskDict.update({dept_data.deptname: dept_internal_task_count})
     for data in dept_external_task:
-        tasks = Task.objects.filter(departement = data.departement, createdby = data.createdby)
+        tasks = Task.objects.filter(departement__exact = data.departement, createdby__exact = data.createdby)
         task_count = tasks.count()
         for name in tasks:
             each_dept_count = tasks.filter(createdby = name.createdby).count()
             TaskDict.update({name.createdby.deptname: each_dept_count})
     return TaskDict
 #@login_required
-def _dept_tasks_statistics(deptcode,startdate,enddate):
+def _dept_tasks_statistics(request,deptcode,startdate,enddate):
+    empid=request.session['EmpID']
     tasks = {}
-    task_list= Task.objects.filter(Q(departement__deptcode__exact=deptcode) | Q(project__departement__deptcode__exact=deptcode) )
+    if request.user.groups.filter(name__exact='ismanager').exists():
+        task_list= Task.objects.filter(Q(departement__deptcode__exact=deptcode) | Q(project__departement__deptcode__exact=deptcode) )
+    elif  request.user.groups.filter(name__exact='projectmanager').exists():
+        task_list= Task.objects.filter(
+          (Q(createdby__empid__exact = empid) | Q(assignedto__empid__exact= empid) | Q(project__delegationto__empid__exact= empid))
+             ).order_by('enddate')
+
     tasks['New']=task_list.filter(status__exact='New').count()
     tasks['InProgress']=task_list.filter(status__exact='InProgress').count()
     tasks['Done']=task_list.filter(status__exact='Done').count()
     tasks['Hold']=task_list.filter(status__exact='Hold').count()
-    tasks['Canceled']=task_list.filter(status__exact='Canceled').count()
+    tasks['Cancelled']=task_list.filter(status__exact='Cancelled').count()
     tasks['Closed']=task_list.filter(status__exact='Closed').count()
     return tasks
 
@@ -1394,11 +1413,11 @@ def _dept_open_pojects(request,deptcode,startdate,enddate):
     if request.user.groups.filter(name__exact='ismanager').exists():
         projects= Project.objects.filter(
             (Q(departement__deptcode__exact=deptcode) | Q(task__departement__deptcode__exact=deptcode) )
-            & ~Q(status__name__exact="Closed")).annotate(num_tasks=Count('task'))
+            & ~Q(status__name__exact="Done")).annotate(num_tasks=Count('task'))
     elif request.user.groups.filter(name__exact='projectmanager').exists():
          projects= Project.objects.filter(
-            (Q(createdby__exact=empid) | Q(delegationto__exact=empid) )
-            & ~Q(status__name__exact="Closed")).annotate(num_tasks=Count('task'))
+            (Q(createdby__exact=empid) | Q(delegationto__exact=empid) |  Q(task__assignedto__exact=empid))
+            & ~Q(status__name__exact="Done")).annotate(num_tasks=Count('task'))
     else:
          return projectList   
 
@@ -1416,27 +1435,47 @@ def _dept_open_pojects(request,deptcode,startdate,enddate):
         projectDict["New"]=tasks.filter(status__exact="New").count()
         projectDict["Done"]=tasks.filter(status__exact="Done").count()
         projectDict["Closed"]=tasks.filter(status__exact="Closed").count()
-        projectDict["Canceled"]=tasks.filter(status__exact="Canceled").count()
+        projectDict["Cancelled"]=tasks.filter(status__exact="Cancelled").count()
         projectDict["Hold"]=tasks.filter(status__exact="Hold").count()
         projectDict["InProgress"]=tasks.filter(status__exact="InProgress").count()
         projectList.append(projectDict)
     return projectList
 
 #@login_required
-def _project_kpi(deptcode,startdate,enddate):
+def _project_kpi(request,deptcode,startdate,enddate):
     projectKPI={}
-    projects= Project.objects.filter((Q(departement__deptcode__exact=deptcode)| Q(task__departement__deptcode__exact=deptcode))
-                                 |Q(delegationto__deptcode__exact=deptcode)   ).annotate(dcount=Count('departement'))
-    projectKPI["p_all"]= projects.count()
-    projectKPI["p_internal"]= projects.filter(departement__deptcode__exact=deptcode).count()
-    projectKPI["p_external"]= projects.filter( Q(task__departement__deptcode__exact=deptcode) & ~Q(departement__deptcode__exact = deptcode)).count()
+    empid=request.session['EmpID']
+    if request.user.groups.filter(name__exact='ismanager').exists():
+        projects= Project.objects.filter((Q(departement__deptcode__exact=deptcode)| Q(task__departement__deptcode__exact=deptcode)
+                                     |Q(delegationto__deptcode__exact=deptcode) ) & ~Q(status__name__exact="Done")).annotate(dcount=Count('departement'))
+       #project filters
+        projectKPI["p_all"]= projects.count()
+        projectKPI["p_internal"]= projects.filter(departement__deptcode__exact=deptcode).count()
+        projectKPI["p_external"]= projects.filter( Q(task__departement__deptcode__exact=deptcode) & ~Q(departement__deptcode__exact = deptcode)).count()
+      
+        tasks=Task.objects.filter(
+        (Q(departement__deptcode__exact=deptcode)| Q(project__departement__deptcode__exact=deptcode) )                     )
+        #task filters
+        projectKPI["t_all"]= tasks.count()
+        projectKPI["t_internal"]= tasks.filter(  Q(project__departement__deptcode__exact=deptcode) ).count()
+        projectKPI["t_external"]= tasks.filter(  Q(departement__deptcode__exact=deptcode) & ~Q(project__departement__deptcode__exact=deptcode)).count()
+            
+        
+    elif request.user.groups.filter(name__exact='projectmanager').exists():
+        projects= Project.objects.filter( (Q(createdby__exact=empid) | Q(delegationto__exact=empid) |  Q(task__assignedto__exact=empid))
+            & ~Q(status__name__exact="Done")).annotate(num_tasks=Count('task'))
+        #filters
+        projectKPI["p_all"]= projects.count()
+        projectKPI["p_internal"]= projects.filter( Q(createdby__exact=empid) | Q(delegationto__exact=empid) |Q(departement__deptcode__exact = deptcode)).count()
+        projectKPI["p_external"]= projects.filter( Q(task__assignedto__exact=empid) & ~Q(departement__deptcode__exact = deptcode)).count()
 
-    tasks=Task.objects.filter(
-        (Q(departement__deptcode__exact=deptcode)| Q(project__departement__deptcode__exact=deptcode) )
-                                    )
-    projectKPI["t_all"]= tasks.count()
-    projectKPI["t_internal"]= tasks.filter(  Q(project__departement__deptcode__exact=deptcode) ).count()
-    projectKPI["t_external"]= tasks.filter(  Q(departement__deptcode__exact=deptcode) & ~Q(project__departement__deptcode__exact=deptcode)).count()
+        tasks=Task.objects.filter((Q(createdby__empid__exact = empid) | Q(assignedto__empid__exact= empid) | Q(project__delegationto__empid__exact= empid))
+            & ~Q(status__exact="Closed")  ).order_by('enddate')
+        #task filters
+        projectKPI["t_all"]= tasks.count()
+        projectKPI["t_internal"]= tasks.filter(  Q(project__departement__deptcode__exact=deptcode) ).count()
+        projectKPI["t_external"]= tasks.filter(  Q(departement__deptcode__exact=deptcode) & ~Q(project__departement__deptcode__exact=deptcode)).count()
+            
     return projectKPI
 
 
@@ -1446,11 +1485,11 @@ def _open_tasks(request,deptcode,startdate,enddate):
     if request.user.groups.filter(name__exact='ismanager').exists():
         openTasks= Task.objects.filter(
           (Q(departement__deptcode__exact= deptcode) | Q(project__departement__deptcode__exact= deptcode))
-            & ~Q(status__exact="Closed"))
+            & ~Q(status__exact="Closed") & ~Q(project__status__name__exact="Done"))
     elif request.user.groups.filter(name__exact='projectmanager').exists():
         openTasks= Task.objects.filter(
-          (Q(createdby__empid__exact = empid) | Q(assignedto__empid__exact= empid))
-            & ~Q(status__exact="Closed"))
+          (Q(createdby__empid__exact = empid) | Q(assignedto__empid__exact= empid) | Q(project__delegationto__empid__exact= empid))
+            & ~Q(status__exact="Closed")  ).order_by('enddate')
         
     return openTasks
 

@@ -15,48 +15,84 @@
   <div class="right_col" role="main">
     <div class="">
 
+  <!-- top tiles -->
+    <div class="row tile_count" style="margin-bottom: 0px;">
+      <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-briefcase"></i>  كل المشاريع </span>
+        <div class="count">{{project_kpi.p_all|stringformat:"02d"}}</div>
+       <!-- <span class="count_bottom"><i class="green">4% </i> منذ اخر اسبوع</span>-->
+      </div>
+      <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-clock-o"></i> مشاريع داخلية</span>
+         <div class="count">{{project_kpi.p_internal|stringformat:"02d"}}</div>
+       <!--   <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> منذ اخر اسبوع</span>-->
+      </div>
+      <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-clock-o"></i> مشاريع خارجية</span>
+         <div class="count">{{project_kpi.p_external|stringformat:"02d"}}</div>
+       <!--   <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i>  منذ اخر اسبوع</span>-->
+      </div>
+      <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-clock-o"></i> كل المهام</span>
+        <div class="count">{{project_kpi.t_all|stringformat:"02d"}}</div>
+        <!-- <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i>  منذ اخر اسبوع</span> -->
+      </div>
+      <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-clock-o"></i> مهام داخلية</span>
+      <div class="count">{{project_kpi.t_internal|stringformat:"02d"}}</div>
+        <!--  <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i>  منذ اخر اسبوع</span> -->
+      </div>
+      <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-clock-o"></i> مهام مسندة</span>
+       <div class="count">{{project_kpi.t_external|stringformat:"02d"}}</div>
+       <!--  <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i>   منذ اخر اسبوع</span> -->
+      </div>
 
+    </div>
+    <!-- /top tiles -->
       <div class="clearfix"></div>
 
       <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
           <div class="x_panel">
-            <div class="x_title">
-              <h2>{% trans "Home" %}  <small>{% trans "Dashboard" %}</small></h2>
+            <!--   <div class="x_title">
+            <h2>{% trans "Home" %}  <small>{% trans "KPI" %}</small></h2> 
           
               <div class="clearfix"></div>
-            </div>
+            </div>-->
             <div class="x_content">
            <div class="col-md-12 col-sm-12 col-xs-12" style="overflow: hidden;">
 
-                <div class="profile_title">
-                  <div class="col-md-6">
-                    <h2>{% trans "KPI" %}</h2>
-                  </div>
-         
-                </div>
+    
                 <div class="col-md-4">
                 <!-- start of user-activity-graph -->
-                <div id="curve_chart" style="width:100%; height:280px;"></div>
+                <div class="x_panel" >
+                <div class="x-title"> <b>{% trans "Tasks by enddate" %}</b></div>
+                <div id="graph_bar2" style="width:100%; height:280px;" ></div>
+                {#  {{summary_over_time}}       #}   
                 <!-- end of user-activity-graph -->
                      </div>
-                
+                </div>
                 
                  <div class="col-md-4">
+                   <div class="x_panel" >
+                      <div class="x-title"> <b>{% trans "Tasks by Departement" %}</b></div>
                 <!-- start of user-activity-graph -->
                 <div id="donutchart_dept" style="width:100%; height:280px;"></div>
                 <!-- end of user-activity-graph -->
                      </div>
-                     
+                     </div>
                      
                      
                       <div class="col-md-4">
+                        <div class="x_panel" >
+                            <div class="x-title"><b> {% trans "Tasks by Status" %}</b></div>
                 <!-- start of user-activity-graph -->
                 <div id="piechart_tasks" style="width:100%; height:280px;"></div>
                 <!-- end of user-activity-graph -->
                      </div>
                      
-           {#  {{summary_over_time}}       #}   
+         </div>
        
                      
                          
@@ -92,9 +128,9 @@
                         <tbody>
                          {% for task in open_tasks %}
                           <tr>
-                            <td>1</td>
-                            <td><a href="{% url 'ns-project:project-task-detail' task.project.id task.id   %}" class="blue" >  {{ task.name }}</a></td>
-                            <td><a href="{% url 'ns-project:project-detail' task.project.id %}" class="blue" >  {{ task.project.name }}</a></td>
+                            <td>{{ forloop.counter }}</td>
+                            <td><a href="{% url 'ns-project:project-task-detail' task.project.id task.id   %}" class="blue" >  {{ task.name|truncatechars:50 }}</a></td>
+                            <td><a href="{% url 'ns-project:project-detail' task.project.id %}" class="blue" >  {{ task.project.name|truncatechars:50 }}</a></td>
                             <td>{{  task.startdate|date:"Y-m-d" }}</td>
                             <td>{{  task.enddate|date:"Y-m-d" }}</td>
                             <td>
@@ -169,8 +205,8 @@
                         <tbody>
                          {% for project in open_projects %}
                           <tr>
-                            <td>1</td>
-                            <td><a href="{% url 'ns-project:project-detail' project.detail.id %}" class="blue" >  {{ project.detail.name }}</a></td>
+                            <td>{{ forloop.counter }} </td>
+                            <td><a href="{% url 'ns-project:project-detail' project.detail.id %}" class="blue" >  {{ project.detail.name|truncatechars:50 }}</a></td>
                              <td>{{project.detail.start}}</td>
                               <td>{{project.detail.end}}</td>
                                <td>{{ project.detail.status.name_ar }}</td>
@@ -179,7 +215,7 @@
                             <td>{{project.New}}</td>
                             <td> {{project.InProgress}}</td> 
                             <td>{{project.Done}}</td>
-                           <td>{{project.Canceled}}</td>
+                           <td>{{project.Cancelled}}</td>
                           <td>{{project.Hold}}</td>
                          <td>{{project.Closed}}</td>
                          
@@ -260,12 +296,13 @@
           ['{{_("Hold")}}',      {{ pie_tasks.Hold}}],
           ['{{_("InProgress")}}',     {{ pie_tasks.InProgress}}],
           ['{{_("Done")}}',      {{ pie_tasks.Done}}],
-          ['{{_("Canceled")}}',     {{ pie_tasks.Canceled}}],
+          ['{{_("Canceled")}}',     {{ pie_tasks.Cancelled}}],
           ['{{_("Closed")}}',     {{ pie_tasks.Closed}}],
         ]);
 
         var options = {
-          title: ''
+        //  title: '{% trans " Tasks by status"%}',
+        	//height:'200',
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart_tasks'));
@@ -305,6 +342,7 @@ function drawChart() {
   ]);
 
   var options = {
+   // title: '{% trans " Tasks by departement"%}',
     is3D: true,
     fontSize: 12,
     fontName: 'neo',
@@ -355,7 +393,7 @@ google.charts.load('current', {'packages':['gauge']});
         ]);
 
         var options = {
-          title: '{% trans "Tasks" %}',
+         // title: '{% trans "Tasks" %}',
           curveType: 'function',
           legend: { position: 'bottom' }
         };
@@ -379,5 +417,35 @@ google.charts.load('current', {'packages':['gauge']});
     } );
 } );
     </script>
-    
+   
+   
+   <!--  BAR --> 
+   <script>
+  
+   <!-- moris -->
+   if ($('#graph_bar2').length) {
+
+       Morris.Bar({
+           element: 'graph_bar2',
+           data: [
+        	   {% for s in  summary_over_time %}
+        	   
+               { device: '{{s.period|date:"M Y"}}', geekbench: {{s.total }} },
+{% endfor%}
+     
+           ],
+           
+           xkey: 'device',
+           ykeys: ['geekbench'],
+           labels: ['المهام'],
+           barRatio: 0.4,
+           barColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB', '#3498DB'],
+           xLabelAngle: 35,
+           hideHover: 'auto',
+           resize: true
+       });
+
+   }
+
+   </script>
 {% endblock javascripts %}
