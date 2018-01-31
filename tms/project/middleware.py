@@ -15,6 +15,7 @@ class ForceLangMiddleware:
                 emp = Employee.objects.filter(email= email).get()
                 if emp is not None:
                     request.session['EmpID'] = emp.empid
+                    request.session['Email'] = emp.email
                     request.session['EmpName'] = emp.empname
                     request.session['DeptName'] = emp.deptname
                     request.session['Mobile'] = emp.mobile

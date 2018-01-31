@@ -274,16 +274,16 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 						</td>
 						</tr>
 						<tr>
-<td>
+						<td>
 						<!-- Callout Panel -->
 						<p class="callout">
-						 {{ _('Task has been asigned to you in PMS')}}<br>
-							{{task.name}} <a href="http://{{host}}/project/project_task_detail/{{task.project.id}}/{{task.id}}"><br></br>{{_('Click Here')}}! &raquo;</a>
+						 {{ _('The project has been assigned to you in PMS system')}}<br>
+							{{project.name}} <a href="http://{{host}}/project/project_detail/{{project.id}}"><br></br>{{_('Click Here')}}! &raquo;</a>
 						</p><!-- /Callout Panel -->
 						
-						<h3>{{task.name}}</h3>
-						<p>{{task.desc|truncatewords:100}}</p>
-						<a class="btn" href="http://{{host}}/project/project_task_detail/{{task.project.id}}/{{task.id}}">{{_('Click Here')}}!</a>
+						<h3>{% trans "Detail" %}</h3>
+						<p>{{project.desc|truncatewords:100}}</p>
+						<a class="btn" href="http://{{host}}/project/project_detail/{{project.id}}">{{_('Click Here')}}!</a>
 												
 						<br/>
 						<br/>							
@@ -299,24 +299,25 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 											<td>				
 												
 												<h5 class="">{% trans "Basic Info" %}</h5>
-												<p>{{ _('Created By') }}: <strong>{{task.lasteditby.empname}}</strong></p>
-												<p>{{ _('AssignedDate') }}: <strong>{{task.assigneddate}}</strong></p>
-                                                <p> {{_("Task Status")}}: <strong> {% trans task.status %}</strong></p>
-                                                  <p>  {{_("project Name")}}: <strong> {{task.project.name}}</strong></p>
+												<p> {{_("Project Status")}}: <strong> {{project.status.name_ar}} </strong></p>
+												<p>{{ _('Delegation Date') }}: <strong>{{project.delegationdate}}</strong></p>
+												<p>{{ _('Created By') }}: <strong>{{project.createdby.empname}}</strong></p>
+
                
 											</td>
 										</tr>
 									</table><!-- /column 1 -->	
 									</td>
+									<td>
 									<!--- column 2 -->
 									<table align="left" class="column">
 										<tr>
 											<td>				
 																			
 												<h5 class="">{{ _('Contact Info') }}:</h5>												
-												<p>{{ _('Phone') }}: <strong>{{task.lasteditby.mobile}}</strong></p>
-												<p>{{ _('Ext') }}: <strong>{{task.lasteditby.ext}}</strong></p>
-             <p> {{ _('Email') }}: <strong><a href="mailto:{{task.lasteditby.email}}">{{task.lasteditby.email}}</a></strong></p>
+												<p>{{ _('Phone') }}: <strong>{{project.createdby.mobile}}</strong></p>
+												<p>{{ _('Ext') }}: <strong>{{project.createdby.ext}}</strong></p>
+             <p> {{ _('Email') }}: <strong><a href="mailto:{{ project.createdby.email }}">{{project.createdby.email}}</a></strong></p>
                 
 											</td>
 										</tr>
@@ -324,6 +325,7 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
 									
 									<span class="clear"></span>	
 									
+								</td>
 							</tr>
 						</table><!-- /social & contact -->
 					
