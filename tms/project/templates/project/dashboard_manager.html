@@ -1,26 +1,21 @@
 {% extends "project/base_site.html" %}
 {% load i18n %}
 {% block title %} Dashboard 1 {% endblock title %}
-
 {% block stylesheets %}
-  {{ block.super }}
-
-  <style>
-  #chart_div > table{
- margin:auto !important;
-  }
-  </style>
-    <link href="/static/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
-  <link href="/static/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
-  <link href="/static/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
-  <link href="/static/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
-  <link href="/static/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+{{ block.super }}
+<link href="/static/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link href="/static/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+<link href="/static/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+<link href="/static/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+<link href="/static/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
 {% endblock stylesheets %}
-
 {% block content %}
 
+
   <div class="right_col" role="main">
-    <!-- top tiles -->
+    <div class="">
+
+  <!-- top tiles -->
     <div class="row tile_count" style="margin-bottom: 0px;">
       <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
         <span class="count_top"><i class="fa fa-briefcase"></i>  كل المشاريع </span>
@@ -55,255 +50,241 @@
 
     </div>
     <!-- /top tiles -->
-    {{result}}
-    {%for data in result%}
-    {{data}}
-    {%endfor%}
-     <!-- start  row 1 -->
-    <div class="row">
- <div class="col-md-9 col-sm-12 col-xs-12">
-        <div class="x_panel tile fixed_height_320">
-          <div class="x_title">
-            <h2>مشاريع مفتوحة</h2>
-            {{all_dept}}
-            <div class="clearfix"></div>
-          </div>
-          <div class="x_content">
+      <div class="clearfix"></div>
 
-<div class="container">
-<table class="table table-sm table-responsive" id="open-project-list">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>أسم المشروع</th>
-                    <th>نسبة الانجاز </th>
-                    <th>الإلتزام</th>
-                    <th>كل المهام</th>
-                     <th>جديد </th>
-                    <th>جارى العمل</th>
-                    <th>  منجز</th>
-                    <th>  ملغى</th>
-                     <th>  معلق</th>
-                     <th> مغلق</th>
-                  </tr>
-                </thead>
-                <tbody>
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <!--   <div class="x_title">
+            <h2>{% trans "Home" %}  <small>{% trans "KPI" %}</small></h2> 
+          
+              <div class="clearfix"></div>
+            </div>-->
+            <div class="x_content">
+           <div class="col-md-12 col-sm-12 col-xs-12" style="overflow: hidden;">
 
+    
+                <div class="col-md-4">
+                <!-- start of user-activity-graph -->
+                <div class="x_panel" >
+                <div class="x-title"> <b>{% trans "Tasks by enddate" %}</b></div>
+                <div id="graph_bar2" style="width:100%; height:280px;" ></div>
+                {#  {{summary_over_time}}       #}   
+                <!-- end of user-activity-graph -->
+                     </div>
+                </div>
+                
+                 <div class="col-md-4">
+                   <div class="x_panel" >
+                      <div class="x-title"> <b>{% trans "Tasks by Departement" %}</b></div>
+                <!-- start of user-activity-graph -->
+                <div id="donutchart_dept" style="width:100%; height:280px;"></div>
+                <!-- end of user-activity-graph -->
+                     </div>
+                     </div>
+                     
+                     
+                      <div class="col-md-4">
+                        <div class="x_panel" >
+                            <div class="x-title"><b> {% trans "Tasks by Status" %}</b></div>
+                <!-- start of user-activity-graph -->
+                <div id="piechart_tasks" style="width:100%; height:280px;"></div>
+                <!-- end of user-activity-graph -->
+                     </div>
+                     
+         </div>
+       
+                     
+                         
+                  <div class="clearfix"></div>
+                <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                  <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">{% trans "Tasks work on" %}</a>
+                    </li>
+                    <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">{% trans "Projects Worked on" %}</a>
+                    </li>
+              
+                  </ul>
+                  <div id="myTabContent" class="tab-content">
+                    <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
 
-                  {% for project in open_projects %}
-                  <tr>
-                    <td scope="row">{{project.detail.id}}</td>
-                    <td><a href="{% url 'ns-project:project-detail' project.detail.id %}" class="blue" >  {{ project.detail.name }}</a></td>
-                    <td class="project_progress">
+					<!-- start user tasks -->
+                      <table class="data table table-striped no-margin" id="open_tasks">
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>{% trans "Task" %}</th>
+                            <th>{% trans "Project" %}</th>
+                            <th>{% trans "Start Date" %}</th>
+                            <th>{% trans "End Date" %}</th>
+                            <th>{% trans "AssignedTo" %}</th>
+                            <th>{% trans "Status" %}</th>
+                            <th>{% trans "comittment" %} </th>
+                            <th></th>
+                            <th>{% trans "Progress" %}</th>
+                          
+                          </tr>
+                        </thead>
+                        <tbody>
+                         {% for task in open_tasks %}
+                          <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td><a href="{% url 'ns-project:project-task-detail' task.project.id task.id   %}" class="blue" >  {{ task.name|truncatechars:50 }}</a></td>
+                            <td><a href="{% url 'ns-project:project-detail' task.project.id %}" class="blue" >  {{ task.project.name|truncatechars:50 }}</a></td>
+                            <td>{{  task.startdate|date:"Y-m-d" }}</td>
+                            <td>{{  task.enddate|date:"Y-m-d" }}</td>
+                            <td>
 
+                       {% if task.assignedto.empname%}
+                       {{task.assignedto.empname|truncatewords:6}}
+                       {% elif task.departement.deptname %}
+                       {{task.departement.deptname|truncatewords:6}}
+                      {% endif %}
 
-                              <div class="progress progress_sm">
-                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="{{project.Progress.progress__avg}}" aria-valuenow="72" style="width: {{project.Progress.progress__avg}}%;"></div>
-                              </div>
-
-                              <small> {{ project.Progress.progress__avg|floatformat:-2}}% مكتمل</small>
-                              </td>
-                     <td >
-                      {% now "Y-m-d" as current_date %}
-                     {% if project.enddate|date:"Y-m-d" < current_date  and project.status.name != "done" %}
+                                </td>
+                            <td>{%  trans task.status %}</td>
+                            <td> 
+                     {% now "Y-m-d" as current_date %}
+                     {% if task.enddate|date:"Y-m-d" < current_date and task.status != "Done" %}
+					  <div class="commitment-down text-danger">
+                    <i class="fa fa-level-down"></i> متأخر
+                   </div>
+                     {% else %}
                      <div class="commitment-up text-success">
                      <i class="fa fa-level-up"></i> ملتزم
-                   </div>
-                     {% else %}
-                         <div class="commitment-down text-danger">
-                    <i class="fa fa-level-down"></i> متأخر
                        </div>
                      {%endif%}
-                     </td>
+                            </td>
+                            
+                            <td>  <small class="text-danger left" > {{ task.progress|floatformat:-2}}% مكتمل</small></td>
+                            <td class="vertical-align-mid">
+                              <div class="progress">
+                               
+                               {% if task.enddate|date:"Y-m-d" < current_date and task.status != "Done" %}
+                               
+                                 <div class="progress-bar progress-bar-danger" role="progressbar" data-transitiongoal="{{ task.progress|floatformat:-2}}" aria-valuenow="72" style="width: {{ task.progress|floatformat:-2}%;">  </div>
+                              {%else %}
+                                <div class="progress-bar progress-bar-success" role="progressbar" data-transitiongoal="{{ task.progress|floatformat:-2}}" aria-valuenow="72" style="width: {{ task.progress|floatformat:-2}%;">  </div>
+                              
+                              {%endif%}
+                            </div>
+                              
+                               
+                              
+                            </td>
+                            <td>  </td>
+                          </tr>
+                         {% endfor%}
+                          </tbody>
+                      </table>
+                      <!-- end user projects -->
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
 
-                     <td><b>{{project.All}}</b></td>
-                       <td><b>{{project.New}}</b></td>
-                       <td><b>{{project.InProgress}}</b></td>
-                         <td><b>{{project.Done}} </b></td>
-                           <td><b>{{project.Canceled}}</b></td>
-                          <td><b>{{project.Hold}}</b></td>
-                         <td><b>{{project.Closed}}</b>
-
-                        <!--  <span class="sparkline_area" style="height: 160px;"><canvas width="85" height="15" style="display: inline-block; width: 85px; height: 15px; vertical-align: top;"></canvas></span> -->
-
-                         </td>
-                  </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-              </div>
-          </div>
-        </div>
-      </div>
-
- <div class="col-md-3 col-sm-12 col-xs-12">
-         <div class="x_panel tile fixed_height_320">
-          <div class="x_title">
-              <h2>{% trans "Tasks by status" %}</h2>
-            <div class="clearfix"></div>
-          </div>
-          <div class="x_content">
-<div id="piechart" style="height:250px;"></div>
-
-          </div>
-        </div>
- </div>
-
-     </div> <!-- end  row 1 -->
-
-    <div class="row">
-  <div class="col-md-6 col-sm-12 col-xs-12 float-right">
-        <div class="x_panel tile fixed_height_320 overflow_hidden">
-          <div class="x_title">
-            <h2>المهام المفتوحة</h2>
-            <div class="clearfix"></div>
-          </div>
-          <div class="x_content">
-  <table class="table table-sm table-responsive" id="open-tasks">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>{% trans "Task" %}</th>
-                    <th>{% trans "Project" %}</th>
-                    <th>{% trans "Progress" %}</th>
-                    <th>الألتزام</th>
-                    <th>{% trans "Status" %}</th>
-                    <th>{% trans "End Date" %}</th>
-                  </tr>
-                </thead>
-                <tbody>
-
-
-                  {% for task in open_tasks %}
-                  {% if task is not None and  task.project.id != "" %}
-                  <tr>
-                    <td scope="row">{{task.id}}</td>
-                    <td><a href="{% url 'ns-project:project-task-detail' task.project.id task.id   %}" class="blue" >  {{ task.name }}</a></td>
-                    <td><a href="{% url 'ns-project:project-detail' task.project.id %}" class="blue" >  {{ task.project.name }}</a></td>
-
-                    <td class="project_progress">
-                              <div class="progress progress_sm">
-                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="{{ task.progress|floatformat:-2}}" aria-valuenow="72" style="width: {{ task.progress|floatformat:-2}%;"></div>
-                              </div>
-                              <small> {{ task.progress|floatformat:-2}}% مكتمل</small>
-                              </td>
-
-                     <td >
+                      <!-- start user projects -->
+                      <table class="data table table-striped no-margin" id="open_projects">
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>{% trans "Project Name" %}</th>
+                            <th>{% trans "Start Date" %}</th>
+                            <th>{% trans "End Date" %}</th>
+                             <th>{% trans "Status" %}</th>
+                            <th>{% trans "Tasks Number" %}</th>
+                            <th>{% trans "New" %}</th>
+                            <th >{% trans "InProgress" %}</th>
+                            <th>{% trans "Done" %}</th>
+                            <th>{% trans "Canceled" %}</th>
+                            <th>{% trans "Hold" %}   </th>
+                            <th>{% trans "Closed" %}</th>
+                             <th>{% trans "comittment" %} </th>
+                              <th></th>
+                            <th>{% trans "Progress" %}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                         {% for project in open_projects %}
+                          <tr>
+                            <td>{{ forloop.counter }} </td>
+                            <td><a href="{% url 'ns-project:project-detail' project.detail.id %}" class="blue" >  {{ project.detail.name|truncatechars:50 }}</a></td>
+                             <td>{{project.detail.start}}</td>
+                              <td>{{project.detail.end}}</td>
+                               <td>{{ project.detail.status.name_ar }}</td>
+                             
+                            <td>{{project.All}}</td>
+                            <td>{{project.New}}</td>
+                            <td> {{project.InProgress}}</td> 
+                            <td>{{project.Done}}</td>
+                           <td>{{project.Cancelled}}</td>
+                          <td>{{project.Hold}}</td>
+                         <td>{{project.Closed}}</td>
+                         
+                                      <td> 
                      {% now "Y-m-d" as current_date %}
-
-                     {% if task.enddate|date:"Y-m-d" < current_date and task.status != "Done" %}
-                    <div class="commitment-down text-danger">
+                     {% if project.enddate|date:"Y-m-d" < current_date and project.status != "Done" %}
+					  <div class="commitment-down text-danger">
                     <i class="fa fa-level-down"></i> متأخر
                    </div>
                      {% else %}
-                   <div class="commitment-up text-success">
-                   <i class="fa fa-level-up"></i> ملتزم
-                   </div>
-                    {%endif%}
-                     </td>
-                     <td>{% trans task.status %}</td>
-                     <td>{{  task.enddate|date:"Y-m-d" }}</td>
+                     <div class="commitment-up text-success">
+                     <i class="fa fa-level-up"></i> ملتزم
+                       </div>
+                     {%endif%}
+                            </td>
+                            
+                             <td>  <small class="text-danger left" > {{project.Progress.progress__avg}}% مكتمل</small></td>
+                            <td class="vertical-align-mid">
+                              <div class="progress">
+                               
+                              {% now "Y-m-d" as current_date %}
+                             {% if project.enddate|date:"Y-m-d" < current_date  and project.status.name != "done" %}
+                               
+                                 <div class="progress-bar progress-bar-danger" role="progressbar" data-transitiongoal="{{project.Progress.progress__avg}}" aria-valuenow="72" style="width: {{ task.progress|floatformat:-2}%;">  </div>
+                              {%else %}
+                                <div class="progress-bar progress-bar-success" role="progressbar" data-transitiongoal="{{project.Progress.progress__avg}}" aria-valuenow="72" style="width: {{ task.progress|floatformat:-2}%;">  </div>
+                              
+                              {%endif%}
+                            </div>
+                              
+                               
+                              
+                            </td>
+                          </tr>
+                          {% endfor %}
+                               </tbody>
+                      </table>
+                   
+                      <!-- end user projects -->
 
-                  </tr>
-                  {%endif%}
-                  {% endfor %}
-                </tbody>
-              </table>
+                    </div>
+             
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="col-md-3 col-sm-12 col-xs-12 text-center">
-        <div class="x_panel tile fixed_height_320">
-          <div class="x_title">
-            <h2>مؤشر الاداء</h2>
-            <div class="clearfix"></div>
-          </div>
-          <div class="x_content">
-           {# <div id="echart_gauge" style="height:250px;"></div> #}
-           <div id="chart_div" style="height:250px;"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3 col-sm-12 col-xs-12">
-        <div class="x_panel tile fixed_height_320 overflow_hidden">
-          <div class="x_title">
-            <h2>المهام  حسب الإدارة</h2>
-            <div class="clearfix"></div>
-          </div>
-          <div class="x_content">
-    <div id="donutchart"></div>
-          </div>
-        </div>
-      </div>
-</div>
-
-
-
-
+    </div>
   </div>
+
 {% endblock content %}
-
 {% block javascripts %}
-  {{ block.super}}
-  <!-- Chart.js -->
-  <script src="/static/vendors/Chart.js/dist/Chart.min.js"></script>
-  <!-- gauge.js -->
-  <script src="/static/vendors/gauge.js/dist/gauge.min.js"></script>
-  <!-- Skycons -->
-  <script src="/static/vendors/skycons/skycons.js"></script>
-  <!-- Flot -->
-  <script src="/static/vendors/Flot/jquery.flot.js"></script>
-  <script src="/static/vendors/Flot/jquery.flot.pie.js"></script>
-  <script src="/static/vendors/Flot/jquery.flot.time.js"></script>
-  <script src="/static/vendors/Flot/jquery.flot.stack.js"></script>
-  <script src="/static/vendors/Flot/jquery.flot.resize.js"></script>
-  <!-- Flot plugins -->
-  <script src="/static/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
-  <script src="/static/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
-  <script src="/static/vendors/flot.curvedlines/curvedLines.js"></script>
-  <!-- DateJS -->
-  <script src="/static/vendors/DateJS/build/date.js"></script>
-  <!-- JQVMap -->
-  <script src="/static/vendors/jqvmap/dist/jquery.vmap.js"></script>
-  <script src="/static/vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
-  <script src="/static/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+{{ block.super}}
 
 
-    <!-- ECharts -->
-  <script src="/static/vendors/echarts/dist/echarts.min.js"></script>
-  <script src="/static/vendors/echarts/map/js/world.js"></script>
+  <!-- morris.js -->
+  <script src="/static/vendors/raphael/raphael.min.js"></script>
+  <script src="/static/vendors/morris.js/morris.min.js"></script>
+  <script src="/static/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+   <!-- google chart -->
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> 
+  
+  
+
 
   <!-- google chart -->
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script>
-google.charts.load('current', {'packages':['gauge']});
-    google.charts.setOnLoadCallback(drawChart);
-
-    function drawChart() {
-
-      var data = google.visualization.arrayToDataTable([
-        ['Label', 'Value'],
-        ['{{_("performance")}}', {{per_indicator}}],
-
-      ]);
-
-      var options = {
-        width: 800, height: 220,
-        redFrom: 90, redTo: 100,
-        yellowFrom:75, yellowTo: 90,
-        minorTicks: 5
-      };
-
-      var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
-      chart.draw(data, options);
-    }
-
-</script>
-
-
-<!-- google chart -->
-    <script type="text/javascript">
+ <script type="text/javascript">
       google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);
 
@@ -315,15 +296,16 @@ google.charts.load('current', {'packages':['gauge']});
           ['{{_("Hold")}}',      {{ pie_tasks.Hold}}],
           ['{{_("InProgress")}}',     {{ pie_tasks.InProgress}}],
           ['{{_("Done")}}',      {{ pie_tasks.Done}}],
-          ['{{_("Canceled")}}',     {{ pie_tasks.Canceled}}],
+          ['{{_("Canceled")}}',     {{ pie_tasks.Cancelled}}],
           ['{{_("Closed")}}',     {{ pie_tasks.Closed}}],
         ]);
 
         var options = {
-          title: ''
+        //  title: '{% trans " Tasks by status"%}',
+        	//height:'200',
         };
 
-        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_tasks'));
 
         chart.draw(data, options);
       }
@@ -334,46 +316,13 @@ google.charts.load('current', {'packages':['gauge']});
     $('.commitment-down').fadeIn(100);
 }
 setInterval(blinker, 1000); //Runs every second
+
+
+
+
 </script>
 
-//datatable for project table
- <script src="/static/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-  <script src="/static/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-  <script src="/static/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
-  <script src="/static/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-  <script src="/static/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-  <script src="/static/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
-
-
-  <script type="text/javascript">
-$(document).ready(function() {
-    $('#open-project-list ,#open-tasks').DataTable( {
-       "scrollY":        "200px",
-        "scrollCollapse": true,
-        "paging":         false,
-        "searching" :false,
-         "bLengthChange": false ,
-          "info":     false
-    } );
-} );
-    </script>
-
-        <!-- jQuery Sparklines -->
-  <script src="/static/vendors/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
-      <script>
-                            $(".sparkline_areax").sparkline([5, 6, 7, 9, 9, 5, 3, 2, 6, 4, 6, 7], {
-                                type: 'line',
-                                lineColor: '#26B99A',
-                                fillColor: '#26B99A',
-                                spotColor: '#4578a0',
-                                minSpotColor: '#728fb2',
-                                maxSpotColor: '#6d93c4',
-                                highlightSpotColor: '#ef5179',
-                                highlightLineColor: '#8ba8bf',
-                                spotRadius: 2.5,
-                                width: 85
-                            });
-
+ <script>
 // piecharts departments
 var js_dict = [["key" ,"value"],
 
@@ -393,14 +342,110 @@ function drawChart() {
   ]);
 
   var options = {
+   // title: '{% trans " Tasks by departement"%}',
     is3D: true,
     fontSize: 12,
     fontName: 'neo',
   };
 
-  var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+  var chart = new google.visualization.PieChart(document.getElementById('donutchart_dept'));
   chart.draw(data, options);
 }
+ </script>
+ <script>
+ //performance 
+google.charts.load('current', {'packages':['gauge']});
+    google.charts.setOnLoadCallback(drawChart);
 
-                            </script>
+    function drawChart() {
+
+      var data = google.visualization.arrayToDataTable([
+        ['Label', 'Value'],
+        ['{{_("performance")}}', {{per_indicator}}],
+
+      ]);
+
+      var options = {
+        width: 200, height: 250,
+        redFrom: 90, redTo: 100,
+        yellowFrom:75, yellowTo: 90,
+        minorTicks: 5
+      };
+
+      var chart = new google.visualization.Gauge(document.getElementById('chart_per'));
+      chart.draw(data, options);
+    }
+
+</script>
+
+<script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Year', 'Sales'],
+          {% for s in summary_over_time %}
+          ['{{s.period|date:"M Y" }}',  {{s.total}}],
+          {%endfor%}
+          
+        
+        ]);
+
+        var options = {
+         // title: '{% trans "Tasks" %}',
+          curveType: 'function',
+          legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        chart.draw(data, options);
+      }
+      
+     
+    </script>
+   <script type="text/javascript"> 
+    $(document).ready(function() {
+    $('#open-projects ,#open-tasks').DataTable( {
+       "scrollY":        "200px",
+        "scrollCollapse": true,
+        "paging":         false,
+        "searching" :false,
+         "bLengthChange": false ,
+          "info":     false
+    } );
+} );
+    </script>
+   
+   
+   <!--  BAR --> 
+   <script>
+  
+   <!-- moris -->
+   if ($('#graph_bar2').length) {
+
+       Morris.Bar({
+           element: 'graph_bar2',
+           data: [
+        	   {% for s in  summary_over_time %}
+        	   
+               { device: '{{s.period|date:"M Y"}}', geekbench: {{s.total }} },
+{% endfor%}
+     
+           ],
+           
+           xkey: 'device',
+           ykeys: ['geekbench'],
+           labels: ['المهام'],
+           barRatio: 0.4,
+           barColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB', '#3498DB'],
+           xLabelAngle: 35,
+           hideHover: 'auto',
+           resize: true
+       });
+
+   }
+
+   </script>
 {% endblock javascripts %}

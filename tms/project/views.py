@@ -1280,6 +1280,9 @@ def TaskListExternal(request,task_status=None):
 def DashboardManager(request):
     from dateutil.relativedelta import relativedelta
     from django.db.models import F
+    from django.db.models.functions import Trunc
+    from django.db.models import DateTimeField
+    from django.db.models import Sum
     dept_code  = request.session['DeptCode']
     start_date = datetime.now() - relativedelta(years=1)
     end_date = datetime.now()
@@ -1289,9 +1292,24 @@ def DashboardManager(request):
     per_indicator = indicators(dept_code,start_date,end_date)
     project_kpi=_project_kpi(request,dept_code, start_date, end_date)
     open_tasks=_open_tasks(request,dept_code, start_date, end_date)
+    
+        #test 
+    dList=[]
+    qs= Task.objects.filter( Q(departement__exact=dept_code)  |Q(project__delegationto__exact=request.session['EmpID']) |Q(assignedto__exact=request.session['EmpID']) |  Q(project__createdby__exact=request.session['EmpID'])  )
+    summary_over_time = qs.annotate(
+            period=Trunc('enddate','month',output_field=DateTimeField(), ),).values('period').annotate(total=Count('status')).order_by('period')
+#     for  row in summary_over_time :
+#          print (row)
+#          vDict={}
+#          vDict['period']=row.period
+#          vDict['open']   = row.exclude(status__exact="Closed").count()
+#          vDict['closed'] = row.filter(status__exact="Closed")
+#          dList.append[vDict]
+
+
     context = {"start_date":start_date,"end":end_date,"task_based_department":task_based_department,
                'pie_tasks':pie_tasks,"per_indicator":per_indicator,'open_projects':open_projects,'project_kpi':project_kpi,
-               'open_tasks':open_tasks
+               'open_tasks':open_tasks,'summary_over_time':summary_over_time
                }
     return render(request, 'project/dashboard_manager.html', context)
 
@@ -1316,7 +1334,6 @@ def DashboardPM(request):
     
     #test 
     dList=[]
-   
     qs= Task.objects.filter(Q(createdby__exact=request.session['EmpID']) | Q(project__delegationto__exact=request.session['EmpID']) |Q(assignedto__exact=request.session['EmpID']) )
     summary_over_time = qs.annotate(
             period=Trunc('enddate','month',output_field=DateTimeField(), ),).values('period').annotate(total=Count('status')).order_by('period')
@@ -1370,7 +1387,7 @@ def dept_task_indicators(request,dept_code,start_date,end_date):
         )
     elif request.user.groups.filter(name__exact='projectmanager').exists():
         dept_internal_task_count = Task.objects.filter(
-             Q(project__createdby__exact = empid) | Q(project__delegationto__exact = empid) ).count()
+             Q(project__createdby__exact = empid) | Q(project__delegationto__exact = empid) | Q(assignedto__exact = empid) ).count()
     
         dept_external_task = Task.objects.filter(
         Q(assignedto__exact = empid)&
@@ -1446,8 +1463,9 @@ def _project_kpi(request,deptcode,startdate,enddate):
     projectKPI={}
     empid=request.session['EmpID']
     if request.user.groups.filter(name__exact='ismanager').exists():
-        projects= Project.objects.filter((Q(departement__deptcode__exact=deptcode)| Q(task__departement__deptcode__exact=deptcode)
-                                     |Q(delegationto__deptcode__exact=deptcode) ) & ~Q(status__name__exact="Done")).annotate(dcount=Count('departement'))
+        projects= Project.objects.filter(
+            (Q(departement__deptcode__exact=deptcode) | Q(task__departement__deptcode__exact=deptcode) )
+            & ~Q(status__name__exact="Done")).annotate(num_tasks=Count('task'))
        #project filters
         projectKPI["p_all"]= projects.count()
         projectKPI["p_internal"]= projects.filter(departement__deptcode__exact=deptcode).count()

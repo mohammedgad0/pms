@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-29 13:42+0300\n"
+"POT-Creation-Date: 2018-01-31 08:47+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,7 +53,6 @@ msgid "Master"
 msgstr "رئيسية"
 
 #: .\project\forms.py:32 .\project\forms.py:40 .\project\models.py:88
-#: .\project\templates\project\top_navigation.html:27
 msgid "Help"
 msgstr "مساندة"
 
@@ -92,9 +91,9 @@ msgstr "المدة التقريبية للإنجاز"
 #: .\project\forms.py:44 .\project\forms.py:322 .\project\models.py:97
 #: .\project\models.py:104 .\project\models.py:197
 #: .\project\templates\project\dashboard_employee.html:179
-#: .\project\templates\project\dashboard_manager.html:314
-#: .\project\templates\project\dashboard_pm.html:158
-#: .\project\templates\project\dashboard_pm.html:256
+#: .\project\templates\project\dashboard_manager.html:194
+#: .\project\templates\project\dashboard_manager.html:295
+#: .\project\templates\project\dashboard_manager1.html:314
 #: .\project\templates\project\emp_sheet.html:170
 #: .\project\templates\project\emp_sheet.html:181
 #: .\project\templates\project\kanban.html:40
@@ -138,9 +137,9 @@ msgstr "قيد التنفيذ"
 #: .\project\forms.py:51 .\project\forms.py:324 .\project\models.py:106
 #: .\project\models.py:199
 #: .\project\templates\project\dashboard_employee.html:182
-#: .\project\templates\project\dashboard_manager.html:317
-#: .\project\templates\project\dashboard_pm.html:160
-#: .\project\templates\project\dashboard_pm.html:259
+#: .\project\templates\project\dashboard_manager.html:196
+#: .\project\templates\project\dashboard_manager.html:298
+#: .\project\templates\project\dashboard_manager1.html:317
 #: .\project\templates\project\emp_sheet.html:187
 #: .\project\templates\project\kanban.html:68
 #: .\project\templates\project\my_tasks.html:114
@@ -172,8 +171,8 @@ msgstr "تفويض الى"
 
 #: .\project\forms.py:79 .\project\forms.py:86
 #: .\project\templates\project\dashboard_employee.html:68
-#: .\project\templates\project\dashboard_pm.html:153
-#: .\project\templates\project\project_followup.html:99
+#: .\project\templates\project\dashboard_manager.html:189
+#: .\project\templates\project\project_followup.html:86
 #: .\project\templates\project\projects.html:102
 #: .\project\templates\project\reports\per_project.html:21
 msgid "Project Name"
@@ -182,13 +181,13 @@ msgstr "أسم المشروع"
 #: .\project\forms.py:80 .\project\forms.py:88 .\project\forms.py:145
 #: .\project\forms.py:153 .\project\forms.py:205 .\project\forms.py:347
 #: .\project\templates\project\dashboard_employee.html:69
-#: .\project\templates\project\dashboard_pm.html:82
-#: .\project\templates\project\dashboard_pm.html:154
+#: .\project\templates\project\dashboard_manager.html:118
+#: .\project\templates\project\dashboard_manager.html:190
 #: .\project\templates\project\project_detail.html:139
 #: .\project\templates\project\project_task_detail.html:192
 #: .\project\templates\project\project_task_edit.html:171
 #: .\project\templates\project\tasks.html:96
-#: .\project\templates\project\tasks_from_external_dept.html:59
+#: .\project\templates\project\tasks_from_external_dept.html:54
 msgid "Start Date"
 msgstr "تاريخ البدأ"
 
@@ -196,14 +195,14 @@ msgstr "تاريخ البدأ"
 #: .\project\forms.py:154 .\project\forms.py:206 .\project\forms.py:207
 #: .\project\forms.py:348
 #: .\project\templates\project\dashboard_employee.html:70
-#: .\project\templates\project\dashboard_manager.html:171
-#: .\project\templates\project\dashboard_pm.html:83
-#: .\project\templates\project\dashboard_pm.html:155
+#: .\project\templates\project\dashboard_manager.html:119
+#: .\project\templates\project\dashboard_manager.html:191
+#: .\project\templates\project\dashboard_manager1.html:171
 #: .\project\templates\project\project_detail.html:143
 #: .\project\templates\project\project_task_detail.html:194
 #: .\project\templates\project\project_task_edit.html:174
 #: .\project\templates\project\tasks.html:97
-#: .\project\templates\project\tasks_from_external_dept.html:60
+#: .\project\templates\project\tasks_from_external_dept.html:55
 msgid "End Date"
 msgstr "تاريخ الإنتهاء"
 
@@ -222,14 +221,14 @@ msgstr "اختر الحالة"
 #: .\project\templates\project\all_emp_sheets.html:55
 #: .\project\templates\project\all_sheets.html:78
 #: .\project\templates\project\dashboard_employee.html:72
-#: .\project\templates\project\dashboard_manager.html:170
-#: .\project\templates\project\dashboard_pm.html:85
-#: .\project\templates\project\dashboard_pm.html:156
+#: .\project\templates\project\dashboard_manager.html:121
+#: .\project\templates\project\dashboard_manager.html:192
+#: .\project\templates\project\dashboard_manager1.html:170
 #: .\project\templates\project\delegation.html:46
 #: .\project\templates\project\dept_tasks.html:64
 #: .\project\templates\project\project_delete.html:63
 #: .\project\templates\project\project_detail.html:146
-#: .\project\templates\project\project_followup.html:101
+#: .\project\templates\project\project_followup.html:88
 #: .\project\templates\project\project_task_delete.html:56
 #: .\project\templates\project\project_task_edit.html:167
 #: .\project\templates\project\projects.html:107
@@ -237,7 +236,7 @@ msgstr "اختر الحالة"
 #: .\project\templates\project\reports\per_status.html:20
 #: .\project\templates\project\sheet_all_dept.html:75
 #: .\project\templates\project\tasks.html:98
-#: .\project\templates\project\tasks_from_external_dept.html:61
+#: .\project\templates\project\tasks_from_external_dept.html:56
 msgid "Status"
 msgstr "الحالة"
 
@@ -284,7 +283,7 @@ msgid "End date is less than start date"
 msgstr "تاريخ الانتهاء اصغر من تاريخ البدأ"
 
 #: .\project\forms.py:132 .\project\forms.py:192 .\project\forms.py:308
-#: .\project\forms.py:310
+#: .\project\forms.py:310 .\project\forms.py:319
 msgid "Employee"
 msgstr "الموظف"
 
@@ -300,7 +299,7 @@ msgstr "الإدارة"
 
 #: .\project\forms.py:134 .\project\forms.py:194 .\project\forms.py:311
 #: .\project\forms.py:318 .\project\forms.py:371
-#: .\project\templates\project\reports\project_report.html:53
+#: .\project\templates\project\reports\project_report.html:32
 msgid "Select Departement"
 msgstr "أختر القسم"
 
@@ -312,9 +311,9 @@ msgstr "إسناد الى"
 #: .\project\forms.py:143 .\project\forms.py:150 .\project\forms.py:203
 #: .\project\forms.py:214
 #: .\project\templates\project\dashboard_employee.html:67
-#: .\project\templates\project\project_followup.html:98
+#: .\project\templates\project\project_followup.html:85
 #: .\project\templates\project\tasks.html:95
-#: .\project\templates\project\tasks_from_external_dept.html:57
+#: .\project\templates\project\tasks_from_external_dept.html:52
 msgid "Task Name"
 msgstr "اسم المهمة"
 
@@ -346,9 +345,9 @@ msgstr "المسؤل"
 
 #: .\project\forms.py:209 .\project\forms.py:267 .\project\forms.py:274
 #: .\project\templates\project\dashboard_employee.html:71
-#: .\project\templates\project\dashboard_manager.html:168
-#: .\project\templates\project\dashboard_pm.html:88
-#: .\project\templates\project\dashboard_pm.html:166
+#: .\project\templates\project\dashboard_manager.html:124
+#: .\project\templates\project\dashboard_manager.html:202
+#: .\project\templates\project\dashboard_manager1.html:168
 #: .\project\templates\project\project_ganttchart.html:80
 #: .\project\templates\project\project_task_detail.html:58
 #: .\project\templates\project\project_task_detail.html:62
@@ -359,7 +358,7 @@ msgstr "المسؤل"
 #: .\project\templates\project\tasks.html:104
 #: .\project\templates\project\tasks.html:181
 #: .\project\templates\project\tasks.html:185
-#: .\project\templates\project\tasks_from_external_dept.html:67
+#: .\project\templates\project\tasks_from_external_dept.html:62
 msgid "Progress"
 msgstr "نسبة الإنجاز"
 
@@ -410,13 +409,13 @@ msgid "Please enter a reason to Close "
 msgstr "يرجى إدخال سبب الإغلاق"
 
 #: .\project\forms.py:264 .\project\forms.py:292
-#: .\project\templates\project\email\cancel_task.html:287
+#: .\project\templates\project\email\cancel_task.html:280
 msgid "Reason"
 msgstr "السبب"
 
 #: .\project\forms.py:278
-#: .\project\templates\project\tasks_from_external_dept.html:142
-#: .\project\templates\project\tasks_from_external_dept.html:155
+#: .\project\templates\project\tasks_from_external_dept.html:137
+#: .\project\templates\project\tasks_from_external_dept.html:150
 #, fuzzy
 #| msgid "Task inprogress"
 msgid "Task Progress"
@@ -426,7 +425,7 @@ msgstr "مهام قيد التنفيذ"
 msgid "Please enter a reason to cancel"
 msgstr "يرجى إدخال سبب الإلغاء"
 
-#: .\project\forms.py:308 .\project\forms.py:311
+#: .\project\forms.py:308 .\project\forms.py:311 .\project\forms.py:318
 #: .\project\templates\project\project_delete.html:59
 #: .\project\templates\project\project_detail.html:133
 #: .\project\templates\project\reports\per_assignedto.html:46
@@ -447,37 +446,38 @@ msgstr "اختر الحالة"
 
 #: .\project\forms.py:323 .\project\models.py:198
 #: .\project\templates\project\dashboard_employee.html:181
-#: .\project\templates\project\dashboard_manager.html:316
-#: .\project\templates\project\dashboard_pm.html:159
-#: .\project\templates\project\dashboard_pm.html:258 .\project\views.py:582
+#: .\project\templates\project\dashboard_manager.html:195
+#: .\project\templates\project\dashboard_manager.html:297
+#: .\project\templates\project\dashboard_manager1.html:316
+#: .\project\views.py:600
 msgid "InProgress"
 msgstr "قيد التنفيذ"
 
 #: .\project\forms.py:325 .\project\models.py:200
 #: .\project\templates\project\dashboard_employee.html:180
-#: .\project\templates\project\dashboard_manager.html:315
-#: .\project\templates\project\dashboard_pm.html:162
-#: .\project\templates\project\dashboard_pm.html:257
+#: .\project\templates\project\dashboard_manager.html:198
+#: .\project\templates\project\dashboard_manager.html:296
+#: .\project\templates\project\dashboard_manager1.html:315
 #: .\project\templates\project\kanban.html:80
 #: .\project\templates\project\projects.html:30
 #: .\project\templates\project\projects.html:69
-#: .\project\templates\project\tasks.html:54 .\project\views.py:764
+#: .\project\templates\project\tasks.html:54 .\project\views.py:782
 msgid "Hold"
 msgstr "متوقف"
 
 #: .\project\forms.py:326 .\project\models.py:201
 #: .\project\templates\project\kanban.html:92
-#: .\project\templates\project\tasks.html:53 .\project\views.py:697
+#: .\project\templates\project\tasks.html:53 .\project\views.py:715
 msgid "Cancelled"
 msgstr "ملغى"
 
 #: .\project\forms.py:327 .\project\models.py:202
 #: .\project\templates\project\dashboard_employee.html:184
-#: .\project\templates\project\dashboard_manager.html:319
-#: .\project\templates\project\dashboard_pm.html:163
-#: .\project\templates\project\dashboard_pm.html:261
+#: .\project\templates\project\dashboard_manager.html:199
+#: .\project\templates\project\dashboard_manager.html:300
+#: .\project\templates\project\dashboard_manager1.html:319
 #: .\project\templates\project\kanban.html:104
-#: .\project\templates\project\tasks.html:52 .\project\views.py:657
+#: .\project\templates\project\tasks.html:52 .\project\views.py:675
 msgid "Closed"
 msgstr "مغلق"
 
@@ -550,7 +550,7 @@ msgstr "بحاجة الى دعم"
 msgid "Change piroty"
 msgstr "تغيير الأولوية"
 
-#: .\project\models.py:299
+#: .\project\models.py:298
 msgid "Files Upload"
 msgstr ""
 
@@ -680,13 +680,13 @@ msgstr "إضافة تفويض"
 #: .\project\templates\project\project_task_edit.html:125
 #: .\project\templates\project\project_task_edit.html:127
 #: .\project\templates\project\project_team.html:22
-#: .\project\templates\project\reports\project_report.html:33
+#: .\project\templates\project\reports\project_report.html:21
 msgid "Back"
 msgstr "رجوع"
 
 #: .\project\templates\project\add_project.html:19
 #: .\project\templates\project\project_nave.html:29
-#: .\project\templates\project\projects.html:46 .\project\views.py:245
+#: .\project\templates\project\projects.html:46 .\project\views.py:259
 msgid "Ad Project"
 msgstr "إضافة مشروع"
 
@@ -704,7 +704,7 @@ msgstr "اضف ملف جديد"
 
 #: .\project\templates\project\add_project.html:140
 #: .\project\templates\project\add_task.html:139
-#: .\project\templates\project\project_followup.html:74
+#: .\project\templates\project\project_followup.html:67
 msgid "Reset"
 msgstr "إعادة"
 
@@ -815,9 +815,14 @@ msgstr "مهام جديدة"
 msgid "Details"
 msgstr "عرض"
 
-#: .\project\templates\project\base_site.html:12
-msgid "TMS - GAS"
-msgstr ""
+#: .\project\templates\project\base_site.html:13
+#: .\project\templates\project\email\assign_task.html:9
+#: .\project\templates\project\email\assign_task.html:273
+#: .\project\templates\project\email\cancel_task.html:9
+#: .\project\templates\project\email\cancel_task.html:272
+#: .\project\templates\project\login.html:50
+msgid "PMS"
+msgstr "نظام إدارة المشاريع"
 
 #: .\project\templates\project\change_s_sheet.html:42
 #: .\project\templates\project\emp_sheet.html:140
@@ -869,35 +874,18 @@ msgid "Complete"
 msgstr "مكتمل"
 
 #: .\project\templates\project\dashboard_employee.html:152
-#: .\project\templates\project\dashboard_manager.html:142
+#: .\project\templates\project\dashboard_manager1.html:142
 msgid "Tasks by status"
 msgstr "المهام حسب الحالة"
 
 #: .\project\templates\project\dashboard_employee.html:183
-#: .\project\templates\project\dashboard_manager.html:318
-#: .\project\templates\project\dashboard_pm.html:161
-#: .\project\templates\project\dashboard_pm.html:260
+#: .\project\templates\project\dashboard_manager.html:197
+#: .\project\templates\project\dashboard_manager.html:299
+#: .\project\templates\project\dashboard_manager1.html:318
 msgid "Canceled"
 msgstr "ملغى"
 
-#: .\project\templates\project\dashboard_manager.html:166
-#: .\project\templates\project\dashboard_pm.html:80
-#: .\project\templates\project\email\cancel_task.html:286
-msgid "Task"
-msgstr "المهمة"
-
-#: .\project\templates\project\dashboard_manager.html:167
-#: .\project\templates\project\dashboard_pm.html:81
-#: .\project\templates\project\reports\per_project.html:4
-msgid "Project"
-msgstr "المشروع"
-
-#: .\project\templates\project\dashboard_manager.html:287
-#: .\project\templates\project\dashboard_pm.html:324
-msgid "performance"
-msgstr "الأداء"
-
-#: .\project\templates\project\dashboard_pm.html:25
+#: .\project\templates\project\dashboard_manager.html:59
 #: .\project\templates\project\sidebar.html:40
 #: .\project\templates\project\sidebar.html:42
 #: .\project\templates\project\sidebar.html:45
@@ -905,36 +893,70 @@ msgstr "الأداء"
 msgid "Home"
 msgstr "الرئيسية"
 
-#: .\project\templates\project\dashboard_pm.html:25
-msgid "Dashboard"
-msgstr "اللوحة الرئيسية"
-
-#: .\project\templates\project\dashboard_pm.html:34
+#: .\project\templates\project\dashboard_manager.html:59
 msgid "KPI"
 msgstr "المؤشرات"
 
-#: .\project\templates\project\dashboard_pm.html:66
+#: .\project\templates\project\dashboard_manager.html:70
+msgid "Tasks by enddate"
+msgstr "المهام حسب تاريخ الإنتهاء"
+
+#: .\project\templates\project\dashboard_manager.html:79
+msgid "Tasks by Departement"
+msgstr "المهما حسب الإدارة"
+
+#: .\project\templates\project\dashboard_manager.html:89
+msgid "Tasks by Status"
+msgstr "المهام حسب الحالة"
+
+#: .\project\templates\project\dashboard_manager.html:102
 msgid "Tasks work on"
 msgstr "مهام قيد التنفيذ"
 
-#: .\project\templates\project\dashboard_pm.html:68
+#: .\project\templates\project\dashboard_manager.html:104
 msgid "Projects Worked on"
 msgstr "مشاريع قيد التنفيذ"
 
-#: .\project\templates\project\dashboard_pm.html:84
+#: .\project\templates\project\dashboard_manager.html:116
+#: .\project\templates\project\dashboard_manager1.html:166
+#: .\project\templates\project\email\cancel_task.html:279
+msgid "Task"
+msgstr "المهمة"
+
+#: .\project\templates\project\dashboard_manager.html:117
+#: .\project\templates\project\dashboard_manager1.html:167
+#: .\project\templates\project\reports\per_project.html:4
+msgid "Project"
+msgstr "المشروع"
+
+#: .\project\templates\project\dashboard_manager.html:120
 #: .\project\templates\project\tasks.html:102
-#: .\project\templates\project\tasks_from_external_dept.html:65
+#: .\project\templates\project\tasks_from_external_dept.html:60
 msgid "AssignedTo"
 msgstr "مسندة الى"
 
-#: .\project\templates\project\dashboard_pm.html:86
-#: .\project\templates\project\dashboard_pm.html:164
+#: .\project\templates\project\dashboard_manager.html:122
+#: .\project\templates\project\dashboard_manager.html:200
 msgid "comittment"
 msgstr "الالتزام"
 
-#: .\project\templates\project\dashboard_pm.html:157
+#: .\project\templates\project\dashboard_manager.html:193
 msgid "Tasks Number"
 msgstr "مهمه رقم"
+
+
+#: .\project\templates\project\dashboard_manager.html:364
+#: .\project\templates\project\dashboard_manager1.html:287
+msgid "performance"
+msgstr "الأداء"
+
+#: .\project\templates\project\dashboard_manager.html:396
+#: .\project\templates\project\project_nave.html:17
+#: .\project\templates\project\reports\per_project.html:22
+#: .\project\templates\project\reports\per_project.html:64
+#: .\project\templates\project\sidebar.html:48
+msgid "Tasks"
+msgstr "المهام"
 
 #: .\project\templates\project\delegation.html:14
 #: .\project\templates\project\my_delegation.html:14
@@ -1005,7 +1027,7 @@ msgstr "رقم الجوال"
 
 #: .\project\templates\project\details_sheets.html:59
 #: .\project\templates\project\email\assign_task.html:318
-#: .\project\templates\project\email\cancel_task.html:328
+#: .\project\templates\project\email\cancel_task.html:321
 #: .\project\templates\project\emp_sheet.html:49
 #: .\project\templates\project\update_sheet.html:59
 msgid "Ext"
@@ -1013,7 +1035,7 @@ msgstr "تحويلة المكتب"
 
 #: .\project\templates\project\details_sheets.html:62
 #: .\project\templates\project\email\assign_task.html:319
-#: .\project\templates\project\email\cancel_task.html:329
+#: .\project\templates\project\email\cancel_task.html:322
 #: .\project\templates\project\emp_sheet.html:52
 #: .\project\templates\project\update_sheet.html:62
 msgid "Email"
@@ -1035,23 +1057,15 @@ msgstr "إعتماد المهام"
 msgid "Edit tasks"
 msgstr "تعديل المهام"
 
-#: .\project\templates\project\email\assign_task.html:9
-#: .\project\templates\project\email\assign_task.html:273
-#: .\project\templates\project\email\cancel_task.html:9
-#: .\project\templates\project\email\cancel_task.html:279
-#: .\project\templates\project\login.html:50
-msgid "PMS"
-msgstr "نظام إدارة المشاريع"
-
 #: .\project\templates\project\email\assign_task.html:280
-#: .\project\views.py:1032
+#: .\project\views.py:1050
 msgid "Task has been asigned to you in PMS"
 msgstr "تم إسناد مهمة إليك على نظام إدارة المشاريع"
 
 #: .\project\templates\project\email\assign_task.html:281
 #: .\project\templates\project\email\assign_task.html:286
-#: .\project\templates\project\email\cancel_task.html:290
-#: .\project\templates\project\email\cancel_task.html:295
+#: .\project\templates\project\email\cancel_task.html:283
+#: .\project\templates\project\email\cancel_task.html:288
 msgid "Click Here"
 msgstr "أضغط هنا"
 
@@ -1071,54 +1085,54 @@ msgid "Created By"
 msgstr "أنشأت بواسطة"
 
 #: .\project\templates\project\email\assign_task.html:303
-#: .\project\templates\project\email\cancel_task.html:313
+#: .\project\templates\project\email\cancel_task.html:306
 msgid "AssignedDate"
 msgstr "تاريخ الإسناد "
 
 #: .\project\templates\project\email\assign_task.html:304
-#: .\project\templates\project\email\cancel_task.html:314
+#: .\project\templates\project\email\cancel_task.html:307
 #: .\project\templates\project\project_task_detail.html:188
 msgid "Task Status"
 msgstr "حالة المهمه"
 
 #: .\project\templates\project\email\assign_task.html:305
-#: .\project\templates\project\email\cancel_task.html:315
+#: .\project\templates\project\email\cancel_task.html:308
 #: .\project\templates\project\project_task_detail.html:176
 #: .\project\templates\project\project_task_edit.html:147
 msgid "project Name"
 msgstr "أسم المشروع"
 
 #: .\project\templates\project\email\assign_task.html:316
-#: .\project\templates\project\email\cancel_task.html:326
+#: .\project\templates\project\email\cancel_task.html:319
 msgid "Contact Info"
 msgstr "بيانات الاتصال"
 
 #: .\project\templates\project\email\assign_task.html:317
-#: .\project\templates\project\email\cancel_task.html:327
+#: .\project\templates\project\email\cancel_task.html:320
 msgid "Phone"
 msgstr "الهاتف"
 
 #: .\project\templates\project\email\assign_task.html:356
-#: .\project\templates\project\email\cancel_task.html:366
+#: .\project\templates\project\email\cancel_task.html:359
 #: .\project\templates\project\login.html:85
 msgid "GAS"
 msgstr "الهيئة العامة للإحصاء"
 
-#: .\project\templates\project\email\cancel_task.html:286
+#: .\project\templates\project\email\cancel_task.html:279
 msgid "has been canceled by"
 msgstr "تم إالغائها بواسطة"
 
-#: .\project\templates\project\email\cancel_task.html:310
+#: .\project\templates\project\email\cancel_task.html:303
 msgid "Action Detail"
 msgstr "تفاصيل الإجراء"
 
-#: .\project\templates\project\email\cancel_task.html:311
+#: .\project\templates\project\email\cancel_task.html:304
 #: .\project\templates\project\project_task_detail.html:212
 #: .\project\templates\project\project_task_edit.html:192
 msgid "Cancelled By"
 msgstr "ألغيت بواسطة"
 
-#: .\project\templates\project\email\cancel_task.html:312
+#: .\project\templates\project\email\cancel_task.html:305
 msgid "Cancelled Date"
 msgstr "تاريخ الإالغاء"
 
@@ -1270,26 +1284,26 @@ msgstr "أخر التحديثات"
 msgid "Tasks Count"
 msgstr "عدد  المهام"
 
-#: .\project\templates\project\project_followup.html:31
+#: .\project\templates\project\project_followup.html:34
 msgid "Follow-up Administration"
 msgstr "إدارة المتابعة"
 
-#: .\project\templates\project\project_followup.html:73
+#: .\project\templates\project\project_followup.html:66
 msgid "Search"
 msgstr "البحث عن ..."
 
-#: .\project\templates\project\project_followup.html:81
+#: .\project\templates\project\project_followup.html:73
 msgid "Result Number :"
 msgstr "عدد النتائج"
 
-#: .\project\templates\project\project_followup.html:100
+#: .\project\templates\project\project_followup.html:87
 msgid "Assigned to"
 msgstr "مهام مسندة لى "
 
-#: .\project\templates\project\project_followup.html:177
+#: .\project\templates\project\project_followup.html:162
 #: .\project\templates\project\projects.html:221
 #: .\project\templates\project\tasks.html:235
-#: .\project\templates\project\tasks_from_external_dept.html:206
+#: .\project\templates\project\tasks_from_external_dept.html:201
 msgid "Page"
 msgstr "صفحة"
 
@@ -1301,13 +1315,6 @@ msgstr "مخطط جانت"
 #: .\project\templates\project\project_nave.html:11
 msgid "Completed"
 msgstr "مكتمل"
-
-#: .\project\templates\project\project_nave.html:17
-#: .\project\templates\project\reports\per_project.html:22
-#: .\project\templates\project\reports\per_project.html:64
-#: .\project\templates\project\sidebar.html:48
-msgid "Tasks"
-msgstr "المهام"
 
 #: .\project\templates\project\project_nave.html:22
 #: .\project\templates\project\projects.html:103
@@ -1339,36 +1346,36 @@ msgstr "لا يمكن الرجوع عن هذا  الإجراء بعد الحذف
 
 #: .\project\templates\project\project_task_detail.html:50
 #: .\project\templates\project\task\update_pause_task.html:8
-#: .\project\templates\project\tasks_from_external_dept.html:150
+#: .\project\templates\project\tasks_from_external_dept.html:145
 msgid "Pause Task"
 msgstr "تعليق المهمه"
 
 #: .\project\templates\project\project_task_detail.html:52
 #: .\project\templates\project\project_task_detail.html:88
-#: .\project\templates\project\tasks_from_external_dept.html:152
+#: .\project\templates\project\tasks_from_external_dept.html:147
 msgid "Start Task"
 msgstr "تاريخ البدأ"
 
 #: .\project\templates\project\project_task_detail.html:59
 #: .\project\templates\project\project_task_detail.html:63
-#: .\project\templates\project\tasks_from_external_dept.html:144
-#: .\project\templates\project\tasks_from_external_dept.html:157
-#: .\project\views.py:614
+#: .\project\templates\project\tasks_from_external_dept.html:139
+#: .\project\templates\project\tasks_from_external_dept.html:152
+#: .\project\views.py:632
 msgid "Finish Task"
 msgstr "إنهاء"
 
 #: .\project\templates\project\project_task_detail.html:60
 #: .\project\templates\project\project_task_detail.html:64
 #: .\project\templates\project\task\update_cancel_task.html:8
-#: .\project\templates\project\tasks_from_external_dept.html:145
-#: .\project\templates\project\tasks_from_external_dept.html:158
+#: .\project\templates\project\tasks_from_external_dept.html:140
+#: .\project\templates\project\tasks_from_external_dept.html:153
 msgid "Cancel Task"
 msgstr "سبب الإلغاء"
 
 #: .\project\templates\project\project_task_detail.html:79
 #: .\project\templates\project\project_task_detail.html:82
-#: .\project\templates\project\tasks_from_external_dept.html:165
-#: .\project\templates\project\tasks_from_external_dept.html:168
+#: .\project\templates\project\tasks_from_external_dept.html:160
+#: .\project\templates\project\tasks_from_external_dept.html:163
 msgid "Assign To"
 msgstr "إسناد الى"
 
@@ -1399,7 +1406,7 @@ msgstr "إرسال الى"
 #: .\project\templates\project\project_task_edit.html:185
 #: .\project\templates\project\projects.html:108
 #: .\project\templates\project\tasks.html:107
-#: .\project\templates\project\tasks_from_external_dept.html:70
+#: .\project\templates\project\tasks_from_external_dept.html:65
 msgid "Actions"
 msgstr "الإجراءات"
 
@@ -1480,7 +1487,7 @@ msgid "Delegations"
 msgstr "التفويضات"
 
 #: .\project\templates\project\projects.html:47
-#: .\project\templates\project\reports\project_report.html:29
+#: .\project\templates\project\reports\project_report.html:19
 #: .\project\templates\project\sidebar.html:70
 msgid "Reports"
 msgstr "التقارير"
@@ -1506,19 +1513,19 @@ msgstr "الموظف"
 msgid "not assigned"
 msgstr "لم تسند"
 
-#: .\project\templates\project\reports\project_report.html:65
+#: .\project\templates\project\reports\project_report.html:43
 msgid "Report Type"
 msgstr "نوع التقرير"
 
-#: .\project\templates\project\reports\project_report.html:70
+#: .\project\templates\project\reports\project_report.html:47
 msgid "Select All"
 msgstr "أختر الكل"
 
-#: .\project\templates\project\reports\project_report.html:71
+#: .\project\templates\project\reports\project_report.html:48
 msgid "Create"
 msgstr "إنشاء التقرير "
 
-#: .\project\templates\project\reports\project_report.html:84
+#: .\project\templates\project\reports\project_report.html:55
 msgid "Report"
 msgstr "التقارير"
 
@@ -1576,7 +1583,7 @@ msgid "Department Delegation"
 msgstr "إدارات مفوض عليها"
 
 #: .\project\templates\project\sidebar.html:66
-#: .\project\templates\project\tasks_from_external_dept.html:35
+#: .\project\templates\project\tasks_from_external_dept.html:30
 msgid "Tasks assigned to departement"
 msgstr "مهام مسندة الى الإدارة"
 
@@ -1636,8 +1643,8 @@ msgstr "مسندة الى الإدارة"
 #: .\project\templates\project\tasks.html:32
 #: .\project\templates\project\tasks.html:156
 #: .\project\templates\project\tasks.html:161
+#: .\project\templates\project\tasks_from_external_dept.html:116
 #: .\project\templates\project\tasks_from_external_dept.html:121
-#: .\project\templates\project\tasks_from_external_dept.html:126
 msgid "Delayed"
 msgstr "متأخر"
 
@@ -1658,12 +1665,12 @@ msgid "Kanban"
 msgstr "كانبان"
 
 #: .\project\templates\project\tasks.html:105
-#: .\project\templates\project\tasks_from_external_dept.html:68
+#: .\project\templates\project\tasks_from_external_dept.html:63
 msgid "Finshed By"
 msgstr "انجزت بواسطه"
 
 #: .\project\templates\project\tasks.html:106
-#: .\project\templates\project\tasks_from_external_dept.html:69
+#: .\project\templates\project\tasks_from_external_dept.html:64
 msgid "Finshed Date"
 msgstr "تاريخ الإنجاز"
 
@@ -1692,16 +1699,15 @@ msgstr "ملغى"
 msgid "Assign"
 msgstr "مهام مسندة لى "
 
-#: .\project\templates\project\tasks_from_external_dept.html:58
+#: .\project\templates\project\tasks_from_external_dept.html:53
 msgid "Projct Name"
 msgstr "أسم المشروع"
 
-#: .\project\templates\project\top_navigation.html:20
-#: .\project\templates\project\top_navigation.html:28
+#: .\project\templates\project\top_navigation.html:21
 msgid "Profile"
 msgstr "الملف الشخصى"
 
-#: .\project\templates\project\top_navigation.html:29
+#: .\project\templates\project\top_navigation.html:22
 msgid "Log Out"
 msgstr "تسجيل خروج"
 
@@ -1725,7 +1731,7 @@ msgstr "تم حفظ المهام بنجاح"
 msgid "Post Done"
 msgstr "تم تغيير الحاله بنجاح"
 
-#: .\project\timesheet.py:383 .\project\views.py:1559
+#: .\project\timesheet.py:383 .\project\views.py:1634
 msgid "Edit complete"
 msgstr "تم التعديل بنجاح"
 
@@ -1733,147 +1739,157 @@ msgstr "تم التعديل بنجاح"
 msgid "Change status done"
 msgstr "تم تغيير حالة المهمة بنجاح"
 
-#: .\project\views.py:238
+#: .\project\views.py:231
+#, fuzzy
+#| msgid "Project Name"
+msgid "Project Number"
+msgstr "أسم المشروع"
+
+#: .\project\views.py:231
+msgid "has delegated to you"
+msgstr ""
+
+#: .\project\views.py:252
 msgid "Project has created successfully"
 msgstr "تم إنشاء المشروع بنجاح"
 
-#: .\project\views.py:408
+#: .\project\views.py:420
 msgid "Project has updated successfully"
 msgstr "تم تحديث المشروع بنجاح"
 
-#: .\project\views.py:415
+#: .\project\views.py:433
 msgid "Edit Project"
 msgstr "تعديل المشروع"
 
-#: .\project\views.py:441
+#: .\project\views.py:459
 msgid "Project has deleted successfully"
 msgstr "تم حذف المشروع بنجاح"
 
-#: .\project\views.py:579
+#: .\project\views.py:597
 msgid "Update start date for task by"
 msgstr "تم تحديث وقت بدء المهمة"
 
-#: .\project\views.py:584
+#: .\project\views.py:602
 msgid "Start Date Updated successfully"
 msgstr "تم تعديل تاريخ إغلاق المهمه بنجاح"
 
-#: .\project\views.py:618
+#: .\project\views.py:636
 msgid "Finished"
 msgstr "منجزة"
 
-#: .\project\views.py:619
+#: .\project\views.py:637
 msgid " Finish Date Updated successfully"
 msgstr "تم تعديل تاريخ إغلاق المهمه بنجاح"
 
-#: .\project\views.py:639 .\project\views.py:679
+#: .\project\views.py:657 .\project\views.py:697
 msgid "Enter a reason ."
 msgstr "الرجاء إدخال السبب"
 
-#: .\project\views.py:654
+#: .\project\views.py:672
 msgid "Close Task by"
 msgstr "إغلاق المهمه"
 
-#: .\project\views.py:659
+#: .\project\views.py:677
 msgid " Close Date Updated successfully"
 msgstr "تم تعديل تاريخ إغلاق المهمه بنجاح"
 
-#: .\project\views.py:694
+#: .\project\views.py:712
 msgid "Cancel Task by "
 msgstr "سبب الإلغاء"
 
-#: .\project\views.py:699
+#: .\project\views.py:717
 msgid "Task has been cancelled successfully"
 msgstr "تم   إلغاء المهمه بنجاح"
 
-#: .\project\views.py:724
+#: .\project\views.py:742
 msgid "Task Number"
 msgstr "مهمه رقم"
 
-#: .\project\views.py:724
+#: .\project\views.py:742
 msgid "has been canceled"
 msgstr "تم الغائها"
 
-#: .\project\views.py:749
+#: .\project\views.py:767
 msgid "Enter a note ."
 msgstr "الرجاء إدخال السبب"
 
-#: .\project\views.py:761
+#: .\project\views.py:779
 msgid "Task Pause by"
 msgstr "ايقاف بواسطة"
 
-#: .\project\views.py:766
+#: .\project\views.py:784
 msgid "Task has been continuous successfully"
 msgstr "تم تعديل حالة المهمه بنجاح"
 
-#: .\project\views.py:869 .\project\views.py:1115
+#: .\project\views.py:887 .\project\views.py:1133
 msgid "task end date date is less than project start date"
 msgstr "تاريخ الانتهاء اصغر من تاريخ ابدا المشروع"
 
-#: .\project\views.py:871 .\project\views.py:1117
+#: .\project\views.py:889 .\project\views.py:1135
 msgid "task end date date is bigger than project end date"
 msgstr "تاريخ الانتهاء اصغر من تاريخ نهاية المشروع"
 
-#: .\project\views.py:873 .\project\views.py:1119
+#: .\project\views.py:891 .\project\views.py:1137
 msgid "task start date is less than project start date"
 msgstr "تاريخ البدأ اصغر من تاريخ البدأ"
 
-#: .\project\views.py:875 .\project\views.py:1121
+#: .\project\views.py:893 .\project\views.py:1139
 msgid "task start date is bigger than project end date"
 msgstr "تاريخ البدأ أكبر من تاريخ البدأ"
 
-#: .\project\views.py:915 .\project\views.py:918 .\project\views.py:920
+#: .\project\views.py:933 .\project\views.py:936 .\project\views.py:938
 msgid "Add new Task By"
 msgstr "إضافة مهمة جديدة بواسطة"
 
-#: .\project\views.py:915 .\project\views.py:918
+#: .\project\views.py:933 .\project\views.py:936
 msgid "And Assign to"
 msgstr "وتم إسنادها الى"
 
-#: .\project\views.py:922
+#: .\project\views.py:940
 msgid "Task Added"
 msgstr "تم إنشاء المهمة بنجاح"
 
-#: .\project\views.py:949
+#: .\project\views.py:967
 msgid "Task has been deleted successfully"
 msgstr "تم حذف المهمة بنجاح"
 
-#: .\project\views.py:972
+#: .\project\views.py:990
 msgid "Enter select assigntype"
 msgstr "أختر نوع الإسناد"
 
-#: .\project\views.py:1018
+#: .\project\views.py:1036
 msgid " by "
 msgstr "بواسطة"
 
-#: .\project\views.py:1018 .\project\views.py:1019
+#: .\project\views.py:1036 .\project\views.py:1037
 msgid "Assign Task to"
 msgstr "إسناد الى"
 
-#: .\project\views.py:1042
+#: .\project\views.py:1060
 msgid "Task has been assigned successfully"
 msgstr "تم تعديل تاريخ إلغاء المهمه بنجاح"
 
-#: .\project\views.py:1079
+#: .\project\views.py:1097
 msgid "Task Progress chenged by "
 msgstr "تغيير حالة المهمة بواسطة"
 
-#: .\project\views.py:1081
+#: .\project\views.py:1099
 msgid "Progress Updated successfully for Task number"
 msgstr "تم تعديل نسبة الانجاز بنجاح"
 
-#: .\project\views.py:1182
+#: .\project\views.py:1200
 msgid "Task has been updated successfully"
 msgstr "تم تعديل المهمة  بنجاح"
 
-#: .\project\views.py:1184
+#: .\project\views.py:1202
 msgid "Edit Task successfully by"
 msgstr "تم تعديل المهمه بواسطه"
 
-#: .\project\views.py:1532
+#: .\project\views.py:1607
 msgid "Add complete"
 msgstr "تمت الإضافة بنجاح"
 
-#: .\project\views.py:1576 .\project\views.py:1588
+#: .\project\views.py:1651 .\project\views.py:1663
 msgid "No Delegations"
 msgstr "عفواً, لايوجد تفويضات"
 
@@ -1884,6 +1900,9 @@ msgstr "إنجليزى"
 #: .\tms\settings.py:178
 msgid "Arabic"
 msgstr "Arabic"
+
+#~ msgid "Dashboard"
+#~ msgstr "اللوحة الرئيسية"
 
 #~ msgid "New Projects"
 #~ msgstr "مشاريع جديده"

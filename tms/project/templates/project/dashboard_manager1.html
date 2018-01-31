@@ -1,0 +1,406 @@
+{% extends "project/base_site.html" %}
+{% load i18n %}
+{% block title %} Dashboard 1 {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+
+  <style>
+  #chart_div > table{
+ margin:auto !important;
+  }
+  </style>
+    <link href="/static/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+  <link href="/static/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block content %}
+
+  <div class="right_col" role="main">
+    <!-- top tiles -->
+    <div class="row tile_count" style="margin-bottom: 0px;">
+      <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-briefcase"></i>  كل المشاريع </span>
+        <div class="count">{{project_kpi.p_all|stringformat:"02d"}}</div>
+       <!-- <span class="count_bottom"><i class="green">4% </i> منذ اخر اسبوع</span>-->
+      </div>
+      <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-clock-o"></i> مشاريع داخلية</span>
+         <div class="count">{{project_kpi.p_internal|stringformat:"02d"}}</div>
+       <!--   <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> منذ اخر اسبوع</span>-->
+      </div>
+      <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-clock-o"></i> مشاريع خارجية</span>
+         <div class="count">{{project_kpi.p_external|stringformat:"02d"}}</div>
+       <!--   <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i>  منذ اخر اسبوع</span>-->
+      </div>
+      <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-clock-o"></i> كل المهام</span>
+        <div class="count">{{project_kpi.t_all|stringformat:"02d"}}</div>
+        <!-- <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i>  منذ اخر اسبوع</span> -->
+      </div>
+      <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-clock-o"></i> مهام داخلية</span>
+      <div class="count">{{project_kpi.t_internal|stringformat:"02d"}}</div>
+        <!--  <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i>  منذ اخر اسبوع</span> -->
+      </div>
+      <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-clock-o"></i> مهام مسندة</span>
+       <div class="count">{{project_kpi.t_external|stringformat:"02d"}}</div>
+       <!--  <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i>   منذ اخر اسبوع</span> -->
+      </div>
+
+    </div>
+    <!-- /top tiles -->
+    {{result}}
+    {%for data in result%}
+    {{data}}
+    {%endfor%}
+     <!-- start  row 1 -->
+    <div class="row">
+ <div class="col-md-9 col-sm-12 col-xs-12">
+        <div class="x_panel tile fixed_height_320">
+          <div class="x_title">
+            <h2>مشاريع مفتوحة</h2>
+            {{all_dept}}
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+
+<div class="container">
+<table class="table table-sm table-responsive" id="open-project-list">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>أسم المشروع</th>
+                    <th>نسبة الانجاز </th>
+                    <th>الإلتزام</th>
+                    <th>كل المهام</th>
+                     <th>جديد </th>
+                    <th>جارى العمل</th>
+                    <th>  منجز</th>
+                    <th>  ملغى</th>
+                     <th>  معلق</th>
+                     <th> مغلق</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+
+                  {% for project in open_projects %}
+                  <tr>
+                    <td scope="row">{{project.detail.id}}</td>
+                    <td><a href="{% url 'ns-project:project-detail' project.detail.id %}" class="blue" >  {{ project.detail.name }}</a></td>
+                    <td class="project_progress">
+
+
+                              <div class="progress progress_sm">
+                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="{{project.Progress.progress__avg}}" aria-valuenow="72" style="width: {{project.Progress.progress__avg}}%;"></div>
+                              </div>
+
+                              <small> {{ project.Progress.progress__avg|floatformat:-2}}% مكتمل</small>
+                              </td>
+                     <td >
+                      {% now "Y-m-d" as current_date %}
+                     {% if project.enddate|date:"Y-m-d" < current_date  and project.status.name != "done" %}
+                     <div class="commitment-up text-success">
+                     <i class="fa fa-level-up"></i> ملتزم
+                   </div>
+                     {% else %}
+                         <div class="commitment-down text-danger">
+                    <i class="fa fa-level-down"></i> متأخر
+                       </div>
+                     {%endif%}
+                     </td>
+
+                     <td><b>{{project.All}}</b></td>
+                       <td><b>{{project.New}}</b></td>
+                       <td><b>{{project.InProgress}}</b></td>
+                         <td><b>{{project.Done}} </b></td>
+                           <td><b>{{project.Canceled}}</b></td>
+                          <td><b>{{project.Hold}}</b></td>
+                         <td><b>{{project.Closed}}</b>
+
+                        <!--  <span class="sparkline_area" style="height: 160px;"><canvas width="85" height="15" style="display: inline-block; width: 85px; height: 15px; vertical-align: top;"></canvas></span> -->
+
+                         </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              </div>
+          </div>
+        </div>
+      </div>
+
+ <div class="col-md-3 col-sm-12 col-xs-12">
+         <div class="x_panel tile fixed_height_320">
+          <div class="x_title">
+              <h2>{% trans "Tasks by status" %}</h2>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+<div id="piechart" style="height:250px;"></div>
+
+          </div>
+        </div>
+ </div>
+
+     </div> <!-- end  row 1 -->
+
+    <div class="row">
+  <div class="col-md-6 col-sm-12 col-xs-12 float-right">
+        <div class="x_panel tile fixed_height_320 overflow_hidden">
+          <div class="x_title">
+            <h2>المهام المفتوحة</h2>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+  <table class="table table-sm table-responsive" id="open-tasks">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>{% trans "Task" %}</th>
+                    <th>{% trans "Project" %}</th>
+                    <th>{% trans "Progress" %}</th>
+                    <th>الألتزام</th>
+                    <th>{% trans "Status" %}</th>
+                    <th>{% trans "End Date" %}</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+
+                  {% for task in open_tasks %}
+                  {% if task is not None and  task.project.id != "" %}
+                  <tr>
+                    <td scope="row">{{task.id}}</td>
+                    <td><a href="{% url 'ns-project:project-task-detail' task.project.id task.id   %}" class="blue" >  {{ task.name }}</a></td>
+                    <td><a href="{% url 'ns-project:project-detail' task.project.id %}" class="blue" >  {{ task.project.name }}</a></td>
+
+                    <td class="project_progress">
+                              <div class="progress progress_sm">
+                                 <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="{{ task.progress|floatformat:-2}}" aria-valuenow="72" style="width: {{ task.progress|floatformat:-2}%;"></div>
+                              </div>
+                              <small> {{ task.progress|floatformat:-2}}% مكتمل</small>
+                              </td>
+
+                     <td >
+                     {% now "Y-m-d" as current_date %}
+
+                     {% if task.enddate|date:"Y-m-d" < current_date and task.status != "Done" %}
+                    <div class="commitment-down text-danger">
+                    <i class="fa fa-level-down"></i> متأخر
+                   </div>
+                     {% else %}
+                   <div class="commitment-up text-success">
+                   <i class="fa fa-level-up"></i> ملتزم
+                   </div>
+                    {%endif%}
+                     </td>
+                     <td>{% trans task.status %}</td>
+                     <td>{{  task.enddate|date:"Y-m-d" }}</td>
+
+                  </tr>
+                  {%endif%}
+                  {% endfor %}
+                </tbody>
+              </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-12 col-xs-12 text-center">
+        <div class="x_panel tile fixed_height_320">
+          <div class="x_title">
+            <h2>مؤشر الاداء</h2>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+           {# <div id="echart_gauge" style="height:250px;"></div> #}
+           <div id="chart_div" style="height:250px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3 col-sm-12 col-xs-12">
+        <div class="x_panel tile fixed_height_320 overflow_hidden">
+          <div class="x_title">
+            <h2>المهام  حسب الإدارة</h2>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+    <div id="donutchart"></div>
+          </div>
+        </div>
+      </div>
+</div>
+
+
+
+
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <!-- Chart.js -->
+  <script src="/static/vendors/Chart.js/dist/Chart.min.js"></script>
+  <!-- gauge.js -->
+  <script src="/static/vendors/gauge.js/dist/gauge.min.js"></script>
+  <!-- Skycons -->
+  <script src="/static/vendors/skycons/skycons.js"></script>
+  <!-- Flot -->
+  <script src="/static/vendors/Flot/jquery.flot.js"></script>
+  <script src="/static/vendors/Flot/jquery.flot.pie.js"></script>
+  <script src="/static/vendors/Flot/jquery.flot.time.js"></script>
+  <script src="/static/vendors/Flot/jquery.flot.stack.js"></script>
+  <script src="/static/vendors/Flot/jquery.flot.resize.js"></script>
+  <!-- Flot plugins -->
+  <script src="/static/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+  <script src="/static/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+  <script src="/static/vendors/flot.curvedlines/curvedLines.js"></script>
+  <!-- DateJS -->
+  <script src="/static/vendors/DateJS/build/date.js"></script>
+  <!-- JQVMap -->
+  <script src="/static/vendors/jqvmap/dist/jquery.vmap.js"></script>
+  <script src="/static/vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+  <script src="/static/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+
+
+    <!-- ECharts -->
+  <script src="/static/vendors/echarts/dist/echarts.min.js"></script>
+  <script src="/static/vendors/echarts/map/js/world.js"></script>
+
+  <!-- google chart -->
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+google.charts.load('current', {'packages':['gauge']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+      var data = google.visualization.arrayToDataTable([
+        ['Label', 'Value'],
+        ['{{_("performance")}}', {{per_indicator}}],
+
+      ]);
+
+      var options = {
+        width: 800, height: 220,
+        redFrom: 90, redTo: 100,
+        yellowFrom:75, yellowTo: 90,
+        minorTicks: 5
+      };
+
+      var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+      chart.draw(data, options);
+    }
+
+</script>
+
+
+<!-- google chart -->
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Hours per Day'],
+          ['{{_("New")}}',     {{ pie_tasks.New}}],
+          ['{{_("Hold")}}',      {{ pie_tasks.Hold}}],
+          ['{{_("InProgress")}}',     {{ pie_tasks.InProgress}}],
+          ['{{_("Done")}}',      {{ pie_tasks.Done}}],
+          ['{{_("Canceled")}}',     {{ pie_tasks.Canceled}}],
+          ['{{_("Closed")}}',     {{ pie_tasks.Closed}}],
+        ]);
+
+        var options = {
+          title: ''
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+      }
+
+      //flasher
+      function blinker() {
+    $('.commitment-down').fadeOut(100);
+    $('.commitment-down').fadeIn(100);
+}
+setInterval(blinker, 1000); //Runs every second
+</script>
+
+//datatable for project table
+ <script src="/static/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+  <script src="/static/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+  <script src="/static/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+  <script src="/static/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+  <script src="/static/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+  <script src="/static/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+
+
+  <script type="text/javascript">
+$(document).ready(function() {
+    $('#open-project-list ,#open-tasks').DataTable( {
+       "scrollY":        "200px",
+        "scrollCollapse": true,
+        "paging":         false,
+        "searching" :false,
+         "bLengthChange": false ,
+          "info":     false
+    } );
+} );
+    </script>
+
+        <!-- jQuery Sparklines -->
+  <script src="/static/vendors/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
+      <script>
+                            $(".sparkline_areax").sparkline([5, 6, 7, 9, 9, 5, 3, 2, 6, 4, 6, 7], {
+                                type: 'line',
+                                lineColor: '#26B99A',
+                                fillColor: '#26B99A',
+                                spotColor: '#4578a0',
+                                minSpotColor: '#728fb2',
+                                maxSpotColor: '#6d93c4',
+                                highlightSpotColor: '#ef5179',
+                                highlightLineColor: '#8ba8bf',
+                                spotRadius: 2.5,
+                                width: 85
+                            });
+
+// piecharts departments
+var js_dict = [["key" ,"value"],
+
+    {% for k, v in task_based_department.items %}
+    ["{{ k }}", "{{ v }}"]{% if not forloop.last %},{% endif %}
+    {% endfor %}
+]
+
+google.charts.load("current", {packages:["corechart"]});
+google.charts.setOnLoadCallback(drawChart);
+function drawChart() {
+  var data = google.visualization.arrayToDataTable([
+    ['Task', 'Hours per Day'],
+    {% for k, v in task_based_department.items %}
+    ["{{ k }}", {{ v }}]{% if not forloop.last %},{% endif %}
+  {% endfor %}
+  ]);
+
+  var options = {
+    is3D: true,
+    fontSize: 12,
+    fontName: 'neo',
+  };
+
+  var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+  chart.draw(data, options);
+}
+
+                            </script>
+{% endblock javascripts %}
