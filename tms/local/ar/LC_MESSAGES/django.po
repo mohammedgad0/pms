@@ -903,7 +903,7 @@ msgstr "المهام حسب تاريخ الإنتهاء"
 
 #: .\project\templates\project\dashboard_manager.html:79
 msgid "Tasks by Departement"
-msgstr "المهما حسب الإدارة"
+msgstr "المهام حسب الإدارة"
 
 #: .\project\templates\project\dashboard_manager.html:89
 msgid "Tasks by Status"
