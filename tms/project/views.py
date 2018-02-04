@@ -157,7 +157,12 @@ def myuser(request, *args, **kwargs):
                 else:
                         g = Group.objects.get(name='employee')
                         g.user_set.add(request.user.id)
-         
+                #check if user has delegation in some project and he has not any group at let give him projectdelegation
+                if Project.objects.filter(delegationto__exact=emp.id).count() > 0 :
+                    if request.user.groups.filter(name="ismanager"). exists() == False and request.user.groups.filter(name="projectmanager"). exists() == False:
+                        g = Group.objects.get(name='projectdelegation')
+                        g.user_set.add(request.user.id)
+          
         else:
             return login(request, *args, **kwargs)
     return login(request, *args, **kwargs)
@@ -229,11 +234,11 @@ def AddProject(request):
             try:
                 if form.cleaned_data['delegationto'].empid is not None :
                     emp =Employee.objects.get(empid__exact=form.cleaned_data['delegationto'].empid)
-                    user = AuthUser.objects.get(username__exact=emp.email)
+                    user = AuthUser.objects.get(email__exact=emp.email)
                     g = Group.objects.get(name='projectdelegation') 
                     g.user_set.add(user.id)
                     _sender= empObj.email
-                    _receiver = form.cleaned_data['delegationto'].empid
+                    _receiver = form.cleaned_data['delegationto'].email
                     subject=_("Project has delegated to you in PMS")
                     context = {'project': project_obj,'host':request.get_host(),'receiver':_receiver,'sender':_sender}
                     message = get_template('project/email/delegat_project.html').render(context)
@@ -396,12 +401,17 @@ def ProjectEdit(request,pk):
         data = Project.objects.filter( Q (id__exact=pk) & (Q(createdby__exact=request.session['EmpID']) | Q(delegationto__exact=request.session['EmpID']) )).get()
     except ObjectDoesNotExist:
         raise Http404("No Project matches the given query.")
+    #detect old delegation
+    try :
+         olddata= data.delegationto.empid 
+         print (olddata+"old")
+    except:  
+         olddata=None
     # upload file form
     upload = modelformset_factory(Media,form=UploadFile,extra = 1)
     FormSet = upload(queryset=Media.objects.filter(project__id__exact=pk,task__id__exact=None).exclude(Q(filepath__exact=None)| Q(filepath__exact=''))) 
     #project form
     form = ProjectForm(request.POST or None, instance=data)
-    olddata= data.delegationto.empid
     form.has_changed()
     #if user has delegation on project
     try:
@@ -412,20 +422,11 @@ def ProjectEdit(request,pk):
         pass
        
     if form.is_valid():
-       
         instance=form.save(commit=False)
         instance.lasteditby=get_object_or_404(Employee, empid = request.session.get('EmpID'))
-        if form.fields['delegationto'].has_changed(data.delegationto.empid,form.cleaned_data['delegationto'].empid) :
-            pass
-        print (olddata)
-        print  (form.cleaned_data['delegationto'].empid)
-            
         instance.save()
-        #detect changed fileds
-        #print("The following fields changed: %s" % ", ".join(form.changed_data))
-        #intial =form.get_initial_for_field('delegationto','delegationto')
-       
-         #uploading files
+        
+        #uploading files
         upload_form = upload(request.POST, request.FILES)
         if upload_form.is_valid():
             obj_file = upload_form.save(commit=False)
@@ -436,12 +437,30 @@ def ProjectEdit(request,pk):
         else:
             data = {'is_valid': False}
         messages.success(request, _("Project has updated successfully"), fail_silently=True,)
-        #send message if delegation change
-#         if form.cleaned_data['delegationto'] is not None :
-#             if instance.delegationto.empid != form.cleaned_data['delegationto'].empid :
-#                 #delegation changed 
-#                 
-                
+        if form.cleaned_data['delegationto'] is not None :
+          
+            #send message if delegation change
+            print (olddata+"old")
+            print (form.cleaned_data['delegationto'].empid+"new")
+            if form.fields['delegationto'].has_changed(olddata,form.cleaned_data['delegationto'].empid) : 
+                emp =Employee.objects.get(empid__exact=form.cleaned_data['delegationto'].empid)
+            try:
+                user = AuthUser.objects.get(email__exact=emp.email)
+                g = Group.objects.get(name='projectdelegation') 
+                g.user_set.add(user.id)
+            except :
+                pass
+
+                _sender= request.session['Email']
+                _receiver = form.cleaned_data['delegationto'].email
+                subject=_("Project has delegated to you in PMS")
+                context = {'project': instance,'host':request.get_host(),'receiver':_receiver,'sender':_sender}
+                message = get_template('project/email/delegat_project.html').render(context)
+                _sender="sakr@stats.gov.sa"
+                _receiver="sakr@stats.gov.sa"
+                send_mail(subject,message,_sender,[_receiver],fail_silently=False,html_message=message,)
+            else:
+                pass
         return HttpResponseRedirect(reverse('ns-project:project-list'))
     else:
         # Set the messages level back to default.
