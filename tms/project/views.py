@@ -1427,7 +1427,7 @@ def _dept_tasks_statistics(request,deptcode,startdate,enddate):
     empid=request.session['EmpID']
     tasks = {}
     if request.user.groups.filter(name__exact='ismanager').exists():
-        task_list= Task.objects.filter(Q(departement__deptcode__exact=deptcode) | Q(project__departement__deptcode__exact=deptcode) )
+        task_list= Task.objects.filter(Q(departement__deptcode__exact=deptcode) | Q(project__departement__deptcode__exact=deptcode) | Q(project__delegationto__empid__exact= empid) | Q(assignedto__empid__exact= empid))
     elif  request.user.groups.filter(name__exact='projectmanager').exists():
         task_list= Task.objects.filter(
           (Q(createdby__empid__exact = empid) | Q(assignedto__empid__exact= empid) | Q(project__delegationto__empid__exact= empid))
