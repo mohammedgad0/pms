@@ -779,8 +779,8 @@ def updateTaskCancel(request,pk):
             subject=_("Task Number")+' '+str(_obj.id) +' '+_("has been canceled")
             context = {'task': _obj,'host':request.get_host(),'receiver':_receiver,'sender':_sender}
             message = get_template('project/email/cancel_task.html').render(context)
-            _sender="xxsherif82@gmail.com"
-            _receiver="xxsherif82@gmail.com"
+            _sender="sakr@stats.gov.sa"
+            _receiver="sakr@stats.gov.sa"
             send_mail(subject,message,_sender,[_receiver],fail_silently=False,html_message=message,)
 
             return JsonResponse(data)
@@ -932,8 +932,6 @@ def AddTask(request,project_id):
             pass
            
         if form.is_valid():
-       
-            # form.save()
             empObj=get_object_or_404(Employee,empid__exact=request.session.get('EmpID'))
             Task_obj = form.save(commit=False)
             Task_obj.project = get_object_or_404(Project,pk=project_id)
@@ -956,30 +954,50 @@ def AddTask(request,project_id):
             #uploading files
             upload_form = upload(request.POST, request.FILES)
             if upload_form.is_valid():
-                obj_file = upload_form.save(commit=False)
-                for obj in obj_file:
-                    obj.project =  Task_obj.project
-                    obj.task = Task_obj
-                    obj.save()
+                try:
+                    obj_file = upload_form.save(commit=False)
+                    for obj in obj_file:
+                        obj.project =  Task_obj.project
+                        obj.task = Task_obj
+                        obj.save()
+                except:
+                    pass       
             else:
                 data = {'is_valid': False}
-                return JsonResponse(data)
             #update history message
             if assignto_employee:
                 assigntodata = get_object_or_404(Employee , empid = assignto_employee )
                 update_change_reason(Task_obj, _("Add new Task By")+" " + _empname + " " + _("And Assign to") + " " + assigntodata.empname)
+                #email to employee
+                _receiver=assigntodata.email
             elif assignto_department:
                 assigntodata = get_object_or_404(Department , deptcode__exact = assignto_department )
                 update_change_reason(Task_obj, _("Add new Task By") +" " + _empname + " " +_("And Assign to") + " " + assigntodata.deptname)
+                #email to manager
+                try:
+                    manager_obj=Employee.objects.get(empid__exact= assigntodata.managerid)
+                    _receiver=manager_obj.email
+                except:
+                    _receiver="sakr@stats.gov.sa"
             else:
                 update_change_reason(Task_obj, _("Add new Task By")+" " + _empname)
+            #send email notification
+            try:
+                print('send email')
+                subject =_('Task has been asigned to you in PMS')
+                context = {'task': Task_obj,'host':request.get_host()}
+                message = get_template('project/email/assign_task.html').render(context)
+                _sender="sakr@stats.gov.sa"
+                _receiver="sakr@stats.gov.sa"
+                send_mail(subject,message,_sender,[_receiver],fail_silently=False,html_message=message,)
+            except:
+                pass
             #info message
             messages.success(request, _("Task Added"))
             return HttpResponseRedirect(reverse('ns-project:project-task' , kwargs={'pk':project_id} ))
-
-    else:
-        data['form_is_valid'] = False
-        data['errors'] = errors.append(form.errors)
+        else:
+            data['form_is_valid'] = False
+            data['errors'] = errors.append(form.errors)
 
 
     context ={'upload_file':FormSet, 'form':form,'errors':errors,'project_detail':project_detail,'project_list':project_list,'current_url':current_url}
@@ -1082,8 +1100,7 @@ def updateTaskAssignto(request,pk,save=None):
                     _receiver=manager_obj.email
                  except:
                     _receiver="sakr@stats.gov.sa"
-                
-                 
+
                  subject =_('Task has been asigned to you in PMS')
                  context = {'task': _obj,'host':request.get_host()}
                  message = get_template('project/email/assign_task.html').render(context)
@@ -1154,7 +1171,6 @@ def ProjectTaskEdit(request,projectid,taskid):
     project_detail= get_object_or_404(Project,pk=projectid)
     task_detail= get_object_or_404(Task,pk=taskid)
     form = EditTaskForm(request.POST or None, instance=task_detail)
-
     # upload file form
     upload = modelformset_factory(Media,form=UploadFile,extra = 1,can_delete=True)
     FormSet = upload(queryset=Media.objects.filter(project_id__exact=projectid,task__id__exact=taskid).exclude(Q(filepath__exact=None)| Q(filepath__exact='')))
@@ -1175,8 +1191,7 @@ def ProjectTaskEdit(request,projectid,taskid):
             if  form.cleaned_data['startdate'].date() > project_detail.end:
                 form.errors['startdate'] = form.error_class([_('task start date is bigger than project end date')])
         except:
-            pass
-        
+            pass      
     #validate and save
     if form.is_valid():
         instance=form.save(commit=False)
@@ -1205,21 +1220,27 @@ def ProjectTaskEdit(request,projectid,taskid):
         if form.cleaned_data['status']=="Closed":
             instance.closeddate=datetime.now()
             instance.closeby=request.session['EmpID']
-
         #check if user select employee or dept or do nothing
-
         try :
+            #try assign to   employee
             instance.assignedto = Employee.objects.get(empid__exact= form.cleaned_data['assigned_to'])
             instance.departement= Department.objects.get(deptcode__exact=  instance.assignedto.deptcode) 
+            #email to employee
+            if instance.assignedto is not None :
+                _receiver=instance.assignedto.email
+            else:
+                 _receiver="sakr@stats.gov.sa"               
         except:
+             #try assign to manager
              try:
                 instance.assignedto=None
                 instance.departement= Department.objects.get(deptcode__exact= form.cleaned_data['assigned_to'])
+                #email to manager
+                manager_obj=Employee.objects.get(empid__exact= instance.departement.managerid)
+                _receiver=manager_obj.email
              except:
-                pass
-
-          
-
+                _receiver="sakr@stats.gov.sa"
+        #save form
         instance.save()
         #uploading files
         upload_form = upload(request.POST, request.FILES)
@@ -1234,9 +1255,22 @@ def ProjectTaskEdit(request,projectid,taskid):
                    obj.delete()
         else:
             data = {'is_valid': False}
-        messages.success(request, _("Task has been updated successfully"), fail_silently=True,)
         #add to history
         update_change_reason(instance, _("Edit Task successfully by")+" : "+  str( employee.empname)+ ( ",    <i class=\"fa fa-comment\"></i>  "+ form.cleaned_data['note']  if form.cleaned_data['note'] else " "))
+        #send email notification
+        try:
+            _sender=instance.createdby.email
+            subject =_('Task has been asigned to you in PMS')
+            context = {'task': instance,'host':request.get_host(),'receiver':_receiver,'sender':_sender}
+            message = get_template('project/email/assign_task.html').render(context)
+            #test only 
+            _sender="sakr@stats.gov.sa"
+            _receiver="sakr@stats.gov.sa"
+            send_mail(subject,message,_sender,[_receiver],fail_silently=False,html_message=message,)
+        except:
+            pass 
+        #return and notify message 
+        messages.success(request, _("Task has been updated successfully"), fail_silently=True,)
         return HttpResponseRedirect(reverse('ns-project:project-task-detail', kwargs={'projectid':projectid,'taskid':taskid}))
     else:
         context = {'project_detail':project_detail,
