@@ -102,9 +102,7 @@
                     </ul>
                     <br />
 
-
                   </div>
-
                 </section>
                 
  
@@ -145,8 +143,9 @@
 
                           <p class="title">{{ _('Status') }} </p>
                    <p >{{project_detail.status.name_ar}}</p>
-                   
-                   {% if project_detail.delegationto is not None %}
+                 
+                   {% if project_detail.delegationto is not None and project_detail.departement.deptcode|slugify   != "1110" %}
+                  
                         <p class="title">{{ _('Delegation to') }} </p>
                    <p >{{project_detail.delegationto.empname}}</p>
                    {%endif%}
