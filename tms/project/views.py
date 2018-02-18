@@ -224,6 +224,7 @@ def AddProject(request):
             project_obj.createdby= empObj
             project_obj.lasteditby=empObj
             project_obj.createddate= datetime.now()
+            #co
             if form.cleaned_data['delegationto'] is not None :
                 project_obj.delegationdate = datetime.now()
                  
