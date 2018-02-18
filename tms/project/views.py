@@ -187,7 +187,6 @@ def Dashboard(request):
     else:
         return HttpResponseRedirect(reverse('ns-project:dashboard-employee'))
         
-
 def gentella_html(request):
     context = {'LANG': request.LANGUAGE_CODE}
     # The template to be loaded as per gentelella.
@@ -225,8 +224,8 @@ def AddProject(request):
             project_obj.createdby= empObj
             project_obj.lasteditby=empObj
             project_obj.createddate= datetime.now()
-            if form.cleaned_data['delegationto'].empid is not None :
-                project_obj.delegationdate=datetime.now()
+            if form.cleaned_data['delegationto'] is not None :
+                project_obj.delegationdate = datetime.now()
                  
             #save to database
             project_obj.save()
