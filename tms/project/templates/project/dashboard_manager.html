@@ -221,7 +221,7 @@
                          
                                       <td> 
                      {% now "Y-m-d" as current_date %}
-                     {% if project.enddate|date:"Y-m-d" < current_date and project.status != "Done" %}
+                     {% if project.end|date:"Y-m-d" < current_date and project.status != "Done" %}
 					  <div class="commitment-down text-danger">
                     <i class="fa fa-level-down"></i> متأخر
                    </div>
