@@ -130,7 +130,7 @@
                           <tr>
                             <td>{{ forloop.counter }}</td>
                             <td><a href="{% url 'ns-project:project-task-detail' task.project.id task.id   %}" class="blue" title="{{ task.name }}" >  {{ task.name|truncatechars:50 }}</a></td>
-                            <td><a href="{% url 'ns-project:project-detail' task.project.id %}" class="blue" >  {{ task.project.name|truncatechars:50 }}</a></td>
+                            <td><a href="{% url 'ns-project:project-detail' task.project.id %}" class="blue"   title="{{ task.project.name }}">  {{ task.project.name|truncatechars:50 }}</a></td>
                             <td>{{  task.startdate|date:"Y-m-d" }}</td>
                             <td>{{  task.enddate|date:"Y-m-d" }}</td>
                             <td>
