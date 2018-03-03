@@ -443,12 +443,12 @@ def ProjectEdit(request,pk):
             #print (form.cleaned_data['delegationto'].empid+"new")
             if form.fields['delegationto'].has_changed(olddata,form.cleaned_data['delegationto'].empid) : 
                 emp =Employee.objects.get(empid__exact=form.cleaned_data['delegationto'].empid)
-            try:
-                user = AuthUser.objects.get(email__exact=emp.email)
-                g = Group.objects.get(name='projectdelegation') 
-                g.user_set.add(user.id)
-            except :
-                pass
+                try:
+                    user = AuthUser.objects.get(email__exact=emp.email)
+                    g = Group.objects.get(name='projectdelegation') 
+                    g.user_set.add(user.id)
+                except :
+                    pass
 
                 _sender= request.session['Email']
                 _receiver = form.cleaned_data['delegationto'].email
