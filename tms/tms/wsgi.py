@@ -14,8 +14,12 @@ framework.
 
 """
 import os
-
+import sys
+path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(path)
+os.environ['DJANGO_SETTINGS_MODULE'] = 'tms.settings'
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tms.settings")
+
 
 # This application object is used by any WSGI server configured to use this
 # file. This includes Django's development server, if the WSGI_APPLICATION
