@@ -316,8 +316,7 @@ class FollowupForm(forms.Form):
       for data in query:
           if data.deptcode == None or data.deptcode == '' or data.deptcode == 'null':
               continue
-          departement.append(data.deptcode)
-      print(departement)   
+          departement.append(data.deptcode)  
       departement = FollowupModelChoiceField(queryset=Department.objects.filter(deptcode__in= departement), to_field_name="deptcode",empty_label=_('Select Departement'),widget=forms.Select(attrs={'class': 'chosen chosen form-control col-md-3'} ),error_messages={'required': _('Please Sealect Departement')},label=_('Departement'))
       employee = TeamModelChoiceField(queryset=Employee.objects.none(),to_field_name="empid" ,empty_label=_("Select Employee"),widget=forms.Select(attrs={'class': 'chosen form-control col-md-3'} ),required=False,label=_('Employee'))
       TASK_STATUS = (

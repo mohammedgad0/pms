@@ -9,6 +9,8 @@ class Department(models.Model):
     deptname = models.CharField(db_column='DeptName', max_length=200, blank=True, null=True, unique=True)  # Field name made lowercase.
     managerid = models.CharField(db_column='ManagerId', max_length=45, blank=True, null=True)  # Field name made lowercase.
     deptcode = models.IntegerField(db_column='DeptCode', unique=True, blank=True, null=True)  # Field name made lowercase.
+    managername = models.CharField(db_column='ManagerName', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    
     class Meta:
         managed = False
         db_table = 'department'
