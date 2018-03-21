@@ -13,7 +13,6 @@ EMAIL_SSL_KEYFILE=None #specify the path to a PEM-formatted private key file to 
 FILE_CHARSET='utf-8'
 FILE_UPLOAD_MAX_MEMORY_SIZE=2621440    #(i.e. 2.5 MB).
 
-
 # EMAIL_HOST='smtp.gmail.com'
 # EMAIL_PORT=587
 # EMAIL_HOST_USER=''
