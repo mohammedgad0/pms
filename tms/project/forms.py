@@ -141,7 +141,7 @@ class AddTaskForm(ModelForm):
         'department_list','startdate','enddate']
         widgets = {
             'name':TextInput(attrs={'class': 'form-control','placeholder':_('Task Name'),'required': True}),
-            'desc': Textarea(attrs={'class':'form-control','placeholder':_('Task Details'),'required': True}),
+            'desc': Textarea(attrs={'id':'summernote','class':'form-control','placeholder':_('Task Details'),'required': True}),
             'startdate':TextInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Start Date'),'required': True}),
             'enddate':TextInput(attrs={'class': 'form-control has-feedback-left col-md-6 ','id':'single_cal_2','aria-describedby':'inputSuccess2Status','placeholder':_('End Date'),'required': True}),
         }
@@ -201,7 +201,7 @@ class EditTaskForm(ModelForm):
         fields = ['name','desc','startdate','enddate','finisheddate','assigntype','status','progress']
         widgets = {
             'name':TextInput(attrs={'class': 'form-control','placeholder':_('Task Name'),'required': True}),
-            'desc': Textarea(attrs={'class':'form-control','placeholder':_('Task Details'),'required': True}),
+            'desc': Textarea(attrs={ 'id':'summernote','class':'form-control ','placeholder':_('Task Details'),'required': True}),
             'startdate':TextInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Start Date'),'required': False}),
             'enddate':TextInput(attrs={'class': 'form-control has-feedback-left col-md-6 ','id':'single_cal_2','aria-describedby':'inputSuccess2Status','placeholder':_('End Date'),'required': False}),
             'finisheddate':TextInput(attrs={'class': 'form-control has-feedback-left col-md-6 ','id':'single_cal_3','aria-describedby':'inputSuccess2Status','placeholder':_('End Date'),'required': False}),

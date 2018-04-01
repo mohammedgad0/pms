@@ -7,16 +7,13 @@
 
 {% block stylesheets %}
   {{ block.super }}
-
-  <style>
- /* .scrollable-menu {
-    height: auto;
-    max-height: 200px;
-    overflow-x: hidden;
-    */
-}
-  </style>
 {% endblock stylesheets %}
+
+
+  <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+
+
+
 
 {% block content %}
   <div class="right_col" role="main">
@@ -461,4 +458,24 @@ function deleteForm(prefix, btn) {
 
   </script>
 
+
+  <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
+ <script>
+    $(document).ready(function() {
+        $('#summernote').summernote({
+        	 dialogsInBody: true,
+        	  toolbar: [
+        		    // [groupName, [list of button]]
+        		    ['style', ['bold', 'italic', 'underline', 'clear']],
+        		    ['font', ['strikethrough', 'superscript', 'subscript']],
+        		    ['fontsize', ['fontsize']],
+        		    ['color', ['color']],
+        		    ['para', ['ul', 'ol', 'paragraph']],
+        		    ['height', ['height']]
+        		  ]
+        	
+        });
+    });
+    </script>
 {% endblock javascripts %}

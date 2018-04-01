@@ -107,7 +107,7 @@
 <!--  decription -->
 <fieldset class="fieldset_normal">
         <legend>{{ _('Task Description')}}</legend>
-        <div class="article-content">    <p>{{task.desc}} </p></div>
+        <div class="article-content">    <p>{% autoescape off  %}{{task.desc}} {% endautoescape %} </p></div>
       </fieldset>
           
 <!--  attachmenet -->
