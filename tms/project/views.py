@@ -986,8 +986,8 @@ def AddTask(request,project_id):
                 subject =_('Task has been asigned to you in PMS')
                 context = {'task': Task_obj,'host':request.get_host()}
                 message = get_template('project/email/assign_task.html').render(context)
-                _sender="sakr@stats.gov.sa"
-                _receiver="sakr@stats.gov.sa"
+                _sender="portal@stats.gov.sa"
+                #_receiver="sakr@stats.gov.sa"
                 send_mail(subject,message,_sender,[_receiver],fail_silently=False,html_message=message,)
             except:
                 pass
@@ -1103,8 +1103,8 @@ def updateTaskAssignto(request,pk,save=None):
                  subject =_('Task has been asigned to you in PMS')
                  context = {'task': _obj,'host':request.get_host()}
                  message = get_template('project/email/assign_task.html').render(context)
-                 _sender="sakr@stats.gov.sa"
-                 _receiver="sakr@stats.gov.sa"
+                 _sender="portal@stats.gov.sa"
+                 #_receiver="sakr@stats.gov.sa"
                  send_mail(subject,message,_sender,[_receiver],fail_silently=False,html_message=message,)
 
                      
@@ -1263,8 +1263,8 @@ def ProjectTaskEdit(request,projectid,taskid):
             context = {'task': instance,'host':request.get_host(),'receiver':_receiver,'sender':_sender}
             message = get_template('project/email/assign_task.html').render(context)
             #test only 
-            _sender="sakr@stats.gov.sa"
-            _receiver="sakr@stats.gov.sa"
+            _sender="portal@stats.gov.sa"
+           # _receiver="sakr@stats.gov.sa"
             send_mail(subject,message,_sender,[_receiver],fail_silently=False,html_message=message,)
         except:
             pass 
