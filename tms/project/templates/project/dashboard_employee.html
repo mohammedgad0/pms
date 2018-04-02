@@ -1,0 +1,238 @@
+{% extends "project/base_site.html" %}
+{% load i18n %}
+{% block title %} Dashboard 1 {% endblock title %}
+{% block stylesheets %}
+{{ block.super }}
+<link href="/static/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link href="/static/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+<link href="/static/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+<link href="/static/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+<link href="/static/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+{% endblock stylesheets %}
+{% block content %}
+<div class="right_col" role="main">
+   <!-- top tiles -->
+
+   <div class="row tile_count" style="margin-bottom: 0px;">
+      <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+         <span class="count_top"><i class="fa fa-briefcase"></i>  {% trans "All Projects" %} </span>
+         <div class="count">{{kpi.p_all|stringformat:"02d"}}</div>
+         <!-- <span class="count_bottom"><i class="green">4% </i> منذ اخر اسبوع</span>-->
+      </div>
+      <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+         <span class="count_top"><i class="fa fa-clock-o"></i>  {% trans "Internal Projects" %} </span>
+         <div class="count">{{kpi.p_internal|stringformat:"02d"}}</div>
+         <!--   <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> منذ اخر اسبوع</span>-->
+      </div>
+      <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+         <span class="count_top"><i class="fa fa-clock-o"></i>  {% trans "External Projects" %}</span>
+         <div class="count">{{kpi.p_external|stringformat:"02d"}}</div>
+         <!--   <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i>  منذ اخر اسبوع</span>-->
+      </div>
+      <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+         <span class="count_top"><i class="fa fa-clock-o"></i> {% trans "All Tasks" %}</span>
+         <div class="count">{{kpi.t_all|stringformat:"02d"}}</div>
+         <!-- <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i>  منذ اخر اسبوع</span> -->
+      </div>
+      <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+         <span class="count_top"><i class="fa fa-clock-o"></i>  {% trans "Internal Tasks" %}</span>
+         <div class="count">{{kpi.t_internal|stringformat:"02d"}}</div>
+         <!--  <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i>  منذ اخر اسبوع</span> -->
+      </div>
+      <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+         <span class="count_top"><i class="fa fa-clock-o"></i> {% trans "External Tasks" %}</span>
+         <div class="count">{{kpi.t_external|stringformat:"02d"}}</div>
+         <!--  <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i>   منذ اخر اسبوع</span> -->
+      </div>
+   </div>
+   <!-- /top tiles -->
+   {{result}}
+   {%for data in result%}
+   {{data}}
+   {%endfor%}
+   <!-- start  row 1 -->
+   <div class="row">
+      <div class="col-md-9 col-sm-12 col-xs-12">
+         <div class="x_panel tile">
+            <div class="x_title">
+               <h2>{{_('Tasks Open')}}</h2>
+               <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+               <div class="container">
+                  <table class="table table-sm table-responsive" id="open-project-list">
+                     <thead>
+                        <tr>
+                           <th>#</th>
+                           <th> {{_('Task Name')}} </th>
+                           <th> {{_('Project Name')}}  </th>
+                           <th> {{_('Start Date')}} </th>
+                           <th> {{_('End Date')}} </th>
+                           <th> {{_('Progress')}} </th>
+                           <th> {{_('Status')}} </th>
+
+                        </tr>
+                     </thead>
+                     <tbody>
+
+                        {% for task in task_employee %}
+                        <tr>
+                           <th scope="row">{{task.id}}</th>
+                           {# <td>{{task.name}}</td> #}
+                           <td><a href="{%if task.project.id%}{% url 'ns-project:project-task-detail' task.project.id task.id %} {%endif%}" class="blue" > {{ task.name|truncatechars:60 }}</a></td>
+                           <td><a href="{%if task.project.id%}{% url 'ns-project:project-detail' task.project.id %}{%endif%}" class="blue" >  {{ task.project.name }}</a></td>
+                           <td>{{task.startdate|date:'d-M-Y'}}</td>
+                           <td>{{task.enddate|date:'d-M-Y'}}</td>
+                           <td class="project_progress">
+                              <div class="progress progress_sm">
+                              <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="{{task.progress}}"></div>
+                              </div>
+                              <small>{{task.progress}}% {% trans "Complete" %}</small>
+
+                           </td>
+                           <td>
+                             {% if task.status == 'Closed' %}
+                             <span class="btn btn-dark btn-xs"> {{task.get_status_display }}</span>
+                             {% endif %}
+                             {% if task.status == 'Cancelled' %}
+                             <span  class="btn btn-danger btn-xs"> {{task.get_status_display }}</span>
+                             {% endif %}
+                             {% if task.status == 'Hold' %}
+                             <button type="button" class="btn btn-danger btn-xs"> {{task.get_status_display }}</button>
+                             {% endif %}
+                             {% if task.status == 'Done' %}
+                             <button type="button" class="btn btn-success btn-xs"> {{task.get_status_display }}</button>
+                             {% endif %}
+                             {% if task.status == 'InProgress' %}
+                             <span class="btn btn-warning btn-xs"> {{task.get_status_display }}</span>
+                             {% endif %}
+                             {% if task.status == 'New' %}
+                             <span class="btn btn-info btn-xs"> {{task.get_status_display }}</span>
+                             {% endif %}
+                           </td>
+                        </tr>
+                        {% endfor %}
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="col-md-3 col-sm-12 col-xs-12">
+         <div class="x_panel tile ">
+
+            <div class="x_content">
+              <div class="text-center col-md-12 col-sm-12 col-xs-12 profile_left">
+                <div class="profile_img">
+                  <div id="crop-avatar">
+                    <!-- Current avatar -->
+                    <img class="img-responsive avatar-view" src="/static/images/profile.png"  style="margin: 0 auto; height:160px;" alt="Avatar" title="Change the avatar">
+                  </div>
+                </div>
+                <h4>{{employee.empname}}</h4>
+                <ul class="list-unstyled user_data">
+                  <li><i class="fa fa-map-marker user-profile-icon"></i> {{employee.deptname}}
+                  </li>
+                  <li>
+                    <i class="fa fa-briefcase user-profile-icon"></i> {{employee.jobtitle}}
+                  </li>
+                  <li class="m-top-xs">
+                    <i class="fa fa-external-link user-profile-icon"></i>
+                    <a href="mailto:{{employee.email}}" target="_blank">{{employee.email}}</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+         </div>
+      </div>
+      <!--  pichart -->
+       <div class="col-md-3 col-sm-12 col-xs-12 left">
+         <div class="x_panel tile fixed_height_320">
+            <div class="x_title">
+               <h2>{% trans "Tasks by status" %}</h2>
+               <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <div id="piechart" style="height:250px;"></div>
+            </div>
+         </div>
+      </div>
+
+   </div>
+   <!-- end  row 1 -->
+</div>
+{% endblock content %}
+{% block javascripts %}
+{{ block.super}}
+<!-- Chart.js -->
+<!-- google chart -->
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<!-- google chart -->
+<script type="text/javascript">
+   google.charts.load('current', {'packages':['corechart']});
+   google.charts.setOnLoadCallback(drawChart);
+
+   function drawChart() {
+
+     var data = google.visualization.arrayToDataTable([
+       ['Task', 'Hours per Day'],
+       ['{{_("New")}}',     {{ pie_tasks.New}}],
+        ['{{_("Hold")}}',      {{ pie_tasks.Hold}}],
+     ['{{_("InProgress")}}',     {{ pie_tasks.InProgress}}],
+       ['{{_("Done")}}',      {{ pie_tasks.Done}}],
+       ['{{_("Canceled")}}',     {{ pie_tasks.Canceled}}],
+       ['{{_("Closed")}}',     {{ pie_tasks.Closed}}],
+     ]);
+
+     var options = {
+       title: ''
+     };
+
+     var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+     chart.draw(data, options);
+   }
+
+   //flasher
+   function blinker() {
+   $('.commitment-down').fadeOut(100);
+   $('.commitment-down').fadeIn(100);
+   }
+   setInterval(blinker, 1000); //Runs every second
+</script>
+//datatable for project table
+<script src="/static/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="/static/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="/static/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+<script src="/static/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="/static/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script src="/static/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+<script type="text/javascript">
+   $(document).ready(function() {
+       $('#open-project-list').DataTable( {
+           "paging": false,
+           "searching" :false,
+           "info":     false
+       } );
+   } );
+
+</script>
+<!-- jQuery Sparklines -->
+<script src="/static/vendors/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
+<script>
+   $(".sparkline_areax").sparkline([5, 6, 7, 9, 9, 5, 3, 2, 6, 4, 6, 7], {
+       type: 'line',
+       lineColor: '#26B99A',
+       fillColor: '#26B99A',
+       spotColor: '#4578a0',
+       minSpotColor: '#728fb2',
+       maxSpotColor: '#6d93c4',
+       highlightSpotColor: '#ef5179',
+       highlightLineColor: '#8ba8bf',
+       spotRadius: 2.5,
+       width: 85
+   });
+</script>
+
+
+{% endblock javascripts %}
