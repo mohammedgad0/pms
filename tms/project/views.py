@@ -1292,20 +1292,14 @@ def TaskListExternal(request,task_status=None):
             project_id.append(data.project.id)
         except:
             pass
-    #no of new task
-    new_tasks_count= Task.objects.filter(Q(status__exact='New')&(
-         Q(assignedto__empid__exact = empid)|Q(departement__deptcode__exact =  request.session['DeptCode']))
-         ).exclude(createdby__exact=empid).count()
 
     #get all tasks assign to dept from external project
     task_list= Task.objects.filter(
-         Q(departement__deptcode__exact=  request.session['DeptCode'])
-         ).exclude(createdby__exact=empid).order_by('-id')
-
+         Q(departement__deptcode__exact =  request.session['DeptCode']) & ~Q(project__departement__exact =  request.session['DeptCode'])
+         ).order_by('-id')
 
     if task_status=="all":
          task_list= task_list
-
     elif task_status=="unclosed":
          task_list = task_list.exclude(status__exact='Closed')
     elif task_status=="assignedtome":
@@ -1330,7 +1324,6 @@ def TaskListExternal(request,task_status=None):
     elif task_status=="assignedtodept":
          task_list= task_list.filter(departement__deptcode__exact= request.session['DeptCode'])
 
-
     paginator = Paginator(task_list, 5) # Show 5 contacts per page
     page = request.GET.get('page')
     try:
@@ -1342,8 +1335,7 @@ def TaskListExternal(request,task_status=None):
         # If page is out of range (e.g. 9999), deliver last page of results.
         _plist = paginator.page(paginator.num_pages)
 
-
-    context = {'tasks':_plist,'current_url':current_url,'new_tasks_count':new_tasks_count}
+    context = {'tasks':_plist,'current_url':current_url}
     return render(request, 'project/tasks_from_external_dept.html', context)
 
 @login_required
