@@ -881,17 +881,23 @@ def projectFlowUp(request):
 
 @login_required
 def ProjectTeam(request,project_id):
+    from  django.db.models import Count, Case, When, IntegerField ,F
     empid=request.session.get('EmpID')
     project_detail= get_object_or_404(Project,id__exact=project_id) 
-#     try:
-#         project_detail=Project.objects.get(Q(id__excat=project_id) and Q(createdby__exact=empid or delgationto__exact==empid))
-#     except:
-#          raise Http404("No project match your query")
-    
+    #projet top nave
     project_list=  _get_internal_external_projects( request)
-    all_emp = VStatisticstaskdata.objects.filter(projectid = project_id)
+    members = Task.objects.filter(project__id__exact = project_id).values(
+        'assignedto__empname','assignedto__deptname','assignedto__jobtitle','departement__deptname').annotate(
+                                totaltask= Count(id)).annotate(
+                                    new = Count(Case(When(status ='New' ,then=F("id")),output_field=IntegerField())),
+                                    inProgress = Count(Case(When(status ='InProgress' ,then=F("id")),output_field=IntegerField())),
+                                    done = Count(Case(When(status ='Done' ,then=F("id")),output_field=IntegerField())),
+                                    hold = Count(Case(When(status ='Hold' ,then=F("id")),output_field=IntegerField())),
+                                    cancelled = Count(Case(When(status ='Cancelled' ,then=F("id")),output_field=IntegerField())),
+                                    closed = Count(Case(When(status ='Closed' ,then=F("id")),output_field=IntegerField()))).order_by()
+    
     current_url ="ns-project:" + resolve(request.path_info).url_name
-    context={'all_emp':all_emp,'project_detail':project_detail,'project_list':project_list,'current_url':current_url}
+    context={'members': members,'project_detail':project_detail,'project_list':project_list,'current_url':current_url}
     return render(request, 'project/project_team.html', context)
 
 @login_required

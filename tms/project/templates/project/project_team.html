@@ -33,6 +33,12 @@
                   {{ message }}
                 </div>
               {% endfor %}
+              
+              
+              {% for member in members  %}
+             {#  {{ member}} #}
+              
+              {%endfor%}
               <!-- start project list -->
               <table class="table table-striped projects">
                 <thead>
@@ -42,41 +48,57 @@
                     <th>{% trans "Department" %}</th>
                     <th>{% trans "Job title" %}</th>
                     <th>{% trans "Total tasks" %}</th>
-                    <th>{% trans "tasks new" %}</th>
-                    <th>{% trans "Tasks inprogress" %}</th>
-                    <th>{% trans "Tasks done" %}</th>
-                    <th>{% trans "Tasks closed" %}</th>
-                    <th>{% trans "Tasks cancelled" %}</th>
+                    <th>{% trans "New" %}</th>
+                    <th>{% trans "Inprogress" %}</th>
+                    <th>{% trans "Done" %}</th>
+                    <th>{% trans "Hold" %}</th>
+                    <th>{% trans "Closed" %}</th>
+                    <th>{% trans "Cancelled" %}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {% for data in all_emp %}
+                  {% for member in members %}
                   <tr>
                     <td>#</td>
                     <td>
-                      {{data.employeename}}
+                     {%  if member.assignedto__empname %}
+                      {{member.assignedto__empname}} 
+                      {%  else  %}
+                      {% trans '----' %}
+                      {% endif %}
                     </td>
-                    <td>  {{data.deptname}}</td>
                     <td>
-                      {{data.jobtitle}}
+                      {%  if member.assignedto__deptname %}
+                      {{member.assignedto__deptname}} 
+                      {%  elif member.departement__deptname %}
+                      {{ member.departement__deptname }}
+                      {% endif %}
+               
+                     
+                     </td>
+                    <td>
+                      {{member.assignedto__jobtitle}}
                     </td>
                     <td class="project_progress">
-                      {{data.totaltask}}
+                      {{member.totaltask}}
                     </td>
                     <td>
-                        {{data.new}}
+                        {{member.new}}
                     </td>
                     <td>
-                        {{data.inprogress}}
+                        {{member.inProgress}}
                     </td>
                     <td>
-                        {{data.done}}
+                        {{member.done}}
+                    </td>
+                     <td>
+                        {{member.hold}}
                     </td>
                     <td>
-                        {{data.closed}}
+                        {{member.closed}}
                     </td>
                     <td>
-                        {{data.cancelled}}
+                        {{member.cancelled}}
                     </td>
                     </tr>
                   {% endfor %}
