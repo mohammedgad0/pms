@@ -504,19 +504,14 @@ def ProjectTask(request,pk,task_status=None):
     dptDict={}
     current_url ="ns-project:" + resolve(request.path_info).url_name
     empid = request.session.get('EmpID')
-    project_detail= get_object_or_404(Project,id__exact=pk) 
-        
-
-
+    project_detail= get_object_or_404(Project,id__exact=pk)         
     project_list= _get_internal_external_projects(request)
 
     task_list= Task.objects.all().filter(
          Q(project__id__exact=pk)&
         ( Q(assignedto__empid__exact = empid) | Q(createdby__exact=empid) |  Q(project__createdby__empid__exact=empid)  |  Q(project__delegationto__empid__exact=empid))
-         ).order_by('startdate')
+         ).order_by('-startdate')
 
-   
-    
     if task_status=="all":
          task_list= task_list
     elif task_status=="unclosed":
