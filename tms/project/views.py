@@ -1566,11 +1566,11 @@ def _open_tasks(request,deptcode,startdate,enddate):
     if request.user.groups.filter(name__exact='ismanager').exists():
         openTasks= Task.objects.filter(
           (Q(departement__deptcode__exact= deptcode) | Q(project__departement__deptcode__exact= deptcode))
-            & ~Q(status__exact="Closed") & ~Q(project__status__name__exact="Done"))
+            & ~Q(status__exact="Closed") & ~Q(project__status__name__exact="Done")).order_by('-startdate')
     elif request.user.groups.filter(name__exact='projectmanager').exists():
         openTasks= Task.objects.filter(
           (Q(createdby__empid__exact = empid) | Q(assignedto__empid__exact= empid) | Q(project__delegationto__empid__exact= empid))
-            & ~Q(status__exact="Closed")  ).order_by('enddate')
+            & ~Q(status__exact="Closed")  ).order_by('-startdate')
         
     return openTasks
 
