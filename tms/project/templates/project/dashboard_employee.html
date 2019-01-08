@@ -3,11 +3,11 @@
 {% block title %} Dashboard 1 {% endblock title %}
 {% block stylesheets %}
 {{ block.super }}
-<link href="/static/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
-<link href="/static/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
-<link href="/static/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
-<link href="/static/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
-<link href="/static/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+<link href="/pms/static/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link href="/pms/static/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+<link href="/pms/static/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+<link href="/pms/static/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+<link href="/pms/static/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
 {% endblock stylesheets %}
 {% block content %}
 <div class="right_col" role="main">
@@ -126,7 +126,7 @@
                 <div class="profile_img">
                   <div id="crop-avatar">
                     <!-- Current avatar -->
-                    <img class="img-responsive avatar-view" src="/static/images/profile.png"  style="margin: 0 auto; height:160px;" alt="Avatar" title="Change the avatar">
+                    <img class="img-responsive avatar-view" src="/pms/static/images/profile.png"  style="margin: 0 auto; height:160px;" alt="Avatar" title="Change the avatar">
                   </div>
                 </div>
                 <h4>{{employee.empname}}</h4>
@@ -201,12 +201,12 @@
    setInterval(blinker, 1000); //Runs every second
 </script>
 //datatable for project table
-<script src="/static/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="/static/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-<script src="/static/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
-<script src="/static/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-<script src="/static/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-<script src="/static/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+<script src="/pms/static/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="/pms/static/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="/pms/static/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+<script src="/pms/static/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="/pms/static/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script src="/pms/static/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
 <script type="text/javascript">
    $(document).ready(function() {
        $('#open-project-list').DataTable( {
@@ -218,7 +218,7 @@
 
 </script>
 <!-- jQuery Sparklines -->
-<script src="/static/vendors/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
+<script src="/pms/static/vendors/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
 <script>
    $(".sparkline_areax").sparkline([5, 6, 7, 9, 9, 5, 3, 2, 6, 4, 6, 7], {
        type: 'line',

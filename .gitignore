@@ -269,3 +269,4 @@ pip-selfcheck.json
 #media-file
 media/
 tms/settings.py
+/tms/tms/settings.py

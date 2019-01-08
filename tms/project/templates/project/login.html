@@ -5,7 +5,7 @@
 {% block stylesheets %}
   {{ block.super }}
  <!-- Animate.css -->
-<link href="/static/vendors/animate.css/animate.min.css" rel="stylesheet">
+<link href="/pms/static/vendors/animate.css/animate.min.css" rel="stylesheet">
 <style>
 body, html {
     height: 100%;
@@ -14,7 +14,7 @@ body, html {
 body {
    /*background: #092756 !important;
     /* The image used */
-    background-image: url("/static/build/images/banner-1.jpg") !important;
+    background-image: url("/pms/static/build/images/banner-1.jpg") !important;
     /* Full height */
     height: 100% !important;
     /* Center and scale the image nicely */
@@ -43,7 +43,7 @@ body {
       
         <section class="login_content " >
 
-  <img src="/static/images/stats_logo.png" alt="..." class="img-rounded profile_img" style="width:60%;">
+  <img src="/pms/static/images/stats_logo.png" alt="..." class="img-rounded profile_img" style="width:60%;">
           <form action="." method="post" class="form-horizontal ">
             {% csrf_token %}
 

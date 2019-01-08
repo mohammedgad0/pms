@@ -23,7 +23,7 @@ from django.http import JsonResponse
 from django.views.generic.list import ListView
 from django.core.urlresolvers import resolve
 from simple_history.utils import update_change_reason
-from idlelib.debugobj import _object_browser
+# from idlelib.debugobj import _object_browser
 from .timesheet import *
 from django.forms.models import modelformset_factory
 from unittest.case import expectedFailure
