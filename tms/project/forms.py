@@ -330,6 +330,7 @@ class FollowupForm(forms.Form):
         )
       taskstatus= forms.ChoiceField(choices=TASK_STATUS,required=False,label=_("Status"),widget=forms.Select(attrs={'class': ' form-control col-md-3 chosen'}) )
 
+
 class UploadFile(ModelForm):
     class Meta:
         model = Media
@@ -375,3 +376,76 @@ class ReportForm(forms.Form):
     reportType = forms.MultipleChoiceField( required=True,widget=forms.CheckboxSelectMultiple(attrs={'class': 'chektype'} ),choices=RERPORT_TYPE_CHOICES,
    error_messages={'required': _('Please Select Report Type')}
     )
+
+
+class ProjectPhaseForm(ModelForm):
+
+    class Meta:
+        model = ProjectPhase
+        fields = ['phase', 'startdate', 'enddate', 'status', 'parent', 'description']
+
+        widgets = {
+            'startdate':TextInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Start Date'),'required': True}),
+            'enddate':TextInput(attrs={'class': 'form-control has-feedback-left col-md-6 ','id':'single_cal_2','aria-describedby':'inputSuccess2Status','placeholder':_('End Date'),'required': True}),
+            'parent': forms.Select(attrs={'class': 'form-control','placeholder':_('Select Parent')}),
+            'status':forms.Select(attrs={'class': 'form-control','placeholder':_('Select Status')}),
+            'phase': forms.Select(attrs={'class': 'form-control chosen','placeholder':_('Select phases')}),
+            'description': Textarea(attrs={'class': 'form-control', 'placeholder': _('Phase description'), 'required': True}),
+
+        }
+        labels = {
+            'status': _('Status'),
+            'startdate':_('Start Date'),
+            'enddate':_('End Date'),
+            'parent':_('Parent'),
+        }
+        # help_texts = {
+        #     'desc': _('write a Description for Project .'),
+        #     'start':_('Please use the following format: <em>YYYY-MM-DD</em>.'),
+        #     'end':_('Please use the following format: <em>YYYY-MM-DD</em>.'),
+        # }
+        # error_messages = {
+        #     'name': {
+        #             'max_length': _("The Project's name is too long."),
+        #             'required': _("Project's name is required."),
+        #      },
+        #     'start': {
+        #             'required': _("Start Date  is required."),
+        #      },
+        #     'end': {
+        #             'required': _("End Date  is required."),
+        #      },
+        #     'desc': {
+        #             'max_length': _("The Project's Description is too long."),
+        #             'required': _("Description is required."),
+        #      },
+        #
+        # }
+
+    def __init__(self, *args, **kwargs):
+        super(ProjectPhaseForm, self).__init__(*args, **kwargs)
+
+        self.fields['status'].empty_label = None
+    # def clean(self):
+    #     cleaned_data = super().clean()
+    #     end = cleaned_data.get("end")
+    #     start = cleaned_data.get("start")
+    #     #Check end date less than start date
+    #     if end < start:
+    #         msg = _("End date is less than start date")
+    #         self.add_error('end', msg)
+
+
+class AddPhaseForm(ModelForm):
+    class Meta:
+        model = Phase
+        fields = ('name', 'saved')
+
+        widgets ={
+            'name': TextInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ', 'id': 'single_cal_1', 'aria-describedby': 'inputSuccess2Status', 'placeholder': _('Start Date'), 'required': True}),
+            'saved': forms.Select(attrs={'class': 'form-control', 'placeholder': _('Select Status')}),
+        }
+        labels ={
+            'name': _('Phase Name'),
+            'saved': _('Saved for another project')
+        }

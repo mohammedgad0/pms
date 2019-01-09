@@ -1,10 +1,11 @@
 {% extends "project/base_site.html" %}
 {% load i18n %}
 {% load widget_tweaks %}
+{% load static %}
 {% block title %} {% trans "sheets list" %} {% endblock title %}
 
 {% block stylesheets %}
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.css" />
+ <link rel="stylesheet" href="{% static 'vendors/chosen/chosen.min.css' %}" />
 
 {{ block.super }}
 {% endblock stylesheets %}
@@ -16,7 +17,7 @@
     <div class="">
       <div class="page-title">
         <div class="title_left">
-        <!--   <h3>{% trans "Ad Project" %} </h3> -->
+        <!--   <h3>{% trans "Add Phases" %} </h3> -->
         </div>
       </div>
 
@@ -45,23 +46,26 @@
 
   {% csrf_token %}
 
-                <div class="form-group">
-              <div class=" col-md-12 col-sm-12 col-xs-12 ">
-              {{form.name.label_tag}}
-               {{form.name}}
+                   <div class="form-group">
+              <div class="col-md-6 col-sm-12 col-xs-12 ">
+               {{form.phase.label_tag}}
+               {{form.phase}}
+               <br>
+                {{form.phase.help_text}}
+
                </div>
                </div>
 
                <div class="form-group">
               <div class=" col-md-4 col-sm-4 col-xs-12 ">
-              {{form.start.label_tag}}
-               {{form.start}}
+              {{form.startdate.label_tag}}
+               {{form.startdate}}
                 <span class="fa fa-calendar-o form-control-feedback left" style="margin-top:25px;" aria-hidden="true"></span>
                </div>
 
                 <div class=" col-md-4 col-sm-4 col-xs-12 ">
-                {{form.end.label_tag}}
-               {{form.end}}
+                {{form.enddate.label_tag}}
+               {{form.enddate}}
             
                 <span class="fa fa-calendar-o form-control-feedback left" style="margin-top:25px;" aria-hidden="true"></span>
                </div>
@@ -74,8 +78,8 @@
 
              <div class="form-group">
               <div class="col-md-12 col-sm-12 col-xs-12 ">
-              {{form.desc.label_tag}}
-               {{form.desc}}
+              {{form.description.label_tag}}
+               {{form.description}}
                </div>
                </div>
 
@@ -107,23 +111,14 @@
               </div>
               </div>
               {% load user_group %}
-              
-                   <div class="form-group">
-              <div class="col-md-6 col-sm-12 col-xs-12 ">
-               {{form.delegationto.label_tag}}
-               {{form.delegationto}}
-               <br>
-                {{form.delegationto.help_text}}
-               
-               </div>
-               </div>
-              
+
      <div class="form-group text-danger">
      <div class="col-md-3"></div><div class="col-md-9 col-sm-12 col-xs-12">
     {{ form.name.errors }}
-    {{ form.desc.errors }}
-    {{ form.start.errors}}
-    {{ form.end.errors  }}
+    {{ form.description.errors }}
+    {{ form.startdate.errors}}
+    {{ form.enddate.errors  }}
+    {{ form.phase.errors }}
 
     </div>
 </div>
@@ -138,22 +133,10 @@
                    <a href="{{request.META.HTTP_REFERER}}" >  <button type="button" class="btn btn-primary"> <i class="fa fa-angle-double-right"></i> {{ _('Back')}}</button></a>
                    {% endif %}
                     <!--  <button class="btn btn-primary" type="reset">{{_('Reset')}}</button>-->
-                 <button type="submit" class="btn btn-success" name="submit-phases"><i class="fa fa-save"></i> {{_('Submit and add phases')}}</button>
+                 <button type="submit" class="btn btn-success" name="submit-phases"><i class="fa fa-save"></i> {{_('Submit and add another phases')}}</button>
                  <button type="submit" class="btn btn-success" name="submit-done"><i class="fa fa-save"></i> {{_('Submit')}}</button>
                   </div>
                 </div>
-
-<!--  {{ form.as_p }} -->
-
-
-
-
-
-    <!--  {{ form.start.label_tag }} -->
-
-
-
-
 
 </form>
 
@@ -171,7 +154,7 @@
 
 {% block javascripts %}
   {{ block.super }}
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.jquery.js"></script>
+      <script src="{% static 'vendors/chosen/chosen.jquery.min.js' %}"></script>
 
     <script>
   $('#single_cal_1').daterangepicker({

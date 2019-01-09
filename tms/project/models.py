@@ -226,9 +226,11 @@ class Task(models.Model):
     lasteditdate = models.DateTimeField(db_column='LastEditDate', blank=True, null=True)  # Field name made lowercase.
     lasteditby =models.ForeignKey('Employee',to_field='empid',related_name='Task_Employee_LastEditBy',db_column='LastEditBy', blank=True, null=True)
 
+    phase = models.ForeignKey('Phase', on_delete=models.CASCADE, null=True, blank=True)
+
     history = HistoricalRecords()
     class Meta:
-        managed = False
+        managed = True
         db_table = 'task'
 
 
@@ -341,4 +343,30 @@ class AuthUser(models.Model):
     class Meta:
         managed = False
         db_table = 'auth_user'
-           
+
+
+class ProjectPhase(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    phase = models.ForeignKey('Phase', on_delete=models.DO_NOTHING)
+    description = models.CharField(max_length=1500, null=True, blank=True)
+
+    startdate = models.DateField()
+    enddate = models.DateField()
+    status = models.ForeignKey('ProjectStatus', on_delete=models.SET_NULL, null=True)
+    parent = models.ForeignKey('self', on_delete=models.DO_NOTHING)
+
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
+    created_by = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, related_name='created_phases')
+    updated_by = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, related_name='updated_phases')
+
+
+class Phase(models.Model):
+    name = models.CharField(max_length=255)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)
+    saved = models.BooleanField(default=False)
+
+    created_at = models.DateField(auto_now_add=True)
+    created_by = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True)
+
+    projects = models.ManyToManyField(Project, through=ProjectPhase, related_name='phases')

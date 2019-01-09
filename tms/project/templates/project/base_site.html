@@ -10,29 +10,30 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
       {% endblock meta %}
+        {% load static %}
       <title>{% trans "PMS" %}| {% block title %}{% endblock %}</title>
       {% block stylesheets %}
         <!-- Bootstrap -->
         <style>
         @font-face { font-family: 'neo';
-         src: url('/pms/static/fonts/neo/NeoSansArabic.eot');
-         src: url('/pms/static/fonts/neo/NeoSansArabic.eot?#iefix') format('embedded-opentype'),
-         url('/pms/static/fonts/neo/NeoSansArabic.woff') format('woff'),
-         url('/pms/static/fonts/neo/NeoSansArabic.ttf') format('truetype'),
-         url('/pms/static/fonts/neo/NeoSansArabic.svg#ge_neofont') format('svg'); font-style: normal; }
+         src: url('{% static 'fonts/neo/NeoSansArabic.eot' %}');
+         src: url('{% static 'fonts/neo/NeoSansArabic.eot?#iefix' %}') format('embedded-opentype'),
+         url('{% static 'fonts/neo/NeoSansArabic.woff' %}') format('woff'),
+         url('{% static 'fonts/neo/NeoSansArabic.ttf' %}') format('truetype'),
+         url('{% static 'fonts/neo/NeoSansArabic.svg#ge_neofont' %}') format('svg'); font-style: normal; }
 
         </style>
-        <link href="/pms/static/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-      <link href="/pms/static/vendors/bootstrap/dist/css/bootstrap-rtl.min.css" rel="stylesheet">
+        <link href="{% static 'vendors/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+      <link href="{% static 'vendors/bootstrap/dist/css/bootstrap-rtl.min.css' %}" rel="stylesheet">
         <!-- Font Awesome -->
-        <link href="/pms/static/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+        <link href="{% static 'vendors/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
         <!-- NProgress -->
-        <link href="/pms/static/vendors/nprogress/nprogress.css" rel="stylesheet">
+        <link href="{% static 'vendors/nprogress/nprogress.css' %}" rel="stylesheet">
         <!-- bootstrap-daterangepicker -->
-        <link href="/pms/static/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+        <link href="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
       
     <!-- Custom Theme Style -->
-      <link href="/pms/static/build/css/custom_rtl.css" rel="stylesheet">
+      <link href="{% static 'build/css/custom_rtl.css' %}" rel="stylesheet">
       {% endblock stylesheets %}
   
     {% endblock head %}
@@ -76,44 +77,44 @@
       </div>
       {% block javascripts %}
         <!-- jQuery -->
-        <script src="/pms/static/vendors/jquery/dist/jquery.min.js"></script>
-        <script src="/pms/static/vendors/jquery/dist/jquery-ui.js"></script>
+        <script src="{% static 'vendors/jquery/dist/jquery.min.js' %}"></script>
+        <script src="{% static 'vendors/jquery/dist/jquery-ui.js' %}"></script>
         <!-- Bootstrap -->
-        <script src="/pms/static/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="{% static 'vendors/bootstrap/dist/js/bootstrap.min.js' %}"></script>
         <!-- FastClick -->
-        <script src="/pms/static/vendors/fastclick/lib/fastclick.js"></script>
+        <script src="{% static 'vendors/fastclick/lib/fastclick.js' %}"></script>
         <!-- NProgress -->
-        <script src="/pms/static/vendors/nprogress/nprogress.js"></script>
+        <script src="{% static 'vendors/nprogress/nprogress.js' %}"></script>
         <!-- bootstrap-progressbar -->
-        <script src="/pms/static/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+        <script src="{% static 'vendors/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
         <!-- iCheck -->
-        <script src="/pms/static/vendors/iCheck/icheck.min.js"></script>
+        <script src="{% static 'vendors/iCheck/icheck.min.js' %}"></script>
         <!-- bootstrap-daterangepicker -->
-        <script src="/pms/static/vendors/moment/min/moment.min.js"></script>
-        <script src="/pms/static/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+        <script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
+        <script src="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
         <!-- bootstrap-wysiwyg -->
-        <script src="/pms/static/vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js"></script>
-        <script src="/pms/static/vendors/jquery.hotkeys/jquery.hotkeys.js"></script>
-        <script src="/pms/static/vendors/google-code-prettify/src/prettify.js"></script>
+        <script src="{% static 'vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js' %}"></script>
+        <script src="{% static 'vendors/jquery.hotkeys/jquery.hotkeys.js' %}"></script>
+        <script src="{% static 'vendors/google-code-prettify/src/prettify.js' %}"></script>
         <!-- jQuery Tags Input -->
-        <script src="/pms/static/vendors/jquery.tagsinput/src/jquery.tagsinput.js"></script>
+        <script src="{% static 'vendors/jquery.tagsinput/src/jquery.tagsinput.js' %}"></script>
         <!-- Switchery -->
-        <script src="/pms/static/vendors/switchery/dist/switchery.min.js"></script>
+        <script src="{% static 'vendors/switchery/dist/switchery.min.js' %}"></script>
         <!-- Select2 -->
-        <script src="/pms/static/vendors/select2/dist/js/select2.full.min.js"></script>
+        <script src="{% static 'vendors/select2/dist/js/select2.full.min.js' %}"></script>
         <!-- Parsley -->
-        <script src="/pms/static/vendors/parsleyjs/dist/parsley.min.js"></script>
+        <script src="{% static 'vendors/parsleyjs/dist/parsley.min.js' %}"></script>
         <!-- Autosize -->
-        <script src="/pms/static/vendors/autosize/dist/autosize.min.js"></script>
+        <script src="{% static 'vendors/autosize/dist/autosize.min.js' %}"></script>
         <!-- jQuery autocomplete -->
-        <script src="/pms/static/vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
+        <script src="{% static 'vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js' %}"></script>
         <!-- starrr -->
-        <script src="/pms/static/vendors/starrr/dist/starrr.js"></script>
+        <script src="{% static 'vendors/starrr/dist/starrr.js' %}"></script>
 
       {% endblock %}
       <!-- Custom Theme Scripts -->
-      <script src="/pms/static/build/js/jquery.datepick-ar.js"></script>
-      <script src="/pms/static/build/js/custom.js"></script>
+      <script src="{% static 'build/js/jquery.datepick-ar.js' %}"></script>
+      <script src="{% static 'build/js/custom.js' %}"></script>
 
     {% endblock body %}
   </body>

@@ -209,6 +209,8 @@ def AddProject(request):
 
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
+        print(request.POST)
+        return
         # create a form instance and populate it with data from the request:
         form = ProjectForm(request.POST)
         if form.is_valid():
@@ -1882,3 +1884,11 @@ def ProjectReport(request,selectedDpt=None):
     form.fields["project"].queryset =project_list
     context={'form':form,'rtype':_rtype,'rlist':_rlist,'project_list':project_list,'departement_list':departement_list,'selectedDpt':selectedDpt,'depObject':depObject}
     return render(request, 'project/reports/project_report.html', context)
+
+
+def AddProjectPhase(request):
+    form = ProjectPhaseForm
+    upload = modelformset_factory(Media,form=UploadFile,extra = 1)
+    FormSet = upload(queryset=Media.objects.none())
+    context = {'form': form, 'upload_file': FormSet}
+    return render(request, 'project/add_phase.html', context)
