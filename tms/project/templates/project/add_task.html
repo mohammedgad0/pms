@@ -55,6 +55,26 @@
                   <div class="col-md-8 col-sm-12   col-xs-12" >
                      <form action="" method="post" id="myForm" class="form-horizontal form-label-left input_mask" novalidate enctype="multipart/form-data">
                         {% csrf_token %}
+                         <div class="form-group">
+                           <div class=" col-md-12">
+                              {{form.phase.label_tag}}
+                              {{form.phase}}
+                           </div>
+                        </div>
+                         <div class="form-group">
+                           <div class=" col-md-12">
+                              {{form.parent.label_tag}}
+                              {{form.parent}}
+                               <p class="help-block">{{form.parent.help_text}}</p>
+                           </div>
+                        </div>
+                                              <div class="form-group">
+                           <div class=" col-md-12">
+                              {{form.dependent.label_tag}}
+                              {{form.dependent}}
+                               <p class="help-block">{{form.dependent.help_text}}</p>
+                           </div>
+                        </div>
                         <div class="form-group">
                            <div class=" col-md-12">
                               {{form.name.label_tag}}
@@ -154,7 +174,6 @@
 {% endblock content %}
 {% block javascripts %}
 {{ block.super }}
-
 
 {# PHOTOS PAGE SCRIPTS #}
 

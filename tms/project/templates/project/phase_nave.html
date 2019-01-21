@@ -1,0 +1,39 @@
+{% load i18n %}
+<ul class="nav nav-pills navbar-right" role="tablist">
+      <!-- project name select -->
+      <li role="presentation" class="dropdown">
+        <a id="drop6" href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false"> {{project_detail.name}} <span class="caret"></span></a>
+        <ul id="menu3" class="dropdown-menu animated fadeInDown " role="menu" aria-labelledby="drop6">
+{#            {% for project in project_list %}#}
+{#             <li role="presentation"><a role="menuitem" tabindex="-1" href="{% url  current_url project.pk phase_detail.pk %}"> <i class="fa fa-folder-o"></i> {{project.name}}</a> </li>#}
+{#            {% endfor %}#}
+             <li role="presentation" class="divider"></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="{% url 'ns-project:phases-list' project_detail.pk %}"> <i class="fa fa-th-large"></i>  {{_('All Projects') }} </a></li>
+          </ul>
+        </li>
+
+         <!-- task -->
+      <li role="presentation"><a href="{% url 'ns-project:phase-task-list' project_detail.pk phase_detail.id %}">{{_('Tasks')}} </a> </li>
+
+      {% load user_group %}
+     {# {% if request.user|has_group:"ismanager" or  request.user|has_group:"projectmanager" %} #}
+        <!-- team -->
+      <li role="presentation"><a href="{% url 'ns-project:project-team'  project_detail.id %}">{{_('Team Members')}} </a>  </li>
+     {#  {% endif %} #}
+       <!-- project over view -->
+      <li role="presentation"><a href="{% url 'ns-project:project-detail'  project_detail.id %}">{{_('Project Overview')}} </a>  </li>
+                         <!--   <a href="{% url 'ns-project:project-list' %}"  style="float:left" >  <button type="button" class="btn btn-primary btn-md"> <i class="fa fa-th-list"></i>  {% trans "Projects List" %}</button></a>
+
+{% if request.user|has_group:"ismanager" %}
+                  <a href="{% url 'ns-project:add-project' %}" style="float:left">  <button type="button" class="btn btn-primary btn-md"> <i class="fa fa-plus"></i>  {% trans "Ad Project" %}</button></a>
+                  {% endif %}
+               -->
+
+
+
+</ul>
+
+     <ul class="nav nav-pills navbar-left custom-nav" role="tablist">
+                    <a href="{% url 'ns-project:phases-list' project_detail.pk %}"  style="float:left" >  <button type="button" class="btn btn-default btn-md"> <i class="fa fa-th-list"></i>  {% trans "Phases List" %}</button></a>
+     
+     </ul>                   

@@ -124,6 +124,10 @@ class EmployeeList(ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.empname
 
+class TaskList(ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.name
+
 class DepartmentList(ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.deptname
@@ -136,10 +140,12 @@ class AddTaskForm(ModelForm):
 
     class Meta:
         model = Task
-        fields = ['name','desc','assigntype',
-        'employee',
-        'department_list','startdate','enddate']
+        fields = ['name','desc','assigntype', 'employee', 'department_list','startdate','enddate', 'phase', 'parent', 'dependent']
+
         widgets = {
+            'dependent': forms.CheckboxInput(),
+            'parent': forms.Select(attrs={'class': 'form-control chosen', 'placeholder': _('Select parent')}),
+            'phase': forms.Select(attrs={'class': 'form-control chosen','placeholder':_('Select phases')}),
             'name':TextInput(attrs={'class': 'form-control','placeholder':_('Task Name'),'required': True}),
             'desc': Textarea(attrs={'id':'summernote','class':'form-control','placeholder':_('Task Details'),'required': True}),
             'startdate':TextInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Start Date'),'required': True}),
@@ -147,13 +153,16 @@ class AddTaskForm(ModelForm):
         }
 
         labels = {
+            'parent': 'ارتباط المهمة بمهمة أخرى',
             'name': _('Task Name'),
             'desc':_('Task Description'),
             'assigntype':_('Assignto'),
             'startdate':_('Start Date'),
             'enddate':_('End Date'),
+            'dependent': 'لا يمكن بدأ المهمة الا فى حالة انتهاء المهمة الرئيسية؟'
         }
         help_texts = {
+
             'desc': _('write a Description for task .'),
             'startdate':_('Please use the following format: <em>YYYY-MM-DD</em>.'),
             'enddate':_('Please use the following format: <em>YYYY-MM-DD</em>.'),
@@ -196,10 +205,14 @@ class EditTaskForm(ModelForm):
     note = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':_("Note"),'placeholder':_("Note"), 'rows':'3','size': '40','required': 'True'}),required=False, max_length=250, error_messages={'required': 'note'})
     progress = forms.IntegerField(validators=[ MaxValueValidator(100, message="Progress Over 100"),MinValueValidator(0, message="Progress less 0")],min_value=0, max_value=100)
     assigned_to=forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control','placeholder':_('Responsible'),'required': False,}),required=False)
+
     class Meta:
         model = Task
-        fields = ['name','desc','startdate','enddate','finisheddate','assigntype','status','progress']
+        fields = ['name','desc','startdate','enddate','finisheddate','assigntype','status','progress', 'phase', 'parent', 'dependent']
         widgets = {
+            'dependent': forms.CheckboxInput(),
+            'parent': forms.Select(attrs={'class': 'form-control chosen', 'placeholder': _('Select parent')}),
+            'phase': forms.Select(attrs={'class': 'form-control chosen', 'placeholder': _('Select phases')}),
             'name':TextInput(attrs={'class': 'form-control','placeholder':_('Task Name'),'required': True}),
             'desc': Textarea(attrs={ 'id':'summernote','class':'form-control ','placeholder':_('Task Details'),'required': True}),
             'startdate':TextInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Start Date'),'required': False}),
@@ -211,6 +224,7 @@ class EditTaskForm(ModelForm):
 
         }
         labels = {
+            'dependent': 'لا يمكن بدأ المهمة الا فى حالة انتهاء المهمة الرئيسية؟',
             'name': _('Task Name'),
             'desc':_('Task Description'),
             'assigntype':_('Assignto'),
@@ -249,9 +263,9 @@ class EditTaskForm(ModelForm):
             self.add_error('enddate', msg)
 
 class TaskStartForm(forms.Form):
-       rsd = forms.DateField(label=_("Real Start Date"),
-       widget=forms.DateInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Real Start Date'),'required': True}))
-       notes = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':'Notes', 'size': '40','required': False}), required=False,error_messages={'required': 'note'},label=_('Note'))
+    rsd = forms.DateField(label=_("Real Start Date"),
+    widget=forms.DateInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ','id':'single_cal_1','aria-describedby':'inputSuccess2Status','placeholder':_('Real Start Date'),'required': True}))
+    notes = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control','label':'Notes', 'size': '40','required': False}), required=False,error_messages={'required': 'note'},label=_('Note'))
 
 class TaskFinishForm(forms.Form):
        ftime = forms.DateField(label=_("Finished on"),
@@ -424,16 +438,16 @@ class ProjectPhaseForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ProjectPhaseForm, self).__init__(*args, **kwargs)
-
         self.fields['status'].empty_label = None
-    # def clean(self):
-    #     cleaned_data = super().clean()
-    #     end = cleaned_data.get("end")
-    #     start = cleaned_data.get("start")
-    #     #Check end date less than start date
-    #     if end < start:
-    #         msg = _("End date is less than start date")
-    #         self.add_error('end', msg)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        end = cleaned_data.get("enddate")
+        start = cleaned_data.get("startdate")
+        #Check end date less than start date
+        if end < start:
+            msg = 'وقت انتهاء المرحلة اصغر من وقت البدء'
+            self.errors['enddate'] = self.error_class([msg])
 
 
 class AddPhaseForm(ModelForm):
@@ -441,11 +455,11 @@ class AddPhaseForm(ModelForm):
         model = Phase
         fields = ('name', 'saved')
 
-        widgets ={
-            'name': TextInput(attrs={'class': 'form-control has-feedback-left col-md-3 col-sm-9 col-xs-12 ', 'id': 'single_cal_1', 'aria-describedby': 'inputSuccess2Status', 'placeholder': _('Start Date'), 'required': True}),
-            'saved': forms.Select(attrs={'class': 'form-control', 'placeholder': _('Select Status')}),
+        widgets = {
+            'name': TextInput(attrs={'class': 'form-control col-md-3 col-sm-9 col-xs-12 ', 'id': 'single_cal_1', 'aria-describedby': 'inputSuccess2Status', 'placeholder': _('Phase Name'), 'required': True}),
+            'saved': forms.CheckboxInput(),
         }
-        labels ={
+        labels = {
             'name': _('Phase Name'),
             'saved': _('Saved for another project')
         }

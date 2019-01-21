@@ -47,6 +47,9 @@ class SheetAdmin(admin.ModelAdmin):
 class SheetAdmin(admin.ModelAdmin):
     model = Task
 
+@admin.register(Phase)
+class PhaseAdmin(admin.ModelAdmin):
+    model = Phase
 
 @admin.register(Employee)
 class EmployeeAdmin(admin.ModelAdmin):

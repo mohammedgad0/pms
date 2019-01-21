@@ -103,7 +103,16 @@
                   {% endif %}
  <!-- start task detail ------------------------------------- -->
  <div class="col-md-12 col-sm-12 col-xs-12">
-
+<!--  phase -->
+<fieldset class="fieldset_normal">
+        <legend>المرحلة</legend>
+        <div class="article-content">    <p>{% autoescape off  %}{{task.phase.phase.name}} {% endautoescape %} </p></div>
+      </fieldset>
+     <!--  phase -->
+<fieldset class="fieldset_normal">
+        <legend>المهمة الرئيسية</legend>
+        <div class="article-content">    <p>{% autoescape off  %}{{task.parent.name}} {% endautoescape %} </p></div>
+      </fieldset>
 <!--  decription -->
 <fieldset class="fieldset_normal">
         <legend>{{ _('Task Description')}}</legend>

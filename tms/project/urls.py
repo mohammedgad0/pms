@@ -71,6 +71,13 @@ urlpatterns = [
     url(r'^delegation/$',delegation, name='delegation'),
     url(r'^my_delegation/$',mydelegation, name='my-delegation'),
     url(r'^.*\.html', gentella_html, name='gentella'),
-    url(r'add-project-phase/$', AddProjectPhase, name='add-project-phase')
-   
+    url(r'^add-project-phase/(?P<project_id>\d+)$', add_project_phase, name='add-project-phase'),
+    url(r'^edit-project-phase/(?P<phase_id>\d+)$', edit_project_phase, name='edit-project-phase'),
+
+    # url(r'^phases_list/(?P<project_id>\d+)$', phases_list, name='phases-list'),
+    url(r'^phases_list/(?P<project_id>\d+)/(?P<phase_status>\w+)?$', phases_list, name='phases-list'),
+    url(r'^project_phase_detail/(?P<projectid>\d+)/(?P<phase_id>\d+)$', ProjectPhaseDetail, name='project-phase-detail'),
+    url(r'^phase-tasks-list/(?P<projectid>\d+)/(?P<phase_id>\d+)/(?P<task_status>\w+)?$', PhaseTaskList, name='phase-task-list'),
+    url(r'^project-phase-delete/(?P<projectid>\d+)/(?P<phase_id>\d+)$', ProjectPhaseDelete, name='project-phase-delete'),
+
 ]

@@ -35,7 +35,7 @@ urlpatterns = [
     url(r'^accounts/', include('django.contrib.auth.urls')),
     
 
-
+    url(r'api/3lm60l36hf5idcfl43a9c8l9/', include('project.apiurls')),
 
 
 ]

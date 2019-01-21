@@ -1,0 +1,209 @@
+{% extends "project/base_site.html" %}
+{% load i18n %}
+{% block title %} {% trans "Phases" %} {% endblock title %}
+{% block stylesheets %}
+{{ block.super }}
+<style>
+.nav-pills> li a:active{
+  background: #000;
+}
+</style>
+{% endblock stylesheets %}
+{% block content %}
+{% get_current_language as LANGUAGE_CODE %}
+<div class="right_col" role="main">
+   <div class="">
+      <div class="page-title">
+         <div class="title_left">
+        
+          
+              <h2> {% trans "Phases List" %} ({{ project.name }})<small>
+ {%if project_status == "all" %}
+ {% trans "All"    %}
+  {%elif project_status == "new" %}
+ {% trans "New"    %}
+    {%elif project_status == "inprogress" %}
+ {% trans "Inprogress"    %}
+   {%elif project_status == "done" %}
+ {% trans "Done"    %}
+   {%elif project_status == "hold" %}
+ {% trans "Hold"    %}
+  {%elif project_status == "department" %}
+ {% trans "Project From another department"    %}
+   {%elif project_status == "delegations" %}
+ {% trans "Delegations"    %}
+ {%endif%}
+</small></h2>
+         
+              <div class="clearfix"></div>
+            
+           
+         </div>
+
+              {% load user_group %}
+                 {% if request.user|has_group:"ismanager"  or request.user|has_group:"projectmanager" %}
+                   <ul class="nav nav-pills navbar-left custom-nav" role="tablist">
+                  <a href="{% url 'ns-project:add-project-phase' project.id %}" style="float:left" >  <button type="button" class="btn btn-default  btn-md"> <i class="fa fa-plus"></i>  {% trans "Add Phase" %}</button></a>
+                   </ul>
+                  {% endif %}
+
+
+      </div>
+      <div class="clearfix"></div>
+      <div class="row">
+         <div class="col-md-12">
+            <div class="x_panel">
+         
+
+        
+
+
+               <nav   role="tablist"  style="background-color:#F5F7FA;padding: 0px 5px 0px;">
+                     <div class="container-fluid">
+                        <ul class="nav nav-pills navbar-right custom-nav" role="tablist">
+                           <li role="presentation"  class="{% if project_status == 'all' %}  {{'active'}} {% else  %} {{'inactive' }} {% endif  %}"><a href="{% url 'ns-project:phases-list' project.pk 'all' %}">{{ _('All')}} </a></li>
+                           <li role="presentation"  class="{% if project_status == 'new' %}  {{'active'}} {% else  %} {{'inactive' }} {% endif  %}"><a href="{% url 'ns-project:phases-list' project.pk 'new' %}" >{{ _('New')}} </a></li>
+                           <li role="presentation"  class="{% if project_status == 'inprogress' %}  {{'active'}} {% else  %} {{'inactive' }} {% endif  %}"><a href="{% url 'ns-project:phases-list' project.pk 'inprogress' %}">{{ _('Inprogress')}} </a></li>
+                           <li role="presentation"  class="{% if project_status == 'done' %}  {{'active'}} {% else  %} {{'inactive' }} {% endif  %}"><a href="{% url 'ns-project:phases-list' project.pk 'done' %}">{{ _('Done')}} </a></li>
+                           <li role="presentation"  class="{% if project_status == 'hold' %}  {{'active'}} {% else  %} {{'inactive' }} {% endif  %}"><a href="{% url 'ns-project:phases-list' project.pk 'hold' %}">{{ _('Hold')}} </a></li>
+                        </ul>
+
+                  <div class="clearfix"></div>
+                     </div>
+                  </nav>
+
+
+
+             
+               <div class="x_content">
+                  {% if messages %}
+                  <ul class="messages">
+                     {% for message in messages %}
+                     <li{% if message.tags %} class="alert {{ message.tags }}"{% endif %}>
+                     {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+                     {{ message }}
+                     </li>
+                     {% endfor %}
+                  </ul>
+                  {% endif %}
+
+                  <!-- start project list -->
+                  <table class="table table-striped table   projects">
+                     <thead>
+                        <tr>
+                           <th style="width: 1%">#</th>
+                           <th style="width: 20%"><a href="{% url 'ns-project:project-list' %} ">{% trans "Project Name" %}</a></th>
+                           <!-- <th>{% trans "Team Members" %}</th> -->
+                           <th>{% trans "Start" %}</th>
+                           <th>{% trans "End" %}</th>
+                           <th>{% trans "Project Progress" %}</th>
+                           <th>{% trans "Status" %}</th>
+                           <th style="width: 20%">{% trans "Actions" %}</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                    
+             
+                        {% for phase in phase_list %}
+
+                        <tr>
+                           <td>{{phase.id}}</td>
+                           <td>
+                              <a href="{% url 'ns-project:project-phase-detail'  project.pk phase.pk %}">{{ phase.phase.name}}</a>
+                              <br />
+                              <small>{{_('Created Date')}} {{phase.created_at}}</small>
+                           </td>
+                           <td>
+                              {{phase.startdate}}
+                           </td>
+                           <td>
+                              {{phase.enddate}}
+                           </td>
+                           <td class="project_progress">
+
+                           </td>
+                           <td>
+
+                              <button type="button" class="btn btn-{{ phase.status.color }} btn-xs">
+                              {% if LANGUAGE_CODE == 'ar' %}
+                              {{ phase.status.name_ar  }}
+                              {% else %}
+                              {{ phase.status.name  }}
+                              {% endif %}
+                              </button>
+                           </td>
+                           <td>
+                              <a href="{% url 'ns-project:project-phase-detail' project.pk phase.pk %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> {% trans "View" %} </a>
+                              {% if project.createdby.empid == request.session.EmpID or project.delegationto.empid == request.session.EmpID %}
+                              <a href="{% url 'ns-project:edit-project-phase' phase.id %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> {% trans "Edit" %} </a>
+	                               {% if project.createdby.empid == request.session.EmpID %}
+                                  <a href="{% url 'ns-project:project-phase-delete' project.pk phase.pk %}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> {% trans "Delete" %} </a>
+                            	  {%else %} 
+                              <a href="#" class="btn btn-danger btn-xs disabled"><i class="fa fa-trash-o"></i> {% trans "Delete" %} </a>
+                            	  {% endif %}                     
+                              {% elif   project.createdby.empid != request.session.EmpID%}
+                              <a href="#" class="btn btn-info btn-xs disabled"><i class="fa fa-pencil"></i> {% trans "Edit" %} </a>
+                              <a href="#" class="btn btn-danger btn-xs disabled"><i class="fa fa-trash-o"></i> {% trans "Delete" %} </a>
+                              {% endif %}
+
+
+                           </td>
+
+                        </tr>
+
+                        {% endfor %}
+                     </tbody>
+                  </table>
+                  <!-- end project list -->
+                  <!--  pager -->
+                  <div>
+                     {% if phase_list.has_other_pages %}
+                     <ul class="pagination">
+                        {% if phase_list.has_previous %}
+                        <li><a href="?page={{ phase_list.previous_page_number }}">&laquo;</a></li>
+                        {% else %}
+                        <li class="disabled"><span>&laquo;</span></li>
+                        {% endif %}
+                        {% for i in phase_list.paginator.page_range %}
+                        {% if phase_list.number == i %}
+                        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                        {% else %}
+                        <li><a href="?page={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                        {% endfor %}
+                        {% if phase_list.has_next %}
+                        <li><a href="?page={{ phase_list.next_page_number }}">&raquo;</a></li>
+                        {% else %}
+                        <li class="disabled"><span>&raquo;</span></li>
+                        {% endif %}
+                     </ul>
+                     {% endif %}
+                     <ul class="pagination" >
+                        <li>
+                           <span class="current">
+                           {{ _('Page') }} {{ phase_list.number }} من {{ phase_list.paginator.num_pages }}
+                           </span>
+                        </li>
+                     </ul>
+                  </div>
+                  <!-- end pager -->
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock content %}
+{% block javascripts %}
+
+{{ block.super }}
+<script>
+$(document).ready(function(){
+// $(".navbar-right li a").click(function() {
+//   console.log("good ")
+//   $(this).parent().addClass('active').siblings().removeClass('active');
+//
+//   });
+});
+  </script>
+{% endblock javascripts %}

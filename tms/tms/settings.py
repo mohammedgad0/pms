@@ -27,9 +27,12 @@ MESSAGE_TAGS = {
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger',
 }
-LOGOUT_REDIRECT_URL = 'login'
+LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 LOGIN_REDIRECT_URL = '/project/dashboard'
+LOGIN_URL = '/accounts/login/'
+
+SESSION_COOKIE_PATH = '/'
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
 # Quick-start development settings - unsuitable for production
@@ -41,7 +44,7 @@ SECRET_KEY = '48739c63-3ef3-46be-a6e6-effc30a8f49c'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','192.168.0.192','localhost']
+ALLOWED_HOSTS = []
 # Ldap authentication
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -64,7 +67,7 @@ INSTALLED_APPS = [
     'django_filters',
     'widget_tweaks',
     'simple_history',
-    'mathfilters' ,
+	'mathfilters' ,
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -115,28 +118,12 @@ WSGI_APPLICATION = 'tms.wsgi.application'
 # }
 DATABASES = {
    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        
-        'NAME': 'pms',
-        'USER': 'sakr',
-        'PASSWORD': 'Sakr!@#123',
-        'HOST': '192.168.0.192',   # Or an IP Address that your DB is hosted on
-        'PORT': '3306',
-#          
-#         'NAME': 'tms_dev',
-#          'USER': 'sakr',
-#          'PASSWORD': 'Sakr!@#123',
-#          'HOST': '192.168.0.192',   # Or an IP Address that your DB is hosted on
-#          'PORT': '3306',
-          
-#         'NAME': 'tms',
-#         'USER': 'root',
-#         'PASSWORD': '',
-#         'HOST': 'localhost',   # Or an IP Address that your DB is hosted on,
-
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        },
+       'ENGINE': 'django.db.backends.mysql',
+       'NAME': 'pms_dev2',
+       'USER': 'gad',
+       'PASSWORD': 'Gad!@#321',
+       'HOST': '192.168.0.192',   # Or an IP Address that your DB is hosted on
+       'PORT': '3306',
    }
 }
 
@@ -181,8 +168,8 @@ LANGUAGES = [
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
-#posixpath.join(*(BASE_DIR.split(os.path.sep) + ['static']))
-STATIC_ROOT = posixpath.join(*(BASE_DIR.split(os.path.sep) + ['/static/'])) 
+
+STATIC_ROOT = posixpath.join(*(BASE_DIR.split(os.path.sep) + ['static']))
 
 #local pth for language
 LOCALE_PATHS = [

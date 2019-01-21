@@ -210,7 +210,6 @@ def AddProject(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         print(request.POST)
-        return
         # create a form instance and populate it with data from the request:
         form = ProjectForm(request.POST)
         if form.is_valid():
@@ -596,6 +595,7 @@ def ProjectTaskDetail(request,projectid,taskid):
         closedby = None
 
     history=Task.history.filter(id__exact=taskid , project__exact=projectid)[:10:1]
+    print(task_detail)
     context = {'project_detail':project_detail,
                'project_list':project_list,
                'current_url':current_url,
@@ -613,11 +613,19 @@ def ProjectTaskDetail(request,projectid,taskid):
 def updateStartDate(request,pk):
     data = dict()
     errors = []
-    empObj=get_object_or_404(Employee, empid = request.session.get('EmpID'))
-    _obj =  get_object_or_404(Task,pk=pk)
+    empObj=get_object_or_404(Employee, empid=request.session.get('EmpID'))
+    _obj = get_object_or_404(Task, pk=pk)
+    if _obj.parent:
+        parent = get_object_or_404(Task, pk=_obj.parent.pk)
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = TaskStartForm(request.POST)
+        # form.full_clean()
+        if _obj.dependent:
+            if parent.status != 'Done':
+                form.add_error('rsd', 'لا يمكن بدأ المهمة الا بعد الانتهاء من المهمة الرئيسية اولاً')
+                errors.append(form.errors)
+
         if form.is_valid():
             _obj.realstartdate=form.cleaned_data['rsd']
             _obj.realstartby=request.session.get('EmpID', '1056821208')
@@ -635,11 +643,15 @@ def updateStartDate(request,pk):
             data['message'] = _('Start Date Updated successfully')
             data['html_form'] = render_to_string('project/task/update_start_task.html',request=request)
             return JsonResponse(data)
+        else:
+            data['form_errors'] = form.errors
+            # return JsonResponse(data)
 
     # if a GET (or any other method) we'll create a blank form
     else:
+        form = TaskStartForm()
         data['form_is_valid'] = False
-    context = {'form': TaskStartForm(),'pk':pk,'errors':errors}
+    context = {'form': form,'pk':pk,'errors':errors}
     data['html_form'] = render_to_string('project/task/update_start_task.html',context,request=request,)
     return JsonResponse(data)
 
@@ -649,10 +661,27 @@ def updateTaskFinish(request,pk):
     errors = []
     empObj=get_object_or_404(Employee, empid = request.session.get('EmpID'))
     _obj =  get_object_or_404(Task,pk=pk)
+     # upload file form
+    upload = modelformset_factory(Media, form=UploadFile, extra=1)
+    FormSet = upload(queryset=Media.objects.none())
+
     if request.method == 'POST':
+        upload_form = upload(request.POST, request.FILES)
+        print(request.FILES)
+        if upload_form.is_valid():
+            print('upload is valid')
+            obj_file = upload_form.save(commit=False)
+            for obj in obj_file:
+                obj.project = _obj.project
+                obj.task = _obj
+                obj.save()
+        else:
+            data = {'is_valid': False}
+            return JsonResponse(data)
         # create a form instance and populate it with data from the request:
         form = TaskFinishForm(request.POST)
         if form.is_valid():
+            print('form is valid')
             _obj.ftime=form.cleaned_data['ftime']
             _obj.status="Done"
             _obj.progress=100
@@ -661,20 +690,21 @@ def updateTaskFinish(request,pk):
             _obj.lasteditdate=datetime.now()
             _obj.lasteditby=empObj
             _obj.save()
-             #add to history
-            update_change_reason(_obj, _("Finish Task")+" "+request.session['EmpName']+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['notes'])
-            data['form_is_valid'] = True
-            data['icon'] = "f_"+pk
-            data['id'] = pk
-            data['status'] = _('Finished')
-            data['message'] = _(' Finish Date Updated successfully')
-            data['html_form'] = render_to_string('project/task/update_finish_task.html',request=request)
-            return JsonResponse(data)
+             #uploading files
+         #add to history
+        update_change_reason(_obj, _("Finish Task")+" "+request.session['EmpName']+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['notes'])
+        data['form_is_valid'] = True
+        data['icon'] = "f_"+pk
+        data['id'] = pk
+        data['status'] = _('Finished')
+        data['message'] = _(' Finish Date Updated successfully')
+        data['html_form'] = render_to_string('project/task/update_finish_task.html',request=request)
+        return JsonResponse(data)
 
     # if a GET (or any other method) we'll create a blank form
     else:
         data['form_is_valid'] = False
-    context = {'form': TaskFinishForm(),'pk':pk,'errors':errors}
+    context = {'form': TaskFinishForm(),'pk':pk,'errors':errors, 'upload_file': FormSet}
     data['html_form'] = render_to_string('project/task/update_finish_task.html',context,request=request)
     return JsonResponse(data)
 
@@ -899,18 +929,21 @@ def ProjectTeam(request,project_id):
 
 @login_required
 @permission_required('project.add_task', raise_exception=True)
-def AddTask(request,project_id):
-    project_detail= get_object_or_404(Project,pk=project_id)
+def AddTask(request, project_id):
+    project_detail = get_object_or_404(Project, pk=project_id)
     current_url ="ns-project:" + resolve(request.path_info).url_name
-    project_list = _get_internal_external_projects( request)
-    errors=[]
-    data=dict()
-    _empname =  request.session['EmpName']
+    project_list = _get_internal_external_projects(request)
+    errors = []
+    data = dict()
+    _empname = request.session['EmpName']
     _deptcode = request.session['DeptCode']
     # upload_file = UploadFile
     upload = modelformset_factory(Media,form=UploadFile,extra = 1)
     FormSet = upload(queryset=Media.objects.none())
     form = AddTaskForm()
+    form.fields['phase'].queryset = ProjectPhase.objects.filter(phase__department__deptcode=request.session.get('DeptCode'), phase__saved=True,project=project_detail)
+    form.fields['parent'].queryset = Task.objects.filter(project=project_detail)
+
     # form.assignedto.queryset = Employee.objects.filter(deptcode = _deptcode)
     form.fields["employee"].queryset = Employee.objects.filter(deptcode = _deptcode)
     if request.method=='POST':
@@ -959,7 +992,7 @@ def AddTask(request,project_id):
                 try:
                     obj_file = upload_form.save(commit=False)
                     for obj in obj_file:
-                        obj.project =  Task_obj.project
+                        obj.project = Task_obj.project
                         obj.task = Task_obj
                         obj.save()
                 except:
@@ -1173,6 +1206,11 @@ def ProjectTaskEdit(request,projectid,taskid):
     project_detail= get_object_or_404(Project,pk=projectid)
     task_detail= get_object_or_404(Task,pk=taskid)
     form = EditTaskForm(request.POST or None, instance=task_detail)
+    form.fields['phase'].queryset = ProjectPhase.objects.filter(phase__department__deptcode=request.session.get('DeptCode'), phase__saved=True, project=project_detail)
+    form.fields['parent'].queryset = Task.objects.filter(
+        Q(project=project_detail)&
+        ~Q(pk= taskid))
+
     # upload file form
     upload = modelformset_factory(Media,form=UploadFile,extra = 1,can_delete=True)
     FormSet = upload(queryset=Media.objects.filter(project_id__exact=projectid,task__id__exact=taskid).exclude(Q(filepath__exact=None)| Q(filepath__exact='')))
@@ -1886,9 +1924,201 @@ def ProjectReport(request,selectedDpt=None):
     return render(request, 'project/reports/project_report.html', context)
 
 
-def AddProjectPhase(request):
-    form = ProjectPhaseForm
-    upload = modelformset_factory(Media,form=UploadFile,extra = 1)
-    FormSet = upload(queryset=Media.objects.none())
-    context = {'form': form, 'upload_file': FormSet}
+@login_required
+def add_project_phase(request, project_id):
+    form = ProjectPhaseForm()
+    form.fields['phase'].queryset = Phase.objects.filter(department__deptcode=request.session.get('DeptCode'), saved=True)
+    upload = modelformset_factory(Media, form=UploadFile, extra=1)
+    formset = upload(queryset=Media.objects.none())
+    project_detail = Project.objects.filter(pk=project_id).first()
+    if request.method == 'POST':
+        form = ProjectPhaseForm(request.POST or None)
+        form.full_clean()
+        if form.cleaned_data['enddate'] < project_detail.start:
+            form.errors['enddate'] = form.error_class(['تاريخ انتهاء المرحلة أصغر من تاريخ بداية المشروع '])
+        if form.cleaned_data['enddate'] > project_detail.end:
+            form.errors['enddate'] = form.error_class(['تاريخ انتهاء المرحلة اكبر من تاريح انتهاء المشروع'])
+        if form.cleaned_data['startdate'] < project_detail.start:
+            form.errors['startdate'] = form.error_class(['تاريخ بداية المرحلة أصغر من تاريخ بداية المشروع'])
+        if form.cleaned_data['startdate'] > project_detail.end:
+            form.errors['startdate'] = form.error_class(['تاريخ بداية المرحلة اكبر من تاريخ نهاية المشروع'])
+        valid = True
+        if form.is_valid():
+            obj = form.save(commit=False)
+            print(Employee.objects.filter(empid=request.session.get('EmpID')).first().empid)
+            obj.created_by = Employee.objects.filter(empid=request.session.get('EmpID')).first()
+            obj.project = Project.objects.filter(pk=project_id).first()
+            obj.save()
+        else:
+            valid = False
+        #uploading files
+        upload_form = upload(request.POST, request.FILES)
+        if upload_form.is_valid():
+            obj_files = upload_form.save(commit=False)
+            for obj_file in obj_files:
+                obj_file.phase = ProjectPhase.objects.filter(pk=obj.pk).first()
+                obj_file.project = Project.objects.filter(pk=project_id).first()
+                obj_file.save()
+        else:
+            valid = False
+        if 'submit-phases' in request.POST and valid:
+            return redirect(reverse('ns-project:add-project-phase', kwargs={'project_id': project_id}))
+            print(form.errors)
+
+    phase_form = AddPhaseForm()
+    context = {'form': form, 'upload_file': formset, 'phase_form': phase_form}
+
     return render(request, 'project/add_phase.html', context)
+
+@login_required
+def phases_list(request, project_id, phase_status=None):
+    project = Project.objects.get(pk=project_id)
+    phases = project.phases.all()
+    phases_list = phases
+    if phase_status == "all":
+        phases_list = phases
+    elif phase_status is not None:
+        phase_status = phase_status.lower()
+        phases_list = phases.filter(status__name__exact=phase_status)
+    else:
+        phase_status = "all"
+
+    page = request.GET.get('page', 1)
+    phase_list = Paginator(phases_list, 10)
+
+    try:
+        phase_list = phase_list.page(page)
+    except PageNotAnInteger:
+        phase_list = phase_list.page(1)
+
+    return render(request, 'project/phases.html', {'phase_list': phase_list, 'project': project})
+
+@login_required
+def edit_project_phase(request, phase_id):
+    pp = ProjectPhase.objects.filter(pk=phase_id).first()
+    form = ProjectPhaseForm(instance=pp)
+    del form.fields['phase']
+    upload = modelformset_factory(Media, form=UploadFile, extra=1)
+    formset = upload(queryset=Media.objects.filter(phase=pp))
+    project_detail = pp.project
+
+    if request.method == 'POST':
+        form = ProjectPhaseForm(request.POST or None, instance=pp)
+        del form.fields['phase']
+        form.full_clean()
+        if form.cleaned_data['enddate'] < project_detail.start:
+            form.errors['enddate'] = form.error_class(['تاريخ انتهاء المرحلة أصغر من تاريخ بداية المشروع '])
+        if form.cleaned_data['enddate'] > project_detail.end:
+            form.errors['enddate'] = form.error_class(['تاريخ انتهاء المرحلة اكبر من تاريح انتهاء المشروع'])
+        if form.cleaned_data['startdate'] < project_detail.start:
+            form.errors['startdate'] = form.error_class(['تاريخ بداية المرحلة أصغر من تاريخ بداية المشروع'])
+        if form.cleaned_data['startdate'] > project_detail.end:
+            form.errors['startdate'] = form.error_class(['تاريخ بداية المرحلة اكبر من تاريخ نهاية المشروع'])
+        valid = True
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.project = project_detail
+            obj.phase = pp.phase
+            obj.save()
+        else:
+            valid = False
+        #uploading files
+        upload_form = upload(request.POST, request.FILES)
+        if upload_form.is_valid():
+            obj_files = upload_form.save(commit=False)
+            for obj_file in obj_files:
+                obj_file.phase = pp
+                obj_file.project = project_detail
+                obj_file.save()
+        else:
+            valid = False
+        if valid:
+            return redirect(reverse('ns-project:phases-list', kwargs={'project_id': project_detail.id}))
+            print(form.errors)
+
+    phase_form = AddPhaseForm()
+    context = {'form': form, 'upload_file': formset, 'phase_form': phase_form}
+
+    return render(request, 'project/edit_phase.html', context)
+
+@login_required
+def ProjectPhaseDetail(request, projectid, phase_id):
+    project_detail = get_object_or_404(Project, pk=projectid)
+    attached_files = Media.objects.filter(project__id__exact=projectid, phase__id__exact=phase_id)
+    phase_detail = get_object_or_404(ProjectPhase, project_id__exact=projectid, pk=phase_id)
+
+    context = {'phase_detail': phase_detail, 'attached_files': attached_files, 'project_detail':project_detail}
+    return render(request, 'project/project_phase_detail.html', context)
+
+
+@login_required
+def PhaseTaskList(request, projectid, phase_id, task_status):
+
+    empDict={}
+    dptDict={}
+    current_url ="ns-project:" + resolve(request.path_info).url_name
+    empid = request.session.get('EmpID')
+    project_detail= get_object_or_404(Project,id__exact=projectid)
+    phase_detail = get_object_or_404(ProjectPhase, pk=phase_id)
+    project_list = _get_internal_external_projects(request)
+
+    task_list= Task.objects.all().filter(project__id__exact=projectid, phase__id=phase_id)
+
+    if task_status=="all":
+         task_list= task_list
+    elif task_status=="unclosed":
+         task_list = task_list.exclude(status__exact='Closed')
+    elif task_status=="assignedtome":
+         task_list= task_list.filter(assignedto__exact=empid)
+    elif task_status=="new":
+         task_list= task_list.filter(status__exact='New')
+    elif task_status=="inprogress":
+         task_list= task_list.filter(status__exact='InProgress')
+    elif task_status=="finishedbyme":
+         task_list= task_list.filter(finishedby__exact=empid,status__exact='Done')
+    elif task_status=="done":
+         task_list= task_list.filter(status__exact='Done')
+    elif task_status=="closed":
+         task_list= task_list.filter(status__exact='Closed')
+    elif task_status=="cancelled":
+         task_list= task_list.filter(status__exact='Cancelled')
+    elif task_status=="hold":
+         task_list= task_list.filter(status__exact='Hold')
+    elif task_status=="delayed":
+         date = datetime.today().strftime('%Y-%m-%d')
+         task_list= task_list.filter(Q(enddate__lt = date) & ~Q(status__exact='Done'))
+         # task_list= task_list.filter(enddate__lt = datetime.today())
+    elif task_status=="assignedtodept":
+         task_list= task_list.filter(departement__exact= request.session['DeptCode'])
+
+
+    paginator = Paginator(task_list,10) # Show 5 contacts per page
+    page = request.GET.get('page')
+    try:
+        _plist = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        _plist = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        _plist = paginator.page(paginator.num_pages)
+
+
+    context = {'tasks':_plist,'project_detail':project_detail,'project_list':project_list,'current_url':current_url,'empDict':empDict,'dptDict':dptDict,'phase_detail':phase_detail}
+    return render(request, 'project/phase_tasks.html', context)
+
+
+
+def ProjectPhaseDelete(request, projectid, phase_id):
+    try:
+        Phase = ProjectPhase.objects.get((Q(id__exact=phase_id) & Q(project__id__exact=projectid)))
+    except:
+        raise Http404
+
+    if request.method == 'POST':
+        ProjectPhase.objects.filter(id__exact=phase_id).delete()
+        messages.success(request, "تم حذف المرحلة بنجاح", fail_silently=True )
+        return HttpResponseRedirect(reverse('ns-project:phases-list', kwargs={'project_id': Phase.project.id}))
+
+    context = {'task': Phase}
+    return render(request, 'project/phase_task_delete.html', context)

@@ -54,6 +54,21 @@
  <!-- start task detail -->
  <div class="col-md-12 col-sm-12 col-xs-12">
 
+
+
+ <div class="form-group">
+<!-- task title -->
+{{form.phase.label_tag}}
+ {{form.phase}}
+ </div>
+
+<div class="form-group">
+<div class=" col-md-12">
+{{form.parent.label_tag}}
+{{form.parent}}
+</div>
+</div>
+
 <div class="form-group">
 <!-- task title -->
 {{form.name.label_tag}}
@@ -218,10 +233,7 @@
 
   </form>
   <!-- THE MODAL WE WILL BE USING -->
-  <style>
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.css" />
-  </style>
-
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.css" />
 <div class="modal fade" id="modal-task">
    <div class="modal-dialog modal-lg">
       <div class="modal-content">

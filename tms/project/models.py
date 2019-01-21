@@ -10,7 +10,10 @@ class Department(models.Model):
     managerid = models.CharField(db_column='ManagerId', max_length=45, blank=True, null=True)  # Field name made lowercase.
     deptcode = models.IntegerField(db_column='DeptCode', unique=True, blank=True, null=True)  # Field name made lowercase.
     managername = models.CharField(db_column='ManagerName', max_length=100, blank=True, null=True)  # Field name made lowercase.
-    
+
+    def __str__(self):
+        return self.deptname
+
     class Meta:
         managed = False
         db_table = 'department'
@@ -29,7 +32,8 @@ class Employee(models.Model):
     sexcode = models.CharField(db_column='SexCode', max_length=6, blank=True, null=True)  # Field name made lowercase.
     iscontract = models.IntegerField(db_column='IsContract', blank=True, null=True)  # Field name made lowercase.
 
-
+    def __str__(self):
+        return self.empname
     class Meta:
         managed = False
         db_table = 'employee'
@@ -226,12 +230,19 @@ class Task(models.Model):
     lasteditdate = models.DateTimeField(db_column='LastEditDate', blank=True, null=True)  # Field name made lowercase.
     lasteditby =models.ForeignKey('Employee',to_field='empid',related_name='Task_Employee_LastEditBy',db_column='LastEditBy', blank=True, null=True)
 
-    phase = models.ForeignKey('Phase', on_delete=models.CASCADE, null=True, blank=True)
+    phase = models.ForeignKey('ProjectPhase', on_delete=models.CASCADE, null=True, blank=True, related_name='task_phase')
+
+    parent = models.ForeignKey('self', related_name='parent_task', blank=True, null=True)
+    dependent = models.BooleanField(default=False)
+
+    file = models.FileField(upload_to='/documents', null=True, blank=True)
 
     history = HistoricalRecords()
     class Meta:
         managed = True
         db_table = 'task'
+    def __str__(self):
+        return self.name
 
 
 class TaskHistory(models.Model):
@@ -298,9 +309,10 @@ class VStatisticstaskdata(models.Model):
 class Media(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
     project = models.ForeignKey('Project',db_column='projectid',to_field='id', on_delete=models.SET_NULL, blank=True, null=True)
-    task = models.ForeignKey('Task',db_column='taskid',to_field='id', on_delete=models.SET_NULL, blank=True, null=True)
-    filename = models.CharField(blank=True,null=True, max_length=100)
-    filepath = models.FileField(_('Files Upload'),upload_to='documents/',blank=True, null=True)
+    task = models.ForeignKey('Task', db_column='taskid',to_field='id', on_delete=models.SET_NULL, blank=True, null=True)
+    phase = models.ForeignKey('ProjectPhase', on_delete=models.SET_NULL, blank=True, null=True)
+    filename = models.CharField(blank=True, null=True, max_length=100)
+    filepath = models.FileField(_('Files Upload'),upload_to='documents/', blank=True, null=True)
     class Meta:
         db_table = 'media'
 
@@ -346,19 +358,22 @@ class AuthUser(models.Model):
 
 
 class ProjectPhase(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    phase = models.ForeignKey('Phase', on_delete=models.DO_NOTHING)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='phases')
+    phase = models.ForeignKey('Phase', on_delete=models.DO_NOTHING, related_name='phase_details')
     description = models.CharField(max_length=1500, null=True, blank=True)
 
     startdate = models.DateField()
     enddate = models.DateField()
     status = models.ForeignKey('ProjectStatus', on_delete=models.SET_NULL, null=True)
-    parent = models.ForeignKey('self', on_delete=models.DO_NOTHING)
+    parent = models.ForeignKey('self', on_delete=models.DO_NOTHING, null=True, blank=True)
 
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
-    created_by = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, related_name='created_phases')
+    created_by = models.ForeignKey(Employee, to_field='empid', on_delete=models.SET_NULL, null=True, related_name='created_phases')
     updated_by = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, related_name='updated_phases')
+
+    def __str__(self):
+        return self.phase.name
 
 
 class Phase(models.Model):
@@ -367,6 +382,9 @@ class Phase(models.Model):
     saved = models.BooleanField(default=False)
 
     created_at = models.DateField(auto_now_add=True)
-    created_by = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True)
+    created_by = models.ForeignKey(Employee, to_field='empid', on_delete=models.SET_NULL, null=True)
 
-    projects = models.ManyToManyField(Project, through=ProjectPhase, related_name='phases')
+    projects = models.ManyToManyField(Project, through=ProjectPhase)
+
+    def __str__(self):
+        return self.name

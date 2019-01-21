@@ -8,6 +8,16 @@
  <link rel="stylesheet" href="{% static 'vendors/chosen/chosen.min.css' %}" />
 
 {{ block.super }}
+
+    <style>
+    .chosen-container {
+        width: 76% !important;
+    }
+
+    .add-phase-btn {
+        margin-right: 4px;
+    }
+    </style>
 {% endblock stylesheets %}
 
 {% block content %}
@@ -47,9 +57,10 @@
   {% csrf_token %}
 
                    <div class="form-group">
-              <div class="col-md-6 col-sm-12 col-xs-12 ">
+              <div class="col-md-9 col-sm-12 col-xs-12 ">
                {{form.phase.label_tag}}
                {{form.phase}}
+                  <button type="button" class="btn btn-sm btn-primary add-phase-btn" style="padding: 3px 8px;"><i class="fa fa-plus"></i></button>
                <br>
                 {{form.phase.help_text}}
 
@@ -133,7 +144,7 @@
                    <a href="{{request.META.HTTP_REFERER}}" >  <button type="button" class="btn btn-primary"> <i class="fa fa-angle-double-right"></i> {{ _('Back')}}</button></a>
                    {% endif %}
                     <!--  <button class="btn btn-primary" type="reset">{{_('Reset')}}</button>-->
-                 <button type="submit" class="btn btn-success" name="submit-phases"><i class="fa fa-save"></i> {{_('Submit and add another phases')}}</button>
+                 <button type="submit" class="btn btn-success" name="submit-phases"><i class="fa fa-save"></i> {{'حفظ وإضافة مرحلة جديدة'}}</button>
                  <button type="submit" class="btn btn-success" name="submit-done"><i class="fa fa-save"></i> {{_('Submit')}}</button>
                   </div>
                 </div>
@@ -150,6 +161,38 @@
   </div>
 
 
+    <div class="modal add-phase-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" style="display: inline-block;">إضافة مرحلة جديد</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body clearfix">
+        <div class="form-group">
+          <div class="col-md-12 col-sm-12 col-xs-12 ">
+              {{phase_form.name.label_tag}}
+              {{phase_form.name}}
+          </div>
+       </div>
+
+          <div class="form-group">
+              <div class="col-md-12 col-sm-12 col-xs-12 ">
+                  {{phase_form.saved}}
+                  {{phase_form.saved.label_tag}}
+              </div>
+           </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary add-phase-save-btn">حفظ</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">إغلاق</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock content %}
 
 {% block javascripts %}
@@ -157,6 +200,37 @@
       <script src="{% static 'vendors/chosen/chosen.jquery.min.js' %}"></script>
 
     <script>
+    $('.add-phase-btn').click(function(){
+        $('.add-phase-modal').modal('show');
+    });
+    $('.add-phase-save-btn').click(function(){
+        fetch('/api/3lm60l36hf5idcfl43a9c8l9/add_phase', {
+            method: 'POST',
+            body: JSON.stringify({
+                'name': $('.add-phase-modal [name=name]').val(),
+                'saved': $('.add-phase-modal [name=saved]')[0].checked
+            }),
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.hasOwnProperty('status')) {
+                    if (res.status == 0){
+                        alert(res.message);
+                    }
+                    else {
+                        $('#id_phase')[0].innerHTML += '<option value="'+res.data.pk+'" selected>'+res.data.name+'</option>';
+                        $('#id_phase').trigger('chosen:updated');
+                        $('.add-phase-modal').modal('hide');
+                    }
+                }
+                else {
+                    alert('حدث خطأ أثناء محاولة الاتصال بالخادم');
+                }
+            })
+    });
   $('#single_cal_1').daterangepicker({
       singleDatePicker: true,
       singleClasses: "picker_1",

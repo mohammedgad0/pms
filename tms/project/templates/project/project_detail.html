@@ -39,6 +39,9 @@
                 {% if  project_detail.createdby.empid == request.session.EmpID  or project_detail.delegationto.empid == request.session.EmpID %}
                  <a href="{% url 'ns-project:project-edit'  project_detail.id %}" style="float:left" >  <button type="button" class="btn btn-info btn-md"> <i class="fa fa-pencil"></i>  {% trans "Edit" %}</button></a>
                  {% endif %}
+                {% if  project_detail.createdby.empid == request.session.EmpID  or project_detail.delegationto.empid == request.session.EmpID %}
+                 <a href="{% url 'ns-project:phases-list'  project_detail.id %}" style="float:left" >  <button type="button" class="btn btn-default btn-md"> <i class="fa fa-list"></i>  {% trans "List Phases" %}</button></a>
+                 {% endif %}
 
                  <div class="clearfix"></div>
             </div>
