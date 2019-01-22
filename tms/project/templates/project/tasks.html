@@ -62,7 +62,8 @@
                         {% endif %}
                          <a href="{% url 'ns-project:kanban' project_detail.id  %}" class="float-left" style="float:left"> <button type="button" class="btn btn-default btn-md" style="color:#2e6da4;">  <i class="fa fa-th"></i>  {{ _('Kanban') }} </button></a>
                         <a href="{% url 'ns-project:project-gantt' project_detail.id  %}" class="float-left" style="float:left"> <button type="button" class="btn btn-default btn-md" style="color:#2e6da4;">  <i class="fa fa-calendar"></i>  {{ _('Gantt Chart') }} </button></a>
-                    
+                         <a href="{% url 'ns-project:export-task'  %}" class="float-left" style="float:left"> <button type="button" class="btn btn-default btn-md" style="color:#2e6da4;">  <i class="fa fa-calendar"></i>  تصدير الى إكسل </button></a>
+
                       
                         </ul>
                      </div>
@@ -278,6 +279,35 @@
      type: form.attr("method"),
      dataType: 'json',
      success: function (data) {
+         console.log('success')
+       if (data.form_is_valid) {
+        // $(".messages").html('<li class="alert alert-success">'+data.message+"</li>");
+        // $("#status_"+data.id).html('<span class=" btn btn-warning  task-'+data.status+'" >'+data.status+'</span>');
+
+       // $("#"+data.icon).addClass('paction_disable').closest('a').removeAttr("href").removeAttr("data-url").removeAttr("class");
+         $("#modal-task").modal("hide");
+          location.reload();
+       }
+       else {
+         $("#modal-task .modal-content").html(data.html_form);
+       }
+     }
+   });
+   return false;
+   }; //end save form
+
+   var saveFormUpload = function () {
+   var that = $(this);
+   var form = new FormData($(this)[0]);
+   $.ajax({
+     url: that.attr("action"),
+     data: form,
+     type: that.attr("method"),
+     processData: false,
+     contentType: false,
+     dataType: 'json',
+     success: function (data) {
+         console.log('success')
        if (data.form_is_valid) {
         // $(".messages").html('<li class="alert alert-success">'+data.message+"</li>");
         // $("#status_"+data.id).html('<span class=" btn btn-warning  task-'+data.status+'" >'+data.status+'</span>');
@@ -305,7 +335,7 @@
 
    //update task finish date and staus
    $("#task-table").on("click", ".update-finish-task", loadForm);
-   $("#modal-task").on("submit", ".update-finish-task-form", saveForm);
+   $("#modal-task").on("submit", ".update-finish-task-form", saveFormUpload);
 
    //update cancel task
    $("#task-table").on("click", ".update-cancel-task", loadForm);

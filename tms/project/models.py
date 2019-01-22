@@ -191,6 +191,11 @@ class ApfDeptView(models.Model):
         managed = False
         db_table = 'apf_dept_view'
 
+# class TaskAssign(models.Model):
+#     task_id = models.ForeignKey('Task', on_delete=models.SET_NULL, blank=True, null=True)
+#     assign_to = models.ForeignKey('Employee', to_field='empid', related_name='assign_table', on_delete=models.SET_NULL, blank=True, null=True)
+#     created_date = models.DateField(auto_now_add=True)
+
 class Task(models.Model):
     assignedto = models.ForeignKey('Employee',db_column='assignedto',to_field='empid',related_name='Emp3', on_delete=models.SET_NULL, blank=True, null=True)
     departement = models.ForeignKey('Department',db_column='departementid', to_field='deptcode',on_delete=models.SET_NULL, blank=True, null=True)

@@ -1,6 +1,8 @@
 from django.shortcuts import render, render_to_response ,get_object_or_404,redirect
 from django.template import loader
 from django.http import HttpResponse ,HttpResponseRedirect,Http404 ,HttpResponseForbidden
+from django.utils.dateformat import DateFormat
+
 from .models import *
 from .forms import *
 from tms.ldap import *
@@ -32,6 +34,8 @@ from django.template.context_processors import request
 from django.core.exceptions import ObjectDoesNotExist
 from django.template.loader import render_to_string, get_template
 from django.core.mail import EmailMessage
+from django.core.cache import cache
+
 
 def loginfromdrupal(request, email,signature,time):
     from django.contrib.auth import login
@@ -302,7 +306,7 @@ def ProjectList(request,project_status=None):
 
     project_list= Project.objects.all().filter(
     Q( createdby__exact=EmpID)| Q( delegationto__exact=EmpID)|
-    Q(id__in = project_id)
+    Q(id__in = project_id)| Q(departement= request.session.get('DeptCode'))
     ).order_by('-id')
 
     #project  filter by status 
@@ -335,6 +339,7 @@ def ProjectList(request,project_status=None):
                 projectProgress = round(allTakProgress/len(task_list), 2)
             aDict.update({project.id: projectProgress})
 
+    cache.set('project_cach', project_list)
     paginator = Paginator(project_list, 10) # Show 5 contacts per page
     page = request.GET.get('page')
     try:
@@ -346,7 +351,7 @@ def ProjectList(request,project_status=None):
         # If page is out of range (e.g. 9999), deliver last page of results.
         _plist = paginator.page(paginator.num_pages)
 
-    context = {'project_list':_plist , 'aDict':aDict,'tasks_list':tasks_list,"project_id":project_id,'project_status':project_status}
+    context = {'project_list':_plist , 'aDict': aDict, 'tasks_list':tasks_list, "project_id":project_id, 'project_status':project_status}
     return render(request, 'project/projects.html', context)
 
 @login_required
@@ -540,7 +545,7 @@ def ProjectTask(request,pk,task_status=None):
     elif task_status=="assignedtodept":
          task_list= task_list.filter(departement__exact= request.session['DeptCode'])
 
-
+    cache.set('task_cache', task_list)
     paginator = Paginator(task_list,10) # Show 5 contacts per page
     page = request.GET.get('page')
     try:
@@ -691,15 +696,15 @@ def updateTaskFinish(request,pk):
             _obj.lasteditby=empObj
             _obj.save()
              #uploading files
-         #add to history
-        update_change_reason(_obj, _("Finish Task")+" "+request.session['EmpName']+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['notes'])
-        data['form_is_valid'] = True
-        data['icon'] = "f_"+pk
-        data['id'] = pk
-        data['status'] = _('Finished')
-        data['message'] = _(' Finish Date Updated successfully')
-        data['html_form'] = render_to_string('project/task/update_finish_task.html',request=request)
-        return JsonResponse(data)
+             #add to history
+            update_change_reason(_obj, _("Finish Task")+" "+request.session['EmpName']+",    <i class=\"fa fa-comment\"></i>  " + form.cleaned_data['notes'])
+            data['form_is_valid'] = True
+            data['icon'] = "f_"+pk
+            data['id'] = pk
+            data['status'] = _('Finished')
+            data['message'] = _(' Finish Date Updated successfully')
+            data['html_form'] = render_to_string('project/task/update_finish_task.html',request=request)
+            # return JsonResponse(data)
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -2108,7 +2113,6 @@ def PhaseTaskList(request, projectid, phase_id, task_status):
     return render(request, 'project/phase_tasks.html', context)
 
 
-
 def ProjectPhaseDelete(request, projectid, phase_id):
     try:
         Phase = ProjectPhase.objects.get((Q(id__exact=phase_id) & Q(project__id__exact=projectid)))
@@ -2122,3 +2126,87 @@ def ProjectPhaseDelete(request, projectid, phase_id):
 
     context = {'task': Phase}
     return render(request, 'project/phase_task_delete.html', context)
+
+
+def export_project_xls(request):
+    import xlwt
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="projects.xls"'
+    all_emp = cache.get('project_cach')
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Users')
+
+    # Sheet header, first row
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = ['اسم المشروع', 'تاريخ البدأ', 'تاريخ الانتهاء',  'الحالة']
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+
+    rows = all_emp.values_list('name', 'start', 'end', 'status')
+    for row in all_emp:
+        row_num += 1
+        start = DateFormat(row.start)
+        end = DateFormat(row.end)
+        row = [
+            row.name,
+            start.format('d F Y '),
+            end.format('d F Y '),
+            row.status.name_ar
+
+
+        ]
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
+    return response
+
+def export_task_xls(request):
+    import xlwt
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="tasks.xls"'
+    all_tasks = cache.get('task_cache')
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Users')
+
+    # Sheet header, first row
+    row_num = 0
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = ['اسم المهمة', 'تاريخ البدأ', 'تاريخ الانتهاء',  'الحالة', 'تاريخ الانجاز']
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+
+    for row in all_tasks:
+        row_num += 1
+        start = DateFormat(row.startdate)
+        end = DateFormat(row.enddate)
+        finish = ''
+        if row.finisheddate:
+            finish = DateFormat(row.finisheddate)
+        row = [
+            row.name,
+            start.format('d F Y '),
+            end.format('d F Y '),
+            row.status,
+            finish.format('d F Y')
+
+        ]
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
+    return response

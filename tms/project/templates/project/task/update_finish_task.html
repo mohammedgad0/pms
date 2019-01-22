@@ -2,8 +2,7 @@
 {% load widget_tweaks %}
 {% load static %}
 
-
-     <div class="modal-header">
+    <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">x</span>
                     </button>
                     <h4 class="modal-title" id="myModalLabel">{% trans "Task Finish" %} </h4>
@@ -11,7 +10,7 @@
 
 
     <div class="modal-body"> 
-<form action="/project/update_finish_task/{{pk}}" method="post" class="form-horizontal form-label-left input_mask update-finish-task-form" novalidate enctype="multipart/form-data">
+<form id="finish-form" action="/project/update_finish_task/{{pk}}" method="post" class="form-horizontal form-label-left input_mask update-finish-task-form" novalidate enctype="multipart/form-data">
 
   {% csrf_token %}
     <div class="form-group">
@@ -63,15 +62,13 @@
 {#    <input type="button" class="btn btn-primary" value="{% trans "Save changes" %}" onclick="this.form.submit()">#}
 
    </form>
+
+
        </div>
 
      <div class="modal-footer">
 
         </div>          
-
-
-
-
 
 
       <!-- jQuery -->
