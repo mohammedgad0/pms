@@ -80,6 +80,9 @@ urlpatterns = [
     url(r'^phase-tasks-list/(?P<projectid>\d+)/(?P<phase_id>\d+)/(?P<task_status>\w+)?$', PhaseTaskList, name='phase-task-list'),
     url(r'^project-phase-delete/(?P<projectid>\d+)/(?P<phase_id>\d+)$', ProjectPhaseDelete, name='project-phase-delete'),
 
+
     url(r'^export-project', export_project_xls, name='export-project'),
-    url(r'^export-task', export_task_xls, name='export-task')
+    url(r'^export-task', export_task_xls, name='export-task'),
+
+    url(r'^update_assignto_group/(?P<pk>\d+)$', updateTaskAssigntoGroup, name='update-assignto-group'),
 ]

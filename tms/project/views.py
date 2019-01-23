@@ -945,6 +945,7 @@ def AddTask(request, project_id):
     # upload_file = UploadFile
     upload = modelformset_factory(Media,form=UploadFile,extra = 1)
     FormSet = upload(queryset=Media.objects.none())
+
     form = AddTaskForm()
     form.fields['phase'].queryset = ProjectPhase.objects.filter(phase__department__deptcode=request.session.get('DeptCode'), phase__saved=True,project=project_detail)
     form.fields['parent'].queryset = Task.objects.filter(project=project_detail)
@@ -1004,6 +1005,7 @@ def AddTask(request, project_id):
                     pass       
             else:
                 data = {'is_valid': False}
+
             #update history message
             if assignto_employee:
                 assigntodata = get_object_or_404(Employee , empid = assignto_employee )
@@ -1039,8 +1041,8 @@ def AddTask(request, project_id):
             data['form_is_valid'] = False
             data['errors'] = errors.append(form.errors)
 
+    context = {'upload_file':FormSet, 'form':form,'errors':errors,'project_detail':project_detail,'project_list':project_list,'current_url':current_url}
 
-    context ={'upload_file':FormSet, 'form':form,'errors':errors,'project_detail':project_detail,'project_list':project_list,'current_url':current_url}
     return render (request,'project/add_task.html', context)
 
 @login_required
@@ -1170,6 +1172,42 @@ def updateTaskAssignto(request,pk,save=None):
     form.fields["employee"].queryset = Employee.objects.filter(deptcode = request.session['DeptCode'])
     context = {'form': form,'pk':pk,'save':save,'errors':errors}
     data['html_form'] = render_to_string('project/task/update_assignto_task.html',context,request=request)
+    return JsonResponse(data)
+
+
+@login_required
+def updateTaskAssigntoGroup(request, pk, save=None):
+    data = dict()
+    errors = []
+    empObj = get_object_or_404(Employee, empid=request.session.get('EmpID'))
+    assigntype = "emp"
+    employee = None
+    departement = None
+    _assign = ""
+    _obj = get_object_or_404(Task, pk=pk)
+
+    # assign more employee
+    multi_assign = modelformset_factory(TaskAssign, form=MultiAssign, extra=1)
+    FormSetAssign = multi_assign(queryset=TaskAssign.objects.none())
+    for form_assign in FormSetAssign:
+        form_assign.fields["assign_to"].queryset = Employee.objects.filter(deptcode=_obj.dependent)
+
+    if request.method == 'POST':
+        # uploading files
+        FormSetAssign = multi_assign(request.POST)
+        if FormSetAssign.is_valid():
+            try:
+                obj_file = FormSetAssign.save(commit=False)
+                for obj in obj_file:
+                    obj.save()
+            except:
+                pass
+        else:
+            data['form_is_valid'] = False
+            data['errors'] = errors.append(FormSetAssign.errors)
+
+    context = {'formset': FormSetAssign, 'pk': pk, 'save': save, 'errors': errors}
+    data['html_form'] = render_to_string('project/task/update_assignto_group.html', context, request=request)
     return JsonResponse(data)
 
 @login_required

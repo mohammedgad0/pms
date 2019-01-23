@@ -112,6 +112,7 @@
 </div>
                         </fieldset>
 
+
                         <div class="form-group">
                            <div class=" col-md-6">
                               {{form.startdate.label_tag}}
@@ -252,6 +253,7 @@ function deleteForm(btn, prefix) {
 
 function addForm(btn, prefix) {
     var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+    console.log(formCount)
     // You can only submit a maximum of 10 todo items
     if (formCount < 10) {
         // Clone a form (without event handlers) from the first form
@@ -290,7 +292,17 @@ $("#add").click(function () {
 $(".delete").click(function () {
     return deleteForm(this, "form");
 });
+
+
+$("#add-employee").click(function () {
+    return addForm(this, "form2");
 });
+
+$(".delete-employee").click(function () {
+    return deleteForm(this, "form2");
+});
+});
+
 
  function updateElementIndex(el, prefix, ndx) {
      var id_regex = new RegExp('(' + prefix + '-\\d+)');

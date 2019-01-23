@@ -354,6 +354,19 @@ class UploadFile(ModelForm):
             'filepath': _('Choose File'),
 
         }
+
+
+class MultiAssign(ModelForm):
+    assign_to = EmployeeList(queryset=Employee.objects.all(),to_field_name="empid",empty_label=_("Select Employee"),required=False,widget=forms.Select(attrs={'class': 'chosen form-control'} ))
+
+    class Meta:
+        model = TaskAssign
+        fields = ['assign_to']
+        labels = {
+            'assign_to': 'اختر موظف'
+        }
+
+
 class AddDelegation(ModelForm):
     employee = EmployeeList(queryset=Employee.objects.all(),to_field_name="empid",label=_("Delegation to"), empty_label=_("Nothing"),required=True,widget=forms.Select(attrs={'class': 'chosen form-control'} ))
     class Meta:

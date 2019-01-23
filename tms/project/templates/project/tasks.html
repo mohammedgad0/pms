@@ -189,6 +189,7 @@
                               {% if task.project.createdby.empid == request.session.EmpID  or task.project.delegationto.empid == request.session.EmpID %}
                               <!-- manager close task -->
                               <a href="#" data-url="{% url 'ns-project:update-assignto-task' task.id %}" class="update-assignto-task" ><i class="fa fa-hand-o-right fa-2x paction text-primary" title="{% trans "Assign" %} "></i></a>
+                              <a href="#" data-url="{% url 'ns-project:update-assignto-group' task.id %}" class="update-assignto-task" ><i class="fa fa-users fa-2x paction text-primary" title='اسناد الى اكثر من موظف'></i></a>
                               {% if task.closeddate %}
                               <i class="fa fa-power-off  fa-2x paction  paction_disable" title="{% trans "Close" %}" id="c_{{task.id}}"></i>
                               {% else %}
