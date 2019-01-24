@@ -1187,22 +1187,34 @@ def updateTaskAssigntoGroup(request, pk, save=None):
     _obj = get_object_or_404(Task, pk=pk)
 
     # assign more employee
-    multi_assign = modelformset_factory(TaskAssign, form=MultiAssign, extra=1)
-    FormSetAssign = multi_assign(queryset=TaskAssign.objects.none())
+    multi_assign = modelformset_factory(TaskAssign, form=MultiAssign, extra=1, can_delete=True)
+    query = TaskAssign.objects.filter(task_id=_obj.id)
+    if query:
+        FormSetAssign = multi_assign(queryset=query)
+    else:
+        FormSetAssign = multi_assign(queryset=TaskAssign.objects.none())
     for form_assign in FormSetAssign:
-        form_assign.fields["assign_to"].queryset = Employee.objects.filter(deptcode=_obj.dependent)
+        form_assign.fields["assign_to"].queryset = Employee.objects.filter(deptcode=_obj.departement.deptcode)
 
     if request.method == 'POST':
+        print('post')
         # uploading files
         FormSetAssign = multi_assign(request.POST)
         if FormSetAssign.is_valid():
+            data['form_is_valid'] = True
+            print('valid')
             try:
                 obj_file = FormSetAssign.save(commit=False)
                 for obj in obj_file:
+                    obj.task_id = _obj
+                    obj.assign_by = empObj
                     obj.save()
+                for obj in FormSetAssign.deleted_objects:
+                    obj.delete()
             except:
                 pass
         else:
+            print(FormSetAssign.errors)
             data['form_is_valid'] = False
             data['errors'] = errors.append(FormSetAssign.errors)
 
