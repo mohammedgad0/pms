@@ -421,6 +421,7 @@ class ProjectPhaseForm(ModelForm):
 
         }
         labels = {
+            'phase': _('Phase Name'),
             'status': _('Status'),
             'startdate':_('Start Date'),
             'enddate':_('End Date'),

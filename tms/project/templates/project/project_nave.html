@@ -36,5 +36,6 @@
 
      <ul class="nav nav-pills navbar-left custom-nav" role="tablist">
                     <a href="{% url 'ns-project:project-list' %}"  style="float:left" >  <button type="button" class="btn btn-default btn-md"> <i class="fa fa-th-list"></i>  {% trans "Projects List" %}</button></a>
+         <a href="{% url 'ns-project:phases-list' project_detail.id %}"  style="float:left" >  <button type="button" class="btn btn-default btn-md"> <i class="fa fa-th-list"></i>  {% trans "Phases List" %}</button></a>
      
      </ul>                   
