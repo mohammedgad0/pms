@@ -278,11 +278,13 @@ def ProjectList(request,project_status=None):
     EmpID = request.session.get('EmpID')
     emp_data  = get_object_or_404(Employee, empid = EmpID)
     dept_data = get_object_or_404(Department, deptcode = request.session.get('DeptCode'))
-    tasks_list = Task.objects.filter(assignedto__empid = EmpID)
+    tasks_list = Task.objects.filter(Q(assignedto__empid = EmpID)
+                                     | Q(assignees__assign_to_id=EmpID))
 
     if EmpID == dept_data.managerid:
         tasks_list = Task.objects.filter(
         Q(assignedto__empid__exact = EmpID)|
+        Q(assignees__assign_to_id=EmpID) |
         Q(departement__deptcode__exact  = request.session.get('DeptCode'))|
          Q(project__departement__deptcode__exact  = request.session.get('DeptCode'))
         )
@@ -515,7 +517,7 @@ def ProjectTask(request,pk,task_status=None):
 
     task_list= Task.objects.all().filter(
          Q(project__id__exact=pk)&
-        ( Q(assignedto__empid__exact = empid) | Q(createdby__exact=empid) |  Q(project__createdby__empid__exact=empid)  |  Q(project__delegationto__empid__exact=empid))
+        ( Q(assignedto__empid__exact = empid) | Q(assignees__assign_to_id=empid) | Q(createdby__exact=empid) |  Q(project__createdby__empid__exact=empid)  |  Q(project__delegationto__empid__exact=empid))
          ).order_by('-startdate')
 
     if task_status=="all":
@@ -523,7 +525,7 @@ def ProjectTask(request,pk,task_status=None):
     elif task_status=="unclosed":
          task_list = task_list.exclude(status__exact='Closed')
     elif task_status=="assignedtome":
-         task_list= task_list.filter(assignedto__exact=empid)
+         task_list= task_list.filter(assignedto__exact=empid | Q(assignees__assign_to_id=empid))
     elif task_status=="new":
          task_list= task_list.filter(status__exact='New')
     elif task_status=="inprogress":
@@ -1381,7 +1383,7 @@ def ProjectTaskEdit(request,projectid,taskid):
 def TaskListExternal(request,task_status=None):
     current_url ="ns-project:" + resolve(request.path_info).url_name
     empid = request.session.get('EmpID')
-    tasks_list = Task.objects.filter(assignedto__empid = empid)
+    tasks_list = Task.objects.filter(Q(assignedto__empid = empid) | Q(assignees__assign_to_id=empid))
     project_id = []
     for data in tasks_list:
         try:
@@ -1399,7 +1401,7 @@ def TaskListExternal(request,task_status=None):
     elif task_status=="unclosed":
          task_list = task_list.exclude(status__exact='Closed')
     elif task_status=="assignedtome":
-         task_list= task_list.filter(assignedto__empid__exact=empid)
+         task_list= task_list.filter(Q(assignedto__empid__exact=empid) | Q(assignees__assign_to_id=empid))
     elif task_status=="new":
          task_list= task_list.filter(status__exact='New')
     elif task_status=="inprogress":
@@ -1527,7 +1529,7 @@ def DashboardEmployee(request,empid=None):
     return render(request, 'project/dashboard_employee.html', context)
 #@login_required
 def emp_task(empid):
-    tasks = Task.objects.filter( Q(assignedto__empid__exact = empid) & ~Q(status ='Closed'))
+    tasks = Task.objects.filter((Q(assignedto__empid__exact = empid) | Q(assignees__assign_to_id=empid)) & ~Q(status ='Closed'))
     return tasks
 #@login_required
 def dept_task_indicators(request,dept_code,start_date,end_date):
@@ -1567,10 +1569,10 @@ def _dept_tasks_statistics(request,deptcode,startdate,enddate):
     empid=request.session['EmpID']
     tasks = {}
     if request.user.groups.filter(name__exact='ismanager').exists():
-        task_list= Task.objects.filter(Q(departement__deptcode__exact=deptcode) | Q(project__departement__deptcode__exact=deptcode) | Q(project__delegationto__empid__exact= empid) | Q(assignedto__empid__exact= empid))
+        task_list= Task.objects.filter(Q(departement__deptcode__exact=deptcode) | Q(project__departement__deptcode__exact=deptcode) | Q(project__delegationto__empid__exact= empid) | Q(assignedto__empid__exact= empid) | Q(assignees__assign_to_id=empid))
     elif  request.user.groups.filter(name__exact='projectmanager').exists():
         task_list= Task.objects.filter(
-          (Q(createdby__empid__exact = empid) | Q(assignedto__empid__exact= empid) | Q(project__delegationto__empid__exact= empid))
+          (Q(createdby__empid__exact = empid) | Q(assignedto__empid__exact= empid) | Q(assignees__assign_to_id=empid) | Q(project__delegationto__empid__exact= empid))
              ).order_by('enddate')
 
     tasks['New']=task_list.filter(status__exact='New').count()
@@ -1638,14 +1640,14 @@ def _project_kpi(request,deptcode,startdate,enddate):
             
         
     elif request.user.groups.filter(name__exact='projectmanager').exists():
-        projects= Project.objects.filter( (Q(createdby__exact=empid) | Q(delegationto__exact=empid) |  Q(task__assignedto__exact=empid))
+        projects= Project.objects.filter( (Q(createdby__exact=empid) | Q(delegationto__exact=empid) |  Q(task__assignedto__exact=empid) | Q(task__assignees__assign_to_id=empid))
             & ~Q(status__name__exact="Done")).annotate(num_tasks=Count('task'))
         #filters
         projectKPI["p_all"]= projects.count()
         projectKPI["p_internal"]= projects.filter( Q(createdby__exact=empid) | Q(delegationto__exact=empid) |Q(departement__deptcode__exact = deptcode)).count()
-        projectKPI["p_external"]= projects.filter( Q(task__assignedto__exact=empid) & ~Q(departement__deptcode__exact = deptcode)).count()
+        projectKPI["p_external"]= projects.filter( (Q(task__assignedto__exact=empid) | Q(task__assignees__assign_to_id=empid)) & ~Q(departement__deptcode__exact = deptcode)).count()
 
-        tasks=Task.objects.filter((Q(createdby__empid__exact = empid) | Q(assignedto__empid__exact= empid) | Q(project__delegationto__empid__exact= empid))
+        tasks=Task.objects.filter((Q(createdby__empid__exact = empid) | Q(assignedto__empid__exact= empid) | Q(assignees__assign_to_id=empid) | Q(project__delegationto__empid__exact= empid))
             & ~Q(status__exact="Closed")  ).order_by('enddate')
         #task filters
         projectKPI["t_all"]= tasks.count()
@@ -1664,7 +1666,7 @@ def _open_tasks(request,deptcode,startdate,enddate):
             & ~Q(status__exact="Closed") & ~Q(project__status__name__exact="Done")).order_by('-startdate')
     elif request.user.groups.filter(name__exact='projectmanager').exists():
         openTasks= Task.objects.filter(
-          (Q(createdby__empid__exact = empid) | Q(assignedto__empid__exact= empid) | Q(project__delegationto__empid__exact= empid))
+          (Q(createdby__empid__exact = empid) | Q(assignedto__empid__exact= empid) | Q(assignees__assign_to_id=empid) | Q(project__delegationto__empid__exact= empid))
             & ~Q(status__exact="Closed")  ).order_by('-startdate')
         
     return openTasks
@@ -1714,7 +1716,7 @@ def Kanban (request,pk):
     elif project_detail.delegationto is not None and  request.session['EmpID'] == project_detail.delegationto.empid :
         tasks= Task.objects.filter(project__id__exact=pk).order_by('startdate')
     else:
-         tasks= Task.objects.filter(project__id__exact=pk,assignedto__empid__exact=request.session['EmpID']).order_by('startdate')
+         tasks= Task.objects.filter(Q(project__id__exact=pk) & (Q(assignedto__empid__exact=request.session['EmpID']) | Q(assignees__assign_to_id=request.session['EmpID']))).order_by('startdate')
     
     new_tasks=tasks.filter(status__exact="New")
     inprogress_tasks=tasks.filter(status__exact="Inprogress")
@@ -1826,33 +1828,35 @@ def _get_internal_external_projects(request):
     deptcode = request.session['DeptCode']
     if request.user.groups.filter(name__in=['ismanager','projectmanager']).exists():
          projects=Project.objects.filter(
-             (Q(createdby__empid=request.session['EmpID'])| Q( delegationto__exact=request.session['EmpID']) |Q( task__assignedto__empid__exact=request.session['EmpID']))
+             (Q(createdby__empid=request.session['EmpID'])| Q( delegationto__exact=request.session['EmpID']) |Q( task__assignedto__empid__exact=request.session['EmpID']) | Q(task__assignees__assign_to_id=request.session['EmpID']))
                                         ).annotate(dcount=Count('task')).order_by('-id')
     else:
        projects=Project.objects.filter(
-             ( Q(task__assignedto__empid__exact=request.session['EmpID']) |  Q( delegationto__exact=request.session['EmpID']) )
+             ( Q(task__assignedto__empid__exact=request.session['EmpID']) | Q(task__assignees__assign_to_id=request.session['EmpID']) |  Q( delegationto__exact=request.session['EmpID']) )
                                         ).annotate(dcount=Count('task')).order_by('-id')
     return projects
 
 def _project_kpi_employee(employee,startdate,enddate):
-    projectKPI={}
-    projects= Project.objects.filter(  Q(task__assignedto__empid__exact=employee.empid) ).annotate(Count('task'))
-    projectKPI["p_all"]= projects.count()
-    projectKPI["p_internal"]= projects.filter(departement__deptcode__exact=employee.deptcode).count()
-    projectKPI["p_external"]= projects.filter(  ~Q(departement__deptcode__exact = employee.deptcode)).count()
+    projectKPI = {}
+    projects = Project.objects.filter(Q(task__assignedto__empid__exact=employee.empid) |
+                                      Q(task__assignees__assign_to_id=employee.empid)).annotate(Count('task'))
+    projectKPI["p_all"] = projects.count()
+    projectKPI["p_internal"] = projects.filter(departement__deptcode__exact=employee.deptcode).count()
+    projectKPI["p_external"] = projects.filter(~Q(departement__deptcode__exact=employee.deptcode)).count()
 
-    for p in  projects:
-         print (p.id )
+    # for p in projects:
+    #     print(p.id)
          
-    tasks=Task.objects.filter( (Q(assignedto__empid__exact=employee.empid))  )
-    projectKPI["t_all"]= tasks.count()
-    projectKPI["t_internal"]= tasks.filter(  Q(project__departement__deptcode__exact=employee.deptcode)).count()
-    projectKPI["t_external"]= tasks.filter(   ~Q(project__departement__deptcode__exact=employee.deptcode)).count()
+    tasks = Task.objects.filter(Q(assignedto__empid__exact=employee.empid) |
+                                Q(assignees__assign_to_id=employee.empid))
+    projectKPI["t_all"] = tasks.count()
+    projectKPI["t_internal"] = tasks.filter(Q(project__departement__deptcode__exact=employee.deptcode)).count()
+    projectKPI["t_external"] = tasks.filter(~Q(project__departement__deptcode__exact=employee.deptcode)).count()
     return projectKPI
 
 def _employee_tasks_statistics(employee,startdate,enddate):
     tasks = {}
-    task_list= Task.objects.filter(assignedto__empid__exact=employee.empid)
+    task_list= Task.objects.filter(Q(assignedto__empid__exact=employee.empid) | Q(assignees__assign_to_id=employee.empid))
     tasks['New']=task_list.filter(status__exact='New').count()
     tasks['InProgress']=task_list.filter(status__exact='InProgress').count()
     tasks['Done']=task_list.filter(status__exact='Done').count()

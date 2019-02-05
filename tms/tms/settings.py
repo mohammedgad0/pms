@@ -67,7 +67,8 @@ INSTALLED_APPS = [
     'django_filters',
     'widget_tweaks',
     'simple_history',
-	'mathfilters' ,
+    'mathfilters',
+    'django_cron',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -145,6 +146,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+CRON_CLASSES = [
+    'tms.cronjobs.NotifyEmployeeJob',
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
